@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { eventCard } from './event-card.pure';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const SLUG = '2026-10-23-axel-agentic-workflow';
 const listed = (slug: string, anchor?: string) => ({ episode: { slug }, ...(anchor === undefined ? {} : { anchor }) });
 const RECORD = {

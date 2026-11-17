@@ -1,6 +1,6 @@
 # Spec calibration
 
-What every Episode's Spec shares. [`to-review`](../../../.agents/skills/to-review/SKILL.md) takes these values as the caller's inputs and writes the Spec template from them; `/new-episode` keeps everything else about Episodes ([design-ADR-0011](../../../docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md)). The per-Episode inputs stay where they are: the Brief, the Dossier and the designers' fragments. The skill knows nothing of Episodes; this file is the whole seam.
+What every Episode's Spec shares. [`to-review`](../../../.agents/skills/to-review/SKILL.md) takes these values as the caller's inputs and writes the Spec template from them; `/new-episode` keeps everything else about Episodes ([Decision record 0011](../../../docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md)). The per-Episode inputs stay where they are: the Brief, the Dossier and the designers' fragments. The skill knows nothing of Episodes; this file is the whole seam.
 
 ## Page
 

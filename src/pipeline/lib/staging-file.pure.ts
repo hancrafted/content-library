@@ -1,4 +1,4 @@
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 import { parse, parseDocument } from 'yaml';
 
 export const HARNESS_ACTOR = 'process:markdown-harness';
@@ -92,13 +92,13 @@ export function metaBlockText(html: string): string | undefined {
   return META_BLOCK.exec(html)?.[2];
 }
 
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 export function metaGateTier(html: string): Tier {
   const json = metaBlockText(html);
   return json === undefined ? 'unverified' : gateTier(`---\n${json.trim()}\n---\n`);
 }
 
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 export function appendMetaVerified(html: string, entry: VerifiedEntry, generated?: VerifiedEntry): string {
   const match = META_BLOCK.exec(html);
   if (match === null)

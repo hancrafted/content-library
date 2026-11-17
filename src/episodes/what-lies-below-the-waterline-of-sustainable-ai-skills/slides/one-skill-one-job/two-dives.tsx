@@ -8,7 +8,7 @@ import { DESCENT_MILLISECONDS, LATE_DELAY } from './motion';
 import styles from './one-job.module.css';
 import { depthY, sceneX, WaterColumnArt } from './water-column-art';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const SHELF_Y = depthY(40);
 const DEEP_Y = depthY(120);
 const SHIP_SCALE = 1.2;

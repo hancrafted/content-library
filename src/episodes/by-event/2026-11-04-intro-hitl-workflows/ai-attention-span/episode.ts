@@ -7,7 +7,7 @@ import { thoughtExperimentSection } from './sections/thought-experiment';
 import { whatFillsTheWindowSection } from './sections/what-fills-the-window';
 import { hero } from './slides/hero/slide';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const introHitlAiAttentionSpan = episode({
   slug: 'ai-attention-span',
   messages: { en, de },

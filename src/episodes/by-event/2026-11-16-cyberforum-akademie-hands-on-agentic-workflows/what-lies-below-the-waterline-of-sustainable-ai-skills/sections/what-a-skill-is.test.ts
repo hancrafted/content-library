@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 import { whatASkillIsSection } from './what-a-skill-is';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const EPISODE = episodeRef(
   'what-lies-below-the-waterline-of-sustainable-ai-skills',
   '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows',

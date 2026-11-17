@@ -4,7 +4,7 @@ import { bodyLines, headingsOf } from './staging-markdown.pure';
 
 const SLUG_SUFFIX = / \{#[a-z0-9-]+\}$/;
 
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 export function checkTitleMatchesH1(file: string, markdown: string): Finding[] {
   const title = frontmatterField(markdown, 'title');
   if (title === null) return [];

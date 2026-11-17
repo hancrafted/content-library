@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { applySet } from './scenario-set.pure.ts';
 import type { Preset, Settings } from './software-ecology.types';

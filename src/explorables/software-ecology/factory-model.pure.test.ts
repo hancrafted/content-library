@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { buildFactory, createFactory, type Audit, type FactoryHandle } from './factory-model.pure.ts';
 import { RHO_BN, RHO_OTHER, stability } from './factory-sizing.pure.ts';

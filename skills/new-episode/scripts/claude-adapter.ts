@@ -1,4 +1,4 @@
-// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
+// decision: docs/decision-records/0010-run-log-lines-are-a-typed-union-with-point-events.md
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import {

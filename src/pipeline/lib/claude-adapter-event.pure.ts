@@ -1,4 +1,4 @@
-// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
+// decision: docs/decision-records/0010-run-log-lines-are-a-typed-union-with-point-events.md
 import path from 'node:path';
 import { openJobs, subagentFiles } from './claude-adapter.pure.ts';
 import { parseMarker, sessionsOf, type Marker } from './marker.pure.ts';

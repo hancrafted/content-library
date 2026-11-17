@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 export type Rand = () => number;
 export type Streams = Readonly<Record<'ra' | 'rs' | 'rr' | 'rq', Rand>>;
 

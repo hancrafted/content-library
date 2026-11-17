@@ -57,7 +57,7 @@ function DivePills({ pills }: Pick<TestDiveProps, 'pills'>) {
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function TestDive({ run, label, gauge, pills }: TestDiveProps) {
   const withSkill = run === 'with';
   const robotTop = withSkill ? BED - HOVER - ROBOT_HEIGHT : BED - ROBOT_HEIGHT + 16;

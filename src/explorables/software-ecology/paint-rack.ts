@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { drawDoc, label, SPR } from './doc-sprites.ts';
 import type { FloorStation, FloorWork } from './factory-model.pure.ts';
 import type { Frame } from './paint-belts.ts';

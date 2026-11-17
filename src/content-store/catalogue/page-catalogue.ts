@@ -18,7 +18,7 @@ import type { Guide } from '../schemas/guide.schema';
 import type { Template } from '../schemas/template.schema';
 import type { EpisodesPathParams, EventEpisodePage, EventEpisodeParams, PageCatalogue } from './page-catalogue.types';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 // decision: FE-005 §1
 // decision: FE-008 §5
 export type * from './page-catalogue.types';

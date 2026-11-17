@@ -1,6 +1,6 @@
 // decision: FE-005 §5
 // decision: FE-009 §4
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';

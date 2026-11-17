@@ -24,4 +24,4 @@ Han recorded the talk from the Voice script, and said something close to it. Thi
    - **Folded speech**: the passage, the segment it went into.
    - **Unplaced speech** and **pool Slides** left untouched.
    - **Reading time** of the Episode before and after, in minutes.
-     Reading time stays counted from the Voice script (design-ADR _Reading time is counted from the Voice script_), so nothing else needs editing for the minutes to move.
+     Reading time stays counted from the Voice script (Decision record _Reading time is counted from the Voice script_), so nothing else needs editing for the minutes to move.

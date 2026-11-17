@@ -70,7 +70,7 @@ _Avoid_: Clip, recording link
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short. A Brief's Format `guide` names the Guide Resource kind instead of an Episode.
 _Avoid_: Type, kind, length
 
-**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template, a Master slide or a Theme. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
+**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template, a Master slide or a Theme. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; Decision record `docs/decision-records/0019-resources-overview.md`.
 _Avoid_: Tooling page, Layout reference, reference Episode, Asset
 
 **Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.
@@ -105,6 +105,9 @@ _Avoid_: Sidebar, notes panel, teleprompter
 **Table of contents**: an Episode's navigation through its Sections and Slides, with its reading progress. Under an Event it can also show that Event's Episodes and their Sections and Slides.
 _Avoid_: Sitenav, sidebar
 
+**Decision record**: one feature-, contract- or architecture-shaped decision of this repo, a Markdown file `NNNN-slug.md` in `docs/decision-records/` with `type: decision-record` front matter, cited as "Decision record 0027". It is not an Archgate ADR (`.archgate/adrs/`, a coding Discipline enforced by `archgate check`).
+_Avoid_: design-ADR, ADR (for the file in `docs/decision-records/`)
+
 ## Episode structure
 
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Section may declare it has no section slide (default: it has one); the Slide stays authored for the title but is not shown, the table of contents takes the Section's title from it, and the Section's anchor lands on the first page Slide. The Title slide is never optional. The section slide is on by default and a Section may declare it has none: the Section then takes its table-of-contents title from its own words and its anchor lands on its first Slide (planned, #404). A Slide's heading level comes from its place in the Section, not from the Slide.
@@ -125,7 +128,7 @@ _Avoid_: Explorable explanation (the long form, as Wikipedia names it), Shared v
 **Explorable page**: the product built on one Explorable: an Episode-shaped composition of Slides about its primary Explorable, rendered through the one Episode container, so it has the table of contents, the Context drawer, Speaker notes citing Research and a YouTube Video played from its Title slide. Its slug equals the primary Explorable's folder slug, and the content store refuses a page whose slug names no Explorable. URL `/explorables/<slug>/`, listed on `/explorables/`; `/explorable-explanations/*` redirects there. A product unit beside the Episode (`docs/steering/product-vision.md`, rule 4); its convention and Short framing: `docs/features/explorables/README.md`.
 _Avoid_: Explorable explanation page, Resource page
 
-**Guide**: a step-by-step page that takes a viewer through a setup, one step per Slide, ending in a working result they can check. A product unit beside the Episode and the Explorable page, its own Resource kind: URL `/guides/<slug>/`, listed on `/guides/` and on `/resources/`. Built through the Episode pipeline from a Brief. Design-ADR `docs/adr/0019-resources-overview.md`.
+**Guide**: a step-by-step page that takes a viewer through a setup, one step per Slide, ending in a working result they can check. A product unit beside the Episode and the Explorable page, its own Resource kind: URL `/guides/<slug>/`, listed on `/guides/` and on `/resources/`. Built through the Episode pipeline from a Brief. Decision record `docs/decision-records/0019-resources-overview.md`.
 _Avoid_: Tutorial, How-to, Walkthrough, Setup page, feature guide (a document for agents)
 
 **Preset**: one Slide's settings of an Explorable: the view it opens in and what it lights, so the Slide tells its own story at rest.

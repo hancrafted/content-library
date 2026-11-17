@@ -38,7 +38,7 @@ These rules govern the product: the site, its Episodes and its Events. The machi
 
 When rules conflict, the higher one wins.
 
-1. **Architecture beats delivery.** Software architecture, information architecture and UX take no shortcuts. A decision that needs a record gets its own session, even before a workshop. Each kind has its record and its check: Archgate ADRs for code, markdown-harness for documents, design-ADRs and `docs/design/design-guide.md` for UX.
+1. **Architecture beats delivery.** Software architecture, information architecture and UX take no shortcuts. A decision that needs a record gets its own session, even before a workshop. Each kind has its record and its check: Archgate ADRs for code, markdown-harness for documents, Decision records and `docs/design/design-guide.md` for UX.
    **Known gap:** UX taste has no automated check; only review enforces it. Flag any UX decision that relies on review alone, until this gap is closed.
 2. **Agent legibility.** The repo stays as findable for an agent next month as it is today. Test: from `AGENTS.md`, an agent new to the repo reaches any fact in two pointers, and finds it in exactly one place. How to write for that: `/writing-for-agents`.
 3. **Claims cite public evidence.** A Speaker note cites a Research question, or a high-trust Source directly; never an unjudged URL. Trust is judged once, in the evidence layer, and every citation inherits it.

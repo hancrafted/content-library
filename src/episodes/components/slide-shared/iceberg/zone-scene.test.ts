@@ -6,7 +6,7 @@ import { Travel } from './travel';
 import { WholeDepthScene } from './whole-depth-scene';
 import { ZoneScene } from './zone-scene';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const render = (props: Parameters<typeof ZoneScene>[0]) => load(renderToStaticMarkup(createElement(ZoneScene, props)));
 
 const SCENE = '[data-scene]';

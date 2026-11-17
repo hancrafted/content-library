@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 // spec: docs/features/explorables/software-ecology.md#interaction
 import { useState } from 'react';
 import { FactoryRun, presetOf, startSpeedOf } from './factory-run.pure.ts';

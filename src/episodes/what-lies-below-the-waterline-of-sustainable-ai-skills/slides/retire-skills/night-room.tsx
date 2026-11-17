@@ -31,7 +31,7 @@ function PortholeRobot() {
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function NightRoom() {
   const clip = useId();
   return (

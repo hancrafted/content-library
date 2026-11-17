@@ -3,7 +3,7 @@ import { episodeRef } from './catalogue/episode-id.pure';
 import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 // decision: FE-013 §3
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const AXEL = '2026-10-23-axel-agentic-workflow';
 const EPISODE = {
   slug: 'alpha',
@@ -1003,6 +1003,6 @@ describe('edge cases', () => {
   });
 });
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 const TEMPLATE = { slug: 'grids', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 const TEMPLATE_RECORDS = { ...SOUND, templates: [TEMPLATE] };

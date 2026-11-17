@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkVoiceScriptDiff } from './episode-voice-script.pure';
 
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 const SLIDE_BLOCK = `#### Visual
 
 master: basic-page · motion: liquid-ink-transition

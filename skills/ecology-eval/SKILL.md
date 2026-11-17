@@ -5,7 +5,7 @@ description: Tune a software-ecology scenario's YAML numbers until each beat's c
 
 # Ecology eval
 
-A scenario is a tour of beats in a use-case file (`src/explorables/software-ecology/<use-case>.yml`). Each beat carries Han's **claim** (a words key under `scenarios.<id>.claims` in `<use-case>.words.yml`) and the `expect:` and `settles:` ranges that make it checkable. The eval makes every claim hold by tuning the file's numbers. The rules are design-ADR 0024 §20. The use-case file holds the ranges and the words file the claims: these two are the source, and run reports stay in `.scratch/software-ecology/eval/`.
+A scenario is a tour of beats in a use-case file (`src/explorables/software-ecology/<use-case>.yml`). Each beat carries Han's **claim** (a words key under `scenarios.<id>.claims` in `<use-case>.words.yml`) and the `expect:` and `settles:` ranges that make it checkable. The eval makes every claim hold by tuning the file's numbers. The rules are Decision record 0024 §20. The use-case file holds the ranges and the words file the claims: these two are the source, and run reports stay in `.scratch/software-ecology/eval/`.
 
 ## The contract
 

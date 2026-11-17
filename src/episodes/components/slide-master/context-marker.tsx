@@ -19,7 +19,7 @@ const FORMS: Record<Placement, string> = { inline: INLINE, element: ELEMENT, bes
 
 const STATIC = /^(?:[\w@-]+:)*!?static$/;
 
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0013-context-markers.md
 function placementOf(placement: Placement, className = ''): { placement: Placement; className: string } {
   const classes = className.split(/\s+/).filter(Boolean);
   const kept = classes.filter((name) => !STATIC.test(name));
@@ -27,7 +27,7 @@ function placementOf(placement: Placement, className = ''): { placement: Placeme
   return { placement: placement === 'element' ? 'beside' : placement, className: kept.join(' ') };
 }
 
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0013-context-markers.md
 export function ContextMarker(props: { note: string; label: string; placement?: Placement; className?: string }) {
   const { placement, className } = placementOf(props.placement ?? 'element', props.className);
   const inline = placement === 'inline';

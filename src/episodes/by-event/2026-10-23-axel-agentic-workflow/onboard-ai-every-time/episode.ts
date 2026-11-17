@@ -5,7 +5,7 @@ import { fiveMovesToBriefAFreelancerSection } from './sections/five-moves-to-bri
 import { theThoughtExperimentSection } from './sections/the-thought-experiment';
 import { hero } from './slides/hero/slide';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const axelOnboardAiEveryTime = episode({
   slug: 'onboard-ai-every-time',
   messages: { en, de },

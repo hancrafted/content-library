@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 // decision: FE-012 §1
 import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import type { TargetProps } from '@/shared/lib/context-link.pure';

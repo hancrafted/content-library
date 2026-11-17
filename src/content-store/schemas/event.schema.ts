@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { AUDIENCES, closed, EVENT_FORMATS, EVENT_KINDS, isoDate, ORGANIZER_IDS, PLATFORMS, slug, tags } from './fields';
 
 // decision: FE-003 §4
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const organizer = closed(ORGANIZER_IDS);
 const ORGANIZERS_REQUIRED = 'is required, one Organizer or more, the first its lead';
 

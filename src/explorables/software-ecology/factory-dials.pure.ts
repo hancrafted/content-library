@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { FactoryNode } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 import type { AiQuality, Arrivals, Defect, Dials, Over, OwnSet, Settings, Strength } from './software-ecology.types';

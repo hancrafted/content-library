@@ -6,7 +6,7 @@ stale_after: 2026-11-18T00:00:00Z
 
 # Slide presentation contracts
 
-**Accepted architecture contract; surfaces, named transitions and Title-departure navigation.** [design-ADR-0022](../adr/0022-slide-presentation-and-transition-clock.md) owns human acceptance evidence, the responsibility map and binding-governance pointers. This reference defines the accepted feature contract for [#480](https://github.com/hancrafted/content-library/issues/480); it grants no exception beyond the approved boundary. Context window, Human in the loop and AI capability use independent Title surfaces, retained story decoration and outgoing transitions.
+**Accepted architecture contract; surfaces, named transitions and Title-departure navigation.** [Decision record 0022](../adr/0022-slide-presentation-and-transition-clock.md) owns human acceptance evidence, the responsibility map and binding-governance pointers. This reference defines the accepted feature contract for [#480](https://github.com/hancrafted/content-library/issues/480); it grants no exception beyond the approved boundary. Context window, Human in the loop and AI capability use independent Title surfaces, retained story decoration and outgoing transitions.
 
 ## Named transition interface
 

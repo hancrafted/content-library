@@ -167,7 +167,7 @@ function fillOf(sectionTitle: ZoneSceneProps['sectionTitle'], sky: boolean) {
   } as const;
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ZoneScene(props: ZoneSceneProps) {
   const { zone, iceberg, sectionTitle, openWater, label, children, overlay, className } = props;
   const parts = zoneSceneParts({ zone, iceberg, sectionTitle: Boolean(sectionTitle) });

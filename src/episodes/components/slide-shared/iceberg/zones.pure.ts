@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export const ZONES = ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'] as const;
 export type Zone = (typeof ZONES)[number];
 

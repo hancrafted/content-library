@@ -1,4 +1,4 @@
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export const EMPHASIS_OPEN = '\u0001';
 export const EMPHASIS_CLOSE = '\u0002';
 

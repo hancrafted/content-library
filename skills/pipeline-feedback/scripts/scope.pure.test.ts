@@ -6,7 +6,7 @@ describe('checkScope', () => {
     const paths = [
       'skills/new-episode/SKILL.md',
       'skills/new-episode/references/write-spec.md',
-      'docs/adr/0008-x.md',
+      'docs/decision-records/0008-x.md',
       'GLOSSARY.md',
     ];
     expect(checkScope(paths)).toEqual({ ok: true, episode: [], outside: [], frozen: [] });

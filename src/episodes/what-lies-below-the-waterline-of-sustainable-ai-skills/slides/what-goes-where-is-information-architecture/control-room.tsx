@@ -11,7 +11,7 @@ import { Clipboard, Rules, Sheet, Text, TEXT_SCALE } from './papers';
 import { FLOOR_Y, RoomArt, VIEW_TOP } from './room-art';
 import styles from './where.module.css';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const CAPTAIN_X = 110;
 const CAPTAIN_SCALE = 2;
 const CONSOLE_X = 470;

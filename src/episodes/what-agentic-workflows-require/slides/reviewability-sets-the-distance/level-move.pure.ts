@@ -6,7 +6,7 @@ export interface LevelMoveState {
   readonly replays: number;
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function levelMovePlays({ entryAtMount, entry, replays }: LevelMoveState): boolean {
   if (replays > 0) return true;
   return entryAtMount !== 'done' && entry !== 'pending';

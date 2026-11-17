@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { DAYS, Q, dials, speedOf } from './factory-dials.pure.ts';
 import { SHELF } from './factory-flow.pure.ts';
 import { CENTER_MEASURES } from './factory-readouts.pure.ts';

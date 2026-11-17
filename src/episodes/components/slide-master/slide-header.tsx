@@ -103,7 +103,7 @@ function TitleRow({ action, children }: { action: ReactNode; children: ReactNode
   );
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function SlideHeader({
   seed,
   level,

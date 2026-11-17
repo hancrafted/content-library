@@ -40,7 +40,7 @@ function Pennant({ flip, wind }: { readonly flip: boolean; readonly wind: boolea
 
 const ROCKING = { 'data-motion': 'ambient', className: styles.rock } as const;
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Ship({ flip = false, transform, bridge, deck, rock = false }: ShipProps) {
   const layers = shipLayers(flip);
   return (

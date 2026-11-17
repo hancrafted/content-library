@@ -1,5 +1,5 @@
 'use client';
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import type { Rect } from './dash-placement.pure.ts';
 import type { TourWords } from './software-ecology-words.types';

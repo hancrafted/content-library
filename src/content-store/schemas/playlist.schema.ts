@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { slug, visibility } from './fields';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const SLIDE_ANCHOR = /^[a-z0-9]+(-[a-z0-9]+)*(--[a-z0-9]+(-[a-z0-9]+)*)?$/;
 
 const episodeId = z.string().describe("An Episode id: its slug, or `<event-slug>__<slug>` for an Event's copy");

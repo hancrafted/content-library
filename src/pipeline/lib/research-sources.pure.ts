@@ -78,7 +78,7 @@ function sourceFindings(id: number, resource: string, body: Body): string[] {
     : [`The definition [${id}] points to ${url} but the source's resource is ${resource}: make them equal.`];
 }
 
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 export function checkResearchSources(file: string, markdown: string): Finding[] {
   const sources = sourcesOf(markdown);
   const body = readBody(markdown);

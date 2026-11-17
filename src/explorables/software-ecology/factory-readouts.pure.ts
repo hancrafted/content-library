@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { DAYS, dials, rushOf, stallOf } from './factory-dials.pure.ts';
 import { solve } from './factory-solve.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';

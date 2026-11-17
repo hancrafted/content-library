@@ -66,7 +66,7 @@ Existing comments retired in sweeps, one folder at a time; every authored code f
 
    | Label        | Target                                                                |
    | ------------ | --------------------------------------------------------------------- |
-   | `decision:`  | an Archgate ADR section, `FE-009 §4.3`, or a design-ADR path          |
+   | `decision:`  | an Archgate ADR section, `FE-009 §4.3`, or a Decision record path     |
    | `spec:`      | a `docs/features/` heading, `docs/features/hosting.md#how-it-deploys` |
    | `evidence:`  | a repo research doc                                                   |
    | `tech-debt:` | an issue URL in this repo                                             |

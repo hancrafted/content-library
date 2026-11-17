@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 import { whatASkillIsSection } from './what-a-skill-is';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const PLACED = placeSections<Slide>(whatLiesBelowTheWaterlineOfSustainableAiSkills.sections).flat();
 const PAGE_SLUGS = [

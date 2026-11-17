@@ -9,7 +9,7 @@ import {
   verifiedProblems,
 } from './staging-file.pure';
 
-// decision: docs/adr/0005-frontmatter-follows-okf.md
+// decision: docs/decision-records/0005-frontmatter-follows-okf.md
 const GENERATED = '2026-10-12T09:00:00Z';
 const MACHINE = { by: 'process:markdown-harness', at: '2026-10-12T09:05:00Z' };
 const HAN = { by: 'human:han', at: '2026-10-12T09:30:00Z' };

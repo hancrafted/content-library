@@ -5,7 +5,7 @@ description: Run Promotion on a final Episode — harvest its Staging into lesso
 
 # Episode promote
 
-**Promotion** closes an Episode's making (`GLOSSARY.md`). The Slide folders already own every word, so nothing is copied into the code: Staging is _harvested_, its design Options are _archived_, and then it is deleted. The decisions are in design-ADR `docs/adr/0004-episode-content-is-staged-then-promoted.md`.
+**Promotion** closes an Episode's making (`GLOSSARY.md`). The Slide folders already own every word, so nothing is copied into the code: Staging is _harvested_, its design Options are _archived_, and then it is deleted. The decisions are in Decision record `docs/decision-records/0004-episode-content-is-staged-then-promoted.md`.
 
 Inputs: the Episode's slug and its Staging folder `docs/episodes/<staging>/` (often `<slug>-run-<n>`). Staging is the folder holding `spec/spec.html`.
 

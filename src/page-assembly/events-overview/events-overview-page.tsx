@@ -7,7 +7,7 @@ import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
-// decision: docs/adr/0018-events-overview.md
+// decision: docs/decision-records/0018-events-overview.md
 export async function EventsOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'eventsOverview' });
   const cards = eventCards(locale, PAGE_WORDS[locale].tags, { listedOnly: true });

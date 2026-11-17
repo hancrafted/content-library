@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 import type { SlideZone } from '@/episodes/lib/slide-zone.pure';
 
 export type SceneMotion = 'idle' | 'playing' | 'settled';

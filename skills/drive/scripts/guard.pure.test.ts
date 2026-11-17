@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { guardViolations, isDecisionBranch, parseGuardArgs } from './guard.pure.ts';
 
-const GLOBS = ['docs/adr/**', 'docs/features/**', '**/GLOSSARY*.md'];
+const GLOBS = ['docs/decision-records/**', 'docs/features/**', '**/GLOSSARY*.md'];
 
 describe('success cases', () => {
   it('passes a glossary change on a decisions/* branch', () => {
@@ -24,13 +24,13 @@ describe('success cases', () => {
 
   it('names the file and the rule for each Decision doc changed elsewhere', () => {
     // ARRANGE
-    const changed = ['GLOSSARY.md', 'docs/adr/0001-x.md', 'docs/features/a/b.md', 'src/a.ts'];
+    const changed = ['GLOSSARY.md', 'docs/decision-records/0001-x.md', 'docs/features/a/b.md', 'src/a.ts'];
     // ACT
     const violations = guardViolations('feat/x', changed, GLOBS);
     // ASSERT
     expect(violations).toEqual([
       "GLOSSARY.md is a Decision doc (decisionDocs: **/GLOSSARY*.md); it changes only on a decisions/<topic> branch, this is 'feat/x'",
-      "docs/adr/0001-x.md is a Decision doc (decisionDocs: docs/adr/**); it changes only on a decisions/<topic> branch, this is 'feat/x'",
+      "docs/decision-records/0001-x.md is a Decision doc (decisionDocs: docs/decision-records/**); it changes only on a decisions/<topic> branch, this is 'feat/x'",
       "docs/features/a/b.md is a Decision doc (decisionDocs: docs/features/**); it changes only on a decisions/<topic> branch, this is 'feat/x'",
     ]);
   });

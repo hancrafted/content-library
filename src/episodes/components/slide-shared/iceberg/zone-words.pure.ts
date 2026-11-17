@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 // decision: FE-012 §3.1
 import { ZONES, type Zone } from './zones.pure';
 

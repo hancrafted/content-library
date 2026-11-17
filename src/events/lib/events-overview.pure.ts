@@ -5,7 +5,7 @@ import { isPastEvent } from './events.pure';
 
 // decision: FE-007 §3
 // decision: FE-001 §1.3
-// decision: docs/adr/0018-events-overview.md
+// decision: docs/decision-records/0018-events-overview.md
 export interface MonthGroup<T> {
   readonly month: string;
   readonly label: string;

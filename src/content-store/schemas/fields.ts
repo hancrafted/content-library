@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const VISIBILITIES = ['public', 'unlisted'] as const;
 
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
@@ -17,8 +17,8 @@ export const TAG_IDS = [
 ] as const;
 export type TagId = (typeof TAG_IDS)[number];
 
-// decision: docs/adr/0019-resources-overview.md
-// decision: docs/adr/0026-themes-are-authoring-templates.md
+// decision: docs/decision-records/0019-resources-overview.md
+// decision: docs/decision-records/0026-themes-are-authoring-templates.md
 export const TEMPLATE_TYPES = ['episode-template', 'master-slide', 'theme'] as const;
 export type TemplateType = (typeof TEMPLATE_TYPES)[number];
 

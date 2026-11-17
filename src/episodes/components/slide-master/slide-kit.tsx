@@ -55,7 +55,7 @@ function templateOf(t: RuntimeTranslator, slideId: string): RuntimeKit['template
 }
 
 // decision: FE-010 §4
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0013-context-markers.md
 function contextRefsOf(episode: EpisodeKitInput, slide: SlideKitInput): Pick<RuntimeKit, 'ref' | 'marker' | 'Marker'> {
   const declared = (note: string) => {
     if (!slide.notes.includes(note)) {

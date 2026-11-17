@@ -11,7 +11,7 @@ import { verticalCenterSpine } from './slides/vertical-center-spine/slide';
 import { verticalStepper } from './slides/vertical-stepper/slide';
 import { verticalStickyYears } from './slides/vertical-sticky-years/slide';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const timelines = episode({
   slug: 'timelines',
   messages: { en, de },

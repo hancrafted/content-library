@@ -1,15 +1,15 @@
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const EVENT_COPIES_FOLDER = 'by-event';
 
 // decision: FE-004 §7
 export const SLIDE_POOL_FOLDER = 'slide-pool';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const TEMPLATES_FOLDER = 'templates';
 
 export const EXPLORABLE_PAGES_FOLDER = 'explorable-pages';
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export const GUIDES_FOLDER = 'guides';
 
 export const RESERVED_FOLDER_NAMES: readonly string[] = [
@@ -61,7 +61,7 @@ export function matchEpisode<Id extends string, R>(episode: EpisodeRef<Id>, case
   return episode.kind === 'standalone' ? cases.standalone(episode) : cases['event-copy'](episode);
 }
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export interface TemplateRef<Slug extends string = string> {
   readonly kind: 'template';
   readonly id: Slug;

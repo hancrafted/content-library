@@ -1,5 +1,5 @@
 'use client';
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { streamOf, type StreamPart } from './compare-stream.pure.ts';

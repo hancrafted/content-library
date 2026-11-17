@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkPipeline, type PipelineContext } from './episode-pipeline.pure';
 
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const STAGING = 'docs/episodes/demo';
 
 const CONTEXT: PipelineContext = {
@@ -83,7 +83,7 @@ describe('failure cases', () => {
     // ARRANGE
     const yaml = withDesignSpec(PIPELINE);
     const expected = [
-      'Job "write-design-spec" is retired; write-spec designs the Slides and writes the one Spec page (design-ADR-0011).',
+      'Job "write-design-spec" is retired; write-spec designs the Slides and writes the one Spec page (Decision record 0011).',
     ];
     // ACT
     const messages = check(yaml);
@@ -123,7 +123,7 @@ describe('failure cases', () => {
     // ARRANGE
     const yaml = PIPELINE.replace('references: [references/spec-calibration.md]', 'references: []');
     const expected = [
-      'Job "write-spec" does not read references/spec-calibration.md; the Spec calibration holds what every Spec shares (design-ADR-0011).',
+      'Job "write-spec" does not read references/spec-calibration.md; the Spec calibration holds what every Spec shares (Decision record 0011).',
     ];
     // ACT
     const messages = check(yaml);
@@ -140,7 +140,7 @@ describe('failure cases', () => {
         `references: [references/spec-calibration.md, ${asset}]`,
       );
       const expected = [
-        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (design-ADR-0011).`,
+        `Job "write-spec" reads ${asset}, which the Spec template replaced; it reads the Spec calibration instead (Decision record 0011).`,
       ];
       // ACT
       const messages = check(yaml);

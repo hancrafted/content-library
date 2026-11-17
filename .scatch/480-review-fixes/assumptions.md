@@ -3,7 +3,7 @@
 ## 2026-11-04 — Scope and baseline
 
 - Own branch `epic/480-review-fixes` starts at integration `8a398d3bb8753fee83324345e416f154baee0fe2`; baseline ancestry is verified. Main checkout changes are unrelated and untouched.
-- Read the original integration handoff, tracked integration assumptions, complete #480, accepted design-ADR0022, product vision, FE-004 and applicable state, rendering, boundary and testing rules. No plan file exists in this worktree.
+- Read the original integration handoff, tracked integration assumptions, complete #480, accepted Decision record0022, product vision, FE-004 and applicable state, rendering, boundary and testing rules. No plan file exists in this worktree.
 - Scope is the three confirmed final findings only. Native-landing normalization duplication is advisory and stays untouched. The orchestrator owns independent delta review; this agent launches no review agents.
 - Confirmed public seams are the existing URL authority and real Episode composition/static wrapper output. Restoration must preserve newer intent and its throttled URL write. Repeated named effects must retain independent local hosts with unique, deterministic matching filter references. Browser checks use port 4387 and condition-based waits.
 
@@ -28,7 +28,7 @@
 ## 2026-11-04 — Governance, capture and handoff ownership
 
 - `archgate check` and reviewer-context checks pass 29/29 with zero rule violations/warnings; the full gate inside verify passes 37 checks. Required reviewer/code-review and lessons-learned skills are invoked; direct bounded validation finds no additional issue. No review subagent or independent-review approval is claimed: the orchestrator owns the separate delta review.
-- FE-001, FE-004/009, ARCH-003 and accepted design-ADR0022 already cover intent ownership, retained rendering and these public seams. No new governance or instruction-file change is needed. Archgate session-context cannot find a Copilot transcript; capture uses this conversation and actual command/browser evidence.
+- FE-001, FE-004/009, ARCH-003 and accepted Decision record0022 already cover intent ownership, retained rendering and these public seams. No new governance or instruction-file change is needed. Archgate session-context cannot find a Copilot transcript; capture uses this conversation and actual command/browser evidence.
 - Tool advisories remain: broad scopes in GEN-003, FE-001, GEN-004, FE-005 and FE-011; oversized briefings in FE-009, FE-007, FE-004, FE-002, FE-008, ARCH-003 and GEN-001. Installation reports 15 moderate dependency audit findings and pending @parcel/watcher, @swc/core and fsevents script approvals. Vitest warns about future native ESM-config loading. No dependency/config/governance workaround accompanies this task.
 - Integration tip is still the verified baseline at this capture. Only own assumption log is edited; the tracked integration log and original handoff are untouched. Final synchronization, commit identity and clean-tree evidence belong to `.scratch/480-review-fixes/implementation.md` and the implementation report. No push, PR update, merge into integration or issue closure belongs to this task.
 

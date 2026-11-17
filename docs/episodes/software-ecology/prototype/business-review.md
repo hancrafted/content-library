@@ -1,6 +1,6 @@
 # Business review: software ecology Explorable
 
-Reviewer stance: business architect (operating model, value streams, flow, socio-technical design). Read against the Brief, the feature guide, design-ADR 0024, Han's feedback-01 and feedback-02, the research files (SWE-0001, SWE-0002, AIE-0018, AIE-0019, AIE-0020, LLM-0022) and `flow.html` as of 2026-11-11.
+Reviewer stance: business architect (operating model, value streams, flow, socio-technical design). Read against the Brief, the feature guide, Decision record 0024, Han's feedback-01 and feedback-02, the research files (SWE-0001, SWE-0002, AIE-0018, AIE-0019, AIE-0020, LLM-0022) and `flow.html` as of 2026-11-11.
 
 Evidence tags: an ID means the claim sits inside that file's Findings. **hypothesis** means it goes beyond them: the model or flow theory can show it, but no research file supports it yet. **model** means the prototype's own rules produce the result, so playing it is not evidence for it.
 

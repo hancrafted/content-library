@@ -8,7 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills } from '../episode';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const SECTIONS = whatLiesBelowTheWaterlineOfSustainableAiSkills.sections;
 const OPENERS = SECTIONS.map(([opener]) => opener as Slide);

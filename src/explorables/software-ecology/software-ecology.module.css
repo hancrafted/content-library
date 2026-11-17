@@ -1,4 +1,4 @@
-/* decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md */
+/* decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md */
 /* decision: FE-011 §3 */
 .root {
   --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import type { NodeDef, TopoBelt, Topology } from './factory-model.pure.ts';
 import { keyOf, offsetPts, sample, type Path, type Pt } from './factory-paths.pure.ts';
 import type { Route } from './software-ecology.types';

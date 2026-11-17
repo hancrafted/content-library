@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { lintProbe } from './lint-probe';
 
-// decision: docs/adr/0013-context-markers.md
+// decision: docs/decision-records/0013-context-markers.md
 const SLIDE = 'src/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
 const TIMEOUT = 30_000;
 

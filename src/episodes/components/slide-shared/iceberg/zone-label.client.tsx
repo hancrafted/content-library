@@ -40,7 +40,7 @@ function ZonePopover({
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 // decision: FE-009 §8
 export function ZoneLabelButton({ words, className }: { readonly words: ZoneLabelWords; readonly className?: string }) {
   const id = useId();

@@ -12,7 +12,7 @@ import { createElement, Fragment, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 // decision: FE-005 §5
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export interface ArtPage {
   readonly page: string;
   readonly markup: () => string;

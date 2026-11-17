@@ -3,7 +3,7 @@
 # scaffold-pipeline copies this file to docs/episodes/demo-episode/pipeline.yml as a
 # draft, customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and Han approves it by setting
-# `status: approved` (design-ADR-0008).
+# `status: approved` (Decision record 0008).
 #
 # Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved

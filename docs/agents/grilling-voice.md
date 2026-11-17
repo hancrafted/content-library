@@ -59,7 +59,7 @@ the gaps. Confirmation, not interrogation.
 
 Keep the frontier — every decision whose prerequisites are settled — as private bookkeeping.
 Classify it first: speak only a question whose answer changes a contract, an Archgate ADR or
-a design-ADR, or what a future agent session does. Decide the rest
+a Decision record, or what a future agent session does. Decide the rest
 yourself and carry them to the handoff. This restates the classification in
 `docs/agents/grilling-format.md` because a voice session has no filesystem to open it from.
 

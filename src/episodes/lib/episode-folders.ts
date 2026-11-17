@@ -18,7 +18,7 @@ import {
   type TemplateRef,
 } from '../../content-store/catalogue/episode-id.pure.ts';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export const EPISODES_DIR = 'src/episodes';
 
 export const METADATA_FILE = 'episode-metadata.ts';

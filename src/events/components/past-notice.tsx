@@ -10,7 +10,7 @@ interface PastNoticeProps {
   className?: string;
 }
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export function PastNotice({ date, buildDay, text, className }: PastNoticeProps) {
   if (!isPastEvent(date, buildDay)) return null;
   return (

@@ -45,7 +45,7 @@ export function outputLabel(output: string): string {
   return output.replace(STAGING, '');
 }
 
-// decision: docs/adr/0008-pipeline-jobs-belong-to-stages.md
+// decision: docs/decision-records/0008-pipeline-jobs-belong-to-stages.md
 const INTEGRATION_JOB = 'implement-episode-init';
 
 export function previewPort(job: { id: string; port?: number; state: DashboardState }): number | undefined {

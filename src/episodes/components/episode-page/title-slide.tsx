@@ -88,7 +88,7 @@ function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
   );
 }
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
   const { hero, entrance } = props;
   return {
@@ -109,7 +109,7 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
 }
 
 // decision: FE-002 §1
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 export function TitleSlide(props: TitleSlideProps) {
   const { youtubeId, talkLabels, recording, hero, title } = props;
   const launcher = youtubeId && talkLabels && (

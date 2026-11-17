@@ -1,4 +1,4 @@
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';
 

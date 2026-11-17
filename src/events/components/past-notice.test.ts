@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { PastNotice } from './past-notice';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const TEXT =
   'This Event has already taken place. The content below is kept up to date and may differ from the recording.';
 const BUILD_DAY = '2026-10-25';

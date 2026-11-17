@@ -14,7 +14,7 @@ export function guideOf(params: RouteParams<GuideParams>): BuiltGuide {
   return guideAt(params) ?? notFound();
 }
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export async function GuidePage({ page, locale }: { page: BuiltGuide; locale: Locale }) {
   const { guide } = page;
   const composition = compositionOf(guide);

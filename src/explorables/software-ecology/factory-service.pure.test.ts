@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { describe, expect, it } from 'vitest';
 import { createFactory } from './factory-model.pure.ts';
 import type { Bundle, CenterDef, RoleDef, Settings } from './software-ecology.types';

@@ -95,7 +95,7 @@ function OwnEpisodePage({
   );
 }
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 function EpisodeUnderEvent({
   page,
   composition,

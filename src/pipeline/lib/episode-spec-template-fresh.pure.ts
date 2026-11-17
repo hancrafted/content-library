@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
+// decision: docs/decision-records/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 export interface TemplateSources {
   skill: Readonly<Record<string, string>>;
   calibration: string;

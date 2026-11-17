@@ -4,11 +4,12 @@ import { classifyToken, type Token } from './token-discovery.pure';
 const TAG_PREFIX = '--tag-';
 const TAG_DESCRIPTION = 'Colour of one Tag: icon, ink and wash of the cards it leads.';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const ZONE_PREFIX = '--zone-';
 const ZONE_DESCRIPTION = 'Iceberg zone colour: a title Slide, the gauge and the rail at that depth.';
 const SCENERY_PREFIX = '--scenery-';
-const SCENERY_DESCRIPTION = 'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (design-ADR 0025).';
+const SCENERY_DESCRIPTION =
+  'Iceberg scenery tone several Slides repeat: sky, sea, seabed or room (Decision record 0025).';
 
 const DESCRIPTIONS: Record<string, string> = {
   '--primary': 'Main action colour: primary buttons and the strongest emphasis.',

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { useMemo, useState } from 'react';
 import { NO_OVERLAYS, type Overlays, type PageState } from './exchange-file.pure.ts';
 import type { ExchangeWords } from './exchange-words.types';

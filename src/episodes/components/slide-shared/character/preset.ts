@@ -1,4 +1,4 @@
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export const BUILDS = ['slim', 'average', 'broad'] as const;
 export const SKINS = ['light', 'medium', 'deep'] as const;
 export const HAIRS = ['long', 'short', 'bun', 'none'] as const;

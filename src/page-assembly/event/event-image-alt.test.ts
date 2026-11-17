@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 const ALTS: Record<string, Record<string, string>> = { en: en.eventPage.imageAlt, de: de.eventPage.imageAlt };
 
 describe('success cases', () => {

@@ -62,7 +62,7 @@ _Avoid_: scratchpad (a session's own, lost with it), workspace
 **Decisions log**: the file in the topic folder where the Orchestrator writes each settled term and decision in its exact wording the moment it settles, and each Operator correction at once. Decision docs and the Fortify evidence are written from it.
 _Avoid_: notes, minutes, handoff
 
-**Decision docs**: the glossary, design-ADRs and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through its own PR to the base branch; a Subagent proposes terms in its report.
+**Decision docs**: the glossary, Decision records and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through its own PR to the base branch; a Subagent proposes terms in its report.
 _Avoid_: specs (a spec lives on the tracker), docs, documentation
 
 ## Binding

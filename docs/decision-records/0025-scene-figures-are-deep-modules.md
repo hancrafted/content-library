@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Scene figures are deep modules
 status: accepted
 ---

@@ -66,7 +66,7 @@ function GuideCardView({ card, kindLabel, locale, videoLabels, open }: GuideCard
   );
 }
 
-// decision: docs/adr/0019-resources-overview.md
+// decision: docs/decision-records/0019-resources-overview.md
 export async function GuidesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'guidesOverview' });
   const cards = guideCards(locale);

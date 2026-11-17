@@ -1,4 +1,4 @@
-// decision: docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md
+// decision: docs/decision-records/0020-post-production-writes-youtube-metadata-from-the-repo.md
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

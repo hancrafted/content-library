@@ -43,7 +43,7 @@ const Screen = ({
   </g>
 );
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Console({ width, mugs = 0, screens = 2, flip = false, transform, children }: ConsoleProps) {
   const layout = consoleLayout({ width, mugs, screens, flip });
   return (

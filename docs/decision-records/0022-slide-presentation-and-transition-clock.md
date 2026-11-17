@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Slide presentation and a domain-free transition clock
 status: accepted
 ---
@@ -10,7 +10,7 @@ Reusable Slide presentation needs independent authored capabilities and one geom
 
 ## Human acceptance
 
-**Approver:** Han. **Decision:** “approved”, in response to “Please approve design-ADR 0022 and its FE-004/FE-009 reconciliation in #488 so implementation can proceed.”
+**Approver:** Han. **Decision:** “approved”, in response to “Please approve Decision record 0022 and its FE-004/FE-009 reconciliation in #488 so implementation can proceed.”
 
 **Evidence:** explicit approval supplied in the orchestration session and recorded in [PR #488's approval comment](https://github.com/hancrafted/content-library/pull/488#issuecomment-6613041527). The evidence comment is dated `2026-11-03T19:09:43Z`; it is not a separate GitHub review. The approved proposal is commit `793ba1b2edfc96d04d8ce11aab9ccb16574bf28b`.
 
@@ -58,7 +58,7 @@ The owning Archgate records are authoritative. Feature contracts do not waive th
 - [FE-001](../../.archgate/adrs/FE-001-state-management.md): one history writer and active-Slide reader; presentation measurements are transient memory, with no new persistence key. An additive correlated lifecycle belongs to the existing URL authority.
 - [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md), [FE-005](../../.archgate/adrs/FE-005-static-export-contract.md) and [FE-007](../../.archgate/adrs/FE-007-module-layering.md): leaf clients, serializable crossings, complete static output, downward imports and sealed Slide folders. Provider placement, hydration coordination and safe reattachment are implementation choices under those disciplines.
 - [FE-011](../../.archgate/adrs/FE-011-design-tokens.md): live theme-aware colour tokens, governed type roles and Slide-local overrides. Surface overrides preserve authored contrast semantics or carry a matching tone declaration.
-- [design-ADR-0012](0012-slide-header-and-play-once-motion.md): header/Scene entrance policy remains distinct from reversible surface transitions. Decorative slots do not introduce a second Scene entrance or change shared-header ownership.
+- [Decision record 0012](0012-slide-header-and-play-once-motion.md): header/Scene entrance policy remains distinct from reversible surface transitions. Decorative slots do not introduce a second Scene entrance or change shared-header ownership.
 
 These disciplines remain binding. Any implementation that needs a broader exception must stop for its own governance decision.
 
@@ -76,4 +76,4 @@ These disciplines remain binding. Any implementation that needs a broader except
 - [Shared Anchor geometry and composed Title selection](0023-shared-anchor-geometry-and-composed-title-selection.md) — accepted follow-up design; shared measurements and composition-owned compatibility, not an implementation claim.
 - [Slide presentation contracts](../features/slide-transitions.md) — accepted feature contract and downstream verification.
 - [Product vision](../steering/product-vision.md) — architecture, agent legibility and escalation.
-- [Domain docs](../agents/domain.md) — distinction between design-ADRs and binding Archgate records.
+- [Domain docs](../agents/domain.md) — distinction between Decision records and binding Archgate records.

@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 
 const THEME_INIT_SCRIPT = buildThemeInitScript();
 
-// decision: docs/adr/0012-slide-header-and-play-once-motion.md
+// decision: docs/decision-records/0012-slide-header-and-play-once-motion.md
 const JS_CLASS_SCRIPT = "document.documentElement.classList.add('js')";
 
 export async function SiteShell({

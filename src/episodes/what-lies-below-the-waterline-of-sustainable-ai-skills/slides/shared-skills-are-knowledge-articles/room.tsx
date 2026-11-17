@@ -49,7 +49,7 @@ function ReachLines() {
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ControlRoom() {
   return (
     <g transform={`translate(0 ${ROOM_TOP})`}>

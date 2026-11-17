@@ -2625,9 +2625,9 @@
                 <code>tests/post-build/explorable-page-shape.build.test.ts</code>.
               </li>
               <li>
-                The Explorable itself lives in <code>src/explorables/software-ecology/</code> by design-ADR
-                <code>docs/adr/0024-software-ecology-flow-model-and-use-case-files.md</code>; the picked flow Option of
-                Slide 1 is the one <code>FlowRenderer</code> that ships.
+                The Explorable itself lives in <code>src/explorables/software-ecology/</code> by Decision record
+                <code>docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md</code>; the picked
+                flow Option of Slide 1 is the one <code>FlowRenderer</code> that ships.
               </li>
               <li>
                 Post-build text captures <code>tests/post-build/episode-text/software-ecology.{en,de}.json</code>,
@@ -3632,11 +3632,11 @@
                     >qa.weeksWaiting</code
                   >
                   10.04) and a backlog of 223, so "+217" past the six slots. The build pins them by adding
-                  <code>expect:</code> claims for these readouts to that step (design-ADR §10, §12), so the hero never
-                  claims what the model does not show. The document icon, the rack and the turbo are the Visual
-                  language's and the design-ADR's (§14, §15): plain good, a <code>fill-destructive</code> minus for bad,
-                  a warning triangle for a complaint, <code>fill-ai/20</code> with a <code>stroke-ai</code> border and
-                  dot for AI-made; belts <code>stroke-machine/15</code>; weeks of work waiting in
+                  <code>expect:</code> claims for these readouts to that step (Decision record §10, §12), so the hero
+                  never claims what the model does not show. The document icon, the rack and the turbo are the Visual
+                  language's and the Decision record's (§14, §15): plain good, a <code>fill-destructive</code> minus for
+                  bad, a warning triangle for a complaint, <code>fill-ai/20</code> with a <code>stroke-ai</code> border
+                  and dot for AI-made; belts <code>stroke-machine/15</code>; weeks of work waiting in
                   <code>warning</code> from one week and <code>destructive</code> from two, and a full rack's top slot
                   and its "+n" in <code>destructive</code>, the pile-up drawn as the waiting documents themselves; the
                   inspection's shield <code>human</code>, the Customer's output <code>primary</code>. The preview is
@@ -4195,12 +4195,12 @@
                     >{ from: string; workCenter: string; waiting: string; overflow: string; reads: string; passedUnread:
                     string; next: string }</code
                   >, one inline SVG; the pile-up runs past the preview's bottom edge on purpose, where
-                  <code>HeroPreview</code>'s mask fades it. The work center card is the design-ADR §14 work center card
-                  (<code>cardView: 'station'</code>) at four times its size; the tag is the dashboard's weeks-waiting
-                  readout, <code>bg-destructive/15</code> from two weeks (<code>bg-warning/25</code> from one). The
-                  document icon, the rack and the turbo are the Visual language's and the design-ADR's (§14, §15): plain
-                  good, a <code>fill-destructive</code> minus for bad, a warning triangle for a complaint,
-                  <code>fill-ai/20</code> with a <code>stroke-ai</code> border and dot for AI-made; belts
+                  <code>HeroPreview</code>'s mask fades it. The work center card is the Decision record §14 work center
+                  card (<code>cardView: 'station'</code>) at four times its size; the tag is the dashboard's
+                  weeks-waiting readout, <code>bg-destructive/15</code> from two weeks (<code>bg-warning/25</code> from
+                  one). The document icon, the rack and the turbo are the Visual language's and the Decision record's
+                  (§14, §15): plain good, a <code>fill-destructive</code> minus for bad, a warning triangle for a
+                  complaint, <code>fill-ai/20</code> with a <code>stroke-ai</code> border and dot for AI-made; belts
                   <code>stroke-machine/15</code>; weeks of work waiting in <code>warning</code> from one week and
                   <code>destructive</code> from two, and a full rack's top slot and its "+n" in
                   <code>destructive</code>, the pile-up drawn as the waiting documents themselves; the inspection's
@@ -5068,8 +5068,8 @@
                   preview carries no licence question (the feature guide keeps that on the PR checklist, and the
                   coloured panel redraw is a pass of its own); the wrong swing is drawn in
                   <code>stroke-destructive</code> as bad work, the wanted one in <code>stroke-foreground</code>. The
-                  document icon, the rack and the turbo are the Visual language's and the design-ADR's (§14, §15): plain
-                  good, a <code>fill-destructive</code> minus for bad, a warning triangle for a complaint,
+                  document icon, the rack and the turbo are the Visual language's and the Decision record's (§14, §15):
+                  plain good, a <code>fill-destructive</code> minus for bad, a warning triangle for a complaint,
                   <code>fill-ai/20</code> with a <code>stroke-ai</code> border and dot for AI-made; belts
                   <code>stroke-machine/15</code>; weeks of work waiting in <code>warning</code> from one week and
                   <code>destructive</code> from two, and a full rack's top slot and its "+n" in
@@ -5142,9 +5142,10 @@
                 <p class="text-caption"><code>master: basic-page · motion: none</code></p>
                 <p data-spec="visual-idea">
                   The whole software ecology Explorable fills the Slide with every option on. The viewer meets it as the
-                  toolbar, the stage and the work center dashboard. The design lives in the design-ADR
-                  <code>docs/adr/0024-software-ecology-flow-model-and-use-case-files.md</code> and the feature guide
-                  <code>docs/features/explorables/software-ecology.md</code>; the Spec designers mock it from there.
+                  toolbar, the stage and the work center dashboard. The design lives in the Decision record
+                  <code>docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md</code> and the
+                  feature guide <code>docs/features/explorables/software-ecology.md</code>; the Spec designers mock it
+                  from there.
                 </p>
                 <p data-spec="visual-idea">
                   The toolbar holds Swing, Roles, Ideal and Realistic, a Scenarios menu with a guided tour per scenario,
@@ -7147,7 +7148,7 @@
                       <code>HANDOFF_SECS</code> 0.6 s, <code>RACK</code> 6, <code>AMBER</code> 1 and <code>RED</code> 2
                       weeks, <code>PILE_MAX</code> 12) and the source map (<code>40-factory.js</code> stage,
                       <code>45-card.js</code> cards, <code>50-ui.js</code> toolbar, <code>55-tour.js</code> tour). Build
-                      against it; never ship it as code. Binding: design-ADR 0024 (decisions 1, 12, 13, 14) and
+                      against it; never ship it as code. Binding: Decision record 0024 (decisions 1, 12, 13, 14) and
                       FE-012-explorables.
                     </p>
                     <p>
@@ -8285,7 +8286,7 @@
                       <code>HANDOFF_SECS</code> 0.6 s, <code>RACK</code> 6, <code>AMBER</code> 1 and <code>RED</code> 2
                       weeks, <code>PILE_MAX</code> 12) and the source map (<code>40-factory.js</code> stage,
                       <code>45-card.js</code> cards, <code>50-ui.js</code> toolbar, <code>55-tour.js</code> tour). Build
-                      against it; never ship it as code. Binding: design-ADR 0024 (decisions 1, 12, 13, 14) and
+                      against it; never ship it as code. Binding: Decision record 0024 (decisions 1, 12, 13, 14) and
                       FE-012-explorables.
                     </p>
                     <p>
@@ -10158,7 +10159,7 @@
                       <code>HANDOFF_SECS</code> 0.6 s, <code>RACK</code> 6, <code>AMBER</code> 1 and <code>RED</code> 2
                       weeks, <code>PILE_MAX</code> 12) and the source map (<code>40-factory.js</code> stage,
                       <code>45-card.js</code> cards, <code>50-ui.js</code> toolbar, <code>55-tour.js</code> tour). Build
-                      against it; never ship it as code. Binding: design-ADR 0024 (decisions 1, 12, 13, 14) and
+                      against it; never ship it as code. Binding: Decision record 0024 (decisions 1, 12, 13, 14) and
                       FE-012-explorables.
                     </p>
                     <p>
@@ -11560,8 +11561,8 @@
                     <code>bg-muted rounded-xl border-border shadow-md</code>; the Customer card
                     <code>stroke-primary</code> with 0.5× and 67 % in <code>fill-primary</code> as the Slide's one focal
                     point, the Why accent stub <code>bg-primary</code>, the others <code>bg-foreground</code>; pressure
-                    by design-ADR 0024 decisions 7 and 14: a full rack’s top slot, its "+217", "223 waiting" (10 weeks
-                    of work, past two) <code>destructive</code>; "could serve 0.5× demand" plain, as on Slide 1,
+                    by Decision record 0024 decisions 7 and 14: a full rack’s top slot, its "+217", "223 waiting" (10
+                    weeks of work, past two) <code>destructive</code>; "could serve 0.5× demand" plain, as on Slide 1,
                     <code>warning</code> only for a work center between one and two weeks of work waiting (none in this
                     still); every still is captioned "AI unbalanced, week 20" with "Illustrative model, not measured";
                     the dashboard's People label <code>text-human</code>, Tools &amp; artefacts
@@ -13672,7 +13673,7 @@
                     >) under the toolbar pills of 2a's <code>ToolbarStill</code>; <code>DialGauge</code> (<code
                       >{ label: string; set: number; withAi?: number; scale: 'log' | 'linear' }</code
                     >), efficiency on the log scale 10 % to 1000 % as the Explorable's slider. Tokens: quality
-                    assurance's curve by design-ADR 0024 decision 7, each week's segment
+                    assurance's curve by Decision record 0024 decision 7, each week's segment
                     <code>stroke-foreground</code> under one week of work, <code>stroke-warning</code> from one and
                     <code>stroke-destructive</code> from two, over bands <code>fill-warning/15</code> (1 to 2 weeks) and
                     <code>fill-destructive/10</code> (past 2), "10 weeks" <code>fill-destructive</code>; the Customer's
@@ -13711,7 +13712,7 @@
     <!-- spec-review:start -->
     <!--
   The Spec review form, inlined verbatim into every spec/spec.html by write-spec
-  (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
+  (Decision record 0011). Its fields sit beside what they review and join it by form="spec-review":
   per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
   name="note:<slide-slug>", and one textarea name="note:visual-language".
   npm run episode:spec serves the page and saves the review as the next feedback round.

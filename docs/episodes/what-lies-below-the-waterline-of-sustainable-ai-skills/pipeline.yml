@@ -2,7 +2,7 @@
 # docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/pipeline.yml as a draft the moment the Run begins,
 # customize-pipeline tailors it for that Episode once the Setup jobs
 # have collected what it needs, and finalizes it by setting
-# `status: approved` (design-ADR-0008).
+# `status: approved` (Decision record 0008).
 #
 # Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
@@ -532,7 +532,7 @@ jobs:
         model: opus
 
   # The Spec: one static HTML page with two or three Options per Slide beside
-  # its words (design-ADR-0011). The implementor runs in the orchestrator's
+  # its words (Decision record 0011). The implementor runs in the orchestrator's
   # session, because it spawns one designer per Section and writes the page
   # alone. The user picks an Option per Slide through `npm run episode:spec`; every
   # review round is a new Attempt, and the user approves the Spec at the gate.
@@ -613,7 +613,7 @@ jobs:
       ruler and slim left rail component (one tile per Section, plain zone label with the ocean term beneath), and a new
       `bubbles` ink profile for the Section-title descent, per the Iceberg style in docs/design/design-guide.md,
       docs/features/slide-transitions.md and the approved Spec. Han tunes the zone colours after seeing them render, so
-      each zone is one token. Also, by docs/adr/0025-scene-figures-are-deep-modules.md: ZoneScene (sky with sun in light
+      each zone is one token. Also, by docs/decision-records/0025-scene-figures-are-deep-modules.md: ZoneScene (sky with sun in light
       and moon in dark, sea, rays, seabed, iceberg and the zone's one ambient loop, drawing the sea life and iceberg that
       implement-scene-cast writes), Travel, the zone label's popover (metres and scientific name on hover, focus or tap),
       the client leaf in ZoneScene that sets data-motion=settled on the Scene once its once-animations end (emotes included, data-motion=emote) and pauses every ambient loop while the document is hidden (CSS alone cannot see it), composing the scenery parts implement-scene-cast wrote in iceberg/scenery/ (sky, seabed included) rather than redrawing them, absorbing the Zone type, zone label and RulerSlot that implement-episode-init put in slide-shared/waterline-echo/ (one owner for the ruler, ADR 0025), fixing its sections/section-slides.test.ts to hand-written expected values with no booleans collapsed in ACT (ARCH-003), and the Episode's page-level Chat app / Coding agent toggle held in memory as transient state, opening on Chat app (FE-001; Han, 2026-11-13)."
@@ -664,7 +664,8 @@ jobs:
     port: 4002
   - id: implement-scene-cast
     stage: build
-    intent: "Build the scene figures by docs/adr/0025-scene-figures-are-deep-modules.md before any Section uses them:
+    intent:
+      "Build the scene figures by docs/decision-records/0025-scene-figures-are-deep-modules.md before any Section uses them:
       the setting-free `character/` module (Character, poses.pure.ts with tests, emote and says bubble, shared preset
       aiAgent), the `deep-sea-expedition/` cast (cast.ts captain and pilot presets, Robot, Ship, Console) and the sea
       life and iceberg ZoneScene draws, under src/episodes/components/slide-shared/. Spawn four Opus subagents at medium
@@ -692,7 +693,7 @@ jobs:
           - visual-check
           - commit
         references:
-          - docs/adr/0025-scene-figures-are-deep-modules.md
+          - docs/decision-records/0025-scene-figures-are-deep-modules.md
           - docs/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/spec/spec-v2.html
           - docs/design/design-guide.md
           - docs/features/slide-transitions.md
@@ -703,7 +704,7 @@ jobs:
           - code-review
           - visual-check
         references:
-          - docs/adr/0025-scene-figures-are-deep-modules.md
+          - docs/decision-records/0025-scene-figures-are-deep-modules.md
           - docs/design/design-guide.md
         rubric: references/implement-section.md#rubric
         model: opus
@@ -711,7 +712,7 @@ jobs:
     port: 4012
   - id: implement-section-a-thought-experiment
     stage: build
-    intent: Build Section 1 of 8, "A thought experiment", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 1 of 8, "A thought experiment", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -757,7 +758,7 @@ jobs:
     port: 4003
   - id: implement-section-what-a-skill-is
     stage: build
-    intent: Build Section 2 of 8, "What a skill is", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 2 of 8, "What a skill is", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -803,7 +804,7 @@ jobs:
     port: 4004
   - id: implement-section-when-to-write-one
     stage: build
-    intent: Build Section 3 of 8, "When to write one", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 3 of 8, "When to write one", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -849,7 +850,7 @@ jobs:
     port: 4005
   - id: implement-section-the-label
     stage: build
-    intent: Build Section 4 of 8, "The label", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 4 of 8, "The label", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -895,7 +896,7 @@ jobs:
     port: 4006
   - id: implement-section-what-goes-inside
     stage: build
-    intent: Build Section 5 of 8, "What goes inside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 5 of 8, "What goes inside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -941,7 +942,7 @@ jobs:
     port: 4007
   - id: implement-section-what-stays-beside
     stage: build
-    intent: Build Section 6 of 8, "What stays beside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 6 of 8, "What stays beside", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -987,7 +988,7 @@ jobs:
     port: 4008
   - id: implement-section-sharing-it
     stage: build
-    intent: Build Section 7 of 8, "Sharing it", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 7 of 8, "Sharing it", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style
@@ -1033,7 +1034,7 @@ jobs:
     port: 4009
   - id: implement-section-keeping-it-alive
     stage: build
-    intent: Build Section 8 of 8, "Keeping it alive", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/adr/0025-scene-figures-are-deep-modules.md.
+    intent: Build Section 8 of 8, "Keeping it alive", of the Brief's Slides, at its placement marker, its Scenes composed from ZoneScene, Travel and the cast by docs/decision-records/0025-scene-figures-are-deep-modules.md.
     needs:
       - implement-episode-init
       - implement-iceberg-style

@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { SPR } from './doc-sprites.ts';
 import type { FloorBelt, FloorStation } from './factory-model.pure.ts';
 import type { Pt } from './factory-paths.pure.ts';

@@ -42,7 +42,7 @@ export interface ControlRoomProps {
   readonly children?: ReactNode;
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function ControlRoom({ size = ROOM, time = 'day', clock = true, children }: ControlRoomProps) {
   return (
     <g data-control-room className={styles.room}>

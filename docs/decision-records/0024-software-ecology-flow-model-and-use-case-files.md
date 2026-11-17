@@ -1,5 +1,5 @@
 ---
-type: design-adr
+type: decision-record
 title: Software ecology flow model and use-case files
 status: accepted
 ---

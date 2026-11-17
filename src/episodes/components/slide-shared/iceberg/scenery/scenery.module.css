@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 .scenery {
   --bed: color-mix(in oklab, var(--bulb) 33%, color-mix(in oklab, var(--on-brand-accent) 35%, var(--overlay)));
   --bed-lit: color-mix(in oklab, var(--bulb) 39%, color-mix(in oklab, var(--on-brand-accent) 47%, var(--overlay)));

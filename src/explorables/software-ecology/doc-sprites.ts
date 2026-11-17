@@ -1,4 +1,4 @@
-// decision: docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+// decision: docs/decision-records/0024-software-ecology-flow-model-and-use-case-files.md
 import { bulb, giftBox, star } from './doc-gift.ts';
 import type { Colors, Ctx, DocKind } from './doc-types.ts';
 

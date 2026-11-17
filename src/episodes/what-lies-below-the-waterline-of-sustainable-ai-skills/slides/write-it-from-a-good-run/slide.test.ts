@@ -8,7 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { writeItFromAGoodRun } from './slide';
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 const slideUnderTest = writeItFromAGoodRun as unknown as Slide;
 const opener = slide({
   slug: 'when-to-write-one',

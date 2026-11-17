@@ -114,7 +114,7 @@ flowchart TD
   SG --> CL
 ```
 
-**Magnetic ink:** draws in `shared/components/animations/`, attaches in `shared/hooks/`, computes in `shared/lib/`; `SiteShell` composes context. `docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md`.
+**Magnetic ink:** draws in `shared/components/animations/`, attaches in `shared/hooks/`, computes in `shared/lib/`; `SiteShell` composes context.
 
 Rejected: visual schema (constrains Scenes), per-Episode containers (navigation drift), flat packages (lose tier direction).
 
@@ -135,12 +135,12 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
 5. `episode-page/` owns the one container, composition mechanics and page-scoped presentation adapters; it feeds plain inputs to domain-free shared measurement. Page chrome: reached only from page assembly or the container.
-6. `episodes/templates/<slug>/`: Template composition, including Themes (design-ADR 0026), never an Episode.
+6. `episodes/templates/<slug>/`: Template composition, including Themes (Decision record 0026), not an Episode.
 
 ### 4. One pass from Episode to page
 
 1. Generated route → own record → template → container → static HTML; anchors from position. Other composed pages: via the registry.
-2. Routes: `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`. Resources: `/resources/`, `/<type>/<slug>/`; Themes: `/themes/<slug>/` (design-ADR 0026).
+2. Routes: `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`. Resources: `/resources/`, `/<type>/<slug>/`; Themes: `/themes/<slug>/` (Decision record 0026).
 3. A page naming another (card, overview, Event navigation, metadata) reads its summary, never its composition: an Episode page ships only its own JS and CSS.
 4. `npm run registry` writes routes and summaries; a stale one fails the fast suite.
 
@@ -155,7 +155,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 1. Free: Title slide notes and Voice script, a Scene, a Slide folder, a templated Episode, a §7 promotion.
 2. Only a new ADR: a tier, module, second container, route beyond §4.2, shared Slide shape, text or style home.
-3. Presentation configuration and the clock boundary follow `docs/adr/0022-slide-presentation-and-transition-clock.md`; the rest here stays binding.
+3. Presentation configuration and the clock follow `docs/decision-records/0022-slide-presentation-and-transition-clock.md`; the rest here stays binding.
 
 ### 7. Where reuse goes
 
@@ -174,7 +174,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 1. **DO** start from this map, then open the record that owns the concern. (Decision 1)
 2. **DO** run `npm run registry` after adding an Episode (copy `episode-template/`, add metadata) or editing a folder, Playlist, text or Voice script. (Decision 3, Decision 4)
-3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, design-ADR-0008)
+3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, Decision record 0008)
 4. **DO** promote a part a second Slide needs to `slide-shared/`, a Slide several Episodes show as-is to the Slide pool, imported via `@/`. (Decision 3, Decision 7)
 5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
 6. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
@@ -225,11 +225,11 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ## References
 
-- [Presentation boundary and approval](../../docs/adr/0022-slide-presentation-and-transition-clock.md).
+- [Presentation boundary](../../docs/decision-records/0022-slide-presentation-and-transition-clock.md).
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, Page chrome.
-- [Source tree](../../docs/adr/0017-source-tree-follows-the-product.md).
-- [Self-contained Slide](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md).
+- [Source tree](../../docs/decision-records/0017-source-tree-follows-the-product.md).
+- [Self-contained Slide](../../docs/decision-records/0001-the-slide-is-a-self-contained-folder.md).
 - [Episode authoring](../../docs/features/episode-migration.md).
-- [Section modules](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md).
-- [Content model and routes](../../docs/adr/0016-content-data-model.md).
-- [Shared magnetic ink](../../docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md).
+- [Sections](../../docs/decision-records/0008-pipeline-jobs-belong-to-stages.md).
+- [Content model](../../docs/decision-records/0016-content-data-model.md).
+- [Shared magnetic ink](../../docs/decision-records/0022-magnetic-ink-is-a-shared-action-effect.md).

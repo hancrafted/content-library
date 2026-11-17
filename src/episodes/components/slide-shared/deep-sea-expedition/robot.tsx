@@ -97,7 +97,7 @@ function Moving({
   );
 }
 
-// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: docs/decision-records/0025-scene-figures-are-deep-modules.md
 export function Robot({ motion, mood, says, lamp, aim = 'ahead', flip, state }: RobotProps) {
   const { lampLit, beam, beamMotion, bodyMotion } = robotLook({ motion, lamp });
   return (

@@ -1,4 +1,4 @@
-/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: docs/decision-records/0025-scene-figures-are-deep-modules.md */
 .art {
   --bulk-lit: oklch(0.56 0.03 250);
   --bulk: oklch(0.46 0.03 254);

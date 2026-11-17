@@ -1,4 +1,4 @@
-// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
+// decision: docs/decision-records/0004-episode-content-is-staged-then-promoted.md
 import { readSpec, specSectionSlugs, specSlideAnchors, type Spec } from './episode-spec-page.pure';
 import { checkSpec, DOSSIER_FILE } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';

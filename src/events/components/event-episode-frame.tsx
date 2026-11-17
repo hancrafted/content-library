@@ -11,7 +11,7 @@ import { EVENT_WORDS, eventCopy } from '../lib/event-words';
 import { isPastEvent } from '../lib/events.pure';
 import { PastNotice } from './past-notice';
 
-// decision: docs/adr/0016-content-data-model.md
+// decision: docs/decision-records/0016-content-data-model.md
 export interface EventEpisodeFrame {
   readonly route: string;
   readonly header: ReactNode;
