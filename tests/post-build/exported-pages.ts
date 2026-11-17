@@ -73,15 +73,11 @@ export function exportedPage(url: string): CheerioAPI {
   return page;
 }
 
-export function resolveBasePath(): string {
-  if (process.env.NEXT_PUBLIC_BASE_PATH) return process.env.NEXT_PUBLIC_BASE_PATH;
-  if (process.env.SITE_URL) {
-    try {
-      const pathname = new URL(process.env.SITE_URL).pathname.replace(/\/+$/, '');
-      if (pathname) return pathname;
-    } catch {
-      // ignore
-    }
+export function resolveBasePath(env: Readonly<Record<string, string | undefined>> = process.env): string {
+  if (env.NEXT_PUBLIC_BASE_PATH) return env.NEXT_PUBLIC_BASE_PATH;
+  if (env.SITE_URL) {
+    const pathname = new URL(env.SITE_URL).pathname.replace(/\/+$/, '');
+    if (pathname) return pathname;
   }
   return nextConfig.basePath ?? '';
 }
