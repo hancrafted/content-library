@@ -10,6 +10,7 @@ import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
 import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
+import { signalProcess } from './worktree-signal.ts';
 
 /** Runs a command and returns its output. */
 const capture = (cmd: string, args: string[], cwd?: string): string =>
@@ -79,17 +80,10 @@ const isAlive = (pid: number): boolean => {
 
 /** SIGTERM, a short wait, then SIGKILL for whatever is left. */
 function killProcesses(procs: Proc[]): void {
-  const signal = (proc: Proc, sig: NodeJS.Signals) => {
-    try {
-      process.kill(proc.pid, sig);
-    } catch {
-      // already gone
-    }
-  };
-  for (const proc of procs) signal(proc, 'SIGTERM');
+  for (const proc of procs) signalProcess(proc.pid, 'SIGTERM');
   const deadline = Date.now() + 3000;
   while (Date.now() < deadline && procs.some((p) => isAlive(p.pid))) spawnSync('sleep', ['0.1']);
-  for (const proc of procs.filter((p) => isAlive(p.pid))) signal(proc, 'SIGKILL');
+  for (const proc of procs.filter((p) => isAlive(p.pid))) signalProcess(proc.pid, 'SIGKILL');
   for (const proc of procs) console.log(`✔ stopped ${describeProc(proc)}`);
 }
 
