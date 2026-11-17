@@ -2,7 +2,6 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { Bike, Colleague, LINE, Screw, Sheet, Wrenches } from './vignette-parts';
 
-/** The four messes set up before the shift, then the four arriving during it, in the rot grid's column order. */
 export const MESS_IDS = [
   'wrong-screw',
   'binder',
@@ -14,7 +13,6 @@ export const MESS_IDS = [
   'rush-vs-check',
 ] as const;
 
-/** The cleaned-up state of each static mess, in the same column order. */
 export const CLEAN_IDS = ['checked-sheet', 'one-page', 'three-wrenches', 'one-sheet'] as const;
 
 export type MessId = (typeof MESS_IDS)[number];

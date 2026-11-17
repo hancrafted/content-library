@@ -14,11 +14,6 @@ export function artUrl(name: string, manifest: ArtManifest, basePath: string): s
   return url === null ? null : `${basePath}${url}`;
 }
 
-/**
- * A name for a drawing its data fully decides, such as a sky's facets or a school of rays: the figure, then a hash of
- * the data, so equal data shares one file and a change of data is a new picture. Never hash a class name: the page and
- * the art build name CSS-module classes differently.
- */
 export function artName(figure: string, data: unknown): string {
   const text = JSON.stringify(data);
   let hash = 0x811c9dc5;

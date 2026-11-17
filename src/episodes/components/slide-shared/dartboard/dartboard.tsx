@@ -1,19 +1,14 @@
 import { cn } from '@/shared/lib/utils';
 
-/** How a board is drawn: `hero` on the Title slide and the Slides it explains, `quiet` as a section slide's echo. */
 export type DartboardTone = 'hero' | 'quiet';
 
 export interface DartboardProps {
   readonly cx: number;
   readonly cy: number;
-  /** The outer ring's radius; the rings step in evenly from it. */
   readonly r: number;
-  /** How many rings sit around the bull, at least one. */
   readonly rings: number;
-  /** The bull's radius. */
   readonly bull: number;
   readonly tone?: DartboardTone;
-  /** `muted` dulls the bull toward `muted-foreground`, so darts in `primary` still read where they land on it. */
   readonly bullTone?: 'primary' | 'muted';
 }
 

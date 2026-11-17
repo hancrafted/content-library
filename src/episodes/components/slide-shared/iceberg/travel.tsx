@@ -2,9 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import styles from './travel.module.css';
 
 export interface TravelProps {
-  /** Where the figures start, as a CSS `translate` against the Scene's drawing: `-20% -10%`. */
   readonly from: string;
-  /** Where they come to rest; their drawn place unless given. */
   readonly to?: string;
   /** How long the move takes, in milliseconds. */
   readonly duration?: number;
@@ -15,11 +13,7 @@ export interface TravelProps {
 
 const DEFAULT_DURATION_MILLISECONDS = 1600;
 
-/**
- * Moves its figures across the Scene once, when the Slide turns active (design-ADR 0025, Motion 3): positions belong
- * to the Slide, so moving between them is this, never a figure's own `motion`. An SVG group inside `ZoneScene`; its
- * rest state is `to`, so a still frame and reduced motion show the figures where they arrive.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 export function Travel({
   from,
   to = '0 0',

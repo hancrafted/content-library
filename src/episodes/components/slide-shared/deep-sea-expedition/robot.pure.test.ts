@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { beamPoints, robotHead, robotLook } from './robot.pure';
 
-/*
- * The diving robot's logic: which parts its lamp and motion light and move, where its beam points and where its emote
- * sits. Worked values come from the Spec's `parts.py` `beam()`: a cone from the lamp at (32, 30), 0.5 rad wide.
- */
-
 describe('success cases', () => {
   it('lights the lamp and draws the beam at rest, nothing moving', () => {
     // ARRANGE

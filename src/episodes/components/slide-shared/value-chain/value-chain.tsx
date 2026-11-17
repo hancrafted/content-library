@@ -7,17 +7,13 @@ export type { ValueChainStage } from './value-chain-board.client';
 export interface ValueChainProps {
   readonly name: string;
   readonly role: string;
-  /** A square portrait under `public/`, shown small beside the name. */
   readonly portrait: { readonly src: string; readonly alt: string };
-  /** The claim, then its accented turn: "I have worked every link…" + "Now I enable AI across it." */
   readonly statement: string;
   readonly statementAccent: string;
-  /** Under the chain: what runs beneath every stage. */
   readonly rail: string;
   readonly proofLabel: string;
   /** The booking call to action; `href` must be https. */
   readonly booking: { readonly label: string; readonly href: string; readonly newTabHint: string };
-  /** Oldest first; the last is the primary stage. */
   readonly stages: readonly ValueChainStage[];
 }
 
@@ -71,10 +67,7 @@ function Booking({ label, href, newTabHint }: ValueChainProps['booking']) {
   );
 }
 
-/**
- * Who is talking, told as a value chain: every stage worked, read from the latest (the primary one) down, each with two
- * proofs. A plain-props part (FE-002 §3.3): the Slide passes its own words; hover and focus live in the board leaf.
- */
+// decision: FE-002 §3.3
 export function ValueChain(props: ValueChainProps) {
   return (
     <ValueChainBoard

@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { placeTransform } from './creature-group.pure';
 
-/*
- * How every creature group (fish, jellies, lanternfish, bubbles) places one member: moved to its spot about the
- * group's centre, drawn at its own size times the group's scale, and mirrored across when the group faces left.
- */
-
 describe('success cases', () => {
   it('moves a member to its spot and draws it at its own size times the group scale', () => {
     // ARRANGE

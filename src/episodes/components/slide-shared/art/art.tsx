@@ -6,15 +6,9 @@ import { artUrl } from './art.pure';
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 interface ArtProps {
-  /**
-   * The drawing's name in the art store, one per picture: a figure part and its pose (`robot/hull-lamp-lit`), or a
-   * Slide's backdrop part. Two drawings under one name stay inline, and `npm run art` names them.
-   */
   readonly name: string;
-  /** The page's class on the `<use>`: its motion, when the drawing moves as a whole. */
   readonly className?: string;
   readonly transform?: string;
-  /** The drawing: still SVG shapes, painted by its CSS module's simple selectors. No text, ids or motion inside. */
   readonly children: ReactNode;
 }
 

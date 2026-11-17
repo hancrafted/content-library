@@ -18,11 +18,9 @@ import {
 import { mountDrift, type Drift } from './drift-canvas';
 import { createClock, FIELD_INK, motionOf, type Motion, type Story } from './drift.pure';
 
-/** The words on the pause button, in the page's language. */
 export interface MotionLabels {
   readonly pause: string;
   readonly play: string;
-  /** The button's title while reduced motion keeps the background still. */
   readonly stilled: string;
 }
 
@@ -65,7 +63,6 @@ function useDocumentHidden(): boolean {
   );
 }
 
-/** Holds the one pause state the background and its button share; renders no element of its own. */
 export function HeroMotion({ children }: { children: ReactNode }) {
   const [paused, setPaused] = useState(false);
   const reduced = useReducedMotion();
@@ -73,7 +70,6 @@ export function HeroMotion({ children }: { children: ReactNode }) {
   return <MotionContext.Provider value={value}>{children}</MotionContext.Provider>;
 }
 
-/** The pause and play button: outside the decorative Backdrop, 44px, named in the page's language. */
 export function HeroMotionButton({ labels }: { labels: MotionLabels }) {
   const { paused, reduced, toggle } = useMotionState();
   const stopped = paused || reduced;
@@ -95,11 +91,9 @@ export function HeroMotionButton({ labels }: { labels: MotionLabels }) {
   );
 }
 
-/** The two canvases of one drift: the faint field and the accent beat. */
 interface CanvasRefs {
   readonly beat: RefObject<HTMLCanvasElement | null>;
   readonly field: RefObject<HTMLCanvasElement | null>;
-  /** The field's blurred half, softened once by CSS instead of by a canvas filter every frame. */
   readonly soft: RefObject<HTMLCanvasElement | null>;
 }
 
@@ -109,7 +103,6 @@ interface Shared {
   seconds: number;
 }
 
-/** Mounts the drift while the story, the theme or the reduced preference stand: the tokens are read once per mount. */
 function useDrift(refs: CanvasRefs, story: Story, staticFrame: boolean) {
   const shared = useRef<Shared>({ drift: undefined, seconds: 0 });
   const theme = useResolvedTheme();
@@ -129,7 +122,6 @@ function useDrift(refs: CanvasRefs, story: Story, staticFrame: boolean) {
   return shared;
 }
 
-/** The loop: one frame request at a time, none unless the motion is running; a stop forgets the last frame. */
 function useLoop(motion: Motion, shared: RefObject<Shared>) {
   const clockRef = useRef(createClock());
   useEffect(() => {
@@ -150,7 +142,6 @@ function useLoop(motion: Motion, shared: RefObject<Shared>) {
   }, [motion, shared]);
 }
 
-/** The art's canvas: Message drift for `story`, drawn behind the Slide and counted in the Slide's zone. */
 export function HeroCanvas({ story }: { story: Story }) {
   const { paused, reduced } = useMotionState();
   const active = isPlaying(useSlideZone());

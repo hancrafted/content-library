@@ -12,7 +12,6 @@ export interface TitleWindow {
   readonly height: number;
 }
 
-/** A title's type role as `globals.css` sets it: `clamp(min, vw, max)` and its leading. */
 export interface TitleRole {
   readonly min: number;
   readonly vw: number;
@@ -21,21 +20,15 @@ export interface TitleRole {
 }
 
 const REM = 16;
-/** The hero role, `--size-hero` and `--leading-hero`. */
 export const HERO_ROLE: TitleRole = { min: 2.5 * REM, vw: 0.052, max: 4.5 * REM, leading: 1.05 };
-/** The heading role a Section title takes, `--size-heading` and `--leading-heading`. */
 export const HEADING_ROLE: TitleRole = { min: 2.25 * REM, vw: 0.042, max: 3.75 * REM, leading: 1.1 };
 
-/** Where the line counts step, wide screens first, as the CSS modules read them through `titleLineStyle`. */
 const STEPS = [80 * REM, 48 * REM, 0] as const;
 
-/** A title's line counts on a wide screen, a tablet and a phone. */
 export type TitleLines = readonly [wide: number, tablet: number, phone: number];
 
-/** The floating header's band (`--header-block`, 4.875rem). */
 const HEADER_BLOCK = 4.875 * REM;
 
-/** How many lines the title takes at a width. */
 export function titleLines(width: number, lines: TitleLines): number {
   return lines[STEPS.findIndex((from) => width >= from)]!;
 }
@@ -53,7 +46,6 @@ export function titleBottom(
   return HEADER_BLOCK + below + padding + titleLines(width, lines) * role.leading * size;
 }
 
-/** The line counts as custom properties a CSS module picks by breakpoint: `--title-lines-wide` and on. */
 export function titleLineStyle(lines: TitleLines): Readonly<Record<`--${string}`, string>> {
   const [wide, tablet, phone] = lines.map(String);
   return { '--title-lines-wide': wide!, '--title-lines-tablet': tablet!, '--title-lines-phone': phone! };

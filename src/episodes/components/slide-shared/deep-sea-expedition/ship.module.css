@@ -1,13 +1,5 @@
-/*
- * The research ship's facet tones, light from the upper left. No raw colour lives outside a Slide folder (FE-011), so
- * every tone is mixed from global tokens that carry no meaning: `--on-brand-accent` as white and `--overlay` as black
- * (both fixed across themes), `--info` for the blue machinery, `--brand-accent` for the boot-top stripe, `--bulb` to
- * warm the white deck house. Dark mode only retunes the mixes. `--machine` stays the robot's meaning, never paint here.
- *
- * The rock is the Surface zone's ambient loop (design-ADR 0025, Motion §5): `Ship` sets `.rock` only when its Slide
- * passes `rock`; it runs only while the Slide is active, rests level, and reduced motion removes it.
- */
-
+/* decision: docs/adr/0025-scene-figures-are-deep-modules.md */
+/* decision: FE-011 §4 */
 .ship {
   --ship-hull-lit: color-mix(
     in oklab,
@@ -106,7 +98,6 @@
 
 .house-shade {
   fill: var(--ship-house-shade);
-  /* No edge unless a Scene sets one, as the cabin close-up does. */
   stroke: var(--ship-house-shade-edge, none);
 }
 
@@ -142,7 +133,6 @@
   fill: var(--ship-pennant);
 }
 
-/* The rock pivots on the ship's origin, the waterline amidships, and rests level. */
 .rock {
   transform-box: view-box;
   transform-origin: 0 0;
@@ -167,10 +157,6 @@
   }
 }
 
-/*
- * The pennant flutters in the wind about the masthead: it narrows and its fly lifts and drops, resting as drawn. Only
- * with the rock, on the active Slide.
- */
 .flutter {
   transform-box: view-box;
   transform-origin: 0 0;

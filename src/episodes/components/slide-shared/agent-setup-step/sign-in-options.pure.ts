@@ -5,17 +5,13 @@
  * published. The explanations are the Slide's own copy, keyed by `id`.
  */
 
-/** One sign-in choice. */
 export interface SignInOption {
   readonly id: string;
-  /** The vendor's on-screen label, verbatim; absent when the vendor does not publish it. */
   readonly label?: string;
-  /** The one to pick for most people: the Slide marks it "Pick this". */
   readonly recommended: boolean;
 }
 
 const OPTIONS: Readonly<Record<string, readonly SignInOption[]>> = {
-  // Read from openai/codex main (codex-rs/tui/src/onboarding/auth.rs); the released build may word it slightly differently.
   codex: [
     { id: 'chatgpt', label: 'Sign in with ChatGPT', recommended: true },
     { id: 'device-code', label: 'Sign in with Device Code', recommended: false },
@@ -27,7 +23,6 @@ const OPTIONS: Readonly<Record<string, readonly SignInOption[]>> = {
     { id: 'console', recommended: false },
     { id: 'platform', recommended: false },
   ],
-  // GitHub's authenticate page quotes both questions; whether another sign-in choice exists besides the device code is unverified.
   copilot: [
     { id: 'github-com', label: 'GitHub.com', recommended: true },
     { id: 'enterprise', label: 'GitHub Enterprise Cloud with data residency', recommended: false },

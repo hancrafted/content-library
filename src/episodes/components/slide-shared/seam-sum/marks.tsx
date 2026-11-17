@@ -1,6 +1,5 @@
 import { cn } from '@/shared/lib/utils';
 
-/** The failure mark's cross, sitting on the top-right edge of a `relative` box. */
 export function Cross({ label }: { label: string }) {
   return (
     <span
@@ -35,7 +34,6 @@ function AgentGlyph() {
   );
 }
 
-/** Who did the card: a person in `human`, an agent in `ai`. */
 export function DoneBy({ who, label }: { who: 'person' | 'agent'; label: string }) {
   return (
     <span
@@ -54,7 +52,6 @@ export function DoneBy({ who, label }: { who: 'person' | 'agent'; label: string 
   );
 }
 
-/** The done tick beside a card's own goal. */
 export function Tick({ label }: { label: string }) {
   return (
     <svg viewBox="0 0 16 16" className="mt-1 size-4 shrink-0 text-foreground" role="img" aria-label={label}>
@@ -69,7 +66,6 @@ export function Tick({ label }: { label: string }) {
   );
 }
 
-/** An arrow into a wall: what the other card held. */
 export function SeamIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-3.5 shrink-0" aria-hidden>

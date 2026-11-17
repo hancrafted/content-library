@@ -17,7 +17,6 @@ export type { Half, SeamSumCard } from './types';
 
 const SIGN = 'self-center text-subheading font-semibold text-muted-foreground';
 
-/** The four cards with a plus sign before each but the first. */
 function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'> & { compact: boolean }) {
   return (
     <ul
@@ -47,7 +46,6 @@ function CardRow({ cards, words, compact }: Pick<SeamSumProps, 'cards' | 'words'
   );
 }
 
-/** "=" and the party the cards add up to: its goal, failed, and which cards broke which half. */
 function SumResult({ result, words }: Pick<SeamSumProps, 'result' | 'words'>) {
   return (
     <div className="flex items-center gap-4 px-1">
@@ -78,7 +76,6 @@ function SumResult({ result, words }: Pick<SeamSumProps, 'result' | 'words'>) {
   );
 }
 
-/** The four cards, the sum signs and the party they add up to, on the muted board. */
 export function SeamSum({ label, cards, result, words, compact = false }: SeamSumProps) {
   return (
     <div

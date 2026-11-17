@@ -1,11 +1,4 @@
-/*
- * The skill scope matrix (Option 18a): the squares' care tint, the pictures' facets and the dashed trip. No raw colour
- * (FE-011): every tone mixes global tokens toward the Spec's own. The wall, sky and sea mix the zone tokens, deepening
- * toward `--zone-midnight` and `--zone-abyss` in dark; the desk warms `--bulb` toward `--overlay`; the notebook and
- * card box derive from `--human` (the captain's own things); the project binder from `--success` (the Spec's green),
- * the fleet manual from `--info`; `--primary` steps the squares' tint with care.
- */
-
+/* decision: FE-011 §4 */
 /*
  * A picture's labels sit at their corners while the matrix has its axis column (Tailwind `@2xl`, 42rem). Narrower, a
  * picture is about 130 px wide, too small for two corner labels: they stack in flow over the drawing, which grows to
@@ -22,17 +15,12 @@
     padding: 0.5rem;
   }
 
-  /* In flow, but still positioned, so each label paints over the drawing as it does at its corner. */
   .onPicture > :not(svg) {
     position: relative;
     inset: auto;
   }
 }
 
-/*
- * A square, and the cropped square's axis plate, read on any zone, as `ZoneCard` does: their text tokens reset to
- * their own paper, so a Slide deep in a dark zone that shows one square keeps its words legible.
- */
 .square,
 .plate {
   --foreground: var(--card-foreground);
@@ -43,7 +31,6 @@
   background: color-mix(in oklab, var(--primary) calc((var(--care) - 1) * 5%), var(--card));
 }
 
-/* The cropped square's locator and axis words sit on the card's own paper, so they keep AA contrast on dark water. */
 .plate {
   background: var(--card);
   color: var(--card-foreground);
@@ -244,7 +231,6 @@
   fill: var(--gilt);
 }
 
-/* The drop under paper and the soft waterline glow are translucent: one opaque tone at an opacity, deeper in dark. */
 .picture [data-tone='drop'] {
   fill-opacity: 0.18;
 }
@@ -262,7 +248,6 @@
   stroke: var(--foreground);
 }
 
-/* The trip draws once on entry, from the notebook to the fleet manual; its rest state is drawn. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .trip {
     animation: reveal 1200ms ease-in-out 300ms both;

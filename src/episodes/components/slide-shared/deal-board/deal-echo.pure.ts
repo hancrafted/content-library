@@ -1,4 +1,3 @@
-/** What `checkDealEcho` reads of a lane: whether it is ringed. */
 interface RingedLane {
   readonly ringed?: boolean;
 }

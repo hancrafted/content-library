@@ -15,10 +15,8 @@ import styles from './siphonophore.module.css';
  *   and never under reduced motion; transform and opacity only (decision 19).
  */
 export interface SiphonophoreProps {
-  /** The top of the float, in the Scene. */
   readonly x: number;
   readonly y: number;
-  /** How many swimming bells hang under the float. */
   readonly segments?: number;
   readonly scale?: number;
 }
@@ -27,7 +25,6 @@ const BELL_STEP = 14;
 const FIRST_BELL = 22;
 const TRAIL = 70;
 
-/** Where bell `index` hangs: down the stem, swinging gently left and right. */
 const bellAt = (index: number) => ({ x: 6 * Math.sin(index * 0.7), y: FIRST_BELL + index * BELL_STEP });
 
 interface Point {
@@ -35,7 +32,6 @@ interface Point {
   readonly y: number;
 }
 
-/** The swimming bells down the stem, each lit on its upper left. */
 function Bells({ bells }: { readonly bells: readonly Point[] }) {
   return bells.map(({ x, y }) => (
     <g key={y} data-siphonophore-bell transform={`translate(${x} ${y})`}>
@@ -46,7 +42,6 @@ function Bells({ bells }: { readonly bells: readonly Point[] }) {
   ));
 }
 
-/** The stem from the float past the last bell, and two tentacles trailing from its end. */
 function Trail({ last }: { readonly last: Point }) {
   const end = last.y + TRAIL;
   const stem = toPoints([
@@ -73,10 +68,6 @@ function Trail({ last }: { readonly last: Point }) {
   );
 }
 
-/**
- * A siphonophore, the Twilight Section titles' long colony (decision 11 of feedback 2): a small float, a string of
- * translucent swimming bells and a trailing stem, swaying slowly from the float. A placeholder for the Fable redraw.
- */
 export function Siphonophore({ x, y, segments = 9, scale = 1 }: SiphonophoreProps) {
   if (!Number.isInteger(segments) || segments < 1)
     throw new Error(`A siphonophore needs a whole count of one or more bells, got ${segments}.`);

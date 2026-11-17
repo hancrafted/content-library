@@ -52,7 +52,6 @@
   fill: var(--siph-glint);
 }
 
-/* The colony sways from its float, slowly, only on the active Slide. */
 .sway {
   transform-box: view-box;
   transform-origin: 0 0;
@@ -64,7 +63,6 @@
   }
 }
 
-/* It starts and ends level, where it is drawn, so the loop never jumps when it starts. */
 @keyframes siphonophore-sway {
   0%,
   100% {

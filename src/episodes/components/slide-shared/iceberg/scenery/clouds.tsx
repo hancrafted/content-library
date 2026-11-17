@@ -3,20 +3,16 @@ import styles from './clouds.module.css';
 import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
 
-/** How far off a cloud drifts: the far layer slowest, the near layer fastest (decision 9 of feedback 2). */
 export type CloudLayer = 'far' | 'mid' | 'near';
 
-/** One cloud: its base centre in the Scene, its size against the drawn shape, which of the two shapes, its layer. */
 export interface CloudAt {
   readonly x: number;
   readonly y: number;
   readonly scale: number;
   readonly shape: 0 | 1;
-  /** Without one, the cloud's size picks it: 0.8 and over near, 0.55 and over mid, smaller far. */
   readonly layer?: CloudLayer;
 }
 
-/** The Surface sky's three layers over a 1200-wide Scene with the waterline at 400. */
 const SURFACE_CLOUDS: readonly CloudAt[] = [
   { x: 430, y: 70, scale: 0.42, shape: 1, layer: 'far' },
   { x: 700, y: 175, scale: 0.38, shape: 0, layer: 'far' },
@@ -26,7 +22,6 @@ const SURFACE_CLOUDS: readonly CloudAt[] = [
   { x: 150, y: 352, scale: 0.95, shape: 0, layer: 'near' },
 ];
 
-/** A cloud's layer: its own, or the one its size suggests. */
 export function cloudLayer({ scale, layer }: Pick<CloudAt, 'scale' | 'layer'>): CloudLayer {
   if (layer !== undefined) return layer;
   return scale >= 0.8 ? 'near' : scale >= 0.55 ? 'mid' : 'far';
@@ -71,7 +66,6 @@ export function Clouds({ at = SURFACE_CLOUDS }: { readonly at?: readonly CloudAt
   );
 }
 
-// The drawing: two cumulus shapes from the Spec's `parts.py` (seed 25), lit crowns to the upper left.
 const CLOUDS: readonly (readonly FacetLayer[])[] = [
   [
     {

@@ -1,15 +1,11 @@
-/** What a sticky note on the cashflow board stands for; a `ghost` is the dashed outline where a note used to be. */
 export type NoteKind = 'cash' | 'cost' | 'revenue' | 'ghost';
 
 /** One sticky note. `amount` is in euros and never signed: the board prints a cost's minus itself. */
 export interface Note {
   readonly kind: NoteKind;
   readonly amount?: number;
-  /** A larger note, for the one number the board turns on. */
   readonly big?: boolean;
-  /** A `primary` ring around the note, for the one note a Slide points at. */
   readonly ring?: boolean;
-  /** The Context drawer target the note carries, the value a Slide kit's `target(…)` names. */
   readonly target?: string;
 }
 
@@ -18,22 +14,15 @@ export interface NoteSlots {
   readonly notes: readonly (Note | null)[];
 }
 
-/**
- * Where a lane sits: two lanes per row when the board is narrow, all in one row when it is wide. `narrowBand` is the
- * row of lanes, from 0, it stands in while narrow; the grid row itself follows from the board's `--lane-rows` in CSS.
- */
 export interface LanePlacement {
   readonly narrowColumn: number;
   readonly narrowBand: number;
   readonly wideColumn: number;
 }
 
-/** Note slots a lane has at most. */
 const SLOTS = 3;
-/** Lanes per row while the board is narrow. */
 export const NARROW_LANES = 2;
 
-/** Degrees a note rests at, by column (cycled) then slot, so a note tilts the same on every board. */
 const TILTS: readonly (readonly number[])[] = [
   [-2, 1, -1],
   [2, -1, 1],
@@ -41,16 +30,11 @@ const TILTS: readonly (readonly number[])[] = [
   [1, 2, -2],
 ];
 
-/** A note's amount as it moves the balance: a cost takes money out, a ghost or a note with no amount moves nothing. */
 export function signedAmount(note: Note): number {
   const amount = note.amount ?? 0;
   return note.kind === 'cost' ? -amount : amount;
 }
 
-/**
- * The cash left at each column's end, read top to bottom: a cash note states the balance, a cost takes from it,
- * revenue adds to it, and a column with no cash note starts from the column before it.
- */
 export function cashLeft(columns: readonly NoteSlots[]): number[] {
   let balance = 0;
   return columns.map(({ notes }) => {
@@ -77,7 +61,6 @@ export function tiltOf(column: number, slot: number): number {
   return TILTS[(column - 1) % TILTS.length][(slot - 1) % 3];
 }
 
-/** Where the lane of a column, counted from 1, sits on the board's grid in its narrow and wide layouts. */
 export function lanePlacement(column: number): LanePlacement {
   const index = column - 1;
   return {
@@ -87,51 +70,32 @@ export function lanePlacement(column: number): LanePlacement {
   };
 }
 
-/**
- * Where an arrow stands on the board: its two cells, its label and its kind. A `shaft` (the default) runs straight
- * along the slot row, its label on the shaft; a `curve` is a stroked arc across the gap beside the `from` cell, toward
- * `to`, its label on a pill in the slot under `from`. `BoardArrow` extends it.
- */
 export interface ArrowCells {
   readonly from: BoardCell;
   readonly to: BoardCell;
   readonly label?: string;
   readonly variant?: 'shaft' | 'curve';
-  /**
-   * A shaft's label stands on the shaft in the gap between this column's lane and the next, clear of the notes on
-   * either side, where the board is wide enough to hold it there; narrower, it stands in the slot under `from`. With
-   * no `labelGap`, the label is a pill under the middle of the shaft.
-   */
   readonly labelGap?: number;
 }
 
-/** What `slotRows` reads: the notes, and the overlays that stand in a slot row. */
 export interface SlotReach {
   readonly columns: readonly NoteSlots[];
   readonly stamp?: { readonly column: number };
   readonly arrow?: ArrowCells;
 }
 
-/** The slot an arrow reaches: its ends, and the slot under its start when its label stands there. */
 function arrowReach({ from, to, label, variant, labelGap }: NonNullable<SlotReach['arrow']>): number {
   const labelUnder = label !== undefined && (variant === 'curve' || labelGap !== undefined);
   return Math.max(from[1], to[1], labelUnder ? from[1] + 1 : 0);
 }
 
-/**
- * How many note rows the board's lanes draw: the lowest slot a note fills, the middle one under a stamp, and the
- * slots an arrow and its standing label reach; at least one, at most three. A board whose footers state each balance
- * has no third note, so its lanes come out shorter.
- */
 export function slotRows({ columns, stamp, arrow }: SlotReach): number {
   const notes = columns.map(({ notes: slots }) => slots.reduce((low, note, index) => (note ? index + 1 : low), 0));
   return Math.min(SLOTS, Math.max(1, ...notes, stamp ? 2 : 0, arrow ? arrowReach(arrow) : 0));
 }
 
-/** A column and a slot, both counted from 1. */
 export type BoardCell = readonly [column: number, slot: number];
 
-/** What `checkBoard` reads: where each overlay is placed, and how many columns there are. */
 export interface BoardPlacements {
   readonly count: number;
   readonly stamp?: { readonly column: number };

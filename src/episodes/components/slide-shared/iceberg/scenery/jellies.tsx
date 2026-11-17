@@ -45,7 +45,6 @@ export function Jellies({ x, y, at, count, seed = 1, scale = 1 }: Omit<GroupProp
   );
 }
 
-// The drawing: a pale bell and its trailing tentacles from the Spec's `parts.py` (seed 25).
 const JELLY: readonly FacetLayer[] = [
   { tone: 'jelly', d: 'M-10 0L-7 -8L0 -11L7 -8L10 0Z' },
   { tone: 'jelly-lit', d: 'M-7 -8L0 -11L0 0L-10 0Z' },

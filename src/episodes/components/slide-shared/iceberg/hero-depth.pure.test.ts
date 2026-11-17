@@ -12,12 +12,6 @@ import {
 } from './hero-depth.pure';
 import { KEEL_DEPTH } from './scenery/iceberg-placement.pure';
 
-/*
- * The Title slide's hero drawing (design guide, Iceberg; the Spec's picked Title-slide Option): a sky for the title
- * and the sun, then the four zones under it, all fitted to the hero's height so every zone shows at any width; the
- * Sunlit band deep enough for an iceberg keel twice its tip that ends just inside the Twilight zone.
- */
-
 describe('success cases', () => {
   it('stacks the Surface sky and the four zones under it, each band starting where the one above ends', () => {
     // ARRANGE
@@ -80,8 +74,6 @@ describe('success cases', () => {
 
   it('facets the water under the waterline about half as densely as before feedback 2, across the bleed too', () => {
     // ARRANGE
-    // Before: four bands of nine cells of 140 across the 1200-wide drawing, two triangles a cell, 72 in all. Now fifteen
-    // cells of the shared water cell (240) per band across the 3600-wide bleed, one row each: 120 over three widths.
     const expected = 120;
     // ACT
     const triangles = heroWater(HERO_DEPTH).reduce((sum, band) => sum + band.facets.length, 0);
@@ -136,8 +128,14 @@ describe('edge cases', () => {
 
   it('reads the title as two lines on a wide screen, three on a narrower one and five on a phone', () => {
     // ARRANGE
-    // 94 px of header band, the slide header's top padding, then each line at 1.05 of the hero size.
-    const expected = [94 + 96 + 2 * 1.05 * 72, 94 + 96 + 3 * 1.05 * 0.052 * 1024, 94 + 64 + 5 * 1.05 * 40];
+    const headerBandPixels = 94;
+    const slideHeaderTopPaddingPixels = { wide: 96, phone: 64 };
+    const heroLeading = 1.05;
+    const expected = [
+      headerBandPixels + slideHeaderTopPaddingPixels.wide + 2 * heroLeading * 72,
+      headerBandPixels + slideHeaderTopPaddingPixels.wide + 3 * heroLeading * 0.052 * 1024,
+      headerBandPixels + slideHeaderTopPaddingPixels.phone + 5 * heroLeading * 40,
+    ];
     const digits = 5;
     const close = expected.map((bottom) => expect.closeTo(bottom, digits));
     // ACT

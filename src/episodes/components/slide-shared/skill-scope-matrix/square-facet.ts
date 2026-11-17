@@ -1,7 +1,3 @@
-/*
- * One facet of a skill scope matrix picture: a path in the picture's 380 by 145 space and its tone, a tone
- * `skill-scope-matrix.module.css` mixes from global tokens.
- */
 export type SquareTone =
   | 'binder'
   | 'binder-lit'
@@ -51,8 +47,6 @@ export interface SquareFacet {
 }
 
 export interface SquareFacets {
-  /** Wall, desk, sky and sea: behind the ships. */
   readonly back: readonly SquareFacet[];
-  /** The story object: in front of the ships. */
   readonly front: readonly SquareFacet[];
 }

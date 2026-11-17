@@ -7,10 +7,8 @@ import type { ReactNode } from 'react';
  * (FE-007 §5).
  */
 
-/** The board's own size, the frame every Scene lays its parts out in. */
 const BOARD = { width: 360, height: 180 } as const;
 
-/** The whiteboard: an `<svg>` holding the board surface and the Scene's parts, named once for assistive technology. */
 export function Board({ label, children }: { label: string; children: ReactNode }) {
   return (
     <svg
@@ -26,10 +24,6 @@ export function Board({ label, children }: { label: string; children: ReactNode 
   );
 }
 
-/**
- * A check passed: a tick in a circle. `success` is the fixed mark (a seam that now holds); `primary`, a check standing
- * on a handoff.
- */
 export function Tick({ cx, cy, tone }: { cx: number; cy: number; tone: 'success' | 'primary' }) {
   const fixed = tone === 'success';
   return (
@@ -57,7 +51,6 @@ const ARROW_CLASS: Record<ArrowTone, string> = {
   destructive: 'fill-none stroke-destructive',
 };
 
-/** A handoff arrow at height `y`, its head at `to`: pointing right when `to` lies right of `from`, else left. */
 export function Arrow({ from, to, y, tone = 'foreground' }: { from: number; to: number; y: number; tone?: ArrowTone }) {
   const back = to < from ? -6 : 6;
   return (
@@ -74,7 +67,6 @@ export function Arrow({ from, to, y, tone = 'foreground' }: { from: number; to: 
   );
 }
 
-/** The agent badge on a note's corner, in the meaning colour `ai`. */
 export function AgentBadge({ cx, cy }: { cx: number; cy: number }) {
   return (
     <g data-agent-badge>

@@ -9,16 +9,12 @@ import type { Zone } from '../iceberg/zones.pure';
 
 export type { RobotState } from '../deep-sea-expedition/robot.pure';
 
-/** One Slide's robot: its state and, under the waterline, the zone it is in. */
 export interface RobotBeat {
-  /** The Slide's slug. */
   readonly slide: string;
   readonly state: RobotState;
-  /** The zone the robot is in, while it is in the water or on the seabed. */
   readonly depth?: Zone;
 }
 
-/** Every Slide that shows the robot, Title slide first, in the Episode's order. */
 export const ROBOT_STORY: readonly RobotBeat[] = [
   { slide: 'hero', state: 'hanging' },
   { slide: 'a-thought-experiment', state: 'deck' },
@@ -52,10 +48,6 @@ export function robotAt(slide: string, story: readonly RobotBeat[] = ROBOT_STORY
 
 const UNDERWATER: ReadonlySet<RobotState> = new Set(['in-water', 'seabed']);
 
-/**
- * The Slides that break the story: once the robot is in the water, any later row on deck or hanging, and a
- * `recovered` row anywhere but last. Empty when the story holds.
- */
 export function storyBreaks(story: readonly RobotBeat[]): readonly string[] {
   const firstIn = story.findIndex(({ state }) => UNDERWATER.has(state));
   return story.flatMap(({ slide, state }, index) => {
@@ -65,23 +57,17 @@ export function storyBreaks(story: readonly RobotBeat[]): readonly string[] {
   });
 }
 
-/** One Slide as it renders: its slug and the `data-robot-state` of each robot it draws, `unmarked` for none. */
 export interface DrawnSlide {
   readonly slug: string;
   readonly robots: readonly string[];
 }
 
-/** What the story says against an Episode's rendered Slides. */
 export interface StoryFindings {
-  /** The Slides that draw the robot, in the Episode's order: the story's rows, in its order, when it holds. */
   readonly drawn: readonly string[];
-  /** Each robot a Slide with a row draws in another state than its row. */
   readonly strays: readonly string[];
-  /** The rows for a Slide the Episode does not hold. */
   readonly unheld: readonly string[];
 }
 
-/** The robot story against an Episode's Slides, Title slide first, each rendered once. */
 export function storyAgainstSlides(
   slides: readonly DrawnSlide[],
   story: readonly RobotBeat[] = ROBOT_STORY,

@@ -1,8 +1,3 @@
-/*
- * The captain's notebook open on the desk before the room's faceted wall: scribbled zigzag lines over the ruled
- * left page, the dark spine, a pencil beside it. Slide 18 lays the scribbled index card on the right.
- * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
- */
 import type { SquareFacets } from './square-facet';
 
 export const NOTEBOOK: SquareFacets = {

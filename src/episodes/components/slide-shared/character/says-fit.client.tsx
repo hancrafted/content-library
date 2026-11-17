@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode }
 import styles from './emote.module.css';
 import { saysFit, saysRoom } from './says.pure';
 
-/** The scale the `transform` attributes between `node` and `root` apply, CSS motion left out. */
 function transformScale(node: SVGGraphicsElement, root: SVGSVGElement): number {
   let scale = 1;
   for (let el: Element | null = node; el && el !== root; el = el.parentElement) {
@@ -37,7 +36,6 @@ function unitPixels(node: SVGGraphicsElement): number {
 /** Screen pixels per CSS pixel of the words: their scale, `--says-scale` and fit together; 0 while hidden. */
 const drawnPerCss = (words: HTMLElement, drawn: DOMRect) => (words.offsetWidth ? drawn.width / words.offsetWidth : 0);
 
-/** True while the emote's pop still runs, so the bubble is not yet where it rests. */
 function whilePopping(node: SVGGElement, then: () => void): boolean {
   const bubble = node.closest('[data-says-bubble]');
   const popping = bubble?.getAnimations().some((animation) => animation.playState === 'running') ?? false;
@@ -45,10 +43,6 @@ function whilePopping(node: SVGGElement, then: () => void): boolean {
   return popping;
 }
 
-/**
- * Narrows the words' wrap, through `--says-room`, so a bubble the fit turned up stays inside its picture. It measures
- * the bubble at its own width first, and waits for the emote's pop to rest, as a bubble mid-pop is not where it rests.
- */
 function fitRoom(node: SVGGElement, side: 1 | -1) {
   const words = node.querySelector<HTMLElement>('[data-says]');
   const root = node.ownerSVGElement;

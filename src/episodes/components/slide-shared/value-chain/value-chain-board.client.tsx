@@ -4,13 +4,11 @@ import { cn } from '@/shared/lib/utils';
 import { type FocusEvent, type ReactNode, useId, useState } from 'react';
 import styles from './value-chain.module.css';
 
-/** One proof of a stage: a number that carries it, and what it counts. */
 export interface ValueChainProof {
   readonly metric: string;
   readonly text: string;
 }
 
-/** One link of the value chain: when it began, what it was, where, and the two proofs behind it. */
 export interface ValueChainStage {
   readonly slug: string;
   readonly year: string;
@@ -20,15 +18,10 @@ export interface ValueChainStage {
 }
 
 export interface ValueChainBoardProps {
-  /** Oldest first; the last is the primary stage, shown first and active by default. */
   readonly stages: readonly ValueChainStage[];
-  /** Under the chain: what runs beneath every stage. */
   readonly rail: string;
-  /** The proofs' heading word, followed by the active stage's label: "Proof · AI enablement". */
   readonly proofLabel: string;
-  /** Who is talking and what they claim, above the proofs. */
   readonly intro: ReactNode;
-  /** Below the proofs: the call to action. */
   readonly action: ReactNode;
 }
 
@@ -38,10 +31,6 @@ interface StageProps {
   readonly active: boolean;
 }
 
-/**
- * The stage's circle on the chain: the active one grows, rings and pulses once; the primary one is the accent.
- * Positioned, so it paints over the chain's line at rest too, not only once its scale lifts it.
- */
 function StageDot({ primary, active }: Omit<StageProps, 'stage'>) {
   return (
     <span className="flex justify-center" aria-hidden="true">
@@ -102,7 +91,6 @@ function StageButton({
   );
 }
 
-/** One proof card; it rises in when its stage becomes active. */
 function ProofCard({ proof, primary, active }: { proof: ValueChainProof; primary: boolean; active: boolean }) {
   return (
     <div
@@ -135,10 +123,6 @@ function StageProofs({ stage, primary, active, proofLabel }: StageProps & { proo
   );
 }
 
-/**
- * Every stage's proofs, stacked in one cell with only the active stage's shown: the cell keeps the tallest stage's
- * height, so swapping stages never moves the Slide.
- */
 function Proofs({
   id,
   stages,
@@ -171,7 +155,6 @@ interface ChainProps {
   readonly onRelease: () => void;
 }
 
-/** The stages latest first, on one line that fades from the accent down; leaving it by pointer or focus releases. */
 function Chain({ stages, primarySlug, activeSlug, engaged, proofsId, onActivate, onRelease }: ChainProps) {
   const releaseOnFocusLeave = (event: FocusEvent<HTMLOListElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) onRelease();
@@ -200,11 +183,7 @@ function Chain({ stages, primarySlug, activeSlug, engaged, proofsId, onActivate,
   );
 }
 
-/**
- * The value chain and its proofs, which share one state: the active stage. The primary (latest) stage is active until
- * a hover, focus or click picks another; leaving the chain hands it back. Transient state (FE-001): a reload loses
- * nothing a reader would miss.
- */
+// decision: FE-001 §1
 export function ValueChainBoard({ stages, rail, proofLabel, intro, action }: ValueChainBoardProps) {
   const primary = stages[stages.length - 1];
   const [active, setActive] = useState<{ slug: string; engaged: boolean }>({ slug: primary.slug, engaged: false });

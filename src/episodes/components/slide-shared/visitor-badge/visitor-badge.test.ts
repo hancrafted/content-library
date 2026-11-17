@@ -7,7 +7,6 @@ function badge(props: VisitorBadgeProps): string {
   return renderToStaticMarkup(createElement(VisitorBadge, props));
 }
 
-/** The visible text of rendered markup, tags dropped and whitespace collapsed. */
 function textOf(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')

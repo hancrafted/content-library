@@ -6,32 +6,27 @@ import { slotOutline } from './deal-slot';
 
 const TILT = ['-rotate-2', 'rotate-1', 'rotate-2', '-rotate-1'] as const;
 
-/** A note on the echo: a blank paper slip, a word on paper, or a square tinted as cash or revenue. */
 export interface EchoNote {
   readonly slug: string;
   readonly text?: string;
   readonly tint?: 'cash' | 'revenue';
 }
 
-/** A number standing for a lane's notes, in `primary` when it carries the Section's point. */
 export interface EchoCount {
   readonly value: string;
   readonly primary?: boolean;
 }
 
-/** One stage of the echo: its notes or its count, then its slot, the deal board's dashed slot drawn small. */
 export interface EchoLane {
   readonly slug: string;
   readonly notes?: readonly EchoNote[];
   readonly count?: EchoCount;
   readonly slot?: DealSlot;
-  /** The one lane that changed on this section slide, ringed in `primary`. */
   readonly ringed?: boolean;
 }
 
 export interface DealEchoProps {
   readonly lanes: readonly EchoLane[];
-  /** The cycle under every lane: a `primary` bracket and its text. */
   readonly cycle?: string;
 }
 
@@ -86,7 +81,6 @@ function Lane({ lane }: { lane: EchoLane }) {
   );
 }
 
-/** The cycle under the lanes: one `primary` bracket across all of them and its text. */
 function Cycle({ text }: { text: string }) {
   return (
     <div data-echo="cycle" className="flex flex-col gap-1">
@@ -103,12 +97,6 @@ function Cycle({ text }: { text: string }) {
   );
 }
 
-/**
- * The deal board's echo on a section slide (the Hero motif of "Why it's never too early to start with sales"): the
- * Title slide's lanes drawn small and unlabelled, in the state that Section brings the pipeline to, at most the one
- * lane that changed ringed. It keeps its own distance below the Slide header. Decoration: hidden from assistive tech,
- * since the Slide's title and caption carry its words.
- */
 export function DealEcho({ lanes, cycle }: DealEchoProps) {
   checkDealEcho(lanes);
   return (

@@ -16,15 +16,12 @@ import styles from './whale.module.css';
  *   (decision 20).
  */
 export interface WhaleProps {
-  /** The whale's centre in the Scene. */
   readonly x: number;
   readonly y: number;
   readonly scale?: number;
-  /** Faces the whale left instead of right. */
   readonly flip?: boolean;
 }
 
-/** A humpback in large hand-cut planes, the Midnight zone's creature, gliding slowly back and forth. */
 export function Whale({ x, y, scale = 0.8, flip = false }: WhaleProps) {
   return (
     <g
@@ -41,7 +38,6 @@ export function Whale({ x, y, scale = 0.8, flip = false }: WhaleProps) {
   );
 }
 
-// The drawing: the humpback from the Spec's `parts.py` (seed 25), back lit to the upper left, pale belly below.
 const WHALE: readonly FacetLayer[] = [
   { tone: 'whale-lit', d: 'M-150 -6L-110 -15L-110 0.7Z' },
   { tone: 'whale', d: 'M-150 -6L-110 0.7L-150 1Z' },

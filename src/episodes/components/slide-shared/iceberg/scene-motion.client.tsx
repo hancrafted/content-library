@@ -8,28 +8,23 @@ import type { Zone } from './zones.pure';
 
 interface SceneMotionProps {
   readonly className?: string;
-  /** The Iceberg zone the Scene draws, a hook for its CSS (`data-depth-zone`); not the Slide's zone. */
   readonly zone: Zone;
-  /** The zone's colour tokens, set by `ZoneScene`. */
   readonly style?: CSSProperties;
   readonly children: ReactNode;
 }
 
-/** Each animation running in the Scene, with how often it repeats; an ambient loop repeats forever. */
 function runningIn(scene: HTMLElement) {
   return scene
     .getAnimations({ subtree: true })
     .map((animation) => ({ animation, iterations: animation.effect?.getComputedTiming().iterations ?? 1 }));
 }
 
-/** `settled` once every once-animation started on entry has finished; a cancelled one counts as ended. */
 function useSettle(scene: RefObject<HTMLDivElement | null>, start: SceneMotion) {
   const [settled, setSettled] = useState<'playing' | 'settled'>('playing');
   useEffect(() => {
     const element = scene.current;
     if (start !== 'playing' || element === null) return;
     let live = true;
-    // One frame on: the mount's `[data-zone='active']` has applied, so the CSS animations exist.
     const frame = window.requestAnimationFrame(() => {
       const waited = onceAnimations(runningIn(element)).map(({ animation }) => animation.finished);
       void Promise.allSettled(waited).then(() => {
@@ -39,14 +34,12 @@ function useSettle(scene: RefObject<HTMLDivElement | null>, start: SceneMotion) 
     return () => {
       live = false;
       window.cancelAnimationFrame(frame);
-      // Leaving the active Slide: the next entry plays again and settles anew.
       setSettled('playing');
     };
   }, [scene, start]);
   return start === 'playing' ? settled : start;
 }
 
-/** True while the document is hidden: CSS alone cannot see a background tab. */
 function useDocumentHidden() {
   const [hidden, setHidden] = useState(false);
   useEffect(() => {

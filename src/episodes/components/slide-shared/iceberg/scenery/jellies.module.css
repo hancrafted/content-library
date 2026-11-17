@@ -31,7 +31,6 @@
   stroke-linejoin: round;
 }
 
-/* The Twilight loop: each jelly bobs on its own beat, only on the active Slide. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .bob {
     animation: jelly-bob 7s ease-in-out infinite alternate;

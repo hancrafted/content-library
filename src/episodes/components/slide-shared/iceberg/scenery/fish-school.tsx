@@ -34,7 +34,6 @@ export function FishSchool({ x, y, at, count = 11, seed = 1, scale = 1.3, flip =
   );
 }
 
-// The drawing: one small yellow fish from the Spec's `parts.py` (seed 25), lit back to the upper left.
 const FISH: readonly FacetLayer[] = [
   { tone: 'fish-lit', d: 'M-10 0L-2 -5.5L0 0ZM-2 -5.5L9 -2.5L0 0Z' },
   { tone: 'fish-shade', d: 'M9 -2.5L12 0L0 0ZM12 0L9 3L0 0ZM9 3L-2 5L0 0Z' },

@@ -3,22 +3,16 @@
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { useState } from 'react';
 
-/** What `LoadOnClick` takes: serializable words and the one link it may load. */
 export interface LoadOnClickProps {
-  /** The page to frame; nothing requests it before the click. */
   src: string;
   buttonLabel: string;
-  /** Under the button: what the click loads, and from where. */
   hint: string;
   /** The link's text once the page is shown, for a page that refuses framing: "Results in the second tab". */
   fallbackNote: string;
-  /** Read to a screen reader after the link's text. */
   newTabHint: string;
-  /** The frame's accessible name. */
   title: string;
 }
 
-/** Before the click: the button and the hint, nothing else. */
 function Gate({ onLoad, buttonLabel, hint }: { onLoad: () => void; buttonLabel: string; hint: string }) {
   return (
     <div className="flex flex-wrap items-center gap-4">

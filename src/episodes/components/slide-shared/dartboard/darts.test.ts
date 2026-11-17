@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Darts, type DartsProps } from './darts';
 
-/*
- * The darts thrown at the dartboard: one mark per point, a dot by default or a document page, coloured by what the
- * throw means. The Title slide, the section slides and the precision and accuracy Slides draw them.
- */
-
 const marks = (props: DartsProps): Record<string, string>[] => {
   const $ = load(renderToStaticMarkup(createElement('svg', null, createElement(Darts, props))));
   return $('svg')

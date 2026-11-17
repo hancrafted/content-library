@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bandFacets, edgeY, seaFacets, WATER_CELL, zoneEdge } from './zone-edges.pure';
 
-/*
- * The faceted water every Iceberg Scene stands in: zone boundaries in uneven waves from one generator, and the facets
- * between two of them, meeting the next band on the very same points; the same on every render.
- */
-
-/** Every corner of every facet, as `x,y`. */
 const cornersOf = (facets: readonly { readonly points: string }[]) =>
   new Set(facets.flatMap(({ points }) => points.split(' ')));
 
@@ -103,8 +97,6 @@ describe('edge cases', () => {
   });
   it('cuts the same water for seed 7 every time: the corners fixed, the inner ones nudged, the top and bottom along', () => {
     // ARRANGE
-    // Two by two cells of 100: the inner corner moves to (73.7, 128.6), the top middle along the top to (70.7, 0), the
-    // bottom middle along the bottom to (111.9, 200); the corners on the left and right sides stay put.
     const expected = [
       { points: '0,0 70.7,0 0,100', tone: 'sea-lit' },
       { points: '70.7,0 73.7,128.6 0,100', tone: 'sea' },

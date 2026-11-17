@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { flowPlays } from './flow-motion.pure';
 
-/*
- * When the factory line's flow plays: once from its Slide's first entrance, and again on every pointer or keyboard
- * replay; a line mounted again after its Slide entered stands at its end state until pointed at.
- */
-
 describe('success cases', () => {
   it('plays once the Slide starts entering', () => {
     // ARRANGE

@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { AGENTS, casesOf, DEFAULT_AGENT, DEFAULT_OS, OPERATING_SYSTEMS, pickOf } from './picks.pure';
 
-/*
- * The toolbar picks a setup step reads (FE-001 §1, transient, through `usePagePick`): the operating system and the AI
- * agent, each a list of options keyed by the value the page shares. The hrefs are the vendors' own pages, checked by
- * hand against each vendor on 2026-10-29.
- */
-
+// decision: FE-001 §1
 describe('success cases', () => {
   it('finds the AI agent the viewer picked', () => {
     // ARRANGE

@@ -37,7 +37,6 @@
   stroke-linejoin: round;
 }
 
-/* Each fish darts forward and drifts back on its own beat, only on the active Slide. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .dart {
     animation: lanternfish-dart 5s ease-in-out infinite alternate;

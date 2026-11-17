@@ -10,7 +10,6 @@ const SLOT = 'zone-label-popover';
 
 const RULES: PopoverRules = { maxWidth: 256, gap: 8, minRoom: 96 };
 
-/** Why the popover is open: a press keeps it until the next press or Esc; hover and focus only while they last. */
 type OpenBy = 'press' | 'hover' | 'focus';
 
 function ZonePopover({

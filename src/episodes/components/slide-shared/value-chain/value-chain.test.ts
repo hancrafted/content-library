@@ -3,7 +3,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { ValueChain, type ValueChainProps } from './value-chain';
 
-/** A two-stage chain told oldest first, as a Slide's copy hands it over. */
 const PROPS: ValueChainProps = {
   name: 'Ada Lovelace',
   role: 'Analyst · Writer',
@@ -41,7 +40,6 @@ function render(props: ValueChainProps): string {
   return renderToStaticMarkup(createElement(ValueChain, props));
 }
 
-/** The visible text of rendered markup, tags dropped and whitespace collapsed. */
 function textOf(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')
@@ -49,7 +47,6 @@ function textOf(html: string): string {
     .trim();
 }
 
-/** How many `aria-hidden="true"` elements are open after `tag`: entering one starts the count, nesting moves it. */
 function hiddenDepthAfter(depth: number, tag: string): number {
   if (tag.endsWith('/>')) return depth;
   const closing = tag.startsWith('</');
@@ -57,7 +54,6 @@ function hiddenDepthAfter(depth: number, tag: string): number {
   return !closing && tag.includes('aria-hidden="true"') ? 1 : 0;
 }
 
-/** The text a reader is offered: `textOf`, minus every `aria-hidden="true"` subtree (decoration, inactive stages). */
 function exposedTextOf(html: string): string {
   let depth = 0;
   let kept = '';

@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Robot, type RobotProps } from './robot';
 
-/*
- * The diving robot, the AI of "What lies below the waterline": an SVG group a Scene places in its own <svg>. Its lamp
- * lights a beam, its motion plays once inside the figure, and its mood and words attach at its head anchor.
- */
-
 const draw = (props: RobotProps) => {
   const $ = load(renderToStaticMarkup(createElement('svg', null, createElement(Robot, props))), { xml: true });
   return {

@@ -2,7 +2,6 @@ import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
 import type { DealBracket } from './deal-board.types';
 
-/** The `primary` annotation over the emphasised lane: its label and a drawn arrow bending down into the lane. */
 export function Annotation({ text }: { text: string }) {
   return (
     <div data-deal="annotation" className={styles.annotationRow}>
@@ -30,7 +29,6 @@ export function Annotation({ text }: { text: string }) {
   );
 }
 
-/** The dashed flow arrow under the lanes, from a name on the list to a signed contract. */
 export function Ends({ ends: [first, last] }: { ends: readonly [string, string] }) {
   return (
     <div data-deal="ends" className="flex flex-col gap-2">
@@ -48,7 +46,6 @@ export function Ends({ ends: [first, last] }: { ends: readonly [string, string] 
   );
 }
 
-/** The label under the emphasised lane and the bracket under the lanes sales works. */
 export function Bracket({ bracket, emphasis }: { bracket: DealBracket; emphasis: number }) {
   return (
     <>

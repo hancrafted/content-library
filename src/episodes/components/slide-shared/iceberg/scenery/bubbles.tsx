@@ -14,19 +14,15 @@ import { scatter } from './scenery.pure';
 
 const BUBBLE_RADIUS = 6;
 const BUBBLE_BEAT_SECONDS = 1.3;
-/** Sides per bubble in turn, so a column never repeats one outline. */
 const SIDES = [7, 6, 8] as const;
 
-/** Rising bubbles, the Abyss zone's loop and the descent's: each rises from where it is drawn and fades. */
 export function Bubbles({ x, y, at, count = 7, seed = 1, scale = 1 }: Omit<GroupProps, 'flip'>) {
-  // The scatter's column grows with the group, so a larger group rises in a wider, taller column.
   const bubbles =
     at ?? scatter({ count, seed, spread: [24 * scale, 70 * scale], gap: [10 * scale, 14 * scale], sizes: [0.5, 1.2] });
   return (
     <g className={styles.scenery} data-bubbles transform={`translate(${x} ${y})`}>
       {bubbles.map((p, index) => (
         <g key={`${p.x}:${p.y}`} transform={placeTransform(p, scale)}>
-          {/* The host moves the bubble (rise and fade); the bubble names that motion and draws itself. */}
           <g className={styles.rise} data-bubble style={{ animationDelay: `${-index * BUBBLE_BEAT_SECONDS}s` }}>
             <PolyBubble
               sides={SIDES[index % SIDES.length]}

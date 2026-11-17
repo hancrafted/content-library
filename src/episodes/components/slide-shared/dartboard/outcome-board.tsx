@@ -1,10 +1,6 @@
 import { Dartboard } from './dartboard';
 import { Darts, type DartTone, type Point } from './darts';
 
-/**
- * The four outcomes of precision and accuracy: precise or not (a tight or loose cluster), accurate or not (on the bull
- * or off it).
- */
 export type PrecisionOutcome = 'precise-accurate' | 'precise-off' | 'accurate-scattered' | 'neither';
 
 /**

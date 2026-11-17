@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { SkillScopeMatrix, SkillScopeSquare, type Square, type SquareId } from './skill-scope-matrix';
 
-/*
- * The skill scope matrix of Slide 18, and one square of it cropped out for a later Slide that comes back to it: the
- * same square card, with a locator naming where it sits.
- */
-
 const square = (id: SquareId, care: Square['care']): Square => ({
   id,
   care,

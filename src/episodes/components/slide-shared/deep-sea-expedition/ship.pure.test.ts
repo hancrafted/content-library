@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { deckY, SHIP_TONES, shipAnchors, shipLayers } from './ship.pure';
 
-/*
- * The research ship's geometry: facets in three paint layers and the anchors where a Scene places the crew and the
- * robot. (0, 0) is the waterline amidships; the bow points right unless flipped. The deck line runs from (-144, -29)
- * at the stern to (150, -37) at the bow, so a deck height at x is -29 - 8 * (x + 144) / 294.
- */
-
 describe('success cases', () => {
   it('stands the bridge crew on the window sill, inside the window opening', () => {
     // ARRANGE

@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { saysBox, saysFit, saysRoom } from './says.pure';
 
-/*
- * The shared speech bubble's size rule (decision 53): its words never draw smaller than the caption role they are set
- * in, however small the picture; and the box a Slide's layout test measures the bubble with, in the Scene's own units.
- */
-
 describe('success cases', () => {
   it('turns words up until they draw at their caption size, when the picture draws them smaller', () => {
     // ARRANGE

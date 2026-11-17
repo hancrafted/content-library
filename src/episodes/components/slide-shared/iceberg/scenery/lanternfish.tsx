@@ -42,10 +42,8 @@ export function Lanternfish({ x, y, at, count = 9, seed = 3, scale = 1.2, flip =
   );
 }
 
-/** A photophore: a small diamond at (x, y). */
 const light = (x: number, y = 2.6, r = 0.9) => `${x},${y - r} ${x + r},${y} ${x},${y + r} ${x - r},${y}`;
 
-// The drawing: a blunt-headed fish lit along its back from the upper left, a big eye and four photophores.
 const LANTERNFISH: readonly { readonly tone: string; readonly points: string }[] = [
   { tone: 'lantern-lit', points: '12,0 2,-5 -8,-2 0,0' },
   { tone: 'lantern', points: '12,0 0,0 -8,2 2,4.5' },

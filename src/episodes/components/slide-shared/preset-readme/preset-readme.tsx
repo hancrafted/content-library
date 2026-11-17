@@ -1,13 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import { useId, type ReactNode } from 'react';
 
-/*
- * The readme an Explorable Slide carries about its Preset: what it shows, what to try, what to notice.
- * A static server part: the Slide hands it every word. Three short items side by side on a wide container, stacked on
- * a narrow one, so the visual below keeps the whole width.
- * Collapsed, it folds into a native disclosure: still server-rendered, its text in the static HTML.
- */
-
 export interface PresetReadmeItem {
   readonly label: string;
   readonly text: string;
@@ -15,7 +8,6 @@ export interface PresetReadmeItem {
 
 export interface PresetReadmeProps {
   readonly heading: string;
-  /** The Preset's id, shown as code; absent when the Slide shows no named Preset. */
   readonly preset?: string;
   readonly items: readonly PresetReadmeItem[];
   /** Folds the items under the heading, closed, for a page whose visual must fit the first screen. */
@@ -47,7 +39,6 @@ function Items({ items }: { readonly items: readonly PresetReadmeItem[] }) {
   );
 }
 
-/** The always-visible line of a collapsed readme: a chevron that turns when open, then the heading. */
 function Summary({ children }: { readonly children: ReactNode }) {
   return (
     <summary className="flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden">

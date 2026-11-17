@@ -1,8 +1,3 @@
-/*
- * The faceted sky and Surface sea with the lit waterline; the fleet manual in front of the three ships: lit
- * cover, gilt bands and the inset page. Slide 18 lays the travelling index card on it.
- * Lifted from the approved Spec Option 18a, in the picture's own 380 by 145 space.
- */
 import type { SquareFacets } from './square-facet';
 
 export const FLEET: SquareFacets = {

@@ -26,16 +26,11 @@ const ring = (r: number) =>
  * - Motion: none.
  */
 export interface SunMoonProps {
-  /** The disc's centre in the Scene. */
   readonly x: number;
   readonly y: number;
   readonly r?: number;
 }
 
-/**
- * The Surface sky's light: a faceted sun in light mode and a crescent moon in dark. Both are drawn; the theme swaps
- * them in CSS alone (`.dark`), as the landing window does, so the static page needs no script to pick one.
- */
 export function SunMoon({ x, y, r = 34 }: SunMoonProps) {
   return (
     <g className={styles.sunMoon} data-sun-moon transform={`translate(${x} ${y})`}>

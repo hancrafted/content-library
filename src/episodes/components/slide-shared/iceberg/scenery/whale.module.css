@@ -61,7 +61,6 @@
   stroke-linejoin: round;
 }
 
-/* The Midnight loop: the whale glides slowly back and forth, only on the active Slide. */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .glide {
     animation: whale-glide 30s ease-in-out infinite alternate;
