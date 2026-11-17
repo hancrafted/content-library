@@ -14,13 +14,6 @@ import { describe, expect, it } from 'vitest';
 import { whatLiesBelowTheWaterlineOfSustainableAiSkills as episode } from './episode';
 import { hero } from './slides/hero/slide';
 
-/*
- * The robot story table against the Episode itself (feedback 3, decision 42): every Slide that draws the robot has its
- * row, in the Episode's order, so the story's rule that the robot never climbs back out of the water holds for the
- * Slides as they render. A Slide that adds or drops the robot adds or drops its row. Each Slide renders once; the
- * judgement is `storyAgainstSlides`, and the story's own rules are tested beside it.
- */
-
 const EPISODE = 'what-lies-below-the-waterline-of-sustainable-ai-skills';
 const LABELS = { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` };
 const PLACED = placeSections<Slide>(episode.sections).flat();
