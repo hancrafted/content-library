@@ -70,7 +70,6 @@ export function PromptEditor({ words, text, edited, onText, onReset, onClose }: 
   );
 }
 
-/** Whether the editor is open: transient, so a reload closes it. */
 export function useOpen() {
   const [on, set] = useState(false);
   return { on, toggle: () => set((now) => !now), close: () => set(false) };

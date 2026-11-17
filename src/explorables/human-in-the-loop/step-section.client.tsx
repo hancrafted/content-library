@@ -34,7 +34,6 @@ export function StepSection({ n, title, info, kit, open = true, children }: Sect
   return (
     <Collapsible defaultOpen={open} data-step-section={n} className="group/step flex min-w-0 flex-col">
       {n > 1 && <Separator className="mb-5.5" />}
-      {/* The step's box: light grey while the pointer is inside it. Its padding sits in the gap, so the spacing stays. */}
       <div
         data-step-box=""
         className="-my-3 flex min-w-0 flex-col gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-muted"

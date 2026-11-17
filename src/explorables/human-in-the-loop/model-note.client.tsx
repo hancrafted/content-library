@@ -7,12 +7,6 @@ import { useState } from 'react';
 import { modelNote, type ModelWords } from './model-tier.pure';
 import type { ModelTier } from './workflow-schema.types';
 
-/*
- * The model the step's job is best run with, in the action row right of the chat buttons: "Model: High · deep
- * thinking" and a `?` that shows the tier's one standard tooltip. Hover and keyboard focus open it as with any
- * Tooltip; a press opens it and keeps it open, where Radix alone closes it again on click and never opens it on a tap.
- */
-
 interface ModelNoteProps {
   readonly words: ModelWords;
   readonly tier: ModelTier;

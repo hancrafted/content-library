@@ -66,10 +66,6 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/**
- * The progress file's save and load: the run of an authored Workflow only, so none while an uploaded one is shown.
- * Save waits for work to save, as Reset does; Load always shows, so a new device can restore a run.
- */
 function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
   const { controls, words, progress } = bar;
   if (!progress) return null;

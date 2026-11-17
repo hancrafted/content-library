@@ -128,7 +128,6 @@ function demoPropsOf({ data, state, progress }: Shown, canChange: boolean, on: C
   return { demo, onDemo: on.onDemo, onReset: on.onReset, onDownloadRun: progress?.onDownload };
 }
 
-/** The run goes to the diagram only once it has work, and never to a readonly Preset: both views then show progress. */
 function diagramOf({ data, state, workflow, run, drawn }: Shown, on: Callbacks): DiagramProps {
   const shows = !data.readonly && !run.canChangeDemo;
   return {

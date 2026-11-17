@@ -49,7 +49,6 @@ function Panel({ stage, run, jobId, round, slots, level, onLevel, debug, ...chro
   );
 }
 
-/** The title takes the first focus, so no control (and no tooltip) greets the viewer. */
 function focusTitle(event: Event) {
   event.preventDefault();
   document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
@@ -73,11 +72,6 @@ function focusOpener(event: Event, opener: Opener | null) {
   button.focus();
 }
 
-/**
- * The stage modal part: a shadcn Dialog (Radix) open while a stage is open, so it gives the top layer, Escape, the
- * focus trap and a close on the overlay. The title takes the first focus, so no control greets the viewer; closing
- * returns focus to the opener. A copy announces `words.copied` in a polite live region.
- */
 export function ModalPart({ stage, run, jobId, round, slotValues, onSlots, onClose, ...rest }: ModalProps) {
   const opener = useRef<Opener | null>(null);
   useEffect(() => {

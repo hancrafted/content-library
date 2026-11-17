@@ -1,4 +1,4 @@
-import { fanGeometry, TITLE_Y, type Connector as ConnectorKind } from './diagram-layout.pure';
+import { fanGeometry, TITLE_Y_PIXELS, type Connector as ConnectorKind } from './diagram-layout.pure';
 
 export const STRAIGHT = (
   <svg viewBox="0 0 24 10" className="h-2.5 w-6" aria-hidden="true">
@@ -23,7 +23,7 @@ export function Connector({ kind }: { kind: ConnectorKind }) {
     <div
       aria-hidden="true"
       className="pointer-events-none absolute right-full hidden w-6 justify-center @2xl:flex"
-      style={{ top: straight ? TITLE_Y - 5 : 0 }}
+      style={{ top: straight ? TITLE_Y_PIXELS - 5 : 0 }}
     >
       {straight ? STRAIGHT : <Fan direction={kind.kind} branches={kind.branches} />}
     </div>

@@ -78,10 +78,6 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
   );
 }
 
-/**
- * A lane with the Slide's content after it: the lane keeps its own box, so the "Try it" button covers the lane alone,
- * and the content sits below it in the column.
- */
 function LaneWithAfter({ lane, after }: { lane: ReactNode; after: ReactNode }) {
   return (
     <>

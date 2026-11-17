@@ -15,12 +15,8 @@ export const BRANCH_PITCH = 60;
 const PITCH = BRANCH_PITCH;
 const MARGIN = 20;
 const WIDTH = 20;
-/**
- * Cards stand at the top of their lane, so every hairline is measured from the lane's top edge. The title line of a
- * stage card: the lane's padding (12), the card's border and padding (13) and half a title line (body, 25.6 / 2).
- */
-export const TITLE_Y = 38;
-const FIRST_BRANCH_Y = 86;
+export const TITLE_Y_PIXELS = 38;
+const FIRST_BRANCH_Y_PIXELS = 86;
 
 const widest = (stage: Stage, rounds: Rounds): number => Math.max(1, rounds[stage.id] ?? 1);
 
@@ -32,8 +28,8 @@ export function connectorInto(previous: Stage | undefined, stage: Stage, rounds:
 }
 
 export function fanGeometry(direction: 'out' | 'in', branches: number): Fan {
-  const join = TITLE_Y;
-  const ys = Array.from({ length: branches }, (_, i) => FIRST_BRANCH_Y + i * PITCH);
+  const join = TITLE_Y_PIXELS;
+  const ys = Array.from({ length: branches }, (_, i) => FIRST_BRANCH_Y_PIXELS + i * PITCH);
   const line = (y: number): string =>
     direction === 'out'
       ? `M0 ${join} C 12 ${join}, 10 ${y}, ${WIDTH} ${y}`

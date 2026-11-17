@@ -18,13 +18,6 @@ import { debuggedPrompt, explanationPrompt } from './words.pure';
 import type { StepKind } from './workflow-prompts.pure';
 import type { TaskModalView } from './workflow-view.pure';
 
-/*
- * The body of one chat of a stepper step, as a plain list of numbered steps: the context that fills the prompt (when
- * there is any), the prompt with its result box, or, for a review, the check. No cards, no previews: a button copies
- * the prompt, another copies it wrapped in a request that has an AI explain it, so the viewer learns to prompt. The
- * check is optional: it starts folded, and a pasted result already ends the item.
- */
-
 type Step = TaskModalView['steps'][number];
 
 export interface PanelProps {

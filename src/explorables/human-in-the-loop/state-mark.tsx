@@ -6,7 +6,6 @@ import type { JobState, StageRun } from './workflow-run.pure';
 const STATE_ICON = { open: Circle, done: Check, checked: CheckCheck } as const;
 const STATE_TONE = { open: 'text-muted-foreground', done: 'text-foreground', checked: 'text-primary' } as const;
 
-/** A state as an icon and its word, so colour never carries it alone. */
 export function StateMark({ state, words }: { readonly state: JobState; readonly words: UiWords }) {
   const Icon = STATE_ICON[state];
   const word = { open: words.stateOpen, done: words.stateDone, checked: words.checked }[state];

@@ -49,7 +49,6 @@ export function Picker({ bar }: { readonly bar: ToolbarProps }) {
       </Label>
       <Select value={bar.workflow.id} onValueChange={bar.onWorkflow}>
         <SelectTrigger id={id}>
-          {/* The title as children: Radix renders an empty value until hydration, so the static page would show none. */}
           <SelectValue>{bar.workflow.title}</SelectValue>
         </SelectTrigger>
         <SelectContent>

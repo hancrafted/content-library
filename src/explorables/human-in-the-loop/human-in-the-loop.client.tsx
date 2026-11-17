@@ -35,10 +35,6 @@ function actionsOf(
   };
 }
 
-/**
- * Saves the run of an authored Workflow and resumes it, and offers it as a YAML file to save and load. An uploaded
- * Workflow's run is not kept, so it has neither (decision of #382: no hash can vouch for a file the site does not hold).
- */
 function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispatch: Dispatch<WorkflowEvent>) {
   const target = progressTarget(data, state);
   const { slotValues: results, demo, prompts } = state;

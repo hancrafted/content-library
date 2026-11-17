@@ -8,13 +8,6 @@ import { useState } from 'react';
 import type { UiWords } from './human-in-the-loop.types';
 import type { DemoProps } from './progress-controls.types';
 
-/*
- * The Demo mode switch, a control of the toolbar, and Reset, set apart just after it; the same in the visual's toolbar
- * and in the popover's. The switch is disabled once
- * a result is pasted ("Reset to change"). Reset takes the warning token colour while saved work exists; it asks for
- * confirmation in the page (never a browser dialog), where the viewer may download the run first.
- */
-
 export interface Props extends DemoProps {
   readonly words: UiWords;
   readonly confirming: boolean;

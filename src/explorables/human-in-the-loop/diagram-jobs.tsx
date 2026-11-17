@@ -11,14 +11,6 @@ import { orderedJobs } from './workflow-order.pure';
 import type { JobState, Run, StageRun } from './workflow-run.pure';
 import type { Stage, Workflow } from './workflow.types';
 
-/**
- * The Jobs view, the detailed one, with the viewer's run laid over it once the run has work: the same ordered list of stage columns as the Stages view, but each stage card holds its
- * jobs as job cards in `needs` order, joined by arrows. A repeated stage is drawn once, its jobs inside a dashed
- * bracket that says how many rounds it runs; a gated stage keeps its badge. A job card opens the
- * stage's modal at that job. Once the run has work every job card says open, done or checked, each stage its count ("3/5"), and
- * a repeated stage's bracket holds the rounds the run has, titled by their pasted H3s. All of it is read from the run
- * model: the view never works out progress itself.
- */
 export function DiagramJobs(props: {
   run?: Run;
   workflow: Workflow;

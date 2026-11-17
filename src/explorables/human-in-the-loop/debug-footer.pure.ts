@@ -1,12 +1,6 @@
 import type { StepKind } from './workflow-prompts.pure.ts';
 import type { Level } from './workflow-state.pure';
 
-/*
- * Debug mode (decided with Han): when on, the two copy buttons append one instruction block that has the AI end every
- * reply with a one-line footer naming where the prompt came from, so feedback pastes straight back with its context.
- * The field values stay untranslated ids (greppable); only the instruction around the footer is a word of the locale.
- */
-
 export interface DebugBase {
   readonly workflow: { readonly id: string; readonly title: string };
   readonly level: Level;
@@ -41,7 +35,6 @@ export const LEVEL_OF: Readonly<Record<string, Level>> = Object.fromEntries(
 
 export const SOURCE_CHARS = 8;
 
-/** A name on one line, its quotes softened, so the footer stays one greppable line. */
 const named = (id: string, name: string): string => `${id} "${name.replace(/\s+/g, ' ').replace(/"/g, "'").trim()}"`;
 
 export function debugFooter(scope: DebugScope, { prompt, step, chat }: DebugPrompt): string {
@@ -66,7 +59,6 @@ export function withDebug(text: string, instruction: string, footer: string | nu
   return `${text}\n\n${instruction.replace('{footer}', () => footer)}`;
 }
 
-/** Whether the toggle shows: in development, or on a page whose URL carries `?debug`. Never for a workshop viewer. */
 export function debugAvailable({
   env,
   search,

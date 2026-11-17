@@ -26,7 +26,6 @@ export const isChecked = (stage: Stage): boolean => stage.jobs.some((job) => job
 export const gateLabelOf = (stage: Stage, slot: StageSlot, words: UiWords): string | undefined =>
   stage.gate === undefined ? undefined : (slot.gateLabel ?? words.gate.replace('{n}', String(stage.gate)));
 
-/** The "checked" mark: an icon and its word, so the review habit is never carried by the icon alone. */
 export function CheckedMark({ word }: { readonly word: string }) {
   return (
     <span data-checked="" className="inline-flex items-center gap-1 text-caption font-medium text-muted-foreground">
