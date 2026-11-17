@@ -14,17 +14,12 @@ export interface TakeawayRow {
   readonly zone: Zone;
   readonly name: string;
   readonly lines: readonly TakeawayLine[];
-  /** A Context marker after the row, where the picked Option shows one. */
   readonly marker?: ReactNode;
 }
 
 const TOPS = new Map(depthBands().map(({ zone, top }) => [zone, top]));
 const NODE_Y = new Map(NODES.map(({ zone, y }) => [zone, y]));
 
-/**
- * A step's chip: `primary`, the focal colour, on light water; inverted to the page background on water dark in both
- * themes (Midnight), where `primary` would sink into it.
- */
 function StepChip({ zone, step }: { readonly zone: Zone; readonly step: number }) {
   const chip = isDarkZone(zone) ? 'inverse' : 'primary';
   return (

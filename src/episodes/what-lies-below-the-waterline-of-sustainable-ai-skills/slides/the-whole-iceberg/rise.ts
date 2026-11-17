@@ -12,10 +12,6 @@ export const RISE = ROBOT_START_Y - ROBOT_REST_Y;
 export const RISE_DELAY_MILLISECONDS = 300;
 export const RISE_MILLISECONDS = 2400;
 
-/**
- * Each zone's node on the trail, at the middle of its row of words. The Surface's row floats in the sky above the
- * A-frame (decision 27 of feedback 2), so the robot never reaches its node: it stays `unlit`.
- */
 export const NODES: readonly { readonly zone: Zone; readonly y: number; readonly unlit: boolean }[] = depthBands().map(
   ({ zone, top }) => {
     const y = top + WHOLE_DEPTH.band / 2;
