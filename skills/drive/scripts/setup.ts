@@ -16,13 +16,12 @@ import {
   guardCiLine,
   guardHookLine,
   installCommands,
-  LEARNINGS_STUB,
   parseSetupArgs,
   type ProjectFacts,
-  PROFILES_STUB,
   renderEnforcers,
   updateProjectConfig,
 } from './setup.pure.ts';
+import { LEARNINGS_STUB, PROFILES_STUB, REVIEW_STUB } from './stubs.pure.ts';
 
 export const LOCKFILE = 'skills-lock.json';
 const AUTHORED_DIR = 'skills';
@@ -172,6 +171,7 @@ export function setup(root: string, options: SeedOptions = {}, scriptsDir: strin
   if (note !== null) notes.push(note);
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
   createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
+  createdOnly(`${DRIVE_DIR}/review.md`, REVIEW_STUB);
   return { written, notes };
 }
 
@@ -202,7 +202,7 @@ const isFolder = (dir: string): boolean => {
   }
 };
 
-/** `drive setup [--agent-type <type>] [--model <model>]`: the two flags seed a new Binding only. */
+/** `drive setup [--agent-type <type>] [--tier mid|top]`: the two flags seed a new Binding only. */
 export function runSetup(args: readonly string[]): void {
   const options = parseSetupArgs(args);
   if ('error' in options) fail(options.error);

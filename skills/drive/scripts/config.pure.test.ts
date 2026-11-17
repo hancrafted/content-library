@@ -39,7 +39,19 @@ describe('parseConfig', () => {
           afterRemove: ['tidy'],
         },
         parallel: { default: 2, harnessCap: 8 },
+        models: {},
         decisionDocs: ['docs/words.md'],
+      });
+    });
+
+    it('reads the models each provider gives the tiers', () => {
+      // ARRANGE
+      const text = 'models:\n  claude: { mid: sonnet, top: opus }\n  gemini: { mid: flash, top: pro }';
+      // ACT
+      const config = parseConfig(text, ENTRY);
+      // ASSERT
+      expect(config).toMatchObject({
+        models: { claude: { mid: 'sonnet', top: 'opus' }, gemini: { mid: 'flash', top: 'pro' } },
       });
     });
 
@@ -57,7 +69,7 @@ describe('parseConfig', () => {
       const configs = texts.map((text) => parseConfig(text, ENTRY));
       // ASSERT
       expect(configs).toEqual(
-        texts.map(() => ({ worktree: defaultsFor(ENTRY), parallel: PARALLEL_DEFAULTS, decisionDocs: [] })),
+        texts.map(() => ({ worktree: defaultsFor(ENTRY), parallel: PARALLEL_DEFAULTS, models: {}, decisionDocs: [] })),
       );
     });
   });
@@ -74,6 +86,9 @@ describe('parseConfig', () => {
         'parallel: { default: 0 }',
         'parallel: { cap: 3 }',
         'decisionDocs: x',
+        'models: x',
+        'models:\n  claude: { mid: sonnet }',
+        'models:\n  claude: { mid: sonnet, top: opus, low: haiku }',
       ];
       // ACT
       const errors = texts.map((text) => parseConfig(text, ENTRY));
@@ -88,6 +103,9 @@ describe('parseConfig', () => {
         'parallel.default must be a whole number of at least 1',
         "unknown parallel key 'cap'; expected default, harnessCap",
         'decisionDocs must be a list of paths',
+        'models in docs/drive/project.yml must be a mapping of provider to tiers',
+        'models.claude.top must be a non-empty string',
+        "unknown tier 'low' in models.claude; expected mid, top",
       ]);
     });
   });

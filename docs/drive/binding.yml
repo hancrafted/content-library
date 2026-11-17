@@ -1,19 +1,20 @@
-# The Binding (design-ADR 0027): which skills serve each DRIVE phase (n:m), the model each phase's Subagents run on,
+# The Binding (design-ADR 0027): which skills serve each DRIVE phase (n:m), the model tier each phase's Subagents run on,
 # and the agent type every agent uses. `drive setup` seeds it and adds newly installed skills; you own every edit.
-# `skills` and `model` per phase are yours to change; `seen` lists the skills setup has already offered, so one you
+# `skills` and `model` (a tier, mid or top, mapped to models in project.yml) per phase are yours to change;
+# `seen` lists the skills setup has already offered, so one you
 # remove here is not added back.
 
 agentType: archgate:developer
 phases:
   define:
-    model: sonnet
+    model: mid
     skills:
       - grill-me
       - grill-with-docs
       - grilling
       - research
   reason:
-    model: opus
+    model: top
     skills:
       - codebase-design
       - domain-modeling
@@ -26,19 +27,20 @@ phases:
       - to-tickets
       - wayfinder
   implement:
-    model: sonnet
+    model: mid
     skills:
       - diagnosing-bugs
       - implement
       - tdd
   verify:
-    model: opus
+    model: top
     skills:
       - code-review
       - improve-codebase-architecture
       - pr
+      - visual-check
   evolve:
-    model: sonnet
+    model: mid
     skills:
       - improve-codebase-architecture
       - retro

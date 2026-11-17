@@ -8,6 +8,13 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ## Failure modes
 
+### A decision page of the wrong model tier fails layout or rendering
+
+- **Count:** 1 (last: 2026-11-17, drive)
+- **Enforcer:** none deterministic: the tier rule in dispatch.md "Model", read from the page's calibration; the screenshot check in dispatch.md "A decision page"
+- **Status:** proposed
+- **Evidence:** drive: haiku failed layout; sonnet gave the best layout (the baseline); opus wrote better descriptions but broke rendering (mid-word wraps)
+
 ### Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)
 
 - **Count:** 1 (last: 2026-11-17, drive)
