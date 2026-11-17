@@ -30,14 +30,19 @@ function collect(rules: CSSRuleList, layer: string | undefined, into: RuleSnapsh
   }
 }
 
+function rulesOfReadableSheet(sheet: CSSStyleSheet): CSSRuleList | null {
+  try {
+    return sheet.cssRules;
+  } catch {
+    return null;
+  }
+}
+
 function readRules(): RuleSnapshot[] {
   const snapshots: RuleSnapshot[] = [];
   for (const sheet of Array.from(document.styleSheets)) {
-    try {
-      collect(sheet.cssRules, undefined, snapshots);
-    } catch {
-      // A cross-origin stylesheet cannot be read; it holds none of ours.
-    }
+    const rules = rulesOfReadableSheet(sheet);
+    if (rules) collect(rules, undefined, snapshots);
   }
   return snapshots;
 }
