@@ -4,8 +4,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { deadPid, plantLock } from '../../../tools/load/lock.fixture.ts';
-import type { Timing } from '../../../tools/load/lock.ts';
-import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
+import { withLock } from '../../../tools/load/lock.ts';
+import { forkDate, mergeIntoBase, type Timing, withMergeLock } from './worktree-merge.ts';
 
 // A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
 for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
@@ -92,7 +92,7 @@ const FAST: Timing = { pollMs: 50, timeoutMs: 4000 };
 /** Where a merge runs, with a log sink that keeps every line the merge logs. */
 function merging(cwd: string) {
   const lines: string[] = [];
-  return { cwd, lines, log: (line: string) => void lines.push(line) };
+  return { cwd, lines, withLock, log: (line: string) => void lines.push(line) };
 }
 
 /** Resolves once the merge has logged into `lines` that the base is busy. */
@@ -101,10 +101,11 @@ async function waitingOnBusyBase(lines: string[]): Promise<void> {
 }
 
 const MODULE = path.join(import.meta.dirname, 'worktree-merge.ts');
+const LOCK = path.join(import.meta.dirname, '../../../tools/load/lock.ts');
 
-/** Runs mergeIntoBase in its own process, as a second `wt:done` would. */
+/** Runs mergeIntoBase in its own process, as a second `done` would. */
 function mergeInChild(branch: string, cwd: string): Promise<{ code: number | null; output: string }> {
-  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log }));`;
+  const code = `import { mergeIntoBase } from ${JSON.stringify(MODULE)}; import { withLock } from ${JSON.stringify(LOCK)}; console.log(await mergeIntoBase(process.argv[1], 'base', { cwd: process.argv[2], log: console.log, withLock }));`;
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ['--input-type=module', '-e', code, branch, cwd], {
       encoding: 'utf8',
@@ -215,7 +216,7 @@ describe('mergeIntoBase', () => {
   });
 
   describe('edge cases', () => {
-    it('waits for a wt:sync holding the merge lock of the base before merging into it', async () => {
+    it('waits for a sync holding the merge lock of the base before merging into it', async () => {
       // ARRANGE
       const { main } = fixture();
       let child: Promise<{ code: number | null; output: string }> | undefined;

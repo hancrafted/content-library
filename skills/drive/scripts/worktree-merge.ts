@@ -3,7 +3,6 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { type Timing, withLock } from '../../../tools/load/lock.ts';
 import { git } from './git.ts';
 
 /** A worktree's own git dir, where git keeps its merge, rebase and cherry-pick state. */
@@ -52,17 +51,41 @@ function busyWith(tree: string): string | null {
   return IN_PROGRESS.find(([name]) => existsSync(path.join(gitDir, name)))?.[1] ?? null;
 }
 
-/** Where a merge runs from (a directory inside the repository) and where its progress lines go. */
-export interface MergeContext {
-  cwd: string;
-  log: (line: string) => void;
+/** Timing for a named lock: how often a waiter looks again, and when it gives up. */
+export interface Timing {
+  pollMs: number;
+  timeoutMs: number;
 }
 
 /**
- * Runs `fn` holding the merge lock of `branch` (tools/load/lock.ts), which every merge into `branch` holds:
- * `wt:done --base` merging into it and `wt:sync` run on it. Logs one line while it waits for another holder.
+ * The project's named lock, in the shape of tools/load/lock.ts's `withLock`; the config names the module, so the
+ * skill owns no locking. Runs `fn` holding the lock `name`, which a directory inside the repository (`cwd`) scopes.
  */
-export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn: () => T | Promise<T>): Promise<T> {
+export type WithLock = <T>(
+  name: string,
+  options: Timing & { cwd?: string; onWait?: () => void },
+  fn: () => T | Promise<T>,
+) => Promise<T>;
+
+/** What a project without a lock module gets: no exclusion. */
+export const noLock: WithLock = (_name, _options, fn) => Promise.resolve().then(fn);
+
+/** Where a merge runs from (a directory inside the repository), where its progress lines go, and its lock. */
+export interface MergeContext {
+  cwd: string;
+  log: (line: string) => void;
+  withLock: WithLock;
+}
+
+/**
+ * Runs `fn` holding the merge lock of `branch` (the project's lock module), which every merge into `branch` holds:
+ * `done --base` merging into it and `sync` run on it. Logs one line while it waits for another holder.
+ */
+export function withMergeLock<T>(
+  branch: string,
+  { cwd, log, withLock }: MergeContext,
+  fn: () => T | Promise<T>,
+): Promise<T> {
   const onWait = () => log(`… waiting for another merge into ${branch} to finish`);
   return withLock(`wt-merge/${branch}`, { pollMs: 100, timeoutMs: 10 * 60 * 1000, cwd, onWait }, fn);
 }
@@ -151,8 +174,8 @@ export function mergeIntoBase(
   base: string,
   options: MergeContext & Partial<Timing>,
 ): Promise<'merged' | 'already-merged'> {
-  const { cwd, log, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
-  return withMergeLock(base, { cwd, log }, async () => {
+  const { cwd, log, withLock, pollMs, timeoutMs } = { ...BUSY_WAIT, ...options };
+  return withMergeLock(base, { cwd, log, withLock }, async () => {
     const deadline = Date.now() + timeoutMs;
     const built = { on: '', commit: '' };
     for (let round = 0; ; round++) {

@@ -1,0 +1,25 @@
+# The `drive` CLI's project config (design-ADR 0027): every value the CLI would otherwise hard-code.
+# Hooks are shell commands run from the main checkout with DRIVE_ROOT, DRIVE_BRANCH, DRIVE_BASE (empty without
+# --base), DRIVE_WORKTREE and, for afterMerge, DRIVE_FORKED_AT (when the branch forked, ISO) in the environment.
+worktree:
+  dir: .worktrees
+  baseBranch: main
+  remote: origin
+  # How a hint names the CLI: this repo's package script.
+  invoke: npm run drive -- worktree
+  install:
+    - npm ci
+    - npx husky
+  preflight: npm run preflight
+  # The repo's own lock module (exports withLock); the skill owns no locking.
+  lock: tools/load/lock.ts
+  # Before removal; a failure stops the finish with the worktree intact.
+  beforeRemove:
+    - node tools/load/drive-hooks.ts stop-servers
+  # After the branch merged into its base; a failure is only reported.
+  afterMerge:
+    - node tools/load/drive-hooks.ts slow-tests
+  # After the worktree is gone; a failure is only reported.
+  afterRemove:
+    - node tools/load/drive-hooks.ts remove-context
+    - node tools/load/drive-hooks.ts trim-slow-tests

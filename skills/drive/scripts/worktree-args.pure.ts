@@ -1,13 +1,13 @@
-// The worktree script's arguments: `new|done <branch> [--base <branch>] [--kill]`
-// and `sync [--base <branch>]`. Without --base a worktree branches from origin/main
-// and finishing it syncs local main; with it, both work against that branch instead.
+// The worktree command's arguments: `new|done <branch> [--base <branch>] [--kill]`
+// `sync [--base <branch>]` and `preflight`. Without --base a worktree branches from the config's remote base branch
+// and finishing it syncs the local one; with it, both work against that branch instead.
 // --kill (done only) stops the processes that hold the worktree.
 
 export interface WorktreeArgs {
-  command: 'new' | 'done' | 'sync';
-  /** Empty for `sync`, which works on the current worktree's branch. */
+  command: 'new' | 'done' | 'sync' | 'preflight';
+  /** Empty for `sync` and `preflight`, which work on the current worktree. */
   branch: string;
-  /** The branch to start from and merge into, or null for origin/main. */
+  /** The branch to start from and merge into, or null for the config's remote base branch. */
   base: string | null;
   /** `done` only: stop the processes that block removal. */
   kill: boolean;
@@ -33,15 +33,22 @@ function readOwner(branch: string): Owner | { error: string } {
   return { parent: branch.slice(0, split), issue: ticket === null ? null : Number(ticket[1]) };
 }
 
-const USAGE =
-  'usage: npm run wt:new -- <branch> [--base <branch>]  |  npm run wt:done -- <branch> [--base <branch>] [--kill]  |  npm run wt:sync [-- --base <branch>]';
+/** What the config says about the command line: how a hint names the CLI, and the branch worktrees start from. */
+export interface Naming {
+  /** The command that runs `drive worktree`, as a hint prints it. */
+  invoke: string;
+  baseBranch: string;
+}
+
+const usage = (invoke: string) =>
+  `usage: ${invoke} new <branch> [--base <branch>]  |  ${invoke} done <branch> [--base <branch>] [--kill]  |  ${invoke} sync [--base <branch>]  |  ${invoke} preflight`;
 
 /** A branch name, not a missing argument or a flag in its place. */
 function isBranch(value: string | undefined): value is string {
   return value !== undefined && value !== '' && !value.startsWith('--');
 }
 
-const COMMANDS: readonly string[] = ['new', 'done', 'sync'];
+const COMMANDS: readonly string[] = ['new', 'done', 'sync', 'preflight'];
 
 interface Flags {
   positional: string[];
@@ -61,18 +68,27 @@ function readFlags(tokens: readonly string[]): Flags | { error: string } {
   return flags;
 }
 
-function checkShape(command: string, flags: Flags): string | null {
-  if (!COMMANDS.includes(command)) return `unknown command '${command}'; expected new, done or sync`;
+/** The commands that take no branch: they work on the current worktree. */
+const BRANCHLESS = ['sync', 'preflight'];
+
+function checkShape(command: string, flags: Flags, invoke: string): string | null {
+  if (!COMMANDS.includes(command)) return `unknown command '${command}'; expected new, done, sync or preflight`;
   const branches = flags.positional.filter((word) => isBranch(word));
-  if (flags.positional.length !== branches.length || branches.length !== (command === 'sync' ? 0 : 1)) return USAGE;
+  if (flags.positional.length !== branches.length || branches.length !== (BRANCHLESS.includes(command) ? 0 : 1))
+    return usage(invoke);
+  return checkFlags(command, flags);
+}
+
+function checkFlags(command: string, flags: Flags): string | null {
+  if (flags.base !== null && command === 'preflight') return '--base does not apply to preflight';
   return flags.kill && command !== 'done' ? '--kill belongs to done' : null;
 }
 
-export function parseArgs(argv: readonly string[]): WorktreeArgs | { error: string } {
+export function parseArgs(argv: readonly string[], invoke: string): WorktreeArgs | { error: string } {
   const [command, ...tokens] = argv;
   const flags = readFlags(tokens);
   if ('error' in flags) return flags;
-  const error = checkShape(command, flags);
+  const error = checkShape(command, flags, invoke);
   if (error !== null) return { error };
   const branch = flags.positional[0] ?? '';
   const owner = readOwner(branch);
@@ -87,17 +103,21 @@ export function parseArgs(argv: readonly string[]): WorktreeArgs | { error: stri
 }
 
 /**
- * Why `wt:new` refuses this branch, or null. A subagent branch starts from its parent:
- * the parent must exist, must not be main, and must be the --base. Each refusal names the fix.
+ * Why `new` refuses this branch, or null. A subagent branch starts from its parent:
+ * the parent must exist, must not be the base branch, and must be the --base. Each refusal names the fix.
  */
-export function refuseNewBranch(args: WorktreeArgs, branchExists: (branch: string) => boolean): string | null {
+export function refuseNewBranch(
+  args: WorktreeArgs,
+  branchExists: (branch: string) => boolean,
+  { invoke, baseBranch }: Naming,
+): string | null {
   const { branch, parent, base } = args;
   if (parent === null) return null;
   const task = branch.slice(parent.length + 2);
-  if (parent === 'main')
-    return `a subagent branch cannot hang off main; create its parent first: npm run wt:new -- <type>/<slug>, then npm run wt:new -- <type>/<slug>--${task} --base <type>/<slug>`;
-  if (base !== parent) return `'${branch}' starts from its parent; run: npm run wt:new -- ${branch} --base ${parent}`;
+  if (parent === baseBranch)
+    return `a subagent branch cannot hang off ${baseBranch}; create its parent first: ${invoke} new <type>/<slug>, then ${invoke} new <type>/<slug>--${task} --base <type>/<slug>`;
+  if (base !== parent) return `'${branch}' starts from its parent; run: ${invoke} new ${branch} --base ${parent}`;
   if (!branchExists(parent))
-    return `parent branch '${parent}' does not exist; create it first: npm run wt:new -- ${parent}, then rerun this command`;
+    return `parent branch '${parent}' does not exist; create it first: ${invoke} new ${parent}, then rerun this command`;
   return null;
 }
