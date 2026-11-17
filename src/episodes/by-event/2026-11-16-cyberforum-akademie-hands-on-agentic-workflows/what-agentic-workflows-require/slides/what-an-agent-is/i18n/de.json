@@ -38,7 +38,7 @@
       "model-tools-loop": {
         "title": "Modell, Werkzeuge, Schleife",
         "keywords": "",
-        "script": "Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt, bis sein Ziel erreicht ist. Er ist keine einzelne Chat-Antwort, die Du liest und dann weitergehst, er ist eine Schleife aus Handeln, auf das Ergebnis schauen und wieder Handeln, bis er glaubt, fertig zu sein."
+        "script": "Wir haben vorhin schon Agenten gesehen, hier noch eine kurze Definition von Anthropic: Agenten sind Systeme, die auf ihr Gehirn, das LLM, das Large Language Model, zugreifen, aber eigenständig in einer Schleife, in einem Loop, Werkzeuge ausführen können. Werkzeuge wie Webaufrufe, oder auf Deiner Maschine eine Datei zu suchen, sie zu lesen und das Gelesene wieder an das LLM zurückzuschicken, damit die nächste Anweisung kommt. Das ist ein Agent, und das war's auch schon. Alles, was Du über Agentic oder agentisch liest und hörst, meint am Ende ein System, das eigenständig Werkzeuge und Aktionen ausführen kann. Das ist die Definition eines Agenten."
       },
       "steers-its-own-steps": {
         "title": "Läuft in seiner eigenen Schleife",

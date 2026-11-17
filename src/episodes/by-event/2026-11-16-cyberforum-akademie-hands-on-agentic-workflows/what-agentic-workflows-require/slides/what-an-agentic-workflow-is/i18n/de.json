@@ -19,7 +19,7 @@
       "name-the-thing": {
         "title": "Die Sache benennen",
         "keywords": "",
-        "script": "Bevor wir das Board reparieren, brauchen wir zwei Begriffe als Grundlage. Was ist ein Agent, und was macht einen Workflow agentisch? Erst der Begriff, dann das Board."
+        "script": "Diese Fragestellung ist im Kern genau das, womit sich agentische Workflows befassen. Ein agentischer Workflow ist letztlich nichts anderes, als einen Arbeitsablauf einzuplanen und die Aufgaben so zu definieren, dass sie praktisch für Agenten geschaffen sind und Agenten sie bearbeiten können, damit wir am Ende des Tages trotzdem ein erwünschtes Ergebnis erzielen."
       }
     }
   }

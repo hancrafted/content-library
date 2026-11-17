@@ -91,12 +91,12 @@
       "conways-law": {
         "title": "Conways Gesetz",
         "keywords": "",
-        "script": "Conways Gesetz von 1968, in einfachen Worten: Was Menschen entwerfen, folgt dem, wer mit wem spricht. Ein Workflow, den Menschen für sich selbst zeichnen, ist auch ein Entwurf, also tut er dasselbe. Den genauen Wortlaut findest Du in den Speaker Notes."
+        "script": "Das Erste ist eine sehr berühmte Regel, Conways Law. Sie besagt, dass sich in einer Organisation das System oft so spiegelt, wie die Menschen darin kommunizieren: Am Ende spiegeln Software, ein Produkt und oft auch Arbeitsprozesse die menschlichen Kommunikationsmuster wider. Ein Beispiel: Ein Team ist für das Sommerfest oder ein größeres Projekt zuständig, und eines der Subteams ist stark überrepräsentiert, etwa zehn Leute bei den Venue Scouts, während es für Catering und Travel nur eine Person gibt. Bittest Du diese Leute, einen agentischen Workflow oder generell einen Workflow zu definieren, ist die Wahrscheinlichkeit hoch, dass Anforderungen und Tätigkeiten überproportional von diesem Team repräsentiert sind. Das ist Conways Law."
       },
       "a-teams-draft": {
         "title": "Der Entwurf eines Teams",
         "keywords": "",
-        "script": "Ich habe das bei einem Team erlebt, mit dem ich gearbeitet habe. Sie haben ihren KI-Workflow gezeichnet, und eine Disziplin bekam vierzehn Schritte zur Erkundung, während die anderen einen oder zwei bekamen. Der Workflow spiegelte die Kopfzahl, nicht das Ziel. Ich nenne weder das Unternehmen noch das Team."
+        "script": "Dieses Beispiel habe ich nicht aus der Luft gegriffen, es ist in einem Firmenprojekt passiert, das ich beraten habe. Sie hatten 14 UX-Designer in ihrem Produktteam und vier Engineers, frag mich nicht, wie es dazu gekommen ist. Ihr Workflow hatte tatsächlich zehn einzelne Schritte mit Freigaben und Ähnlichem, die über Design gingen, und nur halb so viele für Engineering und Qualitätssicherung. Das ist Conways Law vom Feinsten."
       },
       "broadly-defined": {
         "title": "Im weiten Sinne",
@@ -106,7 +106,7 @@
       "your-sign": {
         "title": "Dein Warnzeichen",
         "keywords": "",
-        "script": "Wenn also der Workflow, den Deine Leute zeichnen, wie Euer Organigramm aussieht, dann vermute Conways Gesetz und zeichne ihn vom Ziel aus neu. Wenn Du die Transformation leitest, ist diese Prüfung Deine Aufgabe."
+        "script": "Überlässt Du einer solchen Organisation die Aufgabe, sich selbst einen agentischen Workflow zu definieren, kann es gut sein, dass er für Menschen entworfen ist, aber nicht für Agenten. Das ist ein großer Trugschluss: dass man auf den bestehenden Workflow einfach überall KI draufklatschen kann und am Ende genau das richtige Ergebnis herauskommt. Es kann immer noch das Richtige herauskommen, aber meine Hypothese ist, dass es schwierig wird."
       }
     }
   }

@@ -1,0 +1,40 @@
+{
+  "videoId": "2I0_J08evm8",
+  "starts": {
+    "hero": 0,
+    "a-thought-experiment": 48,
+    "the-thought-experiment": 300,
+    "now-with-agents": 420,
+    "what-an-agentic-workflow-is": 491,
+    "what-an-agent-is": 520,
+    "what-an-agentic-workflow-is-slide": 575,
+    "how-far-you-step-out": 703,
+    "in-on-or-out-of-the-loop": 740,
+    "reviewability-sets-the-distance": 856,
+    "what-it-requires-of-each-person": 1051,
+    "plan-back-from-the-goal": 1067,
+    "contracts-at-the-seams": 1187,
+    "reviewing-the-result": 1268,
+    "what-it-requires-of-the-organisation": 1358,
+    "the-org-chart-trap": 1382,
+    "designed-ai-first": 1547,
+    "what-to-look-for-in-your-team": 1635
+  },
+  "unmatched": ["from-article-to-quiz"],
+  "guessed": [
+    "the-thought-experiment",
+    "now-with-agents",
+    "what-an-agentic-workflow-is",
+    "what-an-agent-is",
+    "what-an-agentic-workflow-is-slide",
+    "how-far-you-step-out",
+    "in-on-or-out-of-the-loop",
+    "reviewability-sets-the-distance",
+    "what-it-requires-of-each-person",
+    "reviewing-the-result",
+    "what-it-requires-of-the-organisation",
+    "the-org-chart-trap",
+    "designed-ai-first",
+    "what-to-look-for-in-your-team"
+  ]
+}
