@@ -21,12 +21,6 @@ const OPENAI_COMPACTION = source('openai-compaction', 'https://developers.openai
 
 const ON_PRIMARY = 'text-primary-foreground/70 hover:text-foreground focus-visible:text-foreground';
 
-/**
- * "You can't watch the meter" (Spec Option 9b): compaction as a before and after in three locked mounts of the
- * cornerstone, the bar at step 23 with the fill in the space kept free for summaries, the chat alone, and the bar
- * at step 24 with the summary pinned; under them the caveat footer and the callout Han asked for. Keeps
- * `basic-page`; overrules `motion: local` to none, since both bars are end states.
- */
 export const youCantWatchTheMeter = slide({
   slug: 'you-cant-watch-the-meter',
   messages: { en, de },
