@@ -9,8 +9,7 @@ import { custOf } from './start-settings.pure.ts';
 export const SHELF_ROWS = 4;
 export const SHELF_COLS = Math.ceil(SHELF / SHELF_ROWS);
 
-/** A sign stays this many weeks after its last event, so it does not blink. */
-export const SIGN_HOLD = 1.5;
+export const SIGN_HOLD_WEEKS = 1.5;
 export const RACK = 6;
 export const LEVEL_RED = 2;
 
@@ -49,7 +48,7 @@ export interface CustomerReadout {
 const signOn = (n: FactoryNode, k: SignKind, x: { m: Factory; s: Settings }): boolean => {
   const mech = x.s.mech,
     on = k === 'rework' ? mech.rework : k === 'churn' ? mech.churn : k === 'complaint' ? mech.complaints : true;
-  return on && x.m.t - n.sign[k] < SIGN_HOLD;
+  return on && x.m.t - n.sign[k] < SIGN_HOLD_WEEKS;
 };
 
 const SIGNS: readonly SignKind[] = ['rework', 'churn', 'unread', 'complaint'];

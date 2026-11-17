@@ -4,10 +4,9 @@ import { BELT_W, RETURN_W } from './factory-layout.pure.ts';
 import type { FloorDoc, FloorList } from './factory-model.pure.ts';
 import { at, type Path } from './factory-paths.pure.ts';
 
-const HANDOFF_SECS = 0.6;
-/** A release to the Customer takes twice as long, so it reads as the moment that counts (feedback 10). */
-const RELEASE_SECS = 1.2;
-export const handoffSecs = (release: boolean): number => (release ? RELEASE_SECS : HANDOFF_SECS);
+const HANDOFF_SECONDS = 0.6;
+const RELEASE_SECONDS = 1.2;
+export const handoffSecs = (release: boolean): number => (release ? RELEASE_SECONDS : HANDOFF_SECONDS);
 export const GIFT_SCALE = 1.5;
 export const GAP = 16;
 export const BELT_FILL = 0.9;

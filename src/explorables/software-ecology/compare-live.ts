@@ -5,8 +5,7 @@ import { WEEKS_PER_REAL_SECOND_AT_1X } from './factory-run.pure.ts';
 import { progressOf } from './paint-rack.ts';
 
 const BELT_CHIPS = 24;
-/** A job shorter than this many real seconds shows its ring at 0.6 instead of flickering. */
-const FAST_SECS = 0.25;
+const SHORT_JOB_SECONDS = 0.25;
 
 interface ChipKind {
   readonly good: boolean;
@@ -50,7 +49,7 @@ const setBg = (el: HTMLElement, url: string) => {
 };
 
 const ringOf = (sv: FloorWork, x: { t: number; speed: number }): string =>
-  (sv.end - sv.start) / Math.max(1e-6, x.speed * WEEKS_PER_REAL_SECOND_AT_1X) < FAST_SECS
+  (sv.end - sv.start) / Math.max(1e-6, x.speed * WEEKS_PER_REAL_SECOND_AT_1X) < SHORT_JOB_SECONDS
     ? '0.6'
     : progressOf(sv, x.t).toFixed(2);
 

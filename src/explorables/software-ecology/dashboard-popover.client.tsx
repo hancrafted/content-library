@@ -4,7 +4,7 @@
 import { useEpisodePortalRoot } from '@/shared/hooks/use-episode-portal-root';
 import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { DASH_MAX, placeDash, type DashPlace, type Rect } from './dash-placement.pure.ts';
+import { DASH_MAX_WIDTH_PIXELS, placeDash, type DashPlace, type Rect } from './dash-placement.pure.ts';
 import styles from './software-ecology.module.css';
 
 export interface DashPopoverProps {
@@ -23,7 +23,7 @@ const rectOf = (el: Element): Rect => {
 const boxOf = (p: DashPlace | null): CSSProperties =>
   p
     ? ({ left: p.x, top: p.y, width: p.width, '--tail': `${p.tail}px` } as CSSProperties)
-    : { left: 0, top: 0, width: DASH_MAX, visibility: 'hidden' };
+    : { left: 0, top: 0, width: DASH_MAX_WIDTH_PIXELS, visibility: 'hidden' };
 
 function usePlace(p: DashPopoverProps, pop: RefObject<HTMLDivElement | null>) {
   const [place, setPlace] = useState<DashPlace | null>(null);

@@ -5,7 +5,7 @@ import type { Frame } from './paint-belts.ts';
 import { RACK_W, rackX, SLOT, slotY, type Sprite, type StationVis } from './paint-station.ts';
 import { RACK } from './stage-readouts.pure.ts';
 
-const STEADY_SECS = 0.25;
+const STEADY_JOB_SECONDS = 0.25;
 const STEADY_FILL = 0.6;
 const STAMP_FROM = 0.78;
 
@@ -100,7 +100,7 @@ const kindOfJob = (sv: FloorWork, ai: boolean) => ({
 });
 
 const steadyFill = (sv: FloorWork, secsPerWeek: number): boolean =>
-  secsPerWeek > 0 && (sv.end - sv.start) * secsPerWeek < STEADY_SECS;
+  secsPerWeek > 0 && (sv.end - sv.start) * secsPerWeek < STEADY_JOB_SECONDS;
 
 export const drawWork = (f: Frame, n: FloorStation, x: { v: StationVis; at: WorkAt }) => {
   const sv = n.work,

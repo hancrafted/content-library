@@ -26,8 +26,7 @@ export const slotY = (d: At, i: number): number => d.y + BOT - RACK_PAD - SLOT /
 export const GLYPH_PAD = 7,
   GLYPH_SIZE = 16;
 export const glyphAt = (d: At): Pt => [d.x - HALF + GLYPH_PAD + GLYPH_SIZE / 2, d.y - TOP + HEAD / 2];
-/** An own ticket drops from the glyph into its rack slot in this long, in real seconds. */
-export const OWN_DROP_SECS = 0.4;
+export const OWN_DROP_SECONDS = 0.4;
 const POP_S = 0.5;
 
 export interface Sprite {
@@ -175,7 +174,7 @@ const easeWork = (n: FloorStation, v: StationVis, ease: number) => {
 
 const drop = (d: Sprite, to: { x: number; y: number; s: number }, now: number) => {
   const dr = d.drop as NonNullable<Sprite['drop']>,
-    u = Math.min(1, (now - dr.t0) / (OWN_DROP_SECS * 1000)),
+    u = Math.min(1, (now - dr.t0) / (OWN_DROP_SECONDS * 1000)),
     fall = u * u;
   d.x = dr.from[0] + (to.x - dr.from[0]) * u;
   d.y = dr.from[1] + (to.y - dr.from[1]) * fall;

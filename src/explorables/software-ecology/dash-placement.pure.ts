@@ -16,14 +16,13 @@ export interface DashPlace {
   readonly tail: number;
 }
 
-/** The widest a dashboard grows. */
-export const DASH_MAX = 540;
+export const DASH_MAX_WIDTH_PIXELS = 540;
 const GAP = 16;
 const EDGE = 8;
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
-export const dashWidth = (stage: Rect): number => Math.min(DASH_MAX, stage.width - 24);
+export const dashWidth = (stage: Rect): number => Math.min(DASH_MAX_WIDTH_PIXELS, stage.width - 24);
 
 const inView = (y: number, h: number, view: Rect | undefined) =>
   view ? clamp(y, view.top + EDGE, view.top + view.height - h - EDGE) : y;
