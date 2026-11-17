@@ -43,7 +43,7 @@ Issues [#556](https://github.com/hancrafted/content-library/issues/556) and [#56
 
 ## Agent-decided (contest in review)
 
-- The Spec check is `checkSpec(files, stage)` in `src/pipeline/lib/episode-spec.pure.ts`; `checkStagingFolder(files, known)` runs it.
+- The Spec check is `checkSpec(spec, dossier, stage)` in `src/pipeline/lib/episode-spec.pure.ts`, over the Spec `readSpec(files)` reads once; `checkStagingFolder(files, known)` runs it.
 - The page's markup is addressed by role, never by styling class: `data-spec` on `section`, `title-slide`, `slide`, `option`, `mock`, `echoes`, `echo`, `build-notes`, `voice-script`, `speaker-notes`, `visual-idea` and `context-marker`, plus `data-number`, `data-option`, `data-section`, `data-recommended`, `data-picked`, `data-source` and `data-note`, which names the Speaker note a Context marker opens by its title. The Title-slide article is `id="top"`, its Options `0a` to `0c`, its fields `pick:top` and `note:top`. The meta block is `<script type="application/json" id="spec-meta">`.
 - The review form lives in the Spec template (see the amendment on the template above). The per-Slide fields sit beside what they review and join the form by `form="spec-review"`: a checkbox `pick:<slide-slug>` valued by the Option id, a note `note:<slide-slug>` per Slide and one `note:visual-language`, and the form itself holds the general comment `note:page` and the Next action `next`. A `data-picked` Option's checkbox, and no other, carries `checked`, so a locked Slide arrives ticked in the next round and the save needs nothing on it.
 - A Slide's words (Visual idea, Voice script, Speaker notes) are `<details>` collapsibles in the item's rail, closed by default and outside the review form, so they need no script and never post.

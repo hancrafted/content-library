@@ -20,10 +20,10 @@ import {
 } from './episode-spec-assemble-words.pure.ts';
 import { fragmentSlides } from './episode-spec-fragment.pure.ts';
 import { itemMarkup, optionsMarkup, type Templates } from './episode-spec-items.pure.ts';
+import { readSpec, SPEC_FILE } from './episode-spec-page.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
 import { briefSource, dossierSlug, dossierSource, mergedSource, type Source } from './episode-spec-source.pure.ts';
 import { fillIn, templateOf, type Slot } from './episode-spec-template.pure.ts';
-import { metaGateTier } from './staging-file.pure.ts';
 
 export interface SpecInputs {
   /** The Spec template asset: a page frame with `data-slot` elements and an item and an Option `<template>`. */
@@ -227,7 +227,7 @@ function frameSlots(inputs: SpecInputs, source: Source, sources: SlideSources): 
 
 /** The Spec page for whatever the inputs hold; throws when `existing` is an approved Spec. */
 export function assembleSpec(inputs: SpecInputs): string {
-  if (inputs.existing !== undefined && metaGateTier(inputs.existing) === 'approved')
+  if (inputs.existing !== undefined && readSpec({ [SPEC_FILE]: inputs.existing }).approved)
     throw new Error('the Spec is approved: an approved Spec cannot be assembled again');
   const brief = briefSource(inputs.brief);
   const source = inputs.dossier === undefined ? brief : mergedSource(brief, dossierSource(inputs.dossier));

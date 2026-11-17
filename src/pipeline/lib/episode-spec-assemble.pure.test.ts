@@ -1,6 +1,7 @@
 import { load } from 'cheerio';
 import { describe, expect, it } from 'vitest';
 import { assembleSpec, type SpecInputs } from './episode-spec-assemble.pure';
+import { readSpec } from './episode-spec-page.pure';
 import { checkSpec } from './episode-spec.pure';
 import { appendMetaVerified } from './staging-file.pure';
 
@@ -529,7 +530,7 @@ describe('success cases', () => {
     const pages = [assembleSpec(FULL), assembleSpec({ ...FULL, feedback: [round] })];
     // ACT
     const findings = pages.flatMap((html) =>
-      checkSpec({ 'spec/spec.html': html, 'dossier.md': DOSSIER }).map(({ message }) => message),
+      checkSpec(readSpec({ 'spec/spec.html': html }), DOSSIER).map(({ message }) => message),
     );
     // ASSERT
     expect(findings).toEqual([]);

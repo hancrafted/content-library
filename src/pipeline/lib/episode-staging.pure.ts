@@ -5,9 +5,8 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
-import { type CheerioAPI } from 'cheerio';
-import { parseSpec, SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
-import { checkSpec, specStage } from './episode-spec.pure';
+import { readSpec, specSectionSlugs, specSlideAnchors, type Spec } from './episode-spec-page.pure';
+import { checkSpec } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
@@ -149,15 +148,13 @@ function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text.
  */
 export function checkStagingFolder(files: Readonly<Record<string, string>>, known: KnownVisuals): Finding[] {
-  // Parsed once: a Spec with its inline SVG mocks takes longer to parse than every check that reads it.
-  const html = files[SPEC_FILE];
-  const spec = html === undefined ? undefined : parseSpec(html);
+  const spec = readSpec(files);
   return [
     ...checkStagingOrder(files),
     ...checkTexts(files),
     ...checkBrief(files),
     ...checkDossier(files, known),
-    ...(spec === undefined ? [] : checkSpec(files, specStage(spec), spec)),
+    ...(spec === undefined ? [] : checkSpec(spec, files['dossier.md'])),
     ...checkFeedbackRounds(files, spec),
   ];
 }
@@ -166,7 +163,7 @@ export function checkStagingFolder(files: Readonly<Record<string, string>>, know
  * The feedback rounds, keyed by the Dossier's Sections and page Slides while it exists and by the Spec's once its
  * Gate deleted the Dossier; none before either exists.
  */
-function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: CheerioAPI | undefined): Finding[] {
+function checkFeedbackRounds(files: Readonly<Record<string, string>>, spec: Spec | undefined): Finding[] {
   const dossier = files['dossier.md'];
   if (dossier !== undefined) {
     const blocks = blocksOf(bodyLines(dossier));

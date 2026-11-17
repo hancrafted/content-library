@@ -14,6 +14,7 @@ import {
   type Prompt,
   type SlidePage,
 } from './archive-staging.pure.ts';
+import { readSpec, SPEC_FILE } from './episode-spec-page.pure.ts';
 import type { Selection } from './episode-spec-slide.pure.ts';
 
 export interface ArchiveInput {
@@ -187,7 +188,8 @@ function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: Episo
 }
 
 export function designArchive(input: ArchiveInput): Archive {
-  const $ = load(input.spec);
+  const spec = readSpec({ [SPEC_FILE]: input.spec });
+  const { $ } = spec.pages[0];
   const heading = $('h1[id]').first();
   const episode = heading.attr('id');
   if (!episode) throw new Error('the Spec has no <h1 id> naming its Episode slug');

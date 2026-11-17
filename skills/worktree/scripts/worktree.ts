@@ -5,9 +5,9 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
-import { slowTestsLogPath, trimSlowTests } from '../../../tools/load/slow-tests.mts';
+import { slowTestReport, trimSlowTests } from '../../../tools/load/slow-tests.mts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { mergeIntoBase, slowTestReport, withMergeLock } from './worktree-merge.ts';
+import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
@@ -144,7 +144,9 @@ function deleteMerged(branch: string, base: string): void {
 
 async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
-  const slowTests = slowTestReport(branch, base, mainRoot());
+  const forked = forkDate(branch, base, mainRoot());
+  const note = `since it branched off ${base}`;
+  const slowTests = forked === null ? [] : slowTestReport({ cwd: mainRoot(), branch, since: forked, note });
   try {
     const result = await mergeIntoBase(branch, base, { cwd: mainRoot(), log: console.log });
     console.log(result === 'merged' ? `✔ merged ${branch} into ${base}` : `✔ ${branch} already merged into ${base}`);
@@ -181,8 +183,7 @@ async function finish(branch: string, base: string | null, kill: boolean): Promi
   removeContextFolder(branch);
   console.log(`✔ removed ${target} and its Claude Desktop folder`);
   // Every finish keeps the slow-tests log to its last 30 days, with or without a base.
-  const slowTestsLog = slowTestsLogPath(mainRoot());
-  if (slowTestsLog !== null) trimSlowTests(slowTestsLog, new Date());
+  trimSlowTests({ cwd: mainRoot(), now: new Date() });
   if (base !== null) {
     deleteMerged(branch, base);
     return;
