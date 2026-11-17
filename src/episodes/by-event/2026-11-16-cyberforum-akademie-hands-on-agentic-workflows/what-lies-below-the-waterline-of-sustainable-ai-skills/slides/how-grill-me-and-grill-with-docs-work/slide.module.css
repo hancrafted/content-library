@@ -114,11 +114,7 @@
   color: var(--primary-foreground);
 }
 
-/*
- * The one emphasis motion, once on entry: the current carries Monday's files into Thursday's run, then "Core" fades
- * into Thursday's glossary already filled primary (opacity only: its words turn light with the fill) and the "+1 term"
- * tag appears. The base rules are the end state, which reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .current {
     animation: carry 900ms cubic-bezier(0.33, 0, 0.2, 1) 400ms both;

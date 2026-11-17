@@ -114,7 +114,6 @@ export interface RunColumnProps {
   readonly n: number;
   readonly label: string;
   readonly lead: { readonly chat: string; readonly coding: ReactNode };
-  /** What sits after the lead: Run 2's Context marker. */
   readonly after?: ReactNode;
   readonly target?: { readonly 'data-target': string };
   readonly children: ReactNode;

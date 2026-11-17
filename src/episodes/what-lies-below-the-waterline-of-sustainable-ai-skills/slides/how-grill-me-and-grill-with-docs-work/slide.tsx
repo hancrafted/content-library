@@ -22,7 +22,6 @@ const BEST_PRACTICES = {
 const POCOCK_SKILLS = { slug: 'pocock-skills', url: 'https://github.com/mattpocock/skills' };
 const NOTE = 'project-context-written-beside-the-skill';
 
-/** Paths and the command are code: the same in every locale, never translated. */
 const PATHS = {
   outer: 'grill-with-docs/SKILL.md',
   grilling: 'grilling/SKILL.md',
