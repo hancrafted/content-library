@@ -95,10 +95,7 @@
   opacity: 0.65;
 }
 
-/*
- * The one emphasis motion: the near-twins fade back while the wall's first line fills primary and its leader draws to
- * the one card. The base rules are the rest state, which reduced motion and a still frame show; nothing loops.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 .lit {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -133,7 +130,6 @@
   }
 }
 
-/* The line fades in already lit, the leader after it: opacity alone (decision 19). */
 @keyframes light-up {
   from {
     opacity: 0;
