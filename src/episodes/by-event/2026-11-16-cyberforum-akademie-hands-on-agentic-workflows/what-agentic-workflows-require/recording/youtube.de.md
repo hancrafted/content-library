@@ -35,3 +35,9 @@ Mehr zum Workshop: https://hancrafted.net/de/events/2026-11-16-cyberforum-akadem
 Ein Gedankenexperiment · Was ein agentischer Workflow ist · Wie weit Du Dich herausnimmst · Was es von jeder Person verlangt · Was es von der Organisation verlangt
 
 ## Comment ID
+
+UgzEyMVdIPH0CkxSI3R4AaABAg
+
+## Applied fingerprint
+
+e3b0c44298fc1c14
