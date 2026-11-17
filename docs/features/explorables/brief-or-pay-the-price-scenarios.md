@@ -6,7 +6,7 @@ stale_after: 2027-05-18T00:00:00Z
 
 # Scenario authoring guide
 
-Read before writing or changing a Scenario file for the brief-or-pay-the-price Explorable. It is the whole contract of the file: what each field means, which problem the loader reports for which mistake, and a one-stage file that loads. A **Scenario**, an **Agentic workflow**, a **Stage**, a **Cell** and an **Annotation** are defined in the [glossary](../../../GLOSSARY.md). Spec: issue #703.
+Read before writing or changing a Scenario file for the brief-or-pay-the-price Explorable. It is the whole contract of the file: what each field means, which problem the loader reports for which mistake, and a one-stage file that loads. A **Scenario**, an **Agentic workflow** and a **Stage** are defined in the [glossary](../../../GLOSSARY.md). A Cell is one BRIEF move against one PRICE trait in the Agent matrix; an Annotation is one drawn element a Scenario attaches to a BRACE letter. Spec: issue #703.
 
 ## One file, both languages
 

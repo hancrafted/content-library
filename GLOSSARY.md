@@ -152,15 +152,6 @@ _Avoid_: Prompt tips, rules
 **BRACE**: the five principles of an Agentic workflow, applying across its Stages: **B**ackwards from the goal, **R**esolve dependencies early, **A**utonomy through intent, **C**ontracts at the seams, **E**ngineer trust. Not a counter to a Scenario's Stages: Stages are a process, BRACE its principles.
 _Avoid_: Workflow rules
 
-**Mirror**: a definition view of the brief-or-pay-the-price Explorable (PRICE, BRIEF, a Scenario's Stages, BRACE): acronym chips down the middle, each revealing a freelancer card on the left and an AI card on the right, in the pay-the-price Slide's grammar.
-_Avoid_: Flip card, definition list
-
-**Cell**: one BRIEF move against one PRICE trait, in the brief-or-pay-the-price Explorable's Agent matrix, and the zoom level that shows it: the trait's problem over the move's fix, with evidence. A node in a Scenario marks its own Cells, each with an example; a Cell outside the counters table renders as "in this context".
-_Avoid_: Square, pairing
-
-**Annotation**: one drawn element a Scenario attaches to a BRACE letter (a highlight, arrow, group, tag, chip or mark), so the Workflow view shows how that principle applies to that Agentic workflow. BRACE steps are cumulative.
-_Avoid_: Overlay, lens
-
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
 _Avoid_: Hero or cover for the Slide itself; **Hero motif** names the Episode's recurring visual idea the Title slide sets, never the Slide
 
