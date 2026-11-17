@@ -1,11 +1,3 @@
-/*
- * The Title slide's hero drawing (design guide, Iceberg; the Spec's picked Title-slide Option 0a): a Surface sky the
- * title and the sun sit in, about a third of the height, the waterline, then the four zones under it, the Abyss ending
- * on the seabed at the bottom. The drawing is fitted to the hero's height, so all five zones and the sun show at any
- * width (Han, 2026-11-14); the sky and water run on past both sides for screens wider than the drawing. The Sunlit
- * band is deep enough for an iceberg keel twice its tip that ends a fifth into the Twilight zone. The zones meet on
- * uneven waves (feedback 3, decision 45); the waterline stays straight and lit.
- */
 import { type IcebergPlacement, placeIcebergInBands } from './scenery/iceberg-placement.pure';
 import { HERO_ROLE, titleBottom, type TitleLines, titleLineStyle, type TitleWindow } from './title-clearance.pure';
 import { bandFacets, type SeaFacet, WATER_CELL, type ZoneEdge, zoneEdge } from './zone-edges.pure';
@@ -47,7 +39,6 @@ export interface HeroBand {
   readonly bottom: number;
 }
 
-/** The Surface sky, then each zone from the waterline down; refused when the zones run past the drawing's bottom. */
 export function heroDepthBands({ height, waterline, depths }: HeroDepth): readonly HeroBand[] {
   const underwater = ZONES.filter((zone): zone is UnderwaterZone => zone !== 'surface');
   const end = underwater.reduce((top, zone) => top + depths[zone], waterline);
@@ -103,17 +94,14 @@ export function heroWater(depth: HeroDepth): readonly HeroWaterBand[] {
 export const HERO_SHIP_TOP = 190;
 const AIR = 24;
 
-/** A window the hero fills, in CSS pixels. */
 export type HeroWindow = TitleWindow;
 
 const HERO_LINES: TitleLines = [2, 3, 5];
 
-/** Where the hero title's last line ends, in pixels from the top: its words start a rem under the header band. */
 export function heroTitleBottom(window: HeroWindow): number {
   return titleBottom(window, { role: HERO_ROLE, lines: HERO_LINES, below: 16 });
 }
 
-/** The share of the drawing's height above the ship's masthead: what must clear the title. */
 export function heroKeep(depth: HeroDepth = HERO_DEPTH): number {
   return (depth.waterline - HERO_SHIP_TOP - AIR) / depth.height;
 }

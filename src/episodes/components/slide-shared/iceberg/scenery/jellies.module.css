@@ -1,5 +1,4 @@
-/* The jellies drawing's palette and motion: colours mixed from global tokens only (FE-011), light and dark; see the frozen interface in jellies.tsx. */
-
+/* decision: FE-011 §4 */
 .jellies {
   --jelly: color-mix(in oklab, color-mix(in oklab, var(--info) 40%, var(--on-brand-accent)) 60%, transparent);
   --jelly-lit: color-mix(in oklab, color-mix(in oklab, var(--info) 27%, var(--on-brand-accent)) 80%, transparent);

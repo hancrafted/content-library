@@ -4,9 +4,7 @@ import styles from './travel.module.css';
 export interface TravelProps {
   readonly from: string;
   readonly to?: string;
-  /** How long the move takes, in milliseconds. */
   readonly duration?: number;
-  /** How long after the Slide turns active the move starts, in milliseconds. */
   readonly delay?: number;
   readonly children: ReactNode;
 }

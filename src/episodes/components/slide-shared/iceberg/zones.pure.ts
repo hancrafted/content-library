@@ -2,7 +2,6 @@
 export const ZONES = ['surface', 'sunlit', 'twilight', 'midnight', 'abyss'] as const;
 export type Zone = (typeof ZONES)[number];
 
-/** Zones dark enough for light text, the same in both themes (one zone palette, Han, 2026-11-14): Twilight down. */
 const DARK_ZONES: ReadonlySet<Zone> = new Set(['twilight', 'midnight', 'abyss']);
 
 export function zoneToken(zone: Zone): string {
@@ -13,7 +12,6 @@ export function isDarkZone(zone: Zone): boolean {
   return DARK_ZONES.has(zone);
 }
 
-/** The zone a Section sits in; the one place a Section out of the Episode's range is refused. */
 export function zoneOf(sections: readonly Zone[], section: number): Zone {
   const zone = Number.isInteger(section) ? sections[section] : undefined;
   if (zone === undefined) throw new Error(`No Section ${section} of ${sections.length}; Sections count from 0.`);

@@ -29,21 +29,6 @@ export function cloudLayer({ scale, layer }: Pick<CloudAt, 'scale' | 'layer'>): 
 
 const WIND_STAGGER_SECONDS = 11;
 
-/**
- * Faceted cumulus clouds in three layers, lit crowns to the upper left; the Surface zone's wind drifts each layer at
- * its own speed.
- *
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the `CLOUDS` facets below and `clouds.module.css`.
- *
- * - Props: `at`, a list of `CloudAt` (`x`, `y`, `scale`, `shape` 0 or 1, `layer`); six clouds in three layers by
- *   default.
- * - Box: each shape at scale 1 stays within x -130 to 130, y -90 to 20 about its base centre.
- * - Hooks: root `data-clouds`; each cloud `data-cloud` with `data-cloud-layer` = `far`, `mid` or `near`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`.
- * - Motion: each cloud is `data-motion="ambient"`, the Surface's wind, under `[data-zone='active']` only and never
- *   under reduced motion; transform and opacity only (decision 19), each layer at its own speed.
- */
 export function Clouds({ at = SURFACE_CLOUDS }: { readonly at?: readonly CloudAt[] }) {
   return (
     <g className={styles.clouds} data-clouds>

@@ -3,18 +3,6 @@ import type { FacetLayer } from './facet-data';
 import { Facets } from './facets';
 import styles from './whale.module.css';
 
-/**
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the `WHALE` facets below and `whale.module.css`.
- *
- * - Props: `x`, `y`, `scale` = 0.8, `flip`, as typed here.
- * - Box: at scale 1 the whale stays within x -215 to 190, y -60 to 85 about its centre, facing right.
- * - Hooks: root `data-whale`.
- * - Tokens it mixes from: `--info`, `--bulb`, `--on-brand-accent`, `--overlay`.
- * - Motion: the moving part is `data-motion="ambient"`, the Midnight zone's slow glide, under `[data-zone='active']`
- *   only and never under reduced motion; transform and opacity only (decision 19). Fins may move on their own
- *   (decision 20).
- */
 export interface WhaleProps {
   readonly x: number;
   readonly y: number;

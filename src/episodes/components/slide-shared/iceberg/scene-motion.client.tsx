@@ -51,18 +51,8 @@ function useDocumentHidden() {
   return hidden;
 }
 
-/**
- * The client leaf of `ZoneScene` (design-ADR 0025, Motion 6): the Scene's root, reporting `data-motion` as `idle`,
- * `playing` or `settled` for browser checks, and `data-document="hidden"` so the zone's CSS pauses every ambient
- * loop in a background tab. Figures stay server components; this leaf only reads the animations they start.
- *
- * It also mirrors its Slide's zone as `data-zone`, the scope every figure's motion CSS reads
- * (`[data-zone='active'] …`, Motion 1). A page Slide's Scene sits inside its mount, which carries the same value; the
- * Title slide's and a section slide's Scene sit in the Backdrop, beside the mount, and would never see it otherwise.
- *
- * It loads the Scene's art (FE-009 §4): each `<Art>` reaches the page as a `<use>` without an `href`, which it sets
- * once its Slide is seen outside `far`, and for every `<use>` before the page prints.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: FE-009 §4
 export function SceneMotionRoot({ className, zone, style, children }: SceneMotionProps) {
   const scene = useRef<HTMLDivElement>(null);
   const slideZone = useSlideZone();

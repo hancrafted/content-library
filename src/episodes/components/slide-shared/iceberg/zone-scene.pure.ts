@@ -45,7 +45,6 @@ export interface TitlePlacement {
 
 export const TITLE_LIFE_AT: Readonly<Record<TitleLife, TitlePlacement>> = {
   lanternfish: { x: 860, y: 610, scale: 1.5, halfWidth: 135 },
-  // Right of the robot's cable at 600 and inside the middle a phone shows, so it stays in view at 375 px (decision 38).
   siphonophore: { x: 720, y: 180, scale: 1.3, halfWidth: 20 },
 };
 
@@ -56,12 +55,10 @@ export const TITLE_LOOP_AT: Readonly<Record<'bubbles', TitlePlacement>> = {
 const SCENE = { width: 1200, height: 800 } as const;
 export const SURFACE_WATERLINE = 400;
 
-/** The air kept between a Section title's last line and the figures under it, in pixels (1rem). */
-const TITLE_AIR = 16;
+const TITLE_AIR_PIXELS = 16;
 
 const SECTION_LINES: TitleLines = [2, 3, 4];
 
-/** Where a Section title's last line ends, in pixels from the Slide's top: its words start right under the header. */
 export function sectionTitleBottom(box: TitleWindow): number {
   return titleBottom(box, { role: HEADING_ROLE, lines: SECTION_LINES, below: 0 });
 }
@@ -70,7 +67,7 @@ export function sectionTitleLift({ width, height }: TitleWindow, reach: number):
   if (reach > SURFACE_WATERLINE)
     throw new Error(`Figures reach ${reach} above the waterline, past the Scene's top at ${SURFACE_WATERLINE}.`);
   const below = SURFACE_WATERLINE - reach;
-  const title = sectionTitleBottom({ width, height }) + TITLE_AIR;
+  const title = sectionTitleBottom({ width, height }) + TITLE_AIR_PIXELS;
   const byWidth = title - (below * width) / SCENE.width;
   const byHeight = (title - (below * height) / SCENE.height) / (1 - below / SCENE.height);
   return Math.max(0, Math.min(byWidth, byHeight));

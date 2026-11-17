@@ -3,15 +3,6 @@ import { placeTransform, type GroupProps } from './creature-group.pure';
 import styles from './scenery.module.css';
 import { scatter } from './scenery.pure';
 
-/*
- * The Abyss's rising bubbles, its ambient loop and the descent's. Each is the shared faceted `PolyBubble`
- * (src/shared/components/core-components/poly-bubble/), the same drawing the `bubbles` transition uses; this group
- * only places them, through `placeTransform` like every creature group, and moves them. The other sea creatures each
- * live in their own file behind a frozen interface (`fish-school.tsx`, `jellies.tsx`, `whale.tsx`, `lanternfish.tsx`,
- * `siphonophore.tsx`), so a Fable redraw touches one creature at a time. Scenery only: the loop runs on the active
- * Slide alone and is gone under reduced motion, leaving each bubble where it is drawn.
- */
-
 const BUBBLE_RADIUS = 6;
 const BUBBLE_BEAT_SECONDS = 1.3;
 const SIDES = [7, 6, 8] as const;

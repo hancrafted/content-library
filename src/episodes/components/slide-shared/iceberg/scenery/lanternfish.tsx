@@ -5,20 +5,6 @@ import { scatter } from './scenery.pure';
 
 const DART_STAGGER_SECONDS = 1.7;
 
-/**
- * A school of lanternfish, the Twilight Section titles' creatures (decision 11 of feedback 2): small dark fish, a row
- * of glowing photophores along each belly, each darting on its own beat. A placeholder for the Fable redraw.
- *
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only `LANTERNFISH` below and `lanternfish.module.css`.
- *
- * - Props: `GroupProps` (`x`, `y`, `at`, `count` = 9, `seed` = 3, `scale` = 1.2, `flip`).
- * - Box: one fish at size 1 stays within x -15 to 13, y -7 to 7 about its centre, facing right.
- * - Hooks: root `data-lanternfish-school`; each member `data-lanternfish`, placed by `placeTransform`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`.
- * - Motion: each fish is `data-motion="ambient"` and darts on its own (decision 20), under `[data-zone='active']`
- *   only and never under reduced motion; transform and opacity only (decision 19).
- */
 export function Lanternfish({ x, y, at, count = 9, seed = 3, scale = 1.2, flip = false }: GroupProps) {
   const school = at ?? scatter({ count, seed, spread: [120, 44], gap: [34 * scale, 14 * scale] });
   return (

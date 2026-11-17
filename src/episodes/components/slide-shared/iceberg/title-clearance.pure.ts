@@ -1,12 +1,3 @@
-/*
- * Where a title Slide's words end, so its drawing can keep its figures below them (feedback 3, decisions 45 and 48):
- * the Title slide's hero and each Section title in the Surface start their words under the floating header, and the
- * ship's masthead must stay below the title's last line at every window size. The numbers mirror the page's own:
- * the header band (`--header-block`), the slide header's top padding (`pt-16 md:pt-24`) and the type tokens of the
- * title's role; line counts are generous, as the German titles run longer.
- */
-
-/** A window, or a Slide's box, in CSS pixels. */
 export interface TitleWindow {
   readonly width: number;
   readonly height: number;
@@ -33,10 +24,6 @@ export function titleLines(width: number, lines: TitleLines): number {
   return lines[STEPS.findIndex((from) => width >= from)]!;
 }
 
-/**
- * Where the title's last line ends, in pixels from the Slide's top: the header band and the space under it (`below`,
- * 1rem on the Title slide, none on a Section title), the slide header's top padding, then each line at the role's size.
- */
 export function titleBottom(
   { width }: TitleWindow,
   { role, lines, below }: { readonly role: TitleRole; readonly lines: TitleLines; readonly below: number },

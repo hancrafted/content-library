@@ -25,11 +25,6 @@ export interface ZonePresentation {
 
 type SlideKind = 'title' | ZonePresentationInput['kind'];
 
-/**
- * Whether a Slide takes its zone's colour as its background, by kind (Han, 2026-11-14; design guide, Iceberg): the
- * Title slide and the section slides fill with their zone, a page Slide keeps the page's own light or dark background
- * and marks depth only on its rail and in its scenery. The one seam that turns zone backgrounds on or off per kind.
- */
 const ZONE_BACKGROUNDS: Readonly<Record<SlideKind, boolean>> = { title: true, section: true, page: false };
 
 function zoneText(zone: Zone): ZoneStyle {

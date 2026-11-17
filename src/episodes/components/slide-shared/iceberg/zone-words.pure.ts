@@ -1,13 +1,9 @@
-/*
- * The words a zone is named in (design-ADR 0025, Interaction 2): its plain name, its depth in metres and its
- * scientific name. A plain `slide-shared` part owns no words (FE-012 §3.1), so a Slide reads them from its own
- * `i18n/` under `zones.<zone>.<word>`, through its `t`, and hands the part plain strings.
- */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
+// decision: FE-012 §3.1
 import { ZONES, type Zone } from './zones.pure';
 
 export interface ZoneLabelWords {
   readonly name: string;
-  /** Its depth in metres: `200–1,000 m`. */
   readonly metres: string;
   readonly science: string;
 }

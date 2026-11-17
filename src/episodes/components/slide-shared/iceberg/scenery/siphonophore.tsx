@@ -3,17 +3,6 @@ import { artName } from '../../art/art.pure';
 import { toPoints } from './scenery.pure';
 import styles from './siphonophore.module.css';
 
-/**
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the drawing below and `siphonophore.module.css`.
- *
- * - Props: `x`, `y` (the float's top), `segments` = 9 (the swimming bells), `scale` = 1, as typed here.
- * - Box: at scale 1 with 9 segments the colony stays within x -20 to 20, y -12 to 220 below its float.
- * - Hooks: root `data-siphonophore`; each bell `data-siphonophore-bell`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`, with `transparent`.
- * - Motion: the moving parts are `data-motion="ambient"`, swaying from the float, under `[data-zone='active']` only
- *   and never under reduced motion; transform and opacity only (decision 19).
- */
 export interface SiphonophoreProps {
   readonly x: number;
   readonly y: number;

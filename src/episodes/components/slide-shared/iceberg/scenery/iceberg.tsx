@@ -4,19 +4,6 @@ import { Facets } from './facets';
 import styles from './iceberg.module.css';
 import { icebergLayers, type IcebergPart } from './scenery.pure';
 
-/**
- * Frozen interface (decisions 15–17 of feedback 2; pinned by `fable-elements.test.ts` and its slow sibling). A Fable
- * redraw changes only the facets below and `iceberg.module.css`.
- *
- * - Props: `part`, `x`, `waterline`, `scale`, `depthScale`, as typed here.
- * - Box: at scale 1 the drawing stays within x -190 to 190, y -168 (tip) to 200 × `depthScale` (keel point), with
- *   (0, 0) on the waterline at the berg's centre (`KEEL_DEPTH`, `TIP_HEIGHT`, `ICEBERG_HALF_WIDTH` in
- *   `iceberg-placement.pure.ts`). Scenes place it only through `placeIceberg`.
- * - Hooks: root `data-iceberg="<part>"`; `data-iceberg-tip`, `data-iceberg-keel` (stretched by `depthScale` alone),
- *   `data-iceberg-glow`.
- * - Tokens it mixes from: `--info`, `--on-brand-accent`, `--overlay`, with `transparent`.
- * - Motion: none; the iceberg never moves, so no `data-motion`.
- */
 export interface IcebergProps {
   readonly part?: IcebergPart;
   readonly x: number;

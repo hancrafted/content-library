@@ -105,7 +105,6 @@ function Drawing({ Backdrop, children }: Pick<HeroDepthSceneProps, 'children'> &
         >
           <Depth>{children}</Depth>
         </svg>
-        {/* The Title slide's art loads as the HTML parses: its first paint never waits for hydration (FE-009 §4). */}
         <ArtNow />
       </SceneMotionRoot>
     </Backdrop>

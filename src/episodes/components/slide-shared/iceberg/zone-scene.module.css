@@ -19,13 +19,6 @@
   animation-play-state: paused;
 }
 
-/*
- * A Surface Section title (feedback 3, decision 48): the drawing fills the box from the top, so its whole sky shows at
- * the top edge, and moves down by `--lift` only when what reaches above the waterline would cross the title's last
- * line; its sky runs on above it. `sectionTitleLift` in `zone-scene.pure.ts` is the same sum, which its tests pin:
- * the title's bottom from the header band, the slide header's padding and the heading role, a rem of air, then the least lift that
- * clears it whether the box's width or its height decides the drawing's scale. The Scene's box is the size container.
- */
 .lifted {
   container-type: size;
 }
