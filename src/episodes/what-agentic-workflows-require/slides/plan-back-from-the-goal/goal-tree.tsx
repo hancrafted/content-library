@@ -7,7 +7,6 @@ export interface TreeColumns {
   readonly start: string;
 }
 
-/** One subgoal and the notes that must be true before it. */
 export interface Branch {
   readonly slug: string;
   readonly subgoal: ReactNode;
@@ -80,11 +79,6 @@ function BranchRow({ branch, row }: { branch: Branch; row: string }) {
   );
 }
 
-/**
- * The goal broken down: on a wide board, the goal at the right edge, forking into two subgoals, each forking into the
- * notes that must be true before it, on twelve columns (five for the notes, four for the subgoals, three for the
- * goal). On a narrow one, the same tree top down: the goal, then each subgoal above its notes.
- */
 export function GoalTree({ label, columns, goal, branches }: GoalTreeProps) {
   return (
     <div role="group" aria-label={label} className="grid grid-cols-1 gap-4 @4xl:grid-cols-12 @4xl:gap-x-2 @4xl:gap-y-4">
