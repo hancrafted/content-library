@@ -1,4 +1,4 @@
-// Pure logic for `wt:done --kill` and `wt:sync`: which processes may be stopped, and what sync runs.
+// Pure logic for `done --kill` and `sync`: which processes may be stopped, and what sync runs.
 
 export interface Proc {
   pid: number;
@@ -36,11 +36,18 @@ export const describeProc = (proc: Proc): string => `pid ${proc.pid} (${proc.com
 
 export type SyncPlan = { error: string } | { target: string };
 
-/** What `wt:sync` merges: origin/main, or the --base branch, into the current branch. */
-export function planSync(input: { branch: string; base: string | null; dirty: boolean }): SyncPlan {
-  const target = input.base ?? 'origin/main';
+/** What `sync` merges: the remote's base branch (`origin/main`), or the --base branch, into the current branch. */
+export function planSync(input: {
+  branch: string;
+  base: string | null;
+  dirty: boolean;
+  /** The config's base branch and remote. */
+  baseBranch: string;
+  remote: string;
+}): SyncPlan {
+  const target = input.base ?? `${input.remote}/${input.baseBranch}`;
   if (input.branch === '') return { error: 'detached HEAD: check out a branch first' };
-  if (input.branch === 'main') return { error: 'run wt:sync inside a worktree, not on main' };
+  if (input.branch === input.baseBranch) return { error: `run sync inside a worktree, not on ${input.baseBranch}` };
   if (input.dirty) return { error: 'the working tree is dirty; commit or stash first' };
   if (input.branch === target) return { error: `${input.branch} cannot merge itself` };
   return { target };

@@ -21,7 +21,7 @@ const mainRoot = path.dirname(git(['rev-parse', '--path-format=absolute', '--git
 const contextRoot = path.join(mainRoot, 'docs', 'claude-project-context');
 const here = git(['rev-parse', '--show-toplevel']).trim();
 const branch = git(['branch', '--show-current']).trim();
-// The same slug as the worktree folder; skills/worktree/scripts/worktree.ts deletes the folder under it on `wt:done`.
+// The same slug as the worktree folder; tools/load/drive-hooks.ts deletes the folder under it on `wt:done`.
 const slug = (name: string) => name.replaceAll('/', '-');
 
 interface Target {

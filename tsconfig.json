@@ -27,7 +27,7 @@
     "*.mts",
     "skills/new-episode/scripts",
     "skills/episode-promote/scripts",
-    "skills/worktree",
+    "skills/drive",
     "skills/visual-check",
     "skills/to-decision-html/scripts",
     "tools",
