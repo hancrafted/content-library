@@ -1,17 +1,9 @@
-/*
- * A per-run pipeline converts each file the Brief lists under `## Episode Design Reference`
- * with its convert-references job: customize-pipeline names one design-reference.md
- * output per item, so each is named in the finalized pipeline. The Brief and the
- * pipeline are finalized separately; this keeps the two lists equal.
- */
-
 import { readPipeline } from './episode-pipeline-definition.pure';
 import type { Finding } from './finding.pure';
 
 const JOB = 'convert-references';
 const REFERENCE_LINK = /\]\((reference\/[^)\s]+\/design-reference\.md)\)/g;
 
-/** The design-reference.md paths the Brief's `## Episode Design Reference` links, relative to its staging folder. */
 function briefReferences(brief: string): string[] {
   const lines = brief.split('\n');
   const start = lines.findIndex((line) => line.trim() === '## Episode Design Reference');
@@ -21,12 +13,6 @@ function briefReferences(brief: string): string[] {
   return [...section.matchAll(REFERENCE_LINK)].map((match) => match[1]);
 }
 
-/**
- * Checks one per-run pipeline against its Brief. A pipeline that does not
- * parse is the schema check's finding, and a draft whose convert-references
- * output is still the template's glob is not expanded yet, so neither has
- * findings here.
- */
 export function checkReferenceJobs(file: string, yaml: string, brief: string): Finding[] {
   const pipeline = readPipeline(yaml);
   if (pipeline === null) return [];

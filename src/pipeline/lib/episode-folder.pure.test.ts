@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createMemoryFolder } from './episode-folder.pure';
 
-/*
- * The in-memory Episode folder: the adapter the dashboard's poll step and output probe are tested through, and the
- * contract the File System Access adapter keeps — paths inside the folder, a NotFoundError for a missing file.
- */
-
 describe('success cases', () => {
   it('reads a file as text, its bytes from an offset and its size and modification time', async () => {
     // ARRANGE

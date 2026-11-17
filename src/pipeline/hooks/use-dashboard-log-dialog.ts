@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-/** Native top-layer modality supplies inert background, focus containment and Escape handling. */
 export function useDashboardLogDialog(eventCount: number) {
   const dialog = useRef<HTMLDialogElement>(null);
   const scroll = useRef<HTMLDivElement>(null);

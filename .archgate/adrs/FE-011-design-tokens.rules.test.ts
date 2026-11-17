@@ -1,9 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-011-design-tokens.rules.ts — one probe per check (A1..A6) that fails on a violating file, and
-// pass cases for what each check must leave alone: the global :root/.dark blocks, a Slide token file with a dark
-// value, a legacy file, a test file, and "Invoice #0042", four hex digits that are not a colour.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-011-design-tokens.rules';
 
@@ -13,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Minimal glob -> RegExp for the double below: '**' spans any number of segments including none, '*' one segment's
-// characters.
 function globToRegExp(pattern: string): RegExp {
   const segments = pattern.split('/');
   let body = '';
@@ -39,7 +33,6 @@ const GLOBALS =
   ':root {\n  --primary: oklch(0.2 0 0);\n  --machine: oklch(0.6 0.1 240);\n}\n.dark {\n  --primary: #eee;\n}\n';
 const PANEL_CSS = 'src/shared/components/design-system-token-editor/token-panel.module.css';
 const SLIDE_CSS = 'src/episodes/demo/slides/loop/loop.module.css';
-/** A pool Slide's token file, `slide-pool/<slide>/`: a Slide token file like any other. */
 const POOL_SLIDE_CSS = 'src/episodes/slide-pool/loop/loop.module.css';
 
 function makeCtx(files: Record<string, string>, legacyGlobs: string[] = []) {

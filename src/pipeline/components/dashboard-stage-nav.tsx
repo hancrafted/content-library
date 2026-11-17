@@ -15,7 +15,6 @@ import { StageStateIcon } from './dashboard-state-icon';
 interface NavigationProps {
   stages: StageNode[];
   onSelect: (id: string) => void;
-  /** Present when the view shows each stage's Jobs. */
   onSelectJob?: SelectJob;
   copy: DashboardCopy;
   geometry: GraphGeometry;

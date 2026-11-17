@@ -14,7 +14,6 @@ export function StageStateIcon({ state, className = 'size-5' }: { state: Dashboa
   return <Icon aria-hidden="true" className={`${className} shrink-0`} />;
 }
 
-/** The exclamation mark on a Job that needs Han; its label names it for screen readers and on hover. */
 export function AttentionMarker({ attention, label }: { attention: boolean; label: string }) {
   if (!attention) return null;
   return (

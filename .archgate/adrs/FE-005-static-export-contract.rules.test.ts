@@ -1,10 +1,5 @@
 /// <reference path="../rules.d.ts" />
 
-// Sibling test for FE-005-static-export-contract.rules.ts — pass and fail path
-// for every rule, plus the boundaries each is easy to get wrong: route groups
-// that look like intercepting folders, static segments, the src/ scope, and
-// prose that merely names a banned key.
-
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-005-static-export-contract.rules';
 
@@ -14,8 +9,6 @@ interface Reported {
   line?: number;
 }
 
-// Stands in for archgate's RuleContext over an in-memory file set. The rules
-// glob only `src/**/*` and the root `*`, so the double serves those two shapes.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -167,11 +160,7 @@ describe('export-config-intact', () => {
     expect(violations).toHaveLength(1);
   });
 
-  it('flags a comment that writes a banned key with a colon — known false positive', async () => {
-    // Deliberate and documented: SERVER_CONFIG_RE is textual, so `headers:` in
-    // a comment reads as a declaration. Do not "fix" the regex to skip comments:
-    // telling a comment from a key needs a parser, and a regex that guesses
-    // risks missing real keys. Reword the comment instead.
+  it('flags a comment that writes a banned key with a colon, since telling a comment from a key needs a parser — known false positive, reword the comment', async () => {
     // ARRANGE
     const source = `// headers: none, Pages cannot set them.\n${GOOD_CONFIG}`;
     const { ctx, violations } = makeCtx({ 'next.config.ts': source });
@@ -231,10 +220,7 @@ describe('no-request-time-features', () => {
     });
   }
 
-  it('misses an arrow-form GET that reads its request — known gap (Risk 1)', async () => {
-    // Pinned on purpose: NON_GET_HANDLER_RE matches `const`, so an arrow-form
-    // POST is caught, but GET_WITH_PARAM_RE matches only `function`. FE-005
-    // Risk 1 records the asymmetry; this test keeps it deliberate, not accidental.
+  it('misses an arrow-form GET that reads its request while an arrow-form POST is caught — known gap, kept deliberate not accidental', async () => {
     // ARRANGE
     const source = `export const GET = async (request: Request) => new Response('');\n`;
     const { ctx, violations } = makeCtx({ 'src/app/api/route.ts': source });

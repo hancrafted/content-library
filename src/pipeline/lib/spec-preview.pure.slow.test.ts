@@ -4,18 +4,12 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { previewPage, readPresets, toolbarConfigOf } from './spec-preview.pure.ts';
 
-/*
- * The slow half of spec-preview.pure.test.ts: the checked-in Spec calibration and Spec template, read from disk,
- * still give the presets the device toolbar offers and a preview page the toolbar's own presets apply to.
- * `skills/**` is a rerun trigger of the slow lane (ARCH-003-testing §4.4).
- */
+// decision: ARCH-003 §4.4
 const SKILL = path.join(import.meta.dirname, '../../../skills/new-episode');
 const CALIBRATION = path.join(SKILL, 'references/spec-calibration.md');
 const TEMPLATE = path.join(SKILL, 'assets/spec-template.html');
 const TOOLBAR = path.join(SKILL, '../to-decision-html/assets/toolbar.html');
-/** The one preset offered with no width: the full column. */
 const FULL_COLUMN = ['fit'];
-/** The pixel the dropdown rule's breakpoint sits under the width the navigation opens at. */
 const BREAKPOINT_GAP = 1;
 const REM = 16;
 const FRAGMENT = `<!-- slide: spent -->

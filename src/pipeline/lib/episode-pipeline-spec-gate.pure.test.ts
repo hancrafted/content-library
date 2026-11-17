@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkPipeline, type PipelineContext } from './episode-pipeline.pure';
 
-/*
- * The Specification Stage's shape (design-ADR-0011), checked through the
- * pipeline schema check: a small Dossier → Spec → Build pipeline that passes,
- * then one change per test that breaks one rule of the Spec Gate.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const STAGING = 'docs/episodes/demo';
 
 const CONTEXT: PipelineContext = {
@@ -60,10 +55,8 @@ const DESIGN_SPEC_JOB = `  - id: write-design-spec
       - { type: implementor, skills: [], references: [], model: opus, session: orchestrator }
 `;
 
-/** A template commit, as a per-run pipeline's `template` names it. */
 const SHA = '6426e9c5b0c0f0e1d2a3b4c5d6e7f8091a2b3c4d';
 
-/** The pipeline with a write-design-spec job between write-spec and Build, as the old template had it. */
 function withDesignSpec(yaml: string): string {
   return yaml
     .replace('  - id: implement-episode-init', `${DESIGN_SPEC_JOB}  - id: implement-episode-init`)

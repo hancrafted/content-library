@@ -1,14 +1,9 @@
-/*
- * The staging folder's order checks (design-ADR 0004): each feedback round
- * matches its folder. It reads single files but compares a value markdown-harness cannot: a folder name.
- */
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';
 
 const FEEDBACK_ROUND = /^feedback\/(\d+)\/feedback\.md$/;
 
-/** Each feedback file's `round` equals its folder number, and no two files share a round. */
 function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[] {
   const rounds = Object.entries(files).flatMap(([file, markdown]) => {
     const folder = FEEDBACK_ROUND.exec(file);
@@ -29,11 +24,6 @@ function checkFeedbackRounds(files: Readonly<Record<string, string>>): Finding[]
   });
 }
 
-/**
- * Checks the order a staging folder's files record. `files` maps a path
- * relative to the folder (`feedback/01/feedback.md`,
- * `research/<slug>/research.md`) to its text.
- */
 export function checkStagingOrder(files: Readonly<Record<string, string>>): Finding[] {
   return [...checkFeedbackRounds(files)];
 }

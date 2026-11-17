@@ -1,24 +1,14 @@
-// The one-off repair for a run log written before identity-at-stop existed (design-ADR 0007): for every agent that
-// started as `skill-spawned`, ended, and whose end line carries no identity, the `attrs` line that gives the fold the
-// identity its meta.json names. Pure: the log's lines and a meta.json reader in, the events to append out.
+// decision: docs/adr/0007-pipeline-runs-are-logged-as-spans-in-append-only-jsonl.md
 import { identityFact } from './claude-adapter.pure.ts';
 import { currentRun, fold, type LogEvent, type RunLogLine } from './run-log.pure.ts';
 
-/** meta.json sits beside the subagent's transcript: `agent-<id>.jsonl` → `agent-<id>.meta.json`. */
 export const metaPathOf = (transcriptPath: string): string => transcriptPath.replace(/\.jsonl$/, '.meta.json');
 
 export interface Backfill {
-  /** The `attrs` events to append, in log order; none once every repairable span carries its identity. */
   events: LogEvent[];
-  /** Spans of an older Run that the writer cannot file a line for (it stamps the newest Run), left as they are. */
   elsewhere: number;
 }
 
-/**
- * The parent is computed from the lines before the agent's end line, which is what SubagentStop saw, so a backfilled
- * agent nests under the Attempt or Job that was open when it stopped. A span is repaired once: after its `attrs` line
- * the fold reads its role as parsed, so it no longer qualifies.
- */
 export function identityBackfill(
   lines: readonly RunLogLine[],
   readMeta: (metaPath: string) => string | null,

@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { episodeBranches, unfinishedReminder } from './episode-reminder.pure.ts';
 import type { RunStatus } from './status.pure.ts';
 
-/* The reminder rules over plain values: which Episodes are unfinished and which worktrees hold one. */
-
 const status = (...states: RunStatus['jobs'][number]['state'][]): RunStatus => ({
   jobs: states.map((state, i) => ({ id: `j${i}`, state })),
   running: [],

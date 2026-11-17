@@ -18,11 +18,9 @@ export interface EpisodeRead {
   events: readonly DashboardEvent[];
   pipeline?: DashboardPipeline;
   view?: DashboardView;
-  /** The Run started latest, as the fold orders Runs; absent before any Run starts. */
   run?: Span;
 }
 
-/** A reading and when it finished, epoch milliseconds: the dashboard's "now" without a render-time clock. */
 export interface Polled {
   read: EpisodeRead;
   readAt: number;
@@ -142,15 +140,10 @@ class EpisodeReader {
   }
 }
 
-/**
- * The poll step, one per chosen folder: fresh stats each poll, YAML re-read only when modified, only appended bytes
- * read, an unfinished last line carried, and a shrunk events.jsonl read as replaced. `now` stamps each reading.
- */
 export function createEpisodeReader(folder: EpisodeFolder, now: () => number) {
   return new EpisodeReader(folder, now);
 }
 
-/** Opens a chosen folder with its first reading; rejects, naming the problem, when its pipeline.yml can't be read. */
 export async function openEpisode(folder: EpisodeFolder, now: () => number) {
   const reader = createEpisodeReader(folder, now);
   const initial = await reader.poll();

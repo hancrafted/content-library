@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { classify, linksIn, resourcesOf, summarize } from './check-sources.pure.ts';
 
-/*
- * `npm run check:sources`: which URLs a research file cites, how one fetch outcome is judged,
- * and when the run fails. Fetching is the script's job; the outcomes here are hand-written.
- */
-
 const FILE = `---
 type: research
 sources:

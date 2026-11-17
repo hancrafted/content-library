@@ -25,7 +25,6 @@ function useEscape(open: boolean, close: () => void) {
   }, [open, close]);
 }
 
-/** Like the Context drawer: transient selection, non-modal Escape, focus in on open and back on close. */
 export function useDashboardDetail() {
   const [selection, setSelection] = useState<Selection | null>(null);
   const opener = useRef<HTMLElement | null>(null);

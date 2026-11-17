@@ -1,12 +1,9 @@
-// The Design archive's page shell, shared by the Episode page and the dashboard.
-
 export function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 export interface Head {
   title: string;
-  /** Everything else the head carries: styles, the stylesheet link, scripts. */
   head: string;
 }
 

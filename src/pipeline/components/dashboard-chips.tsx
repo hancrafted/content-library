@@ -21,11 +21,9 @@ interface ChipProps {
   name: string;
   state: ChipState;
   copy: DashboardCopy;
-  /** The jobs view: the icon alone, the name and state for screen readers and on hover. */
   compact?: boolean;
 }
 
-/** One skill or check: its state in colour, icon and words, the words for screen readers and on hover. */
 function Chip({ kind, name, state, copy, compact = false }: ChipProps) {
   const Icon = ICON[state];
   const label = fillTemplate(copy.chips.label, {
@@ -59,7 +57,6 @@ interface RowProps {
   compact?: boolean;
 }
 
-/** A labelled row of chips; compact, the label counts those done. */
 function ChipRow({ heading, chips, compact = false }: RowProps) {
   if (chips.length === 0) return null;
   const done = chips.filter((chip) => DONE.has(chip.state)).length;
@@ -83,7 +80,6 @@ const skillChips = (chips: readonly SkillChip[], copy: DashboardCopy): ChipProps
 const checkChips = (chips: readonly CheckChip[], copy: DashboardCopy): ChipProps[] =>
   chips.map(({ name, state }) => ({ kind: 'check', name, state, copy }));
 
-/** The jobs view: a Job's skills, once each, and its checks, as two rows of icons. */
 export function JobChipList({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) {
   const { skills, checks } = job.chips;
   if (skills.length === 0 && checks.length === 0) return null;
@@ -95,7 +91,6 @@ export function JobChipList({ job, copy }: { job: DashboardJob; copy: DashboardC
   );
 }
 
-/** The Job card: each agent's listed skills in its own state, under its type, then the Job's checks. */
 export function JobChipDetail({ job, copy }: { job: DashboardJob; copy: DashboardCopy }) {
   const { agents, checks } = job.chips;
   if (agents.length === 0 && checks.length === 0) return null;

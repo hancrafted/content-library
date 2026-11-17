@@ -9,11 +9,7 @@ import {
 } from './claude-adapter-event.pure.ts';
 import type { RunLogLine } from './run-log.pure.ts';
 
-/*
- * The adapter's point-fact half (design-ADR-0010): a PostToolUse (Skill, Read) or InstructionsLoaded hook payload, the
- * active-run marker and the run log in; one `event` on the span that made the call out, or none when the span cannot
- * be told for sure or the fact lies outside the repository.
- */
+// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
 const TRACE = '0123456789abcdef0123456789abcdef';
 const RUN_SPAN = 'cccccccccccccccc';
 const JOB_SPAN = 'aaaaaaaaaaaaaaaa';

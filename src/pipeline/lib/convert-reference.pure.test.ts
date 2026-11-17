@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cropName, keepsCrop, pageImage, renderReference, type ReferenceInput } from './convert-reference.pure.ts';
 
-/*
- * `npm run convert-reference`: how marker's paginated Markdown becomes a design-reference.md, one
- * `## Page <n>` per page with its whole-page image, and which of marker's cut-out images stay.
- * Running marker, pdftoppm and ImageMagick is the script's job; their output here is hand-written.
- */
-
 const MARKER = `
 
 {0}------------------------------------------------

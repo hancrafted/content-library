@@ -1,11 +1,4 @@
-/*
- * The stages of a new-episode pipeline: the top-level `stages` list fixes their order, and each job names the one it
- * belongs to in `stage` (design-ADR-0008). A job waits only for jobs of its own or an earlier stage, so the stages
- * read left to right as the run moves. A stage may hold no job: a per-run pipeline whose retrieval reuses every
- * research file has an empty Research stage. Whether `stages` and `stage` are present and of the right type is the
- * field check's finding; this checks what they say.
- */
-
+// decision: docs/adr/0008-pipeline-jobs-belong-to-stages.md
 import type { Job } from './episode-pipeline-definition.pure';
 import { repeated } from './finding.pure';
 
@@ -21,7 +14,6 @@ export function checkStages(stages: readonly string[], jobs: readonly Job[]): st
   ];
 }
 
-/** Each job `job` needs or wants that belongs to a later stage than its own. */
 function laterWaits(job: Job, byId: ReadonlyMap<string, Job>, position: ReadonlyMap<string, number>): string[] {
   const own = job.stage === undefined ? undefined : position.get(job.stage);
   if (own === undefined) return [];

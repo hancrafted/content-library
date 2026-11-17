@@ -1,8 +1,4 @@
-// The Spec review server (design-ADR 0011): serves an Episode's `spec/spec.html` and its `design.css`, and saves the
-// review form's POST, its `feedback` field of lines the page formatted, as the next `feedback/<NN>/feedback.md` round.
-// Nothing in the static export imports it;
-// `npm run episode:spec` (the new-episode skill's `spec.ts`) is its command line.
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
@@ -15,17 +11,13 @@ export interface SpecServer {
 }
 
 export interface SpecServerOptions {
-  /** The Episode folder, holding `spec/spec.html`. */
   folder: string;
-  /** The port to listen on; 0 picks a free one. */
   port: number;
   now: () => Date;
 }
 
-/** The form field holding the feedback lines: the page script formats them, and Copy as prompt copies the same ones. */
 const FEEDBACK_FIELD = 'feedback';
 
-/** The review form posts a few kilobytes; anything far larger is not a review. */
 const MAX_BODY = 1_000_000;
 
 function escapeHtml(text: string): string {
@@ -100,7 +92,6 @@ async function save(response: ServerResponse, request: IncomingMessage, options:
   response.end();
 }
 
-/** The files the server serves, by URL path; nothing else under the folder is reachable. */
 interface Served {
   file: string;
   type: string;
@@ -112,7 +103,6 @@ const FILES: Readonly<Record<string, Served>> = {
   '/design.css': { file: 'spec/design.css', type: 'text/css; charset=utf-8' },
 };
 
-/** Live reload: the page polls this and reloads when the Spec or its CSS changed on disk (re-assembly, `--watch`). */
 const VERSION_PATH = '/__spec-version';
 
 const RELOAD_SCRIPT = `<script>
@@ -149,7 +139,6 @@ const RELOAD_SCRIPT = `<script>
 </script>
 `;
 
-/** The modification times of everything the page is built from, as one comparable string. */
 function version(folder: string): string {
   return [SPEC_FILE, 'spec/design.css']
     .map((name) => {
@@ -177,7 +166,6 @@ function get(response: ServerResponse, folder: string, pathname: string): void {
   send(response, { status: 404, type: TEXT, body: 'Not found\n' });
 }
 
-/** GET serves a file, POST to the page saves the review; anything else is 404. */
 async function handle(request: IncomingMessage, response: ServerResponse, options: SpecServerOptions): Promise<void> {
   const { pathname } = new URL(request.url ?? '/', 'http://localhost');
   const served = FILES[pathname];
@@ -186,7 +174,6 @@ async function handle(request: IncomingMessage, response: ServerResponse, option
   send(response, { status: 404, type: TEXT, body: 'Not found\n' });
 }
 
-/** Starts the server on 127.0.0.1; rejects when the port is taken, so a caller can try the next. */
 export function startSpecServer(options: SpecServerOptions): Promise<SpecServer> {
   const server = createServer((request, response) => {
     handle(request, response, options).catch((error: unknown) => {

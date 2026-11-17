@@ -1,5 +1,3 @@
-// The run commands' argument vocabulary: the options they read, the refusal they raise, and the checks that turn a
-// positional status or an option into a field of the log line. Pure; run-commands.ts is the only caller.
 import { parseArgs } from 'node:util';
 import { USAGE } from './run-help.pure.ts';
 import { STATUSES, VIAS, type LogEvent, type Status, type Via } from './run-log.pure.ts';
@@ -26,10 +24,6 @@ export const refuse = (message: string): never => {
 const NEGATIVE_NUMBER = /^-\d+(\.\d+)?$/;
 const MASK = '\u0000';
 
-/**
- * parseArgs over the run commands' options, accepting negative numbers as positionals (`score … check -1`):
- * the number is hidden from the option parser and restored in the result. The `--` form keeps working.
- */
 export function parseRunArgs(args: readonly string[]): { values: Opts; positionals: string[] } {
   const end = args.indexOf('--');
   const masked = args.map((arg, i) => (NEGATIVE_NUMBER.test(arg) && (end === -1 || i < end) ? MASK + arg : arg));
@@ -41,7 +35,6 @@ export function parseRunArgs(args: readonly string[]): { values: Opts; positiona
   };
 }
 
-/** The end line of a span (or of the Run, with kind `end-run`): `[status] [summary]`, status ok by default. */
 export function endEvent(
   kind: 'end' | 'end-run',
   spanId: string,
@@ -60,7 +53,6 @@ export function viaOf(value: string | undefined): Via | undefined {
     : refuse(`--via must be ${VIAS.join(' or ')}, not "${value}"`);
 }
 
-/** The Params of a command, named by position; a missing one is undefined. */
 export type Params<K extends string> = Partial<Record<K, string>>;
 
 export const need = (value: string | undefined, what: string): string => value ?? refuse(`missing <${what}>\n${USAGE}`);

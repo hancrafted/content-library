@@ -3,18 +3,12 @@ import { episodeRef, templateRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
-/*
- * The one visibility predicate (design-ADR 0016, Routes and visibility): a page and the facts of what it presents
- * in; whether it is exported, in the sitemap, indexed, and where its canonical points out. Expected rows are the
- * table's, written out.
- */
-
+// decision: docs/adr/0016-content-data-model.md
 const EVENT = '2026-10-23-axel-agentic-workflow';
 
 const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
 const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
 const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
-/** A public upcoming Episode: on the site's own lists (overview, Upcoming), out of search. */
 const ANNOUNCED: PageTreatment = { exported: true, inSitemap: false, index: false, listed: true, canonical: 'self' };
 
 const PUBLISHED_PUBLIC: PageFacts = { visibility: 'public', status: 'published' };
@@ -28,15 +22,12 @@ const TEMPLATE_PAGE: PageRef = {
 };
 const EVENT_PAGE: PageRef = { kind: 'event', event: EVENT };
 const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span') };
-/** The AXEL seminar's own copy, in its folder `by-event/<event>/ai-attention-span/`. */
 const COPY = episodeRef('ai-attention-span', EVENT);
 const COPY_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: COPY };
-// @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
+// @ts-expect-error
 const COPY_OWN_PAGE: PageRef = { kind: 'episode', episode: COPY };
-/** Indexed and in the sitemap at its Event-scoped URL, canonical to itself, never on the site's own lists. */
 const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: false, canonical: 'self' };
 
-/** Pages whose treatment rests on what they present. */
 const NEEDS_FACTS: [string, PageRef][] = [
   ['an Episode page', EPISODE_PAGE],
   ['an Event page', EVENT_PAGE],
@@ -44,7 +35,6 @@ const NEEDS_FACTS: [string, PageRef][] = [
   ['an Episode under an Event', EVENT_EPISODE_PAGE],
 ];
 
-/** Facts that say nothing about visibility: none at all, or a status alone. */
 const NO_VISIBILITY: [string, PageFacts][] = [
   ['no facts', {}],
   ['a status but no visibility', { status: 'published' }],

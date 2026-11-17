@@ -62,7 +62,6 @@ function Chooser({ source, copy }: { source: Source; copy: DashboardCopy }) {
   );
 }
 
-/** The opened source's name and controls; a demo Run carries its notice right under it. */
 function SourceBar({ source, specPort, copy }: { source: Source; specPort?: number; copy: DashboardCopy }) {
   return (
     <>

@@ -18,7 +18,6 @@ function fixtureJob(): DashboardJob {
   return fixtureView().jobs[0];
 }
 
-/** A Job of the given stage and state with no observed spans or configured agents. */
 function job(id: string, stage: string, state: DashboardJob['state']): DashboardJob {
   return {
     ...fixtureJob(),

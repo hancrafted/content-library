@@ -18,28 +18,18 @@ import type { Guide } from '../schemas/guide.schema';
 import type { Template } from '../schemas/template.schema';
 import type { EpisodesPathParams, EventEpisodePage, EventEpisodeParams, PageCatalogue } from './page-catalogue.types';
 
-/*
- * The page catalogue (GLOSSARY, FE-005, FE-008): every page the site has, read from the records, each with its
- * treatment from the one visibility predicate (design-ADR 0016, Routes and visibility). Pages, routes, the sitemap,
- * page metadata and the site's own lists ask it "treatment of this page"; none fetches the facts of what a page
- * presents and pairs them with the predicate itself. It also maps each built page to its route's params and back
- * (GLOSSARY, page catalogue). The store serves one catalogue over its records (`store.ts`).
- */
-
+// decision: docs/adr/0016-content-data-model.md
+// decision: FE-005 §1
+// decision: FE-008 §5
 export type * from './page-catalogue.types';
 
 const NO_FACTS: PageFacts = {};
 
-/** What an Episode presents, as the predicate reads it: visibility, status, and whether it is an Event's copy. */
 function episodeFactsOf({ ref, visibility, status }: LoadedEpisode): PageFacts {
   const copy = matchEpisode(ref, { standalone: () => false, 'event-copy': () => true });
   return { visibility, status, ...(copy && { copy }) };
 }
 
-/**
- * A page, its record, the facts the predicate reads from it and the treatment those give, paired once. `record` is
- * undefined for a site list or a page whose record is not held (no facts, so it fails closed).
- */
 interface Entry<P extends PageRef = PageRef, R = unknown> {
   readonly page: P;
   readonly record: R;
@@ -51,7 +41,6 @@ function entryOf<P extends PageRef, R>(page: P, record: R, facts: PageFacts): En
   return { page, record, facts, treatment: pageTreatment(page, facts) };
 }
 
-/** The page an Episode has at `/episodes/<slug>/`: one no Event owns, with a page; an Event's copy has none there. */
 function ownPageOf({ ref }: LoadedEpisode): PageOf<'episode'>[] {
   if (!hasPage(ref)) return [];
   return matchEpisode(ref, {
@@ -60,31 +49,18 @@ function ownPageOf({ ref }: LoadedEpisode): PageOf<'episode'>[] {
   });
 }
 
-/** Each Explorable page's page reference, in record order: its slug names its composition folder. */
-function pageOfExplorablePage({ slug }: ExplorablePage): PageOf<'explorable-page'> {
-  // Every Explorable page the store loads is an entry of the generated registry, keyed by its slug (`tsc` holds key =
-  // slug, and the load refuses a record without a composition folder), so its slug names a composition.
-  return { kind: 'explorable-page', explorablePage: explorablePageRef(slug as ExplorablePageSlug) };
+function pageOfExplorablePage({ slug: slugKeyedByRegistryEntry }: ExplorablePage): PageOf<'explorable-page'> {
+  return { kind: 'explorable-page', explorablePage: explorablePageRef(slugKeyedByRegistryEntry as ExplorablePageSlug) };
 }
 
-/** Each Guide's page reference, in record order: its slug names its composition folder. */
-function pageOfGuide({ slug }: Guide): PageOf<'guide'> {
-  // Every Guide the store loads is an entry of the generated Guide registry, keyed by its slug (`tsc` holds key = slug,
-  // and the load refuses a record without a composition folder), so its slug names a composition.
-  return { kind: 'guide', guide: guideRef(slug as GuideSlug) };
+function pageOfGuide({ slug: slugKeyedByRegistryEntry }: Guide): PageOf<'guide'> {
+  return { kind: 'guide', guide: guideRef(slugKeyedByRegistryEntry as GuideSlug) };
 }
 
-/** Each Template's page, in record order: its type from its record, its slug naming the composition folder. */
-function pageOfTemplate({ type, slug }: Template): PageOf<'template'> {
-  // Every Template the store loads is an entry of the generated Template registry, keyed by its slug (`tsc` holds key
-  // = slug, and the load refuses a record without a composition folder), so its slug names a composition.
-  return { kind: 'template', type, template: templateRef(slug as TemplateSlug) };
+function pageOfTemplate({ type, slug: slugKeyedByRegistryEntry }: Template): PageOf<'template'> {
+  return { kind: 'template', type, template: templateRef(slugKeyedByRegistryEntry as TemplateSlug) };
 }
 
-/**
- * Each Episode every Event's Playlist presents with a page, in record order, with its page under the Event: one page
- * per Episode, placed by its first entry; an entry the served Event marks `repeat` gets none.
- */
 function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
   return content.events.flatMap((event) =>
     event.playlist.episodes.flatMap(({ page: episode, place, repeat }) =>
@@ -95,7 +71,6 @@ function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
   );
 }
 
-/** The entries of a kind served by slug, each with the visibility its record states. */
 function entriesBySlug<R extends { visibility: PageFacts['visibility'] }, P extends PageRef>(
   of: readonly R[],
   page: (record: R) => P,
@@ -103,14 +78,12 @@ function entriesBySlug<R extends { visibility: PageFacts['visibility'] }, P exte
   return of.map((record) => entryOf(page(record), record, { visibility: record.visibility }));
 }
 
-/** Every page the records give, in the catalogue's order, each read once with its record, facts and treatment. */
 function entriesIn(content: Content) {
   const kinds = ['home', 'dashboard', 'episodes', 'events', 'explorables', 'guides', 'resources'] as const;
   const lists = kinds.map((kind) => entryOf({ kind }, undefined, NO_FACTS));
   const episodeOf = (id: EpisodeId) => content.episodes.find(({ ref }) => ref.id === id);
   const episodeEntry = <P extends PageRef>(page: P, record: LoadedEpisode | undefined) =>
     entryOf(page, record, record === undefined ? NO_FACTS : episodeFactsOf(record));
-  // Every Episode record, for the site's lists; only one with a page at `/episodes/` is a page of its own.
   const records = content.episodes.map((record) => {
     const [page] = ownPageOf(record);
     const standIn = page ?? ({ kind: 'episode', episode: record.ref } as PageOf<'episode'>);
@@ -133,12 +106,10 @@ function entriesIn(content: Content) {
   return { lists, records, episodes, explorablePages, guides, templates, events, underEvents };
 }
 
-/** The params a page under `/episodes/` is built at: an Episode's own page at its slug. */
 export function episodesPathParamsOf({ episode }: EpisodesPathPage): EpisodesPathParams {
   return { episode: episode.slug };
 }
 
-/** The params an Episode's page under its Event is built at: the Event's slug and the Episode's slug. */
 export function eventEpisodeParamsOf({ event, episode }: PageOf<'event-episode'>): EventEpisodeParams {
   return { event, episode: episode.slug };
 }
@@ -146,7 +117,6 @@ type Entries = ReturnType<typeof entriesIn>;
 
 const exportedOf = <E extends Entry>(of: readonly E[]) => of.filter(({ treatment }) => treatment.exported);
 
-/** The params and lookups of the kinds served at `/<kind plural>/<slug>/`: the Explorable pages and the Guides. */
 function slugRoutesOf(
   explorablePages: Entries['explorablePages'],
   guides: Entries['guides'],
@@ -160,7 +130,6 @@ function slugRoutesOf(
   };
 }
 
-/** The static params and page lookups of the built pages: the entries whose treatment exports. */
 function routesOf({
   episodes,
   explorablePages,
@@ -190,7 +159,6 @@ function routesOf({
   };
 }
 
-/** The catalogue of the pages these records give: what the store serves over its own records. */
 export function catalogueOf(content: Content): PageCatalogue {
   const all = entriesIn(content);
   const { lists, records, episodes, explorablePages, guides, templates, events, underEvents } = all;

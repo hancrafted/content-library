@@ -4,11 +4,6 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { episodeLogPath, readEpisodeLog, readLog, readRuns } from './episode-run-log.ts';
 
-/*
- * The run-log module against a real temp folder: path rules, folding with liveness from the marker,
- * the current Run, and per-Run dedupe across live and archived logs.
- */
-
 const TRACE_A = 'a'.repeat(32);
 const TRACE_B = 'b'.repeat(32);
 const SLUG = 'my-episode';

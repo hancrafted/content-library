@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkVoiceScriptDiff } from './episode-voice-script.pure';
 
-/*
- * write-voice-script may change only the Voice script lines of what
- * write-dossier committed (design-ADR 0004, issue 106): the draft is the
- * Dossier as write-dossier left it, the voiced file as write-voice-script did.
- */
-
+// decision: docs/adr/0004-episode-content-is-staged-then-promoted.md
 const SLIDE_BLOCK = `#### Visual
 
 master: basic-page · motion: liquid-ink-transition

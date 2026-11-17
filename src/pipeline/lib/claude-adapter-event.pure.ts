@@ -1,13 +1,10 @@
-// The Claude Code adapter's point-fact half (design-ADR-0010): a PostToolUse (Skill, Read) or InstructionsLoaded hook
-// payload, the active-run marker and the run log so far in; the `event` for the core writer to append, or null, out.
-// Pure; `skills/new-episode/scripts/claude-adapter.ts skill|read|instructions` is the I/O.
+// decision: docs/adr/0010-run-log-lines-are-a-typed-union-with-point-events.md
 import path from 'node:path';
 import { openJobs, subagentFiles } from './claude-adapter.pure.ts';
 import { parseMarker, sessionsOf, type Marker } from './marker.pure.ts';
 import type { EventAttributes, EventName, LogEvent, Payload, RunLogLine } from './run-log.pure.ts';
 import { skillName } from './transcript.pure.ts';
 
-/** The hook fields every point fact reads; `agent_id` is present only when a subagent made the call. */
 interface HookIdentity {
   session_id: string;
   transcript_path: string;
@@ -16,13 +13,11 @@ interface HookIdentity {
   agent_type?: string;
 }
 
-/** The PostToolUse payload fields the Skill and Read hooks read. */
 export interface ToolHookPayload extends HookIdentity {
   tool_name?: string;
   tool_input?: unknown;
 }
 
-/** The InstructionsLoaded payload fields the hook reads ([hooks reference](https://code.claude.com/docs/en/hooks)). */
 export interface InstructionsHookPayload extends HookIdentity {
   file_path?: string;
   memory_type?: string;
@@ -33,26 +28,21 @@ export interface InstructionsHookPayload extends HookIdentity {
 
 interface HookInput<P extends HookIdentity> {
   payload: P;
-  /** The marker file's text, null when there is none. */
   marker: string | null;
-  /** The run log's lines so far: the agent's start, or the open Job the marker names. */
   log: readonly RunLogLine[];
 }
 
 export type ToolHookInput = HookInput<ToolHookPayload>;
 
-/** A Read's input plus the root of the repository its path is measured from. */
 export interface ReadHookInput extends ToolHookInput {
   repoRoot: string;
 }
 
-/** A load's input plus the repository root and the loaded file's real path, its symlink resolved (null when unknown). */
 export interface InstructionsHookInput extends HookInput<InstructionsHookPayload> {
   repoRoot: string;
   resolvedPath: string | null;
 }
 
-/** The span a call belongs to: the subagent's agent span, else the open Job the orchestrator is in; never a guess. */
 function invokingSpan(input: HookInput<HookIdentity>, marker: Marker): string | undefined {
   const { payload, log } = input;
   if (payload.agent_id !== undefined) {
@@ -68,7 +58,6 @@ interface Fact<N extends EventName> {
   payload?: Payload;
 }
 
-/** The event for a fact on the span that made it, or null: no marker, another session, no fact, or no span to attribute it to. */
 function pointEvent<N extends EventName>(input: HookInput<HookIdentity>, fact: Fact<N> | null): LogEvent | null {
   const marker = parseMarker(input.marker);
   if (marker === null || !sessionsOf(marker).includes(input.payload.session_id) || fact === null) return null;
@@ -77,7 +66,6 @@ function pointEvent<N extends EventName>(input: HookInput<HookIdentity>, fact: F
   return { kind: 'event', span_id: span, source: 'measured', ...fact } as LogEvent;
 }
 
-/** A path relative to the repository root, or null when it lies outside it. */
 function repoPath(root: string, file: unknown): string | null {
   if (typeof file !== 'string' || file.trim() === '') return null;
   const relative = path.relative(root, path.resolve(root, file));
@@ -88,7 +76,6 @@ function repoPath(root: string, file: unknown): string | null {
 
 const ADR_FILE = /^\.archgate\/adrs\/([A-Z]+-\d{3}-[a-z0-9-]+)\.md$/;
 
-/** The Archgate ADR (id and slug) a loaded file resolves to, when it is one. */
 function adrOf(root: string, resolved: string | null): string | undefined {
   return ADR_FILE.exec(repoPath(root, resolved) ?? '')?.[1];
 }
@@ -96,13 +83,11 @@ function adrOf(root: string, resolved: string | null): string | undefined {
 const definedOnly = <T extends Record<string, unknown>>(o: T): T =>
   Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
 
-/** A Skill tool call as a `skill.invoke` event. */
 export function adaptSkill(input: ToolHookInput): LogEvent | null {
   const name = input.payload.tool_name === 'Skill' ? skillName(input.payload.tool_input) : null;
   return pointEvent(input, name === null ? null : { name: 'skill.invoke', attributes: { 'skill.name': name } });
 }
 
-/** A Read tool call of a file inside the repository as a `file.read` event; the content is never logged. */
 export function adaptRead(input: ReadHookInput): LogEvent | null {
   const { tool_name, tool_input } = input.payload;
   const toolInput =
@@ -111,7 +96,6 @@ export function adaptRead(input: ReadHookInput): LogEvent | null {
   return pointEvent(input, file === null ? null : { name: 'file.read', attributes: { 'file.path': file } });
 }
 
-/** An instruction file Claude Code loaded (a CLAUDE.md, a rule) as an `instructions.load` event. */
 export function adaptInstructions(input: InstructionsHookInput): LogEvent | null {
   const { payload, repoRoot } = input;
   const file = repoPath(repoRoot, payload.file_path);

@@ -19,6 +19,8 @@
   },
   // oxfmt would otherwise sort package.json keys too.
   "sortPackageJson": false,
+  // An ADR's files:/paths: is one inline YAML list (GEN-001), so a long glob must not wrap: oxfmt's limit is 320.
+  "overrides": [{ "files": [".archgate/adrs/*.md"], "options": { "printWidth": 320 } }],
   // What oxfmt skips, beside .gitignore. Patterns are relative to this file.
   "ignorePatterns": [
     ".archgate/rules.d.ts",

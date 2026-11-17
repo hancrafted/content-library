@@ -5,12 +5,6 @@ import { parseDashboardPipeline, projectDashboard } from './dashboard-projection
 import { projectStages } from './dashboard-stages.pure';
 import { createLogFold } from './run-log.pure';
 
-/**
- * Three Stages without Jobs in the Job network, laid out from GRAPH_LAYOUT by hand: the first centre sits at half a
- * Stage node plus the node inset (24 + 6 = 30); an inner Stage spans the minimum gap (96); the last spans half a Stage
- * node, a Job node and edge padding to the Run end (24 + 14 + 8 = 46) plus the same to it (8 + 14 + 8 = 30), 76; and
- * the canvas runs half an end node and edge padding past the Run end (8 + 8). Centres 30, 126, 222; Run end 298; 314 wide.
- */
 const EMPTY_STAGES = projectStages([], ['brief', 'research', 'pr']).stages;
 const EMPTY_WIDTH = 314;
 
@@ -131,14 +125,13 @@ describe('edge cases', () => {
   it('puts the scrubber on a Stage centre when replay reaches that Stage, and back', () => {
     // ARRANGE
     const geometry = graphGeometry(EMPTY_STAGES, true);
-    // The third of four Stage rail places; its centre 222 is 192 along the 268 from the first centre to the Run end.
-    const stage = 2 / 3;
+    const thirdOfFourStageRailPlaces = 2 / 3;
     const expected = 192 / 268;
     // ACT
-    const visual = geometry.rail.screenOf(stage);
+    const visual = geometry.rail.screenOf(thirdOfFourStageRailPlaces);
     const structural = geometry.rail.placeOf(expected);
     // ASSERT
     expect(visual).toBeCloseTo(expected);
-    expect(structural).toBeCloseTo(stage);
+    expect(structural).toBeCloseTo(thirdOfFourStageRailPlaces);
   });
 });

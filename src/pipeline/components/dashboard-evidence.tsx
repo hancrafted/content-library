@@ -22,7 +22,6 @@ const STATUS_COLOR: Record<DashboardState, string> = {
   unclosed: 'bg-muted text-muted-foreground',
 };
 
-/** Why a Job errored and whether the Run went on without it, so a red node is never unexplained. */
 export function JobFailureNote({
   job,
   copy,
@@ -58,7 +57,6 @@ export function StateBadge({ state }: { state: DashboardState }) {
   return <span className={`rounded-md px-2 py-1 text-caption font-medium ${STATUS_COLOR[state]}`}>{state}</span>;
 }
 
-/** A measured duration, or the time so far of a span still running at the moment shown. */
 export function elapsedText(elapsed: Elapsed, copy: DashboardCopy): string {
   const duration = formatDuration(elapsed.ms);
   return elapsed.open ? fillTemplate(copy.elapsedSoFar, { duration }) : duration;
@@ -69,7 +67,6 @@ export function ElapsedTime({ elapsed, copy }: { elapsed: Elapsed | null; copy: 
   return <span className="font-mono text-muted-foreground tabular-nums">{elapsedText(elapsed, copy)}</span>;
 }
 
-/** An agent's span counts as an agent: unclosed under an ended Job or Attempt, it has no time so far. */
 export function SpanMetrics({ span, job, copy }: { span: Span; job?: DashboardJob; copy: DashboardCopy }) {
   const { now } = useContext(DashboardMoment);
   const elapsed = job && span.type === 'agent' ? agentElapsed(job, span, now) : spanElapsed(span, now);

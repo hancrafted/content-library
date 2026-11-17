@@ -2,13 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { SpecSlide } from './episode-spec-page.pure.ts';
 import { nextRound, reviewToFeedback } from './spec-feedback.pure.ts';
 
-/*
- * A Spec review, as the served page posts it, turned into the next `feedback.md` round (design-ADR 0011): the page's
- * own feedback lines, validated against the Spec's Slides and written as they came. A Slide with no pick is set to
- * Redesign and needs no note; approve refuses it, naming the Slide. The posted lines and the clock are hand-written
- * here; the server reads them.
- */
-
+// decision: docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md
 const SLIDES: readonly SpecSlide[] = [
   { section: 'why', slug: 'spent', options: ['1a', '1b'] },
   { section: 'why', slug: 'quiet', options: ['2a', '2b', '2c'] },
@@ -16,10 +10,8 @@ const SLIDES: readonly SpecSlide[] = [
 const TITLE = ['0a', '0b', '0c'];
 const NOW = new Date('2026-10-15T10:40:05.123Z');
 
-/** The path of a round's file under the Episode folder. */
 const roundFile = (round: number) => `feedback/${String(round).padStart(2, '0')}/feedback.md`;
 
-/** The lines the page posts, one feedback item per line. */
 const posted = (...items: string[]) => items.join('\n');
 
 function header(round: number): string[] {
