@@ -29,7 +29,6 @@ function Reader({ desk }: { readonly desk: number }) {
   );
 }
 
-/** The dotted lines from the manual's page to each reader, drawn in once after the control block is stamped. */
 function ReachLines() {
   const { x, y } = PAGE_EDGE;
   return (
