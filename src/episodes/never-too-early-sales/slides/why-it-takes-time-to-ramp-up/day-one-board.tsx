@@ -22,7 +22,6 @@ interface DayOneBoardProps {
   markers: Record<Column, ReactNode>;
 }
 
-/** Paper tilt per note, so the board reads as hand-pinned. */
 const BLANK_TILT = ['-rotate-1', 'rotate-1', '-rotate-1'];
 const QUESTION_TILT = ['rotate-1', '-rotate-2', 'rotate-1'];
 const METRIC_TILT = ['-rotate-1', 'rotate-2'];
@@ -84,7 +83,6 @@ function BoardSurface({ stamp, children }: { stamp: string; children: ReactNode 
         <rect width="100%" height="100%" fill={`url(#${dots})`} />
       </svg>
       {children}
-      {/* Last in the board, so it lies on top of the lanes without a z-index. */}
       <p
         className={cn(
           'absolute -top-6 right-2 rotate-6 rounded-md border-4 border-foreground bg-background px-5 py-2 font-mono text-body font-semibold tracking-widest text-foreground uppercase shadow-lg @3xl:-right-4',
