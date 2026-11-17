@@ -119,17 +119,17 @@
       "in": {
         "title": "In",
         "keywords": "",
-        "script": "Human in the Loop heißt, der Agent handelt erst, nachdem ein Mensch zugestimmt hat. Nimm die Buchung der Location für das Fest: Der Agent schlägt eine Location vor, und nichts wird gebucht, bevor Du Ja sagst."
+        "script": "Human in the Loop ist die maximale Aufsicht. Das ist quasi ein Micromanager, der über jeden Schritt wacht und sieht, was der Agent macht, um rechtzeitig eingreifen zu können: Halt, stopp, Du suchst gerade im falschen Ordner und liest die falschen Dateien, bitte korrigieren. Bei einer riskanten Entscheidung, zum Beispiel einer Versicherungspolice, bei der entschieden wird, ob ausgezahlt wird oder nicht, ist es wahrscheinlich besser, einen Menschen im Loop zu haben, der überwachen kann."
       },
       "on": {
         "title": "An",
         "keywords": "",
-        "script": "Human on the Loop heißt, der Agent handelt selbst, während ein Mensch zusieht und eingreifen kann. Jetzt bucht der Agent die Location selbst, Du liest seine Berichte, und Du greifst ein, wenn etwas falsch aussieht."
+        "script": "Dazwischen liegt Human on the Loop. Der Mensch ist nicht direkt in die einzelnen Schritte involviert, hat aber trotzdem ein Auge auf die Ergebnisse, die Zwischenergebnisse oder einzelne Prozesse zwischendrin, um noch eingreifen zu können."
       },
       "out": {
         "title": "Außerhalb",
         "keywords": "",
-        "script": "Human out of the Loop heißt, der Agent handelt ohne jeden Menschen, der nur das Ergebnis sieht. Der Agent bucht die Location, und alles, was Du bekommst, ist die Bestätigung."
+        "script": "Human out of the Loop bedeutet maximale Autonomie, ohne dass ein Mensch zwischendrin involviert ist. Ich möchte nur das Ergebnis sehen, im Extremfall nur die Rechnung haben. Sagst Du: Mach eine Webrecherche über die drei besten Hotels in Frankfurt, ist das wahrscheinlich eine Aufgabe, bei der ich nur das Ergebnis sehen muss."
       },
       "borrowed-terms": {
         "title": "Geliehene Begriffe",
@@ -139,7 +139,7 @@
       "per-task": {
         "title": "Pro Aufgabe",
         "keywords": "",
-        "script": "Du wählst also pro Aufgabe, nicht pro Unternehmen. Minimales Eingreifen ist dann kein vages Versprechen mehr, sondern eine Einstellung, die Du wählst, Aufgabe für Aufgabe."
+        "script": "Wie immer bei solchen Dingen ist das ein Trade-off, ein Kompromiss: Für welche Aufgaben eignet sich welche Art von Prozess? Das ist eines der Kernkonzepte: Für jede Aufgabe innerhalb eines Workflows überlegst Du, wie viel Aufsicht sie braucht."
       }
     }
   }
