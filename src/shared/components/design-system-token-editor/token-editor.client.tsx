@@ -12,7 +12,6 @@ import { usageRowAddon } from './token-usage/index.client';
 
 const GAP_PIXELS = 8;
 
-/** Closes on Escape (returning focus to the trigger) and on a press outside both the panel and the trigger. */
 function useDismiss(open: boolean, close: () => void, trigger: React.RefObject<HTMLButtonElement | null>) {
   useEffect(() => {
     if (!open) return;
@@ -35,7 +34,6 @@ function useDismiss(open: boolean, close: () => void, trigger: React.RefObject<H
   }, [open, close, trigger]);
 }
 
-/** Open state and the panel's top edge, taken from the button when it opens: the header is sticky and wraps on a phone. */
 function usePopover(trigger: React.RefObject<HTMLButtonElement | null>) {
   const [open, setOpen] = useState(false);
   const [top, setTop] = useState(0);
@@ -77,12 +75,6 @@ function Trigger({
   );
 }
 
-/**
- * The dev-only design-system token editor: an icon button in the header that
- * drops a popover down. It edits the global tokens and the active Slide's own
- * tokens in the active theme, live. Nothing is saved; "Copy changed" exports the
- * changes as a prompt for an agent.
- */
 export default function TokenEditor() {
   const theme = useResolvedTheme();
   const [edits, setEdits] = useState<Edits>({});

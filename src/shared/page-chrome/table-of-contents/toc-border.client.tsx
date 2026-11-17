@@ -14,7 +14,6 @@ interface BorderProps {
   settled: boolean;
 }
 
-/** A clockwise rounded rectangle whose first point is always the top centre. */
 function outlinePath(width: number, height: number): string {
   if (width <= 2 || height <= 2) return '';
   const right = width - 1;

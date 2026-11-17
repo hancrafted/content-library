@@ -24,7 +24,6 @@ export function promotionFlight(envelope: Box, word: Box): Point {
   };
 }
 
-/** An explosion path from the envelope offset to rest: a bowed apex beside the straight line, lifted upward, with its own spin and pace. */
 export function promotionArc(offset: Point, roll: Roll) {
   if (![offset.x, offset.y].every(Number.isFinite)) {
     throw new RangeError('An arc needs a finite launch offset.');

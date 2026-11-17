@@ -4,16 +4,13 @@ import type { Ref } from 'react';
 
 interface SearchInputProps {
   query: string;
-  /** The field's accessible name, and the hint it shows while empty. */
   label: string;
   placeholder: string;
   onChange: (query: string) => void;
   inputRef?: Ref<HTMLInputElement>;
-  /** The field's own data attribute, so each browser keeps its hook (`data-episode-search`, `data-event-search`). */
   data: Record<`data-${string}`, string>;
 }
 
-/** A labelled search field on the shadcn input: every keystroke narrows the list below it. */
 export function SearchInput({ query, label, placeholder, onChange, inputRef, data }: SearchInputProps) {
   return (
     <label className="relative block w-full sm:w-72 sm:shrink-0">

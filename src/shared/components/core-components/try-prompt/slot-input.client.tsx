@@ -15,12 +15,6 @@ import {
 } from './prompt-sections.pure';
 import type { TryPromptWords } from './try-prompt.types';
 
-/*
- * A paste-in slot: per entry a visible label with an upload button and an eye toggle on its right, above a textarea.
- * The textarea is one row until the eye expands it; it stays a textarea so a paste keeps every line break. For a
- * multiple slot a plus button adds the next entry.
- */
-
 const FIELD =
   'block w-full min-w-0 resize-none rounded-md border border-border bg-background px-2 py-1.5 text-caption outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const EXPANDED_ROWS = 8;
@@ -54,7 +48,6 @@ function UploadButton({ label, onValue }: { label: string; onValue: (value: stri
   );
 }
 
-/** The hint of an empty field: its sample's H1 and line count. */
 function hintOf(sample: string | undefined, words: TryPromptWords): string | undefined {
   if (sample === undefined) return undefined;
   const { title, lines } = sampleSummary(sample);

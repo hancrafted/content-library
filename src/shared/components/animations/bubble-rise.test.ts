@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { BubbleRise } from './bubble-rise';
 
-/*
- * The `bubbles` transition's field (Iceberg feedback-2 grill, decisions 12 and 28): forty faceted bubbles of mixed
- * sizes and sides, each placed by its own short custom properties from the seeded field.
- */
-
 const render = () => load(renderToStaticMarkup(createElement(BubbleRise)));
 
 describe('success cases', () => {

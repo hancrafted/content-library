@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { polyBubbleFacets, toPoints } from './poly-bubble.pure';
 
-/*
- * One faceted air bubble (`PolyBubble`): a 6- to 8-sided outline inside the anchor box (-10..10 on both axes, centred
- * on the origin, whole units only), a lit facet toward the light at the upper left, a shade facet opposite it and one glint.
- */
-
 const centroid = (points: readonly (readonly [number, number])[]) =>
   points.reduce(([sx, sy], [x, y]) => [sx + x / points.length, sy + y / points.length], [0, 0]);
 

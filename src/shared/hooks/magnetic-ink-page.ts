@@ -25,7 +25,6 @@ interface PageState {
   owner?: string | null;
 }
 
-/** One page's scheduler. Browser listeners and native elements are supplied by the local adapters. */
 export function createInkPage(clock: Clock) {
   const state: PageState = {
     ink: createMagneticInk(),

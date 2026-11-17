@@ -1,13 +1,10 @@
-// What the dev-only token editor shows around a token: the one-line description of a
-// global token and the designer-convention groups it is listed in (shadcn / Material
-// style: a colour beside its `-foreground` pair). No DOM, no React.
 import { classifyToken, type Token } from './token-discovery.pure';
 
-/** Tag colours are named by the store's vocabulary, which shared code never reads (FE-007 §2.6): one description fits them all. */
+// decision: FE-007 §2.6
 const TAG_PREFIX = '--tag-';
 const TAG_DESCRIPTION = 'Colour of one Tag: icon, ink and wash of the cards it leads.';
 
-/** The Iceberg style's tones: one value per zone, then the scenery several of its Slides repeat (design-ADR 0025). */
+// decision: docs/adr/0025-scene-figures-are-deep-modules.md
 const ZONE_PREFIX = '--zone-';
 const ZONE_DESCRIPTION = 'Iceberg zone colour: a title Slide, the gauge and the rail at that depth.';
 const SCENERY_PREFIX = '--scenery-';
@@ -70,7 +67,6 @@ const DESCRIPTIONS: Record<string, string> = {
   '--font-mono': 'Typeface of code and token names.',
 };
 
-/** One line on what a global token affects; `undefined` for a token not in the table (a Slide's own, say). */
 export function describeToken(name: string): string | undefined {
   if (name.startsWith(TAG_PREFIX)) return TAG_DESCRIPTION;
   if (name.startsWith(ZONE_PREFIX)) return ZONE_DESCRIPTION;
@@ -84,7 +80,6 @@ export interface TokenGroup {
   tokens: Token[];
 }
 
-/** Each group lists exact names in display order; typography is matched by family prefix instead. */
 const GROUPS: readonly { label: string; names?: readonly string[]; prefixes?: readonly string[] }[] = [
   {
     label: 'Brand',
@@ -138,13 +133,11 @@ const OTHER = 'Other';
 
 const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-/** Position in the group's display order: listed names by index, prefixed families by family then name. */
 function rank(group: (typeof GROUPS)[number], name: string): number {
   if (group.names) return group.names.indexOf(name);
   return (group.prefixes ?? []).findIndex((prefix) => name.startsWith(prefix));
 }
 
-/** The global tokens in designer order, empty groups left out and unlisted tokens last under Other. */
 export function groupGlobalTokens(tokens: readonly Token[]): TokenGroup[] {
   const placed = new Set<Token>();
   const groups: TokenGroup[] = GROUPS.map((group) => ({
@@ -161,7 +154,6 @@ export function groupGlobalTokens(tokens: readonly Token[]): TokenGroup[] {
 
 const isColour = (token: Token) => classifyToken(token.name, token.light) === 'colour';
 
-/** A Slide's tokens grouped by the selector of the rule that declares them, colours first within a group. */
 export function groupSlideTokens(tokens: readonly Token[]): TokenGroup[] {
   const bySelector = new Map<string, Token[]>();
   for (const token of tokens) {

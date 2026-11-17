@@ -5,7 +5,6 @@ import { bindInkHost } from './magnetic-ink-host';
 
 export const InkPageContext = createContext<InkBrowser | null>(null);
 
-/** Custom client hosts opt in through a known host reference, never selector discovery. */
 export function useMagneticInk(host: RefObject<HTMLElement | null>, options: InkOptions) {
   const page = useContext(InkPageContext);
   const latest = useRef(options);

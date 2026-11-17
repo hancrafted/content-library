@@ -1,11 +1,3 @@
-/*
- * Rising air bubbles (`BubbleRise`): each bubble starts just below the host's bottom and climbs
- * `(progress - start) * rise` host heights (`cqh` of the field, a size container), so it waits below the host until
- * progress reaches its start and has left through the top by full progress. It sways a few pixels as it climbs.
- * Motion is its own `translate` only (Iceberg feedback-2 grill, decisions 19 and 20). Its colours are `PolyBubble`'s,
- * tinted here. The short custom properties are named in `bubble-rise.tsx`.
- */
-
 .field {
   position: absolute;
   inset: 0;

@@ -42,7 +42,6 @@ function agitation(timeline: gsap.core.Timeline, envelope: SVGGElement) {
   }
 }
 
-/** The envelope rises and rattles, impatient to be opened; it never changes colour or pulls a face. */
 function impatience(timeline: gsap.core.Timeline, root: HTMLElement) {
   const envelope = root.querySelector('[data-envelope]');
   timeline.to(

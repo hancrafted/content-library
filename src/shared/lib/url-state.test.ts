@@ -11,7 +11,6 @@ import {
 } from './url-state';
 import { createUrlNavigationBrowser } from './url-state-browser';
 
-/** Only the service's ports: a URL, recorded history writes, and events. */
 function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];
@@ -620,7 +619,7 @@ describe('failure cases', () => {
   });
 
   describe('reportReading', () => {
-    it('keeps subscribers correct when the browser refuses the write', () => {
+    it('keeps subscribers correct while the URL lags when WebKit throws SecurityError past its history-write limit', () => {
       // ARRANGE
       const { state, win, seen } = setup();
       win.failWrites = true;
@@ -1060,11 +1059,13 @@ describe('edge cases', () => {
     it('never writes more than once per interval over a long fling', () => {
       // ARRANGE
       const { state, writes } = setup();
-      const flingMilliseconds = 10_000;
-      // ACT: a new Slide every 10 ms for 10 s
-      for (let tick = 0; tick < 1000; tick++) {
+      const slideEveryMilliseconds = 10;
+      const ticks = 1000;
+      const flingMilliseconds = ticks * slideEveryMilliseconds;
+      // ACT
+      for (let tick = 0; tick < ticks; tick++) {
         state.reportReading(`slide-${tick}`);
-        vi.advanceTimersByTime(10);
+        vi.advanceTimersByTime(slideEveryMilliseconds);
       }
       vi.advanceTimersByTime(WRITE_INTERVAL_MILLISECONDS);
       // ASSERT

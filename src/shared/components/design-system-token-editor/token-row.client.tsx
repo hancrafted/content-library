@@ -37,7 +37,6 @@ function Swatch({
   );
 }
 
-/** The token's name, a dot when changed, what it affects, and its text field. */
 function RowText({
   name,
   value,
@@ -67,14 +66,12 @@ function RowText({
   );
 }
 
-/** What a row addon is told about its row. */
 export interface RowContext {
   scope: Scope;
   token: Token;
   theme: Theme;
 }
 
-/** A render prop that puts extra UI under a token row; the editor knows nothing of what it shows. */
 export type RowAddon = (row: RowContext) => ReactNode;
 
 interface RowProps extends RowContext {
@@ -84,7 +81,6 @@ interface RowProps extends RowContext {
   onChange: (value: string) => void;
 }
 
-/** One token: a swatch that opens a picker for a colour, and its name, description and text field for the active theme. */
 export function TokenRow({ scope, token, theme, value, changed, onChange, rowAddon }: RowProps) {
   const [picking, setPicking] = useState(false);
   const isColour = classifyToken(token.name, token[theme]) === 'colour';

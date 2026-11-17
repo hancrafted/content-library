@@ -21,7 +21,6 @@ export interface InkInput {
   pointer: InkPoint | null;
   delta: number;
   enabled: boolean;
-  /** The explicitly registered host under the actual pointer target, resolving overlapping hosts. */
   owner?: string | null;
 }
 

@@ -1,5 +1,3 @@
-// The DOM side of the token editor: reads the loaded stylesheets into the plain
-// snapshot token discovery works on, finds a Slide by id, and applies edits.
 import { normaliseColour, toPickerHex } from './colour-convert.pure';
 import type { Edits, Scope } from './token-changes.pure';
 import { editKey } from './token-changes.pure';
@@ -30,14 +28,19 @@ function collect(rules: CSSRuleList, layer: string | undefined, into: RuleSnapsh
   }
 }
 
+function rulesOfReadableSheet(sheet: CSSStyleSheet): CSSRuleList | null {
+  try {
+    return sheet.cssRules;
+  } catch {
+    return null;
+  }
+}
+
 function readRules(): RuleSnapshot[] {
   const snapshots: RuleSnapshot[] = [];
   for (const sheet of Array.from(document.styleSheets)) {
-    try {
-      collect(sheet.cssRules, undefined, snapshots);
-    } catch {
-      // A cross-origin stylesheet cannot be read; it holds none of ours.
-    }
+    const rules = rulesOfReadableSheet(sheet);
+    if (rules) collect(rules, undefined, snapshots);
   }
   return snapshots;
 }
@@ -50,10 +53,6 @@ function slideElement(id: string): HTMLElement | null {
   return document.querySelector<HTMLElement>(`[data-slide="${CSS.escape(id)}"]`);
 }
 
-/**
- * The Slide with this id, in the source folder its page reports: its scope and its own tokens; `null` when the page
- * has no such Slide.
- */
 export function readSlide(id: string, folder: string | null): TokenSet | null {
   const slide = slideElement(id);
   if (!slide) return null;
@@ -75,7 +74,6 @@ export interface TokenSet {
   tokens: readonly Token[];
 }
 
-/** The elements that declare the token inline: the root for a global token, the matching elements of the Slide otherwise. */
 export function carriers(scope: Scope, token: Token): HTMLElement[] {
   if (scope.kind === 'global') return [document.documentElement];
   const slide = slideElement(scope.id);
@@ -102,7 +100,6 @@ function applyProperty(style: CSSStyleDeclaration, name: string, value: string |
   if (originals.size === 0) originalProperties.delete(style);
 }
 
-/** Applies active-theme overrides; clearing an edit restores authored inline values rather than erasing them. */
 export function applyEdits({ scope, tokens }: TokenSet, edits: Edits, theme: Theme) {
   for (const token of tokens) {
     const value = edits[editKey(scope, theme, token)];
@@ -110,17 +107,11 @@ export function applyEdits({ scope, tokens }: TokenSet, edits: Edits, theme: The
   }
 }
 
-/**
- * A colour as the picker's hex. The stylesheet the browser serves may hold a colour
- * in a form the pure reader does not know (it reports `oklch` as `lab()`), so what
- * that cannot read is painted onto a one-pixel canvas and read back as sRGB.
- */
 export function pickerHexOf(value: string): string | null {
   const direct = toPickerHex(value);
   if (direct) return direct;
   const context = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
   if (!context) return null;
-  // An unparseable value leaves fillStyle as it was, so two different starting points tell it apart.
   const resolve = (start: string) => {
     context.fillStyle = start;
     context.fillStyle = value;

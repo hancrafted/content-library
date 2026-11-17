@@ -27,13 +27,8 @@ function ProgressArc({ offset, visible, settled }: { offset: number; visible: bo
   );
 }
 
-/**
- * Circular progress ring for collapsed navigation.
- * Zero starts at 12 o'clock (-rotate-90) and fills clockwise.
- */
 export function ProgressRing({ progress, settled }: ProgressRingProps) {
   const clamped = Math.min(Math.max(progress, 0), 1);
-  // The arc mounts empty and fills on the next frame, so it animates in rather than popping.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const frame = requestAnimationFrame(() => setMounted(true));
