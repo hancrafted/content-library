@@ -7,10 +7,8 @@ export interface StaircaseStep {
   readonly note?: string;
 }
 
-/** Each rank's tread height: relative ranks, laid out in HTML so every word keeps its type role. */
 const RANK_HEIGHT = { 1: 'min-h-12', 2: 'min-h-24', 3: 'min-h-36', 4: 'min-h-64' } as const;
 
-/** The dashed climb from the step the figure stands on towards the next one, and its arrowhead: decoration, no text. */
 function Climb() {
   return (
     <svg viewBox="0 0 60 70" className="w-full" aria-hidden="true">
@@ -32,7 +30,6 @@ function Climb() {
   );
 }
 
-/** The person standing on a step: decoration, no text. */
 function Figure() {
   return (
     <svg viewBox="0 0 40 36" className="mx-auto w-8" aria-hidden="true">
