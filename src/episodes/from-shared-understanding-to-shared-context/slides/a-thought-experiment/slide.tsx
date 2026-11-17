@@ -15,8 +15,6 @@ const SCATTER: readonly Point[] = [
   { x: 212, y: 28 },
 ];
 
-// The section slide of "A thought experiment", echoing the Hero motif: the AI badge throws ten times as many darts,
-// and they scatter off the bull in `warning`. Its Voice script opens the Episode, since the Title slide has none.
 export const aThoughtExperiment = slide({
   slug: 'a-thought-experiment',
   messages: { en, de },
