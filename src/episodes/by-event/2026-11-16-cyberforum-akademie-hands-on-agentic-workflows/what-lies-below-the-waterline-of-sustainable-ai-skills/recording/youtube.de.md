@@ -33,3 +33,9 @@ Mehr zum Workshop der Cyberforum Akademie und zur Buchung: https://hancrafted.ne
 Kapitel: Ein Gedankenexperiment · Was ein Skill ist · Wann Du einen schreibst · Die Beschreibung · Welcher Kontext hineingehört · Welcher Kontext daneben bleibt · Ihn teilen · Ihn am Leben halten
 
 ## Comment ID
+
+UgwLJj8atttN6i31er54AaABAg
+
+## Applied fingerprint
+
+657147a228219b93

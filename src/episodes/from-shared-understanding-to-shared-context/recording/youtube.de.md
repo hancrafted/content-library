@@ -35,3 +35,9 @@ Mehr Folgen, alle Folien und die Quellen dazu findest Du hier: https://hancrafte
 Ein Gedankenexperiment · Warum präzise und genaue Anforderungen schon vor der KI zählten · Kontext ist die Anforderung · Kontext für Agenten erstellen
 
 ## Comment ID
+
+UgydXasX9654ZMNxjUB4AaABAg
+
+## Applied fingerprint
+
+6fb725a0c990d37f
