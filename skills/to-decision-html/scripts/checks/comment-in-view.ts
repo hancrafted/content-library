@@ -16,10 +16,10 @@ interface Observation {
 
 const FIELDS = '[data-item] textarea';
 const MIN_SHOWN = 0.5;
-/** A dictated comment: long enough to grow a field that grows with its text, with non-ASCII text. */
-const COMMENT = Array.from({ length: 12 }, (_, line) => `Zeile ${line + 1}: die Grafik oben zeigt „genau“ das.`).join(
-  '\n',
-);
+const DICTATED_NON_ASCII_COMMENT_LONG_ENOUGH_TO_GROW_THE_FIELD = Array.from(
+  { length: 12 },
+  (_, line) => `Zeile ${line + 1}: die Grafik oben zeigt „genau“ das.`,
+).join('\n');
 
 function measure(kit: Kit, { selector, index }: { selector: string; index: number }): Field {
   const field = document.querySelectorAll(selector)[index];
@@ -31,7 +31,7 @@ async function commentOn(page: Page, index: number): Promise<Field> {
   const field = page.locator(FIELDS).nth(index);
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await field.click();
-  await page.keyboard.insertText(COMMENT);
+  await page.keyboard.insertText(DICTATED_NON_ASCII_COMMENT_LONG_ENOUGH_TO_GROW_THE_FIELD);
   const measured = await inPage(page, measure, { selector: FIELDS, index });
   await field.fill('');
   return measured;

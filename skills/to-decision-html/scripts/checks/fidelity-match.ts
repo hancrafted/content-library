@@ -15,12 +15,12 @@ export const check: Check<Observation> = {
   observe: ({ asked, html }) => ({ fidelity: asked.fidelity!, html }),
   judge({ fidelity, html }) {
     const $ = load(html);
-    // A rung off the ladder, or none, is page-attributes' problem; reporting it here too would double-count it.
     return $('[data-item]')
       .toArray()
       .flatMap(({ attribs }) => {
         const built = attribs['data-fidelity'];
-        if (!onLadder(built) || built === fidelity) return [];
+        const offLadderIsPageAttributesProblemNotDoubleCounted = !onLadder(built);
+        if (offLadderIsPageAttributesProblemNotDoubleCounted || built === fidelity) return [];
         return [`item "${attribs['data-item']}" is built at ${built}; its calibration asked for ${fidelity}`];
       });
   },

@@ -21,18 +21,18 @@ export interface OfflinePage {
 export async function openOffline(browser: Browser, file: string, viewport: Viewport): Promise<OfflinePage> {
   const url = pathToFileURL(path.resolve(file)).href;
   const context = await browser.newContext({ viewport, serviceWorkers: 'block' });
-  // Routing aborts what it intercepts; the request listener also sees file:// loads, which routing may not.
-  const requests = new Set<string>();
+  const requestsIncludingFileLoadsRoutingMayMiss = new Set<string>();
   await context.route('**/*', (route) =>
     route.request().url() === url ? route.continue() : route.abort('blockedbyclient'),
   );
   const page = await context.newPage();
   page.on('request', (request) => {
     const requested = request.url();
-    if (requested !== url && !/^(data|blob|about):/.test(requested)) requests.add(requested);
+    if (requested !== url && !/^(data|blob|about):/.test(requested))
+      requestsIncludingFileLoadsRoutingMayMiss.add(requested);
   });
   await page.goto(url, { waitUntil: 'networkidle' });
-  return { page, requests: [...requests] };
+  return { page, requests: [...requestsIncludingFileLoadsRoutingMayMiss] };
 }
 
 export interface GradedPage {

@@ -1,8 +1,3 @@
-/**
- * The comment the feedback checks type: several lines, indentation, quotes, markup, a code fence and text outside
- * ASCII, so any trimming, escaping or re-encoding on the way to the handoff shows. Only `\n` line breaks, because a
- * <textarea> normalizes every other one to `\n`.
- */
 export const COMMENT = [
   'Zeile 1: „Grüße" — naïve café, 日本語, ½ & <b>markup</b>',
   "  indented line with `backticks` and 'single' quotes",

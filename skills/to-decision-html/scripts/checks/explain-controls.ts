@@ -3,16 +3,15 @@ import type { Check } from '../grader/check.ts';
 
 const PICK_HOOKS = ['[data-option]', '[data-next-action]'] as const;
 const CHOICE_INPUTS = ['input[type="radio"]', 'input[type="checkbox"]', 'select'] as const;
-/**
- * A choice input is a pick when it answers an item: it sits inside one and names no element it changes. A reviewer
- * tool (a theme select in the header, a show/hide toggle with `aria-controls`) changes the view and answers nothing.
- */
-const RESPONSE_SCOPE = ':is([data-item], [data-option], [data-next-action]) ';
-const RESPONSE = ':not([aria-controls])';
+const INSIDE_AN_ITEM_OPTION_OR_NEXT_ACTION = ':is([data-item], [data-option], [data-next-action]) ';
+const NAMES_NO_ELEMENT_IT_CHANGES = ':not([aria-controls])';
 
 function pickProblems($: CheerioAPI): string[] {
   const counted = [
-    ...CHOICE_INPUTS.map((input) => [input, $(`${RESPONSE_SCOPE}${input}${RESPONSE}`).length] as const),
+    ...CHOICE_INPUTS.map(
+      (input) =>
+        [input, $(`${INSIDE_AN_ITEM_OPTION_OR_NEXT_ACTION}${input}${NAMES_NO_ELEMENT_IT_CHANGES}`).length] as const,
+    ),
     ...PICK_HOOKS.map((hook) => [hook, $(hook).length] as const),
   ];
   const found = counted.filter(([, count]) => count > 0).map(([selector, count]) => `${count} ${selector}`);

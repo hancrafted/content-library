@@ -14,8 +14,7 @@ interface Observation {
 }
 
 const NAVS = 'nav, [role="navigation"]';
-/** Below this share of the navigation in view, the reader has lost it. */
-const MIN_SHOWN = 0.5;
+const LEAST_NAVIGATION_SHARE_IN_VIEW = 0.5;
 
 function navigation(navs: string): { index: number; unlinked: string[] } {
   const items = [...document.querySelectorAll('[data-item]')];
@@ -35,8 +34,7 @@ function navigation(navs: string): { index: number; unlinked: string[] } {
   };
 }
 
-/** Scrolls without smooth behaviour, so the measurement sees where the scroll ends. */
-async function scrollTo(page: Page, target: number | 'end'): Promise<void> {
+async function scrollInstantlyTo(page: Page, target: number | 'end'): Promise<void> {
   await page.evaluate((to) => {
     if (to === 'end') window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
     else document.querySelectorAll('[data-item]')[to].scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -52,10 +50,10 @@ async function positions(page: Page, index: number): Promise<Position[]> {
     .locator('[data-item]')
     .evaluateAll((all) => all.map((item) => item.getAttribute('data-item')));
   for (const [position, id] of items.entries()) {
-    await scrollTo(page, position);
+    await scrollInstantlyTo(page, position);
     measured.push({ at: `item "${id}"`, nav: await rect() });
   }
-  await scrollTo(page, 'end');
+  await scrollInstantlyTo(page, 'end');
   measured.push({ at: 'the end of the page', nav: await rect() });
   return measured;
 }
@@ -70,7 +68,9 @@ export const check: Check<Observation> = {
   },
   judge({ viewport, unlinked, positions }) {
     if (positions === null) return ['the page has no item navigation; add a <nav> that links to every item'];
-    const lost = positions.filter(({ nav }) => shownShare(nav, viewport) < MIN_SHOWN).map(({ at }) => at);
+    const lost = positions
+      .filter(({ nav }) => shownShare(nav, viewport) < LEAST_NAVIGATION_SHARE_IN_VIEW)
+      .map(({ at }) => at);
     return [
       ...unlinked.map((id) => `the item navigation has no link to item "${id}"`),
       ...(lost.length > 0

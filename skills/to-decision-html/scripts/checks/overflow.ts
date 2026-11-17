@@ -17,14 +17,13 @@ interface Observation {
   readonly boxes: readonly Box[];
 }
 
-/** Sub-pixel layout rounds; a pixel of excess is noise, not overflow. */
-const TOLERANCE = 1;
+const SUBPIXEL_ROUNDING_TOLERANCE_PIXELS = 1;
 const SCROLLS = new Set(['auto', 'scroll']);
 const HIDES = new Set(['hidden', 'clip']);
 
 function sideways({ facts, overflowX, scrollWidth, clientWidth }: Box): string | null {
   const excess = scrollWidth - clientWidth;
-  if (excess <= TOLERANCE || SCROLLS.has(overflowX)) return null;
+  if (excess <= SUBPIXEL_ROUNDING_TOLERANCE_PIXELS || SCROLLS.has(overflowX)) return null;
   const how = HIDES.has(overflowX) ? 'hides' : 'spills';
   const where = HIDES.has(overflowX) ? 'sideways' : 'past its box sideways';
   return `${describeElement(facts)} ${how} ${excess}px of its content ${where}; let it wrap`;
@@ -32,7 +31,7 @@ function sideways({ facts, overflowX, scrollWidth, clientWidth }: Box): string |
 
 function downwards({ facts, overflowY, scrollHeight, clientHeight }: Box): string | null {
   const excess = scrollHeight - clientHeight;
-  if (excess <= TOLERANCE || SCROLLS.has(overflowY)) return null;
+  if (excess <= SUBPIXEL_ROUNDING_TOLERANCE_PIXELS || SCROLLS.has(overflowY)) return null;
   const how = HIDES.has(overflowY) ? 'hides' : 'spills';
   return `${describeElement(facts)} ${how} ${excess}px of its content below its box; let the box grow`;
 }
@@ -42,8 +41,8 @@ function overflowingBoxes(kit: Kit): Box[] {
   const over = (el: Element) => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1;
   const candidates = [...document.querySelectorAll('body *')].filter((el) => {
     if (el.matches(SKIP) || !el.textContent?.trim()) return false;
-    // An unrendered, collapsed or visually-hidden (1px) box shows no text to overflow.
-    if (el.clientWidth <= 1 || el.clientHeight <= 1) return false;
+    const showsNoTextToOverflow = el.clientWidth <= 1 || el.clientHeight <= 1;
+    if (showsNoTextToOverflow) return false;
     return over(el);
   });
   return candidates
@@ -77,7 +76,7 @@ export const check: Check<Observation> = {
   },
   judge({ page, boxes }) {
     const pageProblem =
-      page.scrollWidth - page.clientWidth > TOLERANCE
+      page.scrollWidth - page.clientWidth > SUBPIXEL_ROUNDING_TOLERANCE_PIXELS
         ? [`the page scrolls sideways: its content is ${page.scrollWidth}px wide in a ${page.clientWidth}px viewport`]
         : [];
     const boxProblems = boxes.flatMap((box) => [sideways(box), downwards(box)]);
