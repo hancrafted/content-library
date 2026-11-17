@@ -1,9 +1,3 @@
-/*
- * The shared speech bubble's size rule (decision 53) and its measure. The words are set at the caption role, one figure
- * unit per CSS pixel; a Scene draws its figures at any scale, and a Slide may turn them down with `--says-scale`. On a
- * phone that once drew them at 5 px. `saysFit` is the factor the bubble turns itself up by, so its words never draw
- * smaller than their caption size; `saysBox` is the bubble's box in a Scene's units, for a Slide's overlap test.
- */
 import type { EmoteProps, Mood } from './actor';
 
 export const SAYS_FRAME = { width: 220, height: 180 } as const;
@@ -17,16 +11,11 @@ export const SAYS_PLACE = {
 
 export const saysPlace = (mood: Mood | undefined) => SAYS_PLACE[mood && THOUGHT_MOODS.has(mood) ? 'beside' : 'plain'];
 
-/*
- * The caption's metrics in CSS pixels (globals.css: 14 px at 1.5 line height), with a generous average glyph for the
- * sans face, so a measured box is never smaller than the drawn one; the padding is the bubble's `px-2 py-1` and border.
- */
-const CAPTION = { lineHeight: 21, glyph: 7.5 } as const;
+const CAPTION_PIXELS = { lineHeightPixels: 21, averageGlyphPixels: 7.5 } as const;
 const PAD = { x: 18, y: 10 } as const;
-const wrapChars = (width: number) => Math.floor((width - PAD.x) / CAPTION.glyph);
+const wrapChars = (width: number) => Math.floor((width - PAD.x) / CAPTION_PIXELS.averageGlyphPixels);
 
 export interface SaysFitInput {
-  /** Screen pixels per figure unit where the bubble hangs, before its own scale; 0 in a hidden picture. */
   readonly unitPixels: number;
   readonly scale: number;
 }
@@ -59,7 +48,6 @@ export interface SaysBoxInput {
   readonly head: { readonly x: number; readonly y: number };
   readonly figureScale: number;
   readonly saysScale?: number;
-  /** Screen pixels per Scene unit at the width under test. */
   readonly scenePixels: number;
   readonly width?: number;
   readonly lift?: number;
@@ -81,8 +69,8 @@ export function saysBox({
   const lines = wrap(text, wrapChars(wrapWidth));
   const longest = Math.max(...lines.map((line) => line.length));
   const css = {
-    width: Math.min(wrapWidth, longest * CAPTION.glyph + PAD.x),
-    height: lines.length * CAPTION.lineHeight + PAD.y,
+    width: Math.min(wrapWidth, longest * CAPTION_PIXELS.averageGlyphPixels + PAD.x),
+    height: lines.length * CAPTION_PIXELS.lineHeightPixels + PAD.y,
   };
   const scale = saysScale * saysFit({ unitPixels: scenePixels * figureScale, scale: saysScale });
   const width = css.width * scale * figureScale;
@@ -93,22 +81,14 @@ export function saysBox({
   return { x: facing === 'left' ? near - width : near, y: bottom - height, width, height };
 }
 
-/** The air a bubble keeps from its picture's edge, in screen pixels. */
 const ROOM_GAP_PIXELS = 4;
 
 export interface SaysRoomInput {
   readonly side: 1 | -1;
-  /** The bubble's drawn edges in screen pixels, and screen pixels per CSS pixel of its words (scale and fit). */
   readonly bubble: { readonly left: number; readonly right: number; readonly drawnPerCss: number };
-  /** The picture's drawn edges in screen pixels. */
   readonly picture: { readonly left: number; readonly right: number };
 }
 
-/**
- * The widest the bubble's words may wrap, in their own CSS pixels, so a bubble turned up by the fit stays inside its
- * picture: the room between its anchored edge and the picture's far edge. `undefined` when it already fits, or in a
- * hidden picture; then the bubble keeps its own width.
- */
 export function saysRoom({ side, bubble, picture }: SaysRoomInput): number | undefined {
   if (!(bubble.drawnPerCss > 0)) return undefined;
   if (bubble.left >= picture.left + ROOM_GAP_PIXELS && bubble.right <= picture.right - ROOM_GAP_PIXELS)

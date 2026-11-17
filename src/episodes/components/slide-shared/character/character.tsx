@@ -28,14 +28,13 @@ export interface CharacterProps extends ActorProps {
   readonly bubble?: BubblePlace;
 }
 
-/** What each motion moves, how long it plays (ms), and where it pivots. */
 const MOTION_PARTS: Record<
   Motion,
-  { readonly groups: readonly Group[]; readonly ms: number; readonly pivot: 'neck' | 'shoulder' }
+  { readonly groups: readonly Group[]; readonly milliseconds: number; readonly pivot: 'neck' | 'shoulder' }
 > = {
-  wave: { groups: ['front-arm'], ms: 1200, pivot: 'shoulder' },
-  nod: { groups: ['head-back', 'head'], ms: 700, pivot: 'neck' },
-  'turn-to': { groups: ['head-back', 'head'], ms: 750, pivot: 'neck' },
+  wave: { groups: ['front-arm'], milliseconds: 1200, pivot: 'shoulder' },
+  nod: { groups: ['head-back', 'head'], milliseconds: 700, pivot: 'neck' },
+  'turn-to': { groups: ['head-back', 'head'], milliseconds: 750, pivot: 'neck' },
 };
 
 const EMOTE_AFTER_MILLISECONDS = 100;
@@ -56,7 +55,7 @@ function FigureGroup({ group, drawing, motion }: GroupProps) {
   );
   if (!motion || !MOTION_PARTS[motion].groups.includes(group)) return <g data-group={group}>{paths}</g>;
   const [px, py]: Point = drawing.pivots[MOTION_PARTS[motion].pivot];
-  const lift = motion === 'wave' ? ({ '--lift': `${drawing.waveLift}deg` } as CSSProperties) : undefined;
+  const lift = motion === 'wave' ? ({ '--lift': `${drawing.waveLiftDegrees}deg` } as CSSProperties) : undefined;
   return (
     <g transform={`translate(${px} ${py})`}>
       <g data-group={group} data-motion={motion} className={styles[motion]} style={lift}>
@@ -66,13 +65,12 @@ function FigureGroup({ group, drawing, motion }: GroupProps) {
   );
 }
 
-/** The emote waits for its figure's motion; refuses a motion the figure does not know. */
 function emoteDelay(motion: Motion | undefined): CSSProperties | undefined {
   if (motion === undefined) return undefined;
   if (!MOTIONS.includes(motion)) {
     throw new Error(`Character has no motion "${motion}"; motions are ${MOTIONS.join(', ')}.`);
   }
-  return { '--emote-delay': `${MOTION_PARTS[motion].ms + EMOTE_AFTER_MILLISECONDS}ms` } as CSSProperties;
+  return { '--emote-delay': `${MOTION_PARTS[motion].milliseconds + EMOTE_AFTER_MILLISECONDS}ms` } as CSSProperties;
 }
 
 const looks = (preset: Preset) => ({

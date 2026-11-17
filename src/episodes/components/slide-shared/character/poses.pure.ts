@@ -36,8 +36,7 @@ export interface FigureDrawing {
   readonly groups: Readonly<Record<Group, readonly Facet[]>>;
   readonly anchor: HeadAnchor;
   readonly pivots: { readonly neck: Point; readonly shoulder: Point };
-  /** How far `wave` lifts the front arm from this pose, in degrees (negative lifts it forward and up). */
-  readonly waveLift: number;
+  readonly waveLiftDegrees: number;
 }
 
 interface Arm {
@@ -52,7 +51,7 @@ interface Stance {
   readonly back: Arm;
   readonly prop: 'side' | 'forward' | 'away';
   readonly finger: boolean;
-  readonly waveLift: number;
+  readonly waveLiftDegrees: number;
 }
 
 const HANGING_FRONT: Arm = { elbow: [13, -56], wrist: [13, -45] };
@@ -60,15 +59,21 @@ const HANGING_BACK: Arm = { elbow: [-14, -56], wrist: [-14, -45] };
 const STANDING = { upper: [0, 0], seated: false, back: HANGING_BACK, finger: false } as const;
 
 const STANCES: Readonly<Record<Pose, Stance>> = {
-  stand: { ...STANDING, front: HANGING_FRONT, prop: 'side', waveLift: -150 },
-  point: { ...STANDING, front: { elbow: [19, -54], wrist: [30, -57] }, prop: 'away', finger: true, waveLift: -70 },
-  hold: { ...STANDING, front: { elbow: [13, -55], wrist: [25, -54] }, prop: 'forward', waveLift: -60 },
+  stand: { ...STANDING, front: HANGING_FRONT, prop: 'side', waveLiftDegrees: -150 },
+  point: {
+    ...STANDING,
+    front: { elbow: [19, -54], wrist: [30, -57] },
+    prop: 'away',
+    finger: true,
+    waveLiftDegrees: -70,
+  },
+  hold: { ...STANDING, front: { elbow: [13, -55], wrist: [25, -54] }, prop: 'forward', waveLiftDegrees: -60 },
   steer: {
     ...STANDING,
     front: { elbow: [18, -56], wrist: [27, -63] },
     back: { elbow: [-5, -54], wrist: [22, -55] },
     prop: 'away',
-    waveLift: -60,
+    waveLiftDegrees: -60,
   },
   sit: {
     upper: [2, 2],
@@ -77,7 +82,7 @@ const STANCES: Readonly<Record<Pose, Stance>> = {
     back: { elbow: [-6, -51], wrist: [27, -49] },
     prop: 'away',
     finger: false,
-    waveLift: -80,
+    waveLiftDegrees: -80,
   },
 };
 
@@ -190,7 +195,7 @@ export function drawFigure(preset: Preset, pose: Pose, mood?: Mood): FigureDrawi
     groups: sort(specs, stance.upper),
     anchor: { x: 1 + ux, y: anchorY(preset) + uy },
     pivots: { neck: [0.5 + ux, -74 + uy], shoulder: [shoulder[0] + ux, shoulder[1] + uy] },
-    waveLift: stance.waveLift,
+    waveLiftDegrees: stance.waveLiftDegrees,
   };
 }
 
