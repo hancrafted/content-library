@@ -57,6 +57,18 @@ async function markersIn(dir: string): Promise<SectionMarker[] | undefined> {
   );
 }
 
+/**
+ * The `published-anchors.json` the page folder `dir` lacks, for the composition `load` returns: the file and its
+ * content, as the composition checks ask for it; none when `dir` has one. `copy-to-event.ts` writes it for an Event's copy.
+ */
+export async function missingPublishedSnapshot(
+  dir: string,
+  load: () => Promise<unknown>,
+): Promise<{ readonly file: string; readonly contents: string } | undefined> {
+  const snapshot = await readPublishedSnapshot(dir, producedAnchors(compositionIn(await load())));
+  return 'missing' in snapshot ? snapshot.missing : undefined;
+}
+
 /** The composition `load` returns and the context of `page`, held in the page folder `dir`. */
 export async function readPage(dir: string, page: ComposedPage, load: () => Promise<unknown>): Promise<CheckedPage> {
   const composition = compositionIn(await load());

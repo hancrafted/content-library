@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  anchorsFileFromFailure,
-  copyEntryId,
-  insertPlaylistEntry,
-  unlistedCopyMetadata,
-} from './copy-to-event.pure.ts';
+import { copyEntryId, insertPlaylistEntry, unlistedCopyMetadata } from './copy-to-event.pure.ts';
 
 /*
  * `copy-to-event.ts`: what the copy of an Episode into an Event's Playlist changes in text.
@@ -30,8 +25,6 @@ const UPCOMING = `export const episodeMetadata = {
   tags: ['a'],
 } as const satisfies EpisodeInput;
 `;
-
-const ANCHORS_MESSAGE = `Episode "e__s" has no published-anchors.json. Create /repo/src/published-anchors.json with this content:\n[\n  "a",\n  "b"\n]\n\n`;
 
 describe('success cases', () => {
   describe('copyEntryId', () => {
@@ -90,17 +83,6 @@ describe('success cases', () => {
       expect(out).toContain("publishedOn: '2026-11-16'");
     });
   });
-
-  describe('anchorsFileFromFailure', () => {
-    it('reads the file and content the anchors test asks for', () => {
-      // ARRANGE
-      const message = ANCHORS_MESSAGE;
-      // ACT
-      const asked = anchorsFileFromFailure(message, 'e__s');
-      // ASSERT
-      expect(asked).toEqual({ file: '/repo/src/published-anchors.json', content: '[\n  "a",\n  "b"\n]\n' });
-    });
-  });
 });
 
 describe('failure cases', () => {
@@ -120,15 +102,6 @@ describe('failure cases', () => {
     const insert = () => insertPlaylistEntry(source, 'e__new', 0);
     // ASSERT
     expect(insert).toThrow(/position/);
-  });
-
-  it('finds no anchors file for another Episode', () => {
-    // ARRANGE
-    const message = ANCHORS_MESSAGE;
-    // ACT
-    const asked = anchorsFileFromFailure(message, 'e__other');
-    // ASSERT
-    expect(asked).toBeUndefined();
   });
 });
 
