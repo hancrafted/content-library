@@ -47,11 +47,6 @@ export interface LevelCardProps {
   readonly targetProps?: TargetProps;
 }
 
-/**
- * One level of human oversight as a card: its shared pill, its full name with the abbreviation beside it, its
- * definition, and its role under a divider. The card spans the three rows `LevelGrid` shares, so the divider sits at
- * one height across the cards.
- */
 export function LevelCard({ level, label, name, abbr, definition, role, marker, targetProps }: LevelCardProps) {
   return (
     <li
