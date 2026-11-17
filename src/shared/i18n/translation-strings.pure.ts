@@ -16,14 +16,7 @@ function readNode(prefix: string, node: TranslationNode, read: (key: string) => 
   );
 }
 
-/**
- * One namespace's strings, translated: the Translation file's own shape walked leaf by
- * leaf, each leaf read by its full key. The result holds only plain strings,
- * so it crosses to a client component as it is (FE-006 §4). `omit` drops
- * top-level keys the caller reads itself, such as a leaf that needs ICU
- * arguments, which a bare read would reject. A failing read throws, so a
- * broken leaf fails the build.
- */
+// decision: FE-006 §4
 export function translationStrings<T extends TranslationNode, K extends keyof T & string = never>(
   namespace: string,
   shape: T,

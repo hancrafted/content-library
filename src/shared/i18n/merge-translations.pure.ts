@@ -5,10 +5,6 @@ export interface TranslationOwner<T extends object = object> {
   readonly files: Readonly<Record<Locale, T>>;
 }
 
-/**
- * Pairs an owner's two files. The German file is typed against the English one, so a German file missing an English
- * key fails `tsc` where the owner is listed.
- */
 export function translationOwner<T extends object>(folder: string, en: T, de: NoInfer<T>): TranslationOwner<T> {
   return { folder, files: { en, de } };
 }
@@ -19,10 +15,6 @@ export type MergedMessages<O extends readonly TranslationOwner[]> = Intersection
 
 const fileOf = (owner: TranslationOwner, locale: Locale) => `${owner.folder}/${locale}.json`;
 
-/**
- * Merges every owner's files into the one message set next-intl serves, per locale. Each top-level namespace has one
- * owner: a namespace two owners define throws, naming both files, so the site never renders whichever file won.
- */
 export function mergeTranslationFiles<const O extends readonly TranslationOwner[]>(
   owners: O,
 ): Record<Locale, MergedMessages<O>> {
@@ -55,10 +47,6 @@ function keyPaths(value: unknown, prefix = ''): string[] {
   return Object.entries(value).flatMap(([key, child]) => keyPaths(child, prefix ? `${prefix}.${key}` : key));
 }
 
-/**
- * Every key a non-English file of the owner lacks or adds against its English file, by full path; empty when the
- * pair agrees. `tsc` sees a lacking key only; this sees both.
- */
 export function localeKeyDrift(owner: TranslationOwner): string[] {
   const english = keyPaths(owner.files.en);
   return LOCALES.filter((locale) => locale !== 'en').flatMap((locale) => {

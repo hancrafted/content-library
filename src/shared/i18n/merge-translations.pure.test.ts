@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { localeKeyDrift, mergeTranslationFiles, translationOwner } from './merge-translations.pure';
 
-/*
- * The site's one message set is merged from every owner's Translation files (FE-003 §4): each top-level namespace has
- * one owner, and each owner's German file has its English file's keys.
- */
+// decision: FE-003 §4
 
 const CHROME = 'src/shared/page-chrome/i18n';
 const LANDING = 'src/page-assembly/landing/i18n';
