@@ -82,7 +82,7 @@ const HELP = {
   ],
   body: [
     'In-body comment',
-    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body. A catch that only swallows an error becomes a small named function (`matchesUnlessSelectorUnreadable`) when the lint rejects an unused binding; around `process.kill` only ESRCH is safe to ignore. A unit or a sum of measured parts in it is a full-word suffix on the name, the sum computed from named parts; a script that deletes comments must skip string literals and pointer markers, and a rename must leave public names and contract strings alone.',
+    'Extract a named constant or function that says it, or add a pointer marker on the line above. A reason for a catch is the name of its binding, or of the function that wraps it; in a test, fold it into the it or describe name; a reason about archgate itself, such as rules files being unable to import each other, goes to the commit body. A catch that only swallows an error becomes a small named function (`matchesUnlessSelectorUnreadable`) when the lint rejects an unused binding. A unit or a sum of measured parts in it is a full-word suffix on the name, the sum computed from named parts.',
   ],
   header: [
     'File header comment',
