@@ -12,21 +12,18 @@ const REWORK = {
   url: 'https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md',
 };
 
-/** The interview on the defining half: the AI asks twice, the rider answers once. */
 const EXCHANGE = [
   { slug: 'q1', who: 'ai' },
   { slug: 'q2', who: 'ai' },
   { slug: 'a1', who: 'human' },
 ] as const;
 
-/** The AI stations of the building half and how many documents each has turned out. */
 const STATIONS = [
   { slug: 'frame', load: 6 },
   { slug: 'assemble', load: 7 },
   { slug: 'test', load: 6 },
 ] as const;
 
-/** One half of the split: its mono index, its name in big type, what it aims at, then its picture. */
 function Half({
   index,
   dot,
@@ -55,12 +52,6 @@ function Half({
   );
 }
 
-/**
- * "Defining and building" (Spec Option 5b): a copy of the `grid-1x2` Master slide's facing halves, hairline and mono
- * index, each half a big-type name over a picture. Defining is an AI asking the rider questions, foreshadowing meta
- * prompting; building is three AI stations with full document queues. Two fact chips under the split carry the
- * evidence. Keeps `motion: none`.
- */
 export const definingAndBuilding = slide({
   slug: 'defining-and-building',
   messages: { en, de },

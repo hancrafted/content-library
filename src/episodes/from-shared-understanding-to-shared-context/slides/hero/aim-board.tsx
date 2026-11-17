@@ -2,21 +2,17 @@ import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboar
 import { Darts, type Point } from '@/episodes/components/slide-shared/dartboard/darts';
 
 export interface AimBoardProps {
-  /** The SVG's accessible name. */
   readonly label: string;
-  /** What you hand the agent, one line per `\n`. */
   readonly handover: string;
   readonly aim: string;
   readonly ai: string;
   readonly speed: string;
   readonly intent: string;
-  /** Where each document lands, by its top-left corner. */
   readonly hits: readonly Point[];
 }
 
 const BOARD = { cx: 364, cy: 220, r: 150, rings: 4, bull: 14 } as const;
 const HANDOVER_LINE = 18;
-/** The work order's text lines: each one's top and width. */
 const WORK_ORDER_LINES = [
   [166, 44],
   [182, 56],
@@ -24,7 +20,6 @@ const WORK_ORDER_LINES = [
   [214, 34],
 ] as const;
 
-/** The work order you hand the agent, raised on hover so the presenter can point at it, and its label. */
 function Handover({ handover, aim }: Pick<AimBoardProps, 'handover' | 'aim'>) {
   return (
     <>
@@ -54,7 +49,6 @@ function Handover({ handover, aim }: Pick<AimBoardProps, 'handover' | 'aim'>) {
   );
 }
 
-/** The aim line from the work order to the board, and the AI badge on it that speeds every throw. */
 function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
   return (
     <>
@@ -63,7 +57,6 @@ function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
       <text x={150} y={189} textAnchor="middle" className="fill-card text-caption font-semibold">
         {ai}
       </text>
-      {/* Over the badge, nudged right so the longer German label clears the work order's edge (x 94) and the board. */}
       <text x={164} y={146} textAnchor="middle" className="fill-ai text-caption font-semibold">
         {speed}
       </text>
@@ -71,11 +64,6 @@ function Throw({ ai, speed }: Pick<AimBoardProps, 'ai' | 'speed'>) {
   );
 }
 
-/**
- * The Title slide's Hero motif (picked Option 0c): the work order you hand the agent sets the aim, the AI badge
- * speeds the throw, and every document lands on the bull of the dartboard, the intent. One inline SVG; its words
- * arrive as props from the Slide's own text.
- */
 export function AimBoard({ label, handover, aim, ai, speed, intent, hits }: AimBoardProps) {
   return (
     <svg viewBox="0 0 520 440" className="w-full" role="img" aria-label={label}>

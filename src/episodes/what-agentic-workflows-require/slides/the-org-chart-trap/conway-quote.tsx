@@ -1,13 +1,11 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
-/** Conway's law in his own words, its author and year, and the hedges that keep it a tendency beside it. */
 export function ConwayQuote(props: {
   quote: string;
   author: string;
   marker: ReactNode;
   hedges: readonly { slug: string; text: ReactNode }[];
-  /** The Slide's targets for the notes aimed at the quote and at the hedges. */
   targets: { quote: TargetProps; hedges: TargetProps };
 }) {
   return (

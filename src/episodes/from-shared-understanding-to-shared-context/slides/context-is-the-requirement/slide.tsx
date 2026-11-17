@@ -4,8 +4,6 @@ import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboar
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The section slide of "Context is the requirement", echoing the Hero motif: the dartboard inside the context window
-// frame, in `machine`, static and dynamic context feeding it.
 export const contextIsTheRequirement = slide({
   slug: 'context-is-the-requirement',
   messages: { en, de },
@@ -21,7 +19,6 @@ export const contextIsTheRequirement = slide({
   segments: [{ slug: 'the-claim' }, { slug: 'the-route' }],
   content: ({ t }) => (
     <SlideFrame>
-      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
       <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
           <rect x={6} y={10} width={288} height={134} rx={12} className="fill-card stroke-machine" strokeWidth={2} />

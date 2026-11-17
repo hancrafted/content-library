@@ -3,7 +3,6 @@ export interface BenchJobsProps {
   readonly notYours: { readonly label: string; readonly text: string };
 }
 
-/** Your two jobs at the bench, edged in `human`, and the one that is not yours, edged in `ai`. */
 export function BenchJobs({ yours, notYours }: BenchJobsProps) {
   return (
     <>

@@ -8,12 +8,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { theWorkflowForBiggerProjects } from './slide';
 
-/*
- * The workflow for bigger projects (Spec Option 11c), read through the one interface the page reads a Slide by:
- * localized into an Episode on the shared Slide header, its text, notes and Voice script as the drawer gets them and
- * its Scene as the page renders it. The section slide is a stand-in, so the test reaches no Episode file.
- */
-
 const SECTION = slide({
   slug: 'managing-the-attention-span',
   messages: { en: { title: 'Managing the attention span' }, de: { title: 'Die Aufmerksamkeitsspanne managen' } },

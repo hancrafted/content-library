@@ -11,7 +11,6 @@ const ANTHROPIC = {
   url: 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
 };
 
-/** One half: the shift's time and label, its kind, the bench at that hour and its legend. */
 function Half(props: {
   time: string;
   label: string;
@@ -39,11 +38,6 @@ function Half(props: {
   );
 }
 
-/**
- * "Static and dynamic context" (Spec Option 9b): the same bike bench twice, at 07:00 before the shift and at 10:30
- * during it, the second fuller, each with a legend of everyday object to AI name. Keeps `grid-1x2` (its two halves)
- * and `motion: none`; each half raises on hover.
- */
 export const staticAndDynamicContext = slide({
   slug: 'static-and-dynamic-context',
   messages: { en, de },

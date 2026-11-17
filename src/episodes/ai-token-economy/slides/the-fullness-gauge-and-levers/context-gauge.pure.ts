@@ -1,7 +1,3 @@
-/**
- * The zone a context window is in as it fills, for the fullness gauge.
- */
-
 export interface ContextGaugeState {
   readonly zone: 'safe' | 'warning' | 'danger';
   readonly label: string;

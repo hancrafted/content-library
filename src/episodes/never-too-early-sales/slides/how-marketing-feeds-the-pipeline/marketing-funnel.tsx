@@ -2,7 +2,6 @@ import type { CSSProperties, ReactNode } from 'react';
 import { FunnelMotion } from './funnel-motion.client';
 import styles from './how-marketing-feeds-the-pipeline.module.css';
 
-/** The funnel's words: the mouth's label, its volume line, the three sources marketing speaks through, its name. */
 export interface Funnel {
   label: string;
   volume: ReactNode;
@@ -10,7 +9,6 @@ export interface Funnel {
   sources: { slug: 'content' | 'ads' | 'web'; label: string }[];
 }
 
-/** One line doodle per source, drawn on its note. */
 const DOODLE = {
   content: <path d="M5 4 H15 L19 8 V20 H5 Z M8 11 H16 M8 15 H14" strokeLinejoin="round" />,
   ads: <path d="M4 10 V14 H7 L15 19 V5 L7 10 Z M18 9 C 20 11, 20 13, 18 15" strokeLinejoin="round" />,
@@ -19,7 +17,6 @@ const DOODLE = {
 
 const TILT = ['-rotate-2', 'rotate-1', '-rotate-1'] as const;
 
-/** The crowd in the funnel, wide at the mouth and narrowing to the spout. */
 const CROWD = [
   [22, 40],
   [40, 90],
@@ -40,13 +37,11 @@ const CROWD = [
   [205, 168],
 ] as const;
 
-/** The two dots leaving through the spout, in `primary`. */
 const SPOUT = [
   [238, 185],
   [272, 178],
 ] as const;
 
-/** A dot of the crowd: `--x` is how far it travels from the mouth, `--i` its turn. */
 function Dot({ x, y, order, spout }: { x: number; y: number; order: number; spout: boolean }) {
   return (
     <circle
@@ -60,7 +55,6 @@ function Dot({ x, y, order, spout }: { x: number; y: number; order: number; spou
   );
 }
 
-/** The funnel's mouth: its label, the three source notes with their doodles, and the volume line. */
 function Mouth({ funnel }: { funnel: Funnel }) {
   return (
     <div className="relative z-10 flex flex-col gap-4">
@@ -85,7 +79,6 @@ function Mouth({ funnel }: { funnel: Funnel }) {
   );
 }
 
-/** The funnel itself: a pale shape, the crowd narrowing inside it, and the `primary` spout. */
 function Shape() {
   return (
     <svg viewBox="0 0 300 360" className={styles.shape} aria-hidden="true">
@@ -111,11 +104,6 @@ function Shape() {
   );
 }
 
-/**
- * Marketing as a funnel in the board idiom: a mouth of three source notes with line doodles over "massive volume",
- * then a funnel of dots narrowing to a `primary` spout that points into the pipeline's first stage. The dots travel
- * in once on the Slide's first `active` and again on every mouse enter and keyboard focus.
- */
 export function MarketingFunnel({ funnel }: { funnel: Funnel }) {
   return (
     <FunnelMotion label={funnel.name} className={styles.funnel} still={<Mouth funnel={funnel} />}>

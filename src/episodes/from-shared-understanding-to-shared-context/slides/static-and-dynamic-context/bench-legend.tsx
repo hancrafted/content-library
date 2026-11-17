@@ -1,4 +1,3 @@
-/** The legend under a bench: each everyday object beside its AI name, the name a `machine` pill. */
 export function BenchLegend({ rows }: { rows: readonly { thing: string; name: string }[] }) {
   return (
     <ul>

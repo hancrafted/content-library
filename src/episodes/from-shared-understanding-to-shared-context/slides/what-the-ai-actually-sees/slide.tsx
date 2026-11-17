@@ -9,12 +9,6 @@ const ANTHROPIC = {
   url: 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents',
 };
 
-/**
- * "What the AI actually sees" (Spec Option 7a): the Context window Explorable in its `slide-4` Preset, the one the
- * viewer met in the context window Episode, called back as is. Keeps `basic-page` and `motion: local`: the motion is
- * the Explorable's own. The Explorable owns no marker, so the Slide puts the window's Context marker in a small label
- * row above it, right-aligned.
- */
 export const whatTheAiActuallySees = slide({
   slug: 'what-the-ai-actually-sees',
   messages: { en, de },
