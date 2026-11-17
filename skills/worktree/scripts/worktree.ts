@@ -7,7 +7,7 @@ import path from 'node:path';
 import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 import { slowTestReport, trimSlowTests } from '../../../tools/load/slow-tests.mts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
-import { forkDate, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
+import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
@@ -144,7 +144,7 @@ function deleteMerged(branch: string, base: string): void {
 
 async function mergeBeforeRemoval(branch: string, base: string): Promise<void> {
   // Read before the merge, which moves the merge-base up to the branch tip.
-  const forked = forkDate(branch, base, mainRoot());
+  const forked = forkDateBeforeMerge(branch, base, mainRoot());
   const note = `since it branched off ${base}`;
   const slowTests = forked === null ? [] : slowTestReport({ cwd: mainRoot(), branch, since: forked, note });
   try {

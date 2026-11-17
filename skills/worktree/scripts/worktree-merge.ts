@@ -15,11 +15,7 @@ function rebasing(tree: string): string | null {
   return null;
 }
 
-/**
- * The worktree that has `base` checked out, from `git worktree list --porcelain`. A rebase detaches HEAD, so a
- * detached worktree that is rebasing `base` counts too.
- */
-function checkoutOf(base: string, cwd: string): string | null {
+function checkoutOfCountingRebase(base: string, cwd: string): string | null {
   const listing = execFileSync('git', ['worktree', 'list', '--porcelain'], {
     cwd,
     encoding: 'utf8',
@@ -52,10 +48,6 @@ export interface MergeContext {
   log: (line: string) => void;
 }
 
-/**
- * Runs `fn` holding the merge lock of `branch` (tools/load/lock.ts), which every merge into `branch` holds:
- * `wt:done --base` merging into it and `wt:sync` run on it. Logs one line while it waits for another holder.
- */
 export function withMergeLock<T>(branch: string, { cwd, log }: MergeContext, fn: () => T | Promise<T>): Promise<T> {
   const onWait = () => log(`… waiting for another merge into ${branch} to finish`);
   return withLock(
@@ -71,28 +63,21 @@ interface Merge {
   cwd: string;
 }
 
-/** Git's own message for merging `branch` into `base`, which leaves out " into main" and " into master". */
-const mergeMessage = ({ branch, base }: Merge) =>
+const gitStyleMergeMessage = ({ branch, base }: Merge) =>
   `Merge branch '${branch}'${['main', 'master'].includes(base) ? '' : ` into ${base}`}`;
 
-/**
- * The merge commit of the branch into the commit `baseTip`, built in the object store alone (`git merge-tree`, then
- * `git commit-tree` with both as parents), so no worktree, index or ref changes. Throws, naming the conflicting
- * paths, when the merge conflicts.
- */
 function buildMerge(merge: Merge, baseTip: string): string {
   const { branch, base, cwd } = merge;
   const result = git(cwd, ['merge-tree', '--write-tree', '--name-only', baseTip, branch]);
-  const [tree, ...rest] = result.stdout.split('\n');
+  const [tree, ...linesAfterTree] = result.stdout.split('\n');
   if (result.status === 1) {
-    // After the tree: the conflicting paths, a blank line, then git's CONFLICT messages.
-    const blank = rest.indexOf('');
-    const paths = rest.slice(0, blank === -1 ? rest.length : blank);
+    const blankLineEndingPaths = linesAfterTree.indexOf('');
+    const paths = linesAfterTree.slice(0, blankLineEndingPaths === -1 ? linesAfterTree.length : blankLineEndingPaths);
     const messages =
-      blank === -1
+      blankLineEndingPaths === -1
         ? ''
-        : rest
-            .slice(blank + 1)
+        : linesAfterTree
+            .slice(blankLineEndingPaths + 1)
             .join('\n')
             .trim();
     throw new Error(
@@ -100,7 +85,7 @@ function buildMerge(merge: Merge, baseTip: string): string {
     );
   }
   if (result.status !== 0) throw new Error(`git merge-tree failed:\n${result.stderr}`);
-  const commit = git(cwd, ['commit-tree', tree, '-p', baseTip, '-p', branch, '-m', mergeMessage(merge)]);
+  const commit = git(cwd, ['commit-tree', tree, '-p', baseTip, '-p', branch, '-m', gitStyleMergeMessage(merge)]);
   if (commit.status !== 0) throw new Error(`git commit-tree failed:\n${commit.stderr}`);
   return commit.stdout.trim();
 }
@@ -109,21 +94,17 @@ const BUSY_WAIT: Timing = { pollMilliseconds: 5000, timeoutMilliseconds: 10 * 60
 
 type Attempt = { done: 'merged' | 'already-merged' } | { tree: string; busy: string; detail: string };
 
-/**
- * One attempt at the merge: fast-forwards the base's worktree to the merge commit unless that worktree is busy.
- * `built` keeps the commit between attempts, rebuilt only when the base tip moved since: whoever made the base busy
- * may have committed onto it meanwhile.
- */
-function attempt(merge: Merge, built: { on: string; commit: string }): Attempt {
+function attempt(merge: Merge, mergeBuiltOnBaseTip: { on: string; commit: string }): Attempt {
   const { branch, base, cwd } = merge;
   if (git(cwd, ['merge-base', '--is-ancestor', branch, base]).status === 0) return { done: 'already-merged' };
-  const tree = checkoutOf(base, cwd);
+  const tree = checkoutOfCountingRebase(base, cwd);
   if (tree === null) throw new Error(`${base} is not checked out in any worktree; check it out, then rerun`);
   const baseTip = git(cwd, ['rev-parse', '--verify', `refs/heads/${base}`]).stdout.trim();
-  if (built.on !== baseTip) Object.assign(built, { on: baseTip, commit: buildMerge(merge, baseTip) });
+  if (mergeBuiltOnBaseTip.on !== baseTip)
+    Object.assign(mergeBuiltOnBaseTip, { on: baseTip, commit: buildMerge(merge, baseTip) });
   const busy = busyWith(tree);
   if (busy !== null) return { tree, busy, detail: '' };
-  const forward = git(tree, ['merge', '--ff-only', built.commit]);
+  const forward = git(tree, ['merge', '--ff-only', mergeBuiltOnBaseTip.commit]);
   if (forward.status === 0) return { done: 'merged' };
   return {
     tree,
@@ -132,15 +113,6 @@ function attempt(merge: Merge, built: { on: string; commit: string }): Attempt {
   };
 }
 
-/**
- * Merges `branch` into `base` with a merge commit. The commit is built outside any worktree (`buildMerge`), then
- * `base` fast-forwards to it inside the worktree that has `base` checked out, so a conflict changes nothing.
- * While that worktree is busy (a merge, rebase or cherry-pick in progress, or the fast-forward refused, say over
- * local changes), it waits and looks again every `pollMilliseconds`, logging one line, and rebuilds the commit when the
- * base tip moved meanwhile. Holds the base's merge lock (`withMergeLock`) throughout, so merges into one base
- * serialize. Rejects, with the base left as it was, when the base is checked out nowhere, the merge conflicts or
- * the base stays busy past `timeoutMilliseconds`.
- */
 export function mergeIntoBase(
   branch: string,
   base: string,
@@ -149,9 +121,9 @@ export function mergeIntoBase(
   const { cwd, log, pollMilliseconds, timeoutMilliseconds } = { ...BUSY_WAIT, ...options };
   return withMergeLock(base, { cwd, log }, async () => {
     const deadline = Date.now() + timeoutMilliseconds;
-    const built = { on: '', commit: '' };
+    const mergeBuiltOnBaseTip = { on: '', commit: '' };
     for (let round = 0; ; round++) {
-      const outcome = attempt({ branch, base, cwd }, built);
+      const outcome = attempt({ branch, base, cwd }, mergeBuiltOnBaseTip);
       if ('done' in outcome) return outcome.done;
       const { tree, busy, detail } = outcome;
       if (Date.now() >= deadline)
@@ -167,11 +139,7 @@ export function mergeIntoBase(
   });
 }
 
-/**
- * The committer date of the merge-base of `branch` and `base`: when the branch forked, as far as the slow-tests log
- * is concerned. Null when the two share no history. Ask before merging: afterwards the merge-base is the tip.
- */
-export function forkDate(branch: string, base: string, cwd: string): Date | null {
+export function forkDateBeforeMerge(branch: string, base: string, cwd: string): Date | null {
   const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
   if (fork === '') return null;
   return new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
