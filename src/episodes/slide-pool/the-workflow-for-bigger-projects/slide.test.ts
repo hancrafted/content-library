@@ -18,7 +18,7 @@ const SECTION = slide({
 function localized(locale: Locale): LocalizedSlide {
   const placed = placeSections<Slide>([[SECTION, theWorkflowForBiggerProjects]]).flat();
   return localizeSlide(placed[1] as never, {
-    episode: episodeRef('ai-attention-span', '2026-10-28-cyberforum-akademie-intro-agentic-workflow').id,
+    episode: episodeRef('ai-attention-span').id,
     locale,
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
