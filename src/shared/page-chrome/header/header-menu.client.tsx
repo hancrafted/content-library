@@ -113,7 +113,6 @@ function MenuUtilities({ open, ...props }: HeaderMenuProps & { open: boolean }) 
 
 function dismissOnEscape(event: KeyboardEvent<HTMLDialogElement>) {
   if (event.key !== 'Escape' || event.currentTarget.querySelector('[role="tooltip"]')) return;
-  // The force-mounted navigation layer would otherwise consume Escape before the native dialog.
   event.preventDefault();
   event.stopPropagation();
   event.currentTarget.close();
@@ -124,7 +123,6 @@ function dismissOnDestination(event: MouseEvent<HTMLDialogElement>) {
   if (target.closest('[data-testid="site-nav"] a, [data-testid="brand"]')) event.currentTarget.close();
 }
 
-/** One copy of every link, with native modal focus trapping, Escape and focus return on mobile. */
 export function HeaderMenu(props: HeaderMenuProps) {
   const menu = useHeaderDialog();
   const navigation = (

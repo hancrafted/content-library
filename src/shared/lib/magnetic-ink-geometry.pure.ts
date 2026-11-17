@@ -46,7 +46,6 @@ export function validateInkHost(rect: InkRect, reach: number) {
   }
 }
 
-/** Hero geometry, with elongated beads rather than unmodified circles. */
 export function inkShapes(contact: InkContact, strength: number, height: number): InkShape[] {
   const activation = smoothInk(strength / 0.16);
   const pull = Math.min(1, contact.distance / 96);

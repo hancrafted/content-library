@@ -17,7 +17,6 @@ const CLOSE =
 const PILL =
   'fixed bottom-4 left-4 z-40 flex cursor-pointer min-h-11 max-w-[calc(100vw-9.5rem)] items-center gap-3 rounded-full border bg-background/80 px-4 py-2 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 md:hidden';
 
-/** The drawer is a narrow-screen affordance; widening past `md` hands over to the sticky panel. */
 function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 48rem)');
@@ -27,7 +26,6 @@ function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
   }, [dialog]);
 }
 
-/** Closes on a backdrop tap and on any link tap, so following an entry reveals the slide. */
 function closeOnDismiss(event: MouseEvent<HTMLDialogElement>) {
   const target = event.target as Element;
   if (target === event.currentTarget || target.closest('a')) event.currentTarget.close();
@@ -38,7 +36,6 @@ interface DrawerProps {
   where: { number: string; title: string } | null;
 }
 
-/** Where the reader is, at a glance; tapping it opens the drawer. */
 function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
   return (
     <button type="button" aria-haspopup="dialog" data-testid="toc-open" className={PILL} onClick={props.onOpen}>
@@ -49,11 +46,6 @@ function DrawerPill(props: DrawerProps & { onOpen: () => void }) {
   );
 }
 
-/**
- * Below `md`: a floating pill showing where the reader is, which slides the
- * table of contents in from the left as a native modal dialog — Escape, focus return and
- * an inert page come from the platform.
- */
 export function TocDrawer(props: DrawerProps & { children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useCloseAtDesktop(dialog);

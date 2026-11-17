@@ -88,7 +88,6 @@ function useLearnMenu() {
   };
   const click = (event: React.MouseEvent) => {
     if (value === 'learn' && !pinned.current) {
-      // A click after hover pins the panel instead of toggling it closed.
       event.preventDefault();
       pinned.current = true;
     } else {
@@ -163,7 +162,6 @@ function isMobile() {
   return !window.matchMedia('(min-width: 64rem)').matches;
 }
 
-/** Hover previews Learn; a click pins it. Mobile shows the same links as an expanded list. */
 export function HeaderNav(nav: HeaderNavProps) {
   const menu = useLearnMenu();
   const mobile = useSyncExternalStore(subscribeToLayout, isMobile, () => false);

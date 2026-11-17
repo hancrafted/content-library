@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { translationStrings } from './translation-strings.pure';
 
-/** A stand-in for next-intl's `t`: tags each full key, so a test sees which key was read for which leaf. */
 const tagged = (key: string) => `<${key}>`;
 
 describe('success cases', () => {

@@ -38,7 +38,7 @@ function Segment({ segment, labels }: { segment: VoiceScriptSegment; labels: Con
   );
 }
 
-/** One Slide's Voice script, its explainer, or the empty state. Server-rendered into the page (FE-010 §2). */
+// decision: FE-010 §2
 export function SlideScript({
   segments,
   labels,

@@ -149,7 +149,6 @@ describe('edge cases', () => {
   });
 });
 
-/** `count` words of filler. */
 function words(count: number): string {
   return Array.from({ length: count }, () => 'word').join(' ');
 }

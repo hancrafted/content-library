@@ -26,21 +26,10 @@ import { DrawerTrigger } from './drawer-trigger';
 
 type Drawer = ReturnType<typeof useContextDrawer>;
 
-/*
- * The card wears the table of contents' border, radius and shadow, but is opaque:
- * it overlaps Slide text in overlay mode and under the scrim, where translucency
- * ghosts. It starts below the sticky site header (top-24; top-32 below `md`,
- * where the header wraps to two rows) and clears the bottom edge by 1rem.
- * Below `md` it rises above the scrim (z-70 over the scrim's 60 and the
- * header's 50). Its width is the one `--drawer-width` the right inset reads.
- */
 const CARD = cn(
   'fixed top-24 right-4 bottom-4 z-40 flex w-[min(var(--drawer-width),calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-background text-body shadow-header',
   'max-md:top-32 max-md:z-[70] md:w-(--drawer-width) motion-reduce:[transition:none]',
 );
-// Only `transform` animates, never width or position. `visibility` flips to
-// visible the instant the drawer opens, or the focus move on open lands on a
-// still-hidden card and is dropped; on close it waits for the slide-out.
 const OPENING = '[transform:translateX(0)] [transition:transform_250ms_ease-out,visibility_0s]';
 const CLOSED =
   'invisible [transform:translateX(calc(100%+2rem))] [transition:transform_200ms_ease-in,visibility_0s_linear_200ms]';
@@ -55,9 +44,8 @@ function Entries({
   kind: DrawerTab;
 }) {
   return entries.map((entry) => (
-    // The Tailwind `hidden` class, not the attribute: print overrides a class (FE-010 §2).
+    // decision: FE-010 §2
     <div key={entry.id} {...{ [CONTEXT_ITEM_ATTR]: entry.id }} className={cn(entry.id !== current && 'hidden')}>
-      {/* The head names the current item on screen; print has no head, so each entry names itself. */}
       {entry.title && (
         <h5 className="mb-2 hidden text-body font-medium text-muted-foreground print:block">{entry.title}</h5>
       )}
@@ -81,7 +69,6 @@ function Panel(props: { tab: DrawerTab; selected: DrawerTab; heading: string; ch
   );
 }
 
-/** Sticky. Row one: tabs left, layout menu and close right. Row two: the current item's title, free to wrap without moving the tabs. */
 function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string }) {
   const { labels, drawer } = props;
   const tabs = DRAWER_TABS.map((id) => ({ id, label: labels.tabs[id] }));
@@ -112,11 +99,6 @@ function PanelHead(props: { labels: DrawerStrings; drawer: Drawer; title: string
   );
 }
 
-/**
- * The one scroll container; it returns to the top when the item or tab changes, and a revealed note scrolls to its top.
- * It scrolls back only once it has left the top: a `scrollTo` on a body still at the top, on mount or while the active
- * Slide changes as the page scrolls, would force a layout of the whole page for nothing.
- */
 function PanelBody(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly ContextEntry[] }) {
   const { labels, drawer, entries } = props;
   const body = useRef<HTMLDivElement>(null);
@@ -160,19 +142,12 @@ function Card(props: { labels: DrawerStrings; drawer: Drawer; entries: readonly 
   );
 }
 
-/** The active Slide's box in the viewport, or `null` when it is not on the page. */
 function slideBox(id: string | null): { top: number; height: number } | null {
   const rect = id === null ? undefined : document.getElementById(id)?.getBoundingClientRect();
   return rect ? { top: rect.top, height: rect.height } : null;
 }
 
-/**
- * Tells the page the card sits beside the Slides: it flags the Episode page, whose
- * right inset then widens in one step (FE-009 §2). The card itself is fixed and
- * takes no layout space, so this is the only thing the Slides see of it. The step
- * reflows every Slide, so before paint it scrolls the reading line back to where
- * it was in the active Slide; the browser's own scroll anchoring does not hold it.
- */
+// decision: FE-009 §2
 function BesideFlag({ beside }: { beside: boolean }) {
   const slide = useActiveSlide();
   useLayoutEffect(() => {
@@ -188,7 +163,6 @@ function BesideFlag({ beside }: { beside: boolean }) {
   return null;
 }
 
-/** Pointer-only dismiss for narrow screens; Escape and the close button serve the keyboard. */
 function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <div
@@ -205,13 +179,7 @@ function Scrim({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/**
- * The Context drawer (FE-010 §7): a floating card on the right. From `xl` it
- * sits beside the Slides (the Foreground's right inset widens at once) or over them; below `xl` it is always an overlay, under a dimmed
- * scrim below `md`. It holds every item's server-rendered notes and script in the DOM and
- * only decides which are visible. Closed it is `invisible` and off-screen, so
- * print and find-in-page still reach the text.
- */
+// decision: FE-010 §7
 export function ContextDrawer(props: { labels: DrawerStrings; entries: readonly ContextEntry[] }) {
   const { labels, entries } = props;
   const ids = useMemo(() => entries.map((entry) => entry.id), [entries]);

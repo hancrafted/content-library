@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyEdits, type TokenSet } from './page-tokens';
+import { applyEdits, readGlobalTokens, type TokenSet } from './page-tokens';
 
 const TOKENS: TokenSet = {
   scope: { kind: 'global' },
@@ -42,6 +42,29 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('skips a cross-origin stylesheet whose rules cannot be read, since it holds none of our tokens', () => {
+    // ARRANGE
+    const crossOrigin = {
+      get cssRules(): never {
+        throw new DOMException('Cannot access rules', 'SecurityError');
+      },
+    };
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'document');
+    Object.defineProperty(globalThis, 'document', {
+      configurable: true,
+      value: { styleSheets: [crossOrigin, { cssRules: [] }] },
+    });
+    try {
+      // ACT
+      const tokens = readGlobalTokens();
+      // ASSERT
+      expect(tokens).toEqual([]);
+    } finally {
+      if (descriptor) Object.defineProperty(globalThis, 'document', descriptor);
+      else Reflect.deleteProperty(globalThis, 'document');
+    }
+  });
+
   it('restores the authored value and priority when repeated edits are cleared', () => {
     // ARRANGE
     const authored = '160px';

@@ -1,4 +1,3 @@
-/* Individual fixed affordances move without establishing a containing block for the mobile dialog. */
 .entrance > :is([data-testid='toc'], [data-testid='toc-open'], a[data-toc-action]) {
   opacity: var(--title-departure-progress, 1);
   translate: 0 calc((1 - var(--title-departure-progress, 1)) * var(--toc-reveal-distance, 0.75rem));

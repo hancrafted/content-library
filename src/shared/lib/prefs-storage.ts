@@ -1,7 +1,6 @@
 import { mergePrefs, parsePrefs, PREFS_KEY, type Prefs } from './prefs.pure';
 import { mergeProgress, parseProgress, PROGRESS_KEY, type ProgressEntry } from './progress.pure';
 
-/** Reads the single prefs key; storage being unavailable reads as empty prefs. */
 export function readPrefs(): Prefs {
   try {
     return parsePrefs(window.localStorage.getItem(PREFS_KEY));
@@ -10,17 +9,16 @@ export function readPrefs(): Prefs {
   }
 }
 
-/** Merges `patch` into the single prefs key. */
-export function writePrefs(patch: Prefs): void {
+export function writePrefs(patch: Prefs): boolean {
   try {
     const raw = window.localStorage.getItem(PREFS_KEY);
     window.localStorage.setItem(PREFS_KEY, mergePrefs(raw, patch));
+    return true;
   } catch {
-    // Storage disabled (private mode, quota): the preference lasts for this page only.
+    return false;
   }
 }
 
-/** The stored entry of one hands-on, if there is a valid one; storage being unavailable reads as none. */
 export function readProgress(key: string): ProgressEntry | undefined {
   try {
     return parseProgress(window.localStorage.getItem(PROGRESS_KEY))[key];
@@ -29,7 +27,6 @@ export function readProgress(key: string): ProgressEntry | undefined {
   }
 }
 
-/** Sets one hands-on's entry under the single progress key, the others kept. False when storage refused (quota, private mode). */
 export function writeProgress(key: string, entry: ProgressEntry | null): boolean {
   try {
     const raw = window.localStorage.getItem(PROGRESS_KEY);
@@ -40,7 +37,6 @@ export function writeProgress(key: string, entry: ProgressEntry | null): boolean
   }
 }
 
-/** Forgets one hands-on's entry. */
 export function removeProgress(key: string): void {
   writeProgress(key, null);
 }
