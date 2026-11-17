@@ -132,17 +132,17 @@
       "two-starting-points": {
         "title": "Zwei Ausgangspunkte",
         "keywords": "",
-        "script": "Sagen wir, es ist das dritte Mal und Du bist bereit, den Skill zu schreiben. Es gibt zwei gute Ausgangspunkte: Deine eigenen Notizen aus früheren Durchläufen, die Logbuchseiten früherer Tauchgänge, oder einen Durchlauf mit der KI, der gerade gut gelaufen ist, der Tauchgang von heute, solange er frisch ist."
+        "script": "Noch einmal die klare Empfehlung: Wenn Du irgendwann einen Ablauf von vorne bis hinten durchgearbeitet hast und das Ergebnis Deinen Erwartungen entspricht, ist das ein Signal dafür, dass Du wirklich guten Kontext hast."
       },
       "capture-the-why": {
         "title": "Das Warum festhalten",
         "keywords": "",
-        "script": "Beim frischen Durchlauf bittest Du die KI, Dich zu interviewen, bevor sie irgendetwas schreibt: warum diese Tiefe, warum diese Reihenfolge, was als Fehlschlag gegolten hätte. Der Skill soll Deine Absicht festhalten und nicht nur die Schritte, denn Schritte ohne das Warum brechen beim ersten Mal, wenn sich die Lage ändert."
+        "script": "Dann ist der Trick: Ich mache nicht direkt einen Skill daraus. Auf Basis des kompletten Prozesses von Ende zu Ende lasse ich die KI mich noch einmal interviewen, weil sich daraus potenziell weitere Anforderungen ergeben, die ich gar nicht berücksichtigt hatte, auch wenn ich den Ablauf schon zum dritten oder vierten Mal gemacht habe."
       },
       "while-he-still-knows": {
         "title": "Solange er es noch weiß",
         "keywords": "",
-        "script": "Dann lass sie den Skill im selben Gespräch schreiben, solange der ganze Durchlauf noch in ihrem Kontextfenster steht. Morgen hat sie es vergessen, und genau damit haben wir angefangen. Das ist also Dein erster Schritt: Nimm eine Aufgabe, die Du dreimal erklärt hast, und mach aus einem guten Durchlauf davon einen Skill. In einem Coding-Agent ist das ein Satz: Bitte ihn, aus diesem Gespräch einen Skill zu machen."
+        "script": "Dann habe ich genügend Kontext in meinem Fenster, um daraus einen Skill zu machen. Es kann ja sein, dass noch weitere Anforderungen oder Bereicherungen aus dem persönlichen Wissensschatz der Person, die den Skill schreibt, dazukommen, und genau dafür ist der Interview-Schritt da. Er macht nicht nur aus einem einmaligen Erfolgserlebnis etwas, das wiederholbar sein soll, sondern zoomt heraus und fragt: Hast Du mir noch mehr Informationen zu liefern, wie ich diesen Skill wirklich brauchbar und wiederholt brauchbar machen kann?"
       }
     }
   }

@@ -5,8 +5,14 @@
   "story": "In der Geschichte:",
   "season": "diese Saison",
   "before": {
-    "heading": { "chat": "Skill-Index · vorher", "coding": ".claude/skills/ · vorher" },
-    "count": { "chat": "47 Skills", "coding": "47 Ordner" },
+    "heading": {
+      "chat": "Skill-Index · vorher",
+      "coding": ".claude/skills/ · vorher"
+    },
+    "count": {
+      "chat": "47 Skills",
+      "coding": "47 Ordner"
+    },
     "uses": "{count}-mal genutzt",
     "unused": "ungenutzt",
     "more": "… 30 weitere, alle ungenutzt"
@@ -33,10 +39,22 @@
   "log": {
     "heading": "Aufgabenlog",
     "rows": {
-      "k4": { "date": "3. Juni", "task": "Neuer Ort K-4" },
-      "photos": { "date": "11. Juni", "task": "Fotos von K-4" },
-      "briefing": { "date": "8. Aug.", "task": "Morgenbesprechung" },
-      "m5": { "date": "27. Aug.", "task": "Neuer Ort M-5" }
+      "k4": {
+        "date": "3. Juni",
+        "task": "Neuer Ort K-4"
+      },
+      "photos": {
+        "date": "11. Juni",
+        "task": "Fotos von K-4"
+      },
+      "briefing": {
+        "date": "8. Aug.",
+        "task": "Morgenbesprechung"
+      },
+      "m5": {
+        "date": "27. Aug.",
+        "task": "Neuer Ort M-5"
+      }
     },
     "more": "und 23 weitere Aufgaben"
   },
@@ -53,8 +71,14 @@
     }
   },
   "after": {
-    "heading": { "chat": "Skill-Index · nachher", "coding": ".claude/skills/ · nachher" },
-    "count": { "chat": "7 Skills", "coding": "7 Ordner" },
+    "heading": {
+      "chat": "Skill-Index · nachher",
+      "coding": ".claude/skills/ · nachher"
+    },
+    "count": {
+      "chat": "7 Skills",
+      "coding": "7 Ordner"
+    },
     "needed": "der, den Du brauchst",
     "callback": "Vor ein paar Slides: der 7. von 47. Jetzt der 3. von 7."
   },
@@ -88,7 +112,9 @@
         "kcs-v6-article-state": {
           "title": "Consortium for Service Innovation, KCS v6 Practices Guide, Technique 5.2: KCS Article State"
         },
-        "anthropic-skills-enterprise": { "title": "Anthropic, Skills for enterprise" }
+        "anthropic-skills-enterprise": {
+          "title": "Anthropic, Skills for enterprise"
+        }
       }
     }
   },
@@ -102,7 +128,7 @@
       "the-archive-box": {
         "title": "Die Archivkiste",
         "keywords": "",
-        "script": "Diese Skills kommen in ein Archiv, jeder mit dem Datum seiner Ausmusterung, damit die Entscheidung festgehalten ist und sich später niemand fragt, wo ein Skill geblieben ist."
+        "script": "Genauso ist das Thema, wie wir Skills archivieren und löschen, weil sie nicht mehr benötigt werden, entweder weil sie nicht verwendet wurden oder weil ein Modell-Update, ein Software-Update oder ein Projekt-Update dazu führt, dass sie nicht gebraucht werden."
       },
       "short-index-again": {
         "title": "Wieder ein kurzer Index",

@@ -123,17 +123,17 @@
       "by-name": {
         "title": "Beim Namen",
         "keywords": "",
-        "script": "Es gibt zwei Wege, wie ein Skill genutzt wird. Der erste ist der einfache: Du rufst ihn beim Namen auf, so wie Du dem Piloten sagen würdest „Sedimentprobe nehmen, bitte“, und das Modell öffnet genau diesen Skill. Kein Raten."
+        "script": "Skills werden grundsätzlich auf zwei Wegen aufgerufen. Einmal rufst Du den Skill selbst auf, das haben wir vorhin schon geübt: über den Slash-Command, bei Codex über das Dollarzeichen. Das ist der Aufruf vom Menschen aus."
       },
       "by-description": {
         "title": "Über die Beschreibung",
         "keywords": "",
-        "script": "Beim zweiten sagst Du nichts über den Skill. Das Modell liest die Beschreibungen, während es arbeitet, und entscheidet selbst, dass diese Aufgabe einen braucht. Seine einzigen Hinweise sind Name und Beschreibung, die Du geschrieben hast. Ist die Beschreibung schwach, bleibt der Skill ungenutzt, egal wie gut seine Anweisungen sind."
+        "script": "Der interessantere Aspekt ist, wie ein Agent den Skill selbst aufrufen kann. Er hat ja den Index geladen. Wenn wir an Workflows denken, ist es sinnvoll, für einen bestimmten Workflow die relevanten Skills zu definieren. Manchmal lässt sich das aber nicht vorher wissen, und wir wollen dem Agenten etwas Autonomie gewähren, Skills für gerade relevante Anwendungsfälle zu laden. Auf Basis des Index, also dessen, was er aus Name und Beschreibung der Skills in seinem Kontextfenster vorhält, kann er entscheiden: Es passt gerade, ich arbeite daran, Material vom Meeresboden zu sammeln, und es gibt einen Skill, der sagt, nutze mich dafür. Die KI entscheidet also selbst, den Skill zu laden. Das sind die zwei Möglichkeiten: aktiv vom Menschen oder automatisiert durch den KI-Agenten, wobei der zweite Weg offensichtlich der interessantere ist."
       },
       "unused-is-real": {
         "title": "Ungenutzt ist echt",
         "keywords": "",
-        "script": "Und dass Skills ungenutzt bleiben, ist keine Theorie: Es wurde gemessen, allerdings nur im Test eines Anbieters mit einem Doku-Skill, also halte den Befund locker. Die Frage, die bleiben sollte, vor jedem Skill, den Du schreibst: Würde das Modell ihn jemals wählen?"
+        "script": "Leider zeigen Messungen und einige Metriken inzwischen, dass 65 Prozent der Skills nicht aufgerufen werden, obwohl sie hätten aufgerufen werden sollen. Überlassen wir es der KI, ist es genauso, wie wenn wir einem Menschen sagen: Im Ordner findest Du Anweisungen, wie Du die Aufgabe zu erledigen hast. Auch dann ist nicht gewährleistet, dass der Mensch die Anweisung immer herausholt und liest."
       }
     }
   }

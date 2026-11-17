@@ -126,12 +126,12 @@
       "three-tries": {
         "title": "Drei Versuche",
         "keywords": "",
-        "script": "Wann wird also aus einer Aufgabe ein Skill? Denk daran, was Du jedes Mal lernst, wenn Du sie dem Modell erklärst. Beim ersten Mal findest Du heraus, was überhaupt nötig ist, beim zweiten Mal schärfst Du es nach, und beim dritten Mal kannst Du sagen, wie ein gutes Ergebnis aussieht. Genau dann weißt Du, was Du aufschreiben würdest."
+        "script": "Überleg Dir kurz, wie wir Arbeitsabläufe vorher definiert haben, vor allem, wenn der Ablauf neu war. Wer einmal versucht hat, einen Arbeitsablauf zu definieren, ohne Erfahrungsberichte gesammelt zu haben, merkt: Wir haben uns Gedanken gemacht, aber sobald wir ihn ausführen, stellen wir fest, dass wir manches nicht berücksichtigt haben. Edge Cases oder Ausnahmezustände führen dazu, dass wir den Ablauf abändern müssen. Deshalb gilt, wenn ich vom Markt rede, nach dem, was ich aktuell in Foren und Communities und im Austausch mit anderen mitbekomme: Wenn wir eine Idee für einen Ablauf haben, lass ihn uns einfach austesten, durch Prompting, Schritt für Schritt, und Ideen und Ablauf sammeln."
       },
       "not-only-repetition": {
         "title": "Nicht nur Wiederholung",
         "keywords": "",
-        "script": "Aber Zählen reicht nicht. Wenn Du nicht prüfen kannst, ob das Ergebnis gut war, hältst Du kein Verfahren fest, Du kopierst eine Gewohnheit, und der Skill wiederholt diese Gewohnheit mit großer Überzeugung."
+        "script": "Das machen wir, bis wir irgendwann einen Run geschaffen haben, einen Durchlauf, eine Session der KI von vorne bis hinten, bei dem das Ergebnis gut war und im Rahmen dessen lag, was ich mir vorgestellt habe. Das bedeutet: Im Kontextfenster, in dem wir gearbeitet haben, stecken genügend Signale, präzise und akkurate Informationen, die der KI geholfen haben, ein Ergebnis zu liefern, mit dem ich zufrieden war. Das ist das Signal, dass es jetzt Sinn macht, aus diesem Kontextfenster einen Skill zu definieren. Ich habe ein Ergebnis, mit dem ich zufrieden bin, und potenziell sogar eines, an dem ich den Skill messen kann, ob er ein ähnlich gutes Ergebnis liefert. Das ist das Prinzip beim dritten Mal. Meistens beim dritten Mal, mal früher, mal später, aber das ist der Gedanke dahinter."
       },
       "did-you-know": {
         "title": "Schon gewusst",

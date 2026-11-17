@@ -130,12 +130,12 @@
       "the-standing-part": {
         "title": "Der feste Teil",
         "keywords": "",
-        "script": "Fang mit dem an, was da ist, bevor irgendeine Aufgabe beginnt, in der Reihenfolge des Explorables: der System-Prompt, die Skills, also Name und Beschreibung jedes Skills, und die Memory-Dateien, also Deine Anweisungen in AGENTS.md. Auf unserem Schiff sind das die festen Regeln, das Register des Handbuchs und Deine Dauerbefehle mit dem Projektbriefing. Dieser Teil ist statisch, er steht im Fenster, egal welche Aufgabe kommt."
+        "script": "Das Lesen der Anweisung geschieht also in drei Schritten. Einmal als statischer Kontext, der immer geladen wird: Name und Description."
       },
       "filling-as-you-dive": {
         "title": "Füllen beim Tauchen",
         "keywords": "",
-        "script": "Dann beginnt die Aufgabe, und das Fenster füllt sich: der Skill, den das Modell geöffnet hat, und die Tool-Ergebnisse, die zurückkommen, die Kamerabilder, Sonardaten und Probenprotokolle des Tauchgangs. Dieser Teil ist dynamisch, und die Anweisungen eines Skills gehören dazu, ob Du den Skill am Anfang aufrufst oder das Modell ihn mittendrin wählt. Ein Skill steht also auf beiden Seiten der Linie: Name und Beschreibung sind statisch, der Skill selbst ist dynamisch."
+        "script": "Dann kommt der dynamische Kontext, je nachdem, ob der Skill aufgerufen wird, und Werkzeug-Calls in den Ordner, die bei Bedarf ausgeführt werden. Deshalb gehört auch der Gedanke dazu, zu überlegen, welche Aktionen ich zu welchem Zeitpunkt im Kontextfenster des Agenten bereitstellen möchte."
       }
     }
   }

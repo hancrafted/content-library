@@ -12,7 +12,11 @@
     "source": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure (nngroup.com)",
     "skills": "Für Skills schreibt Anthropic, dass Claude Informationen schrittweise lädt, wenn sie gebraucht werden.",
     "stepsLabel": "Drei Stufen, die sich nacheinander öffnen: erst ein kurzer Überblick, dann das Detail, dann die Extras.",
-    "steps": { "overview": "Überblick", "detail": "Detail", "extras": "Extras" }
+    "steps": {
+      "overview": "Überblick",
+      "detail": "Detail",
+      "extras": "Extras"
+    }
   },
   "example": "Das Beispiel: Ein Skill lädt in drei Stufen",
   "levelsLabel": "Drei Ladestufen",
@@ -43,8 +47,16 @@
   "art": {
     "shelfLabel": "das Register des Handbuchs: jeder Kartenreiter sichtbar",
     "cardTitle": "Sedimentprobe nehmen",
-    "cardSteps": { "0": "1 Roboter 2 m hoch halten", "1": "2 Kamera prüfen", "2": "3 … 6" },
-    "extras": { "guide": "Artenführer", "label": "Etikettvorlage", "preset": "Arm-Preset" }
+    "cardSteps": {
+      "0": "1 Roboter 2 m hoch halten",
+      "1": "2 Kamera prüfen",
+      "2": "3 … 6"
+    },
+    "extras": {
+      "guide": "Artenführer",
+      "label": "Etikettvorlage",
+      "preset": "Arm-Preset"
+    }
   },
   "otherApps": {
     "chat": "Codex und Gemini CLI laden auch in Stufen",
@@ -58,8 +70,12 @@
       "header": "Drei Stufen, so steht es im Standard",
       "description": "Der Agent-Skills-Standard nennt Metadaten (Name und Beschreibung, etwa 100 Tokens), die beim Start für alle Skills geladen werden, den Hauptteil von SKILL.md, wenn der Skill aktiviert wird, und Dateien in scripts/, references/ oder assets/ nur, wenn sie gebraucht werden [1]. Anthropic beschreibt dieselben drei Stufen [2]. Googles Day-3-Whitepaper ebenso: „1. Metadata (name + description) is always in the agent's context. 2. SKILL.md body is loaded only when the skill triggers. 3. Bundled resources are loaded strictly as needed“ [3]. Das ist Googles Beschreibung des Designs, kein Test, dass es funktioniert.",
       "sources": {
-        "agent-skills-specification": { "title": "Agent Skills, Specification" },
-        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" },
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        },
         "google-day-3-agent-skills": {
           "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
         }
@@ -69,15 +85,21 @@
       "header": "Andere Apps laden auch in Stufen",
       "description": "Codex listet zuerst Name, Beschreibung und Dateipfad und liest die vollständigen Anweisungen, wenn es sich für einen Skill entscheidet [1]; Gemini CLI dokumentiert erst Metadaten, den Hauptteil beim Aktivieren [2]. Für Apps, deren Seiten nicht gelesen wurden, ist die Drei-Stufen-Aussage aus dem gemeinsamen Format abgeleitet.",
       "sources": {
-        "openai-codex-build-skills": { "title": "OpenAI, Build skills (Codex docs)" },
-        "google-gemini-cli-skills": { "title": "Google, Agent Skills in Gemini CLI" }
+        "openai-codex-build-skills": {
+          "title": "OpenAI, Build skills (Codex docs)"
+        },
+        "google-gemini-cli-skills": {
+          "title": "Google, Agent Skills in Gemini CLI"
+        }
       }
     },
     "scripts-documented-for-claude-only": {
       "header": "Skripte: nur für Claude dokumentiert",
       "description": "Claude führt Skripte über bash aus, und „only their output enters context“ [1]. Die gelesenen Seiten anderer Anbieter sagen, dass es mitgelieferte Skripte gibt, aber nicht, was das für den Kontext bedeutet; diese Aussage gilt also nur für Claude. Googles Day-3-Whitepaper fügt eine Zeile hinzu: Skripte „execute without ever polluting the token window“ [2]; nimm das als Googles Aussage, nicht als dokumentiertes Verhalten anderer Apps.",
       "sources": {
-        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" },
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        },
         "google-day-3-agent-skills": {
           "title": "Singhal, Hernandez Larios, Dus, Nigam and Kolan, Agent Skills (Google whitepaper, Kaggle)"
         }
@@ -96,14 +118,18 @@
       "header": "Progressive Disclosure, wie Anthropic es nennt",
       "description": "Anthropic schreibt, das dateibasierte Design „allows progressive disclosure: Claude loads information in stages as needed, rather than consuming context upfront“ [1]. Das Konzept ist allgemein; ein Skill ist das Beispiel.",
       "sources": {
-        "anthropic-agent-skills-overview": { "title": "Anthropic, Agent Skills (Claude Platform docs)" }
+        "anthropic-agent-skills-overview": {
+          "title": "Anthropic, Agent Skills (Claude Platform docs)"
+        }
       }
     },
     "progressive-disclosure-as-nielsen-norman-group-defines-it": {
       "header": "Progressive Disclosure, wie die Nielsen Norman Group es definiert",
       "description": "Jakob Nielsens Artikel definiert es in seiner Zusammenfassung: „Progressive disclosure defers advanced or rarely used features to a secondary screen, making applications easier to learn and less error-prone“ [1]. Es ist ein Prinzip des Interaktionsdesigns von 2006, älter als Skills; die Slide zitiert es wörtlich und auf Englisch.",
       "sources": {
-        "nngroup-progressive-disclosure": { "title": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure" }
+        "nngroup-progressive-disclosure": {
+          "title": "Nielsen Norman Group, Jakob Nielsen, Progressive Disclosure"
+        }
       }
     }
   },
@@ -112,22 +138,22 @@
       "the-concept": {
         "title": "Das Konzept",
         "keywords": "",
-        "script": "Wie findet das Modell also einen Skill, und wie viel davon liest es? Interface-Designer hatten dasselbe Problem lange vor der KI: Ein Bildschirm, der jede Option auf einmal zeigt, überfordert den Menschen davor. Also zeigt man erst das Wichtigste und öffnet den Rest, wenn jemand ihn braucht. Das heißt Progressive Disclosure, und ein Skill wird genauso geladen, in drei Stufen."
+        "script": "Kurz dazu, wie ein KI-Agent einen Skill lädt und liest. Dafür gibt es ein Prinzip aus dem UX-Design: Progressive Disclosure. Wir wollen nicht auf Anhieb mit Informationen überflutet werden, sondern Schritt für Schritt zuerst eine Übersicht sehen und dann entscheiden, ob wir mehr lesen. Wenn ich einen Aspekt brauche, zum Beispiel zum Labeln, gehe ich einen Schritt weiter in die Extras und lade mir das Template herunter. Bei der KI ist der Grund klar: Lädst Du alles auf einmal, überlädst Du das Kontextfenster des Agenten mit Informationen, die für die Aufgabe nicht nötig sind. Das gilt nicht nur für Skills, sondern auch für den Aufbau eines Projektordners: Überleg, was relevant ist und was Schritt für Schritt nachgeladen werden kann."
       },
       "step-one": {
         "title": "Stufe eins",
         "keywords": "",
-        "script": "Stufe eins ist, wie das Modell einen Skill entdeckt, und sie ist immer geladen: Name und Beschreibung jedes Skills. Selbst mit hundert installierten Skills trägt das Modell also in jedes Gespräch nur dieses kurze Register, die Registerseite des Handbuchs."
+        "script": "Bei Skills gibt es drei Schritte. Im ersten wird der Front Matter, also Name und Beschreibung, immer geladen. Alle Skills, die Du in Deinem Ordner oder im Projekt zugänglich gemacht hast, werden in einem Index zusammengefasst, wie in einem Register. Name und Description listen alle Skills auf, und dieser Anteil wird immer geladen. Jede neue Konversation lädt das gesamte Register, damit der Agent weiß, welche Skills zur Verfügung stehen."
       },
       "step-two": {
         "title": "Stufe zwei",
         "keywords": "",
-        "script": "Stufe zwei wird geladen, wenn der Skill genutzt wird. Erst wenn eine Aufgabe zu einer Beschreibung passt, liest das Modell die Hauptanweisungen dieses Skills, keinen Moment früher, so wie der Pilot eine Karte zieht."
+        "script": "Wird der Skill tatsächlich geladen, wird die Skill.md geladen, also der Hauptteil, der Body."
       },
       "step-three": {
         "title": "Stufe drei",
         "keywords": "",
-        "script": "Stufe drei wird nur bei Bedarf geladen: die Referenzen, Vorlagen und Skripte, die Extras in der Hülle, die das Modell erst öffnet, wenn ein Schritt es dorthin schickt. Das genaue Verhalten unterscheidet sich ein wenig von App zu App, deshalb stehen die genauen Aussagen in den Notizen neben dieser Slide."
+        "script": "Danach entscheidet der KI-Agent, ob der Anwendungsfall es hergibt, noch weitere Dateien aus dem Skill-Ordner nachzuladen."
       }
     }
   }

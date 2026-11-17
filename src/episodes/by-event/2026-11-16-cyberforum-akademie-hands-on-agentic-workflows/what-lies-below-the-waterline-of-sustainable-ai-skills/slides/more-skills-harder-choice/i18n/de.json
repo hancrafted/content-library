@@ -88,7 +88,9 @@
       "header": "Skills zu breit oder zu eng",
       "description": "Der Standard warnt, dass zu breit gefasste Skills sich schwer gezielt aktivieren lassen, während zu enge dazu zwingen, mehrere zu laden [1]. Keine Quelle misst direkt, dass einander ähnliche Skills seltener gewählt werden.",
       "sources": {
-        "agent-skills-best-practices": { "title": "Agent Skills, Best practices for skill creators" }
+        "agent-skills-best-practices": {
+          "title": "Agent Skills, Best practices for skill creators"
+        }
       }
     },
     "name-each-skill-as-an-action": {
@@ -106,12 +108,12 @@
       "near-twins": {
         "title": "Fast gleiche Skills",
         "keywords": "",
-        "script": "Jetzt sieh, was passiert, wenn sich die Skills stapeln. „Probe“, „Probe nehmen“, „Bodenprobe v2“: drei Skills, deren Beschreibungen ähnlich klingen, und ein Modell, das zwischen ihnen raten muss. Es rät, und Du hast es dazu gebracht."
+        "script": "Wenn sich Skills ansammeln und womöglich ähneln, klingen sie für KI-Agenten generell sehr ähnlich. Dann ist es umso wichtiger, zu entscheiden, wie ich dem Agenten noch mehr Kontext liefere, damit er den richtigen Skill aufruft."
       },
       "a-short-list-on-the-wall": {
         "title": "Eine kurze Liste an der Wand",
         "keywords": "",
-        "script": "Die Abhilfe ist billig: eine kurze Liste in Deinen Projektanweisungen, AGENTS.md, wenn Du mit einem Coding-Agenten arbeitest, die sagt: „In diesem Projekt nutzen wir diese drei Skills.“ Projektanweisungen sind immer geladen, also muss das Modell nicht mehr aus einem überfüllten Register wählen. Auf unserem Schiff ist das eine Liste an der Wand."
+        "script": "Neben der Description gibt es dafür zum Beispiel die Project Instruction. Das ist in einem Coding-Agenten die Agents.md oder in einem Chatfenster der Teil für die Projektanweisungen. Bei Claude hast Du zum Beispiel diese Projekte, in denen Du Kontextinformationen und Instructions mitliefern kannst. Das ist bei ChatGPT und anderen relativ ähnlich. Dort könnte ich für ein Projekt festlegen, dass bestimmte Skills für bestimmte Anwendungsfälle zu bevorzugen sind. In einem Coding-Agenten sind das die Agents.md-Dateien, das Äquivalent zur Project Instruction. Auch da kannst Du dem KI-Agenten Zusatzinformationen liefern, welche Skills für das aktuelle Projekt relevant sind. Potenziell hast Du eine Sammlung von Skills, die nicht nur für ein Projekt gedacht ist. Das sind zwei Möglichkeiten, die KI besser zu verleiten. Laut einer Messung liegen wir mit dieser Ansage in der Project Instruction auf einmal bei 79 Prozent statt bei 53 Prozent. Das ist die erste Stufe unter der Wasseroberfläche: Wann wir einen Skill schreiben sollten, nicht zu früh, nicht zu häufig, und wie wir dem Agenten die Entscheidung leichter machen, einen Skill zu laden oder nicht."
       },
       "hicks-law": {
         "title": "Das Hick'sche Gesetz",
@@ -121,7 +123,7 @@
       "name-it-as-an-action": {
         "title": "Benenne ihn als Tätigkeit",
         "keywords": "",
-        "script": "Eine Gewohnheit hält das Register noch ordentlich: Benenne jeden Skill als Tätigkeit, in kleingeschriebenen Wörtern mit Bindestrichen, etwa collect-sediment-sample. Ein Name, der sagt, was der Skill tut, sagt dem Modell und Dir, wofür er da ist, bevor irgendwer die Beschreibung liest, und wenn jeder Name demselben Muster folgt, fällt ein Fast-Zwilling auf, bevor er geschrieben wird."
+        "script": "Beim Namen ist empfohlen, ein Verb zu benutzen, eine Gerundform oder Verbform, um den Skill zu benennen. Der Name ist relativ kurz, man kann ihn aber ein bisschen länger ausschreiben."
       }
     }
   }

@@ -132,17 +132,17 @@
       "extras-by-step": {
         "title": "Extras nach Schritt",
         "keywords": "",
-        "script": "Was kann also ohne Risiko in einem Skill liegen? Fachwissen, abgelegt in Zusatzdateien und an den Schritt gebunden, der es braucht. Schritt drei, den Arm absenken, führt ein Skript aus, die Arm-Voreinstellung. Schritt vier, bestimmen, was Du gesammelt hast, liest eine Referenzdatei, den Artenführer, und Schritt sechs, die Probe beschriften, füllt eine Vorlage aus."
+        "script": "Schauen wir, was in den Skill hineingehört. Das haben wir vorhin schon erläutert: Wir haben unseren Skill und unsere Anweisung, und die Anweisung verweist auf weitere Dateien, die als Referenzen, Programme oder Templates im Skill-Ordner liegen. Zusammenfassend: In einen Skill sollten die Informationen, bei denen die KI sagt, die brauche ich, um meine Aufgabe zu erledigen, und die allgemein genug sind, um potenziell auch in einem anderen Projekt verwendet zu werden. Also keine domänen- oder projektspezifischen Informationen. Dasselbe gilt für Labels, Templates und weitere Informationen, die für diesen Skill wirklich relevant sind."
       },
       "the-long-step": {
         "title": "Der lange Schritt",
         "keywords": "",
-        "script": "Werden die Anweisungen eines Schritts lang, verschieb den nächsten Absatz in eine Referenzdatei und lass im Schritt einen Verweis stehen, damit die Anweisungen kurz genug bleiben, dass das Modell sie auf einmal erfasst."
+        "script": "Nimm etwas Allgemeingültiges, das immer verwendet werden kann, zum Beispiel ein Lexikon, das ziemlich groß sein kann. Der Skill braucht es, um seine Aufgabe richtig zu erledigen, etwa um ein Lebewesen im Meer zu identifizieren. Wir wollen nicht 50 oder 60 Seiten Lexikon in die Skill.md schreiben, denn wird der Skill aufgerufen, würde das komplette Lexikon ins Kontextfenster des Agenten geladen. Das wäre nicht schlau, denn wir brauchen offensichtlich nicht alles. Stattdessen lege das Ganze als Referenz in den Referenzordner, sodass es trotzdem innerhalb des Skills zur Verfügung steht, weil es für die Aufgabe relevant ist. Und alles, was wir nicht in die Skill.md schreiben, steht dann nur bei Bedarf bereit."
       },
       "contents-first": {
         "title": "Inhaltsverzeichnis zuerst",
         "keywords": "",
-        "script": "Und beginne jede lange Referenzdatei mit einem Inhaltsverzeichnis, weil das Modell vielleicht nur den Anfang überfliegt. Wenn Schritt vier den Artenführer öffnet, sagt dem Modell schon sein Inhaltsverzeichnis, was sonst noch darin steht."
+        "script": "Zusätzlich liefern wir am Anfang ein Inhaltsverzeichnis, einen Table of Contents, damit der KI-Agent weiß, was alles in diesem Lexikon steckt. Manche KI-Agenten, bei Claude zum Beispiel, lesen eine Datei im Referenzordner nicht komplett, sondern zuerst die ersten 100 Zeilen. Deshalb ist die klare Empfehlung bei Claude, am Anfang eine Art Inhaltsverzeichnis aufzulisten, quasi einen Index für die Informationen in der Datei."
       }
     }
   }

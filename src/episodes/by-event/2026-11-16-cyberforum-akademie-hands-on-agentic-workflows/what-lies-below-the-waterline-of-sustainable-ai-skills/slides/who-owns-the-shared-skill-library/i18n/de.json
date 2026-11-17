@@ -116,12 +116,12 @@
       "back-to-the-square": {
         "title": "Zurück zum Feld",
         "keywords": "",
-        "script": "Komm zurück zur Matrix, zum Feld geteilt und allgemein. Auf diese Art Skill verlassen sich die meisten Menschen, also zählt hier die Sorgfalt am meisten."
+        "script": "Soll ein Skill nicht nur für einen projektspezifischen Anwendungsfall über verschiedene Leute geteilt werden, sondern universell für die ganze Firma oder für mehrere Organisationen gelten, dann stellen sich Fragen, die unter Skill Governance fallen."
       },
       "what-the-front-page-needs": {
         "title": "Was die Titelseite braucht",
         "keywords": "",
-        "script": "Eine geteilte Bibliothek braucht Regeln über Owner und Version hinaus: wer einen Skill hinzufügen darf, auf welcher Stufe er liegt und wen er damit erreicht, was das Laden kostet, mit welchen Modellen und Agenten er funktioniert und wann er in Rente geht. Jede dieser Fragen muss jemand beantworten, bevor der Skill hineinkommt."
+        "script": "Wer darf was ändern? Wer darf den Skill anwenden? Was kostet das Ganze, zum Beispiel an Tokenkosten? Wer darf Veränderungen machen oder den Skill sogar löschen? Das sind alles Fragen der Governance, die sich Firmen gerade stellen."
       },
       "the-dark-corner": {
         "title": "Die dunkle Ecke",

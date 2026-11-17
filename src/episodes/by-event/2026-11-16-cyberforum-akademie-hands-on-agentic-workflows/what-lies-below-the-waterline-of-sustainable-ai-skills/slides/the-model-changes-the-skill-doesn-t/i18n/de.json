@@ -59,23 +59,33 @@
         "herraiz-laws-review": {
           "title": "Herraiz, Rodriguez, Robles und Gonzalez-Barahona, The evolution of the laws of software evolution: a discussion based on a systematic literature review"
         },
-        "godfrey-tu-linux": { "title": "Godfrey und Tu, Evolution in Open Source Software: A Case Study" }
+        "godfrey-tu-linux": {
+          "title": "Godfrey und Tu, Evolution in Open Source Software: A Case Study"
+        }
       }
     },
     "each-model-reads-instructions-differently": {
       "header": "Jedes Modell liest dieselben Anweisungen anders",
       "description": "Anthropics Leitfaden hat modellspezifische Abschnitte dazu, wo sich „a single model behaves differently and what to change in your prompt“ [1]; OpenAI schreibt, dass für andere Modelle optimierte Prompts „may not immediately work“ [2].",
       "sources": {
-        "anthropic-prompting-best-practices": { "title": "Anthropic, Prompting best practices" },
-        "openai-gpt-4-1-prompting-guide": { "title": "OpenAI, GPT-4.1 Prompting Guide" }
+        "anthropic-prompting-best-practices": {
+          "title": "Anthropic, Prompting best practices"
+        },
+        "openai-gpt-4-1-prompting-guide": {
+          "title": "OpenAI, GPT-4.1 Prompting Guide"
+        }
       }
     },
     "model-memory-and-patient-hm": {
       "header": "Das Gedächtnis des Modells und Patient H.M.: eine Analogie, die beim Skill bricht",
       "description": "H.M. lernte Spiegelzeichnen und behielt es über 3 Tage, ohne sich an eine der Sitzungen zu erinnern [1], weil Fertigkeiten von einem Gedächtnissystem außerhalb der geschädigten Region gespeichert werden [2]. Auf ein Modell passt das nur als Analogie: Trainierte Gewichte entsprechen der Fertigkeit, aber eine Skill-Datei wird als Text gelesen und ist damit näher an einer deklarativen Notiz. Diese Zuordnung ist eine Schlussfolgerung; Milner 1962 wurde nur über Squires Darstellung gelesen.",
       "sources": {
-        "squire-legacy-of-hm": { "title": "Squire, The Legacy of Patient H.M. for Neuroscience" },
-        "squire-memory-systems": { "title": "Squire, Conscious and Unconscious Memory Systems" }
+        "squire-legacy-of-hm": {
+          "title": "Squire, The Legacy of Patient H.M. for Neuroscience"
+        },
+        "squire-memory-systems": {
+          "title": "Squire, Conscious and Unconscious Memory Systems"
+        }
       }
     },
     "the-agent-changes-the-skill-too": {
@@ -93,7 +103,7 @@
       "not-the-only-pilot": {
         "title": "Nicht der einzige Pilot",
         "keywords": "",
-        "script": "Unter Deinem Skill ändert sich noch etwas, und das hast Du nicht in der Hand: das Modell, das ihn liest. Jedes KI-Modell hat die Eigenschaft, mit der wir angefangen haben, und jeder KI-Anbieter trainiert sein eigenes, so wie jede Pilotenschule ihre eigenen Piloten ausbildet. Der Leser Deines Skills steht also nie fest."
+        "script": "Vor allem kann es mit jedem Update des KI-Modells sein, dass Skills, die vorher funktioniert haben, danach nicht mehr funktionieren. Das ist, wie wenn wir einen neuen Piloten haben. Er hat dieselbe Zertifizierung gemacht und darf das U-Boot bedienen, hat es aber an einer anderen Schule gelernt. Er wird Anweisungen leicht anders interpretieren, und darauf müssen wir vorbereitet sein."
       },
       "update-and-switch": {
         "title": "Update und Wechsel",

@@ -44,7 +44,7 @@
       "sunlight": {
         "title": "Sonnenlicht",
         "keywords": "",
-        "script": "Wir sind eine Ebene tiefer, in der Sonnenlichtzone. Hier entscheiden wir zwei Dinge: wann eine Aufgabe überhaupt einen Skill verdient, und wie Du ihn beschreibst, damit das Modell ihn auch wirklich auswählt."
+        "script": "Jetzt schauen wir uns die erste Ebene an, wenn wir unter das Wasser tauchen: Wann sollten wir überhaupt einen Skill schreiben, und was gehört alles in die Description?"
       },
       "borrowed-principles": {
         "title": "Geliehene Prinzipien",
@@ -54,7 +54,7 @@
       "why-a-rule-of-thumb": {
         "title": "Warum eine Faustregel",
         "keywords": "",
-        "script": "Sie trägt, weil das Modell nur mit dem arbeitet, was Du ihm gibst, wie eine fähige neue Kollegin an ihrem ersten Tag. Eine Faustregel ist es, weil sie an manchen Stellen bricht. Die stehen in den Notizen zur nächsten Slide, zum Nachlesen."
+        "script": "Wann sollten wir einen Skill schreiben? Dazu gibt es keine Gesetze und auch keine lange Erfahrung, das Ganze ist erst zwei, drei Jahre alt. Aber die Community hat sich etabliert: beim dritten Mal."
       }
     }
   }

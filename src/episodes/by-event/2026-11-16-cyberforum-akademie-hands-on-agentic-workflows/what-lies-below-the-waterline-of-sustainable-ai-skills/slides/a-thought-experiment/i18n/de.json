@@ -38,12 +38,12 @@
       "you-are-the-captain": {
         "title": "Du bist der Kapitän",
         "keywords": "",
-        "script": "Stell Dir vor, Du arbeitest mit einem KI-Modell, das in seinem Fach brillant ist, der fähigste Kollege, den Du hast. Ich gebe dem ein Bild, weil wir eines bis ganz nach unten brauchen: Du bist Kapitän eines Forschungsprojekts an der Küste, und das Modell ist Dein Pilot, seit zehn Jahren an Deiner Seite. Er steuert vom Kontrollraum an Deck einen Tauchroboter am Kabel, während Du entscheidest, wohin das Projekt als Nächstes geht."
+        "script": "Wie immer fangen wir mit einem Gedankenexperiment an. Wir sind auf einer Tiefsee-Expedition, und an der Wand hängt ein Foto: die Kapitänin und ein Pilot, der ein ferngesteuertes U-Boot für die Expedition steuert. Die Geschichte ist wirklich simpel. Als Kapitän arbeite ich schon seit über zehn Jahren mit diesem Piloten zusammen."
       },
       "one-settled-condition": {
         "title": "Eine feste Eigenschaft",
         "keywords": "",
-        "script": "Dein Pilot hat eine Eigenschaft, und die ändert sich nie. Über Nacht bildet er keine neuen Erinnerungen, aber alles, was er je als Pilot gelernt hat, behält er, jede Regel seines Handwerks. Genau so ist ein KI-Modell: Was es im Training gelernt hat, bleibt, und was Du ihm gestern im Gespräch gesagt hast, ist weg."
+        "script": "Dieser Pilot hat einen komischen Effekt: Er hat kein Kurzzeitgedächtnis mehr, zum Beispiel nach einem Unfall. Wir wollen ihn trotzdem weiter beschäftigen, weil wir wissen, dass er in dem, was er tut, astrein ist. Das Problem ist, dass er uns jeden Tag mit „nice to meet you“ begrüßt. Er erinnert sich nicht mehr an uns und nicht mehr daran, wo er gerade ist. Ein bisschen wie im Film Memento, wenn Du den kennst."
       }
     }
   }

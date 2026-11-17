@@ -47,22 +47,30 @@
       "header": "Eine Beschreibung sagt, was und wann",
       "description": "Der Standard verlangt, dass eine Beschreibung sagt, was der Skill tut und wann man ihn nutzt, und Stichworte enthält, an denen Agenten passende Aufgaben erkennen [1]. Anthropic ergänzt konkrete Auslöser und Kontexte, weil Claude danach unter womöglich über 100 Skills wählt [2].",
       "sources": {
-        "agent-skills-specification": { "title": "Agent Skills, Specification" },
-        "anthropic-skill-authoring-best-practices": { "title": "Anthropic, Skill authoring best practices" }
+        "agent-skills-specification": {
+          "title": "Agent Skills, Specification"
+        },
+        "anthropic-skill-authoring-best-practices": {
+          "title": "Anthropic, Skill authoring best practices"
+        }
       }
     },
     "write-the-description-in-the-users-words": {
       "header": "Schreib die Beschreibung in den Worten der Nutzer",
       "description": "Der Standard rät: im Imperativ formulieren, auf die Absicht der Nutzer statt auf die Umsetzung zielen und lieber zu aufdringlich als zu zurückhaltend sein, also die Kontexte, in denen der Skill gilt, ausdrücklich aufzählen [1].",
       "sources": {
-        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+        "agent-skills-optimizing-descriptions": {
+          "title": "Agent Skills, Optimizing skill descriptions"
+        }
       }
     },
     "not-for-lines-googles-advice-alone": {
       "header": "„Nicht für“-Zeilen in einer Beschreibung: nur Googles Rat",
       "description": "Der Standard und Anthropic empfehlen keinen „Nicht für“-Satz in der Beschreibung. Zu häufiges Auslösen fangen sie ab, indem sie knapp danebenliegende Anfragen testen, die Stichworte teilen, aber etwas anderes brauchen; so zeigt sich, ob die Beschreibung präzise ist und nicht nur breit [1].",
       "sources": {
-        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+        "agent-skills-optimizing-descriptions": {
+          "title": "Agent Skills, Optimizing skill descriptions"
+        }
       }
     },
     "the-not-for-clause-in-googles-day-3": {
@@ -80,17 +88,17 @@
       "two-labels": {
         "title": "Zwei Etiketten",
         "keywords": "",
-        "script": "Hier sind zwei Beschreibungen für denselben Skill. Die erste nennt den Inhalt, „SOP-07: Umgang mit dem Kerngerät, Schritte 1 bis 9“, und die zweite sagt, was der Skill tut, und nennt den Moment: „Nimmt einen Sedimentkern. Nutzen, wenn wir einen neuen Ort erreichen und eine Probe vom Meeresboden brauchen.“ Die eine sagt nur, was drinsteht, die andere nennt den Auslöser, also wann Du ihn brauchst, und das ist Dein zweiter Schritt: Schreib die Beschreibung als den Moment, in dem Du ihn brauchst."
+        "script": "Dazu gibt es verschiedenste Meinungen, weil das Feld relativ neu ist, aber eine Meinung, in der sich viele treffen, lautet: Beschreib nicht noch einmal den Skill, sondern beschreib den Moment, den Trigger, wann dieser Skill auszuführen ist. Das ist quasi Kontext. Das Beispiel hier hat ganz klar einen kurzen Satz dazu, was der Skill ist, und das Signal, wann er zu benutzen ist: wenn wir an einem neuen Forschungsort angekommen sind und Samples vom Meeresboden holen sollen."
       },
       "your-request": {
         "title": "Deine Bitte",
         "keywords": "",
-        "script": "Jetzt ist der Tag des Tauchgangs, und Du tippst: „Hol hier noch etwas Schlamm hoch, bevor wir weiterfahren.“ Nichts in „SOP-07, Schritte 1 bis 9“ sagt dem Modell, wann er gebraucht wird, aber „eine Probe vom Meeresboden“ tut es, also passt nur die Beschreibung des Moments. Schreib sie in den Worten, die Du wirklich sagen würdest."
+        "script": "Im Beispiel sagt die Kapitänin: Lass uns ein bisschen Schlamm vom Meeresboden aufsammeln, bevor wir weiterfahren."
       },
       "the-closing-line": {
         "title": "Die Schlusszeile",
         "keywords": "",
-        "script": "Zum Schluss kann die Beschreibung des Moments eine zweite Hälfte haben: „Nicht für Wasserproben oder Filmaufnahmen.“ Sie sagt dem Modell, wo der Skill aufhört, damit es ihn nicht für eine Arbeit öffnet, die er nicht kann. Nimm diese Hälfte als Wahl, nicht als Regel, und teste, ob sie Deinem Skill hilft."
+        "script": "In einigen Papers, zum Beispiel einem von Google, das ich hier verlinkt habe und das Du gerne nachlesen kannst, wird zusätzlich empfohlen, einen Satz zu schreiben, wann der Skill nicht aufgerufen wird. Es geht also mehr darum, zu überlegen: Was sind die Szenarien, was ist ein potenzielles Triggerwort, das den Agenten dazu verleitet, diesen Skill zu zücken? Und weniger darum, den Skill noch einmal zusammenzufassen und zu beschreiben. Wirklich wichtig ist, wann und in welchen Situationen der Skill aufgerufen werden soll."
       }
     }
   }

@@ -10,13 +10,22 @@
     "headingNote": "das Register des Handbuchs",
     "headingCoding": "Front Matter jeder SKILL.md",
     "entries": {
-      "samples": { "name": "Proben", "description": "Proben." },
+      "samples": {
+        "name": "Proben",
+        "description": "Proben."
+      },
       "collect-sediment-sample": {
         "name": "Sedimentprobe nehmen",
         "description": "Eine Sedimentprobe an einem neuen Ort nehmen"
       },
-      "misc-procedures": { "name": "Sonstige Abläufe", "description": "Verschiedene Abläufe." },
-      "run-camera-survey": { "name": "Kamerafahrt", "description": "Einen Streifen Meeresboden filmen" }
+      "misc-procedures": {
+        "name": "Sonstige Abläufe",
+        "description": "Verschiedene Abläufe."
+      },
+      "run-camera-survey": {
+        "name": "Kamerafahrt",
+        "description": "Einen Streifen Meeresboden filmen"
+      }
     }
   },
   "pills": {
@@ -59,7 +68,9 @@
       "header": "Die Beschreibung trägt die ganze Last",
       "description": "Weil beim Start nur Name und Beschreibung laden, trägt laut dem Standard die Beschreibung die ganze Last des Auslösens: Vermittelt sie nicht, wann der Skill nützlich ist, weiß der Agent nicht, dass er zu ihm greifen soll [1].",
       "sources": {
-        "agent-skills-optimizing-descriptions": { "title": "Agent Skills, Optimizing skill descriptions" }
+        "agent-skills-optimizing-descriptions": {
+          "title": "Agent Skills, Optimizing skill descriptions"
+        }
       }
     },
     "descriptions-and-information-scent": {
@@ -77,7 +88,7 @@
       "the-pilots-view": {
         "title": "Der Blick des Piloten",
         "keywords": "",
-        "script": "Setz Dich kurz auf den Platz des Modells. Zu Beginn einer Aufgabe hat es von jedem Skill Namen und Beschreibung vor sich, aber keine der Anweisungen dahinter, wie ein Pilot mit offenem Register und lauter geschlossenen Karten. Solange Du den Skill also nicht beim Namen rufst, ist die Beschreibung der Auslöser: Sie entscheidet, ob das Modell den Skill von sich aus wählt."
+        "script": "Wenn ich zu viele Skills habe, die vielleicht auch noch ähnlich heißen, ist das ein Problem. Es kann gut sein, dass ich nicht einmal mehr weiß, welche Skills ich schon angelegt habe. Diese mentale Last trägt nicht jeder mit sich. Ich habe dann ähnliche Beschreibungen und ähnliche Namen, und für die KI wird es umso schwieriger, den richtigen Skill zum richtigen Zeitpunkt herauszuziehen. Vorhin haben wir gesehen, dass Skills in einem erheblichen Teil der Fälle nicht geladen werden, obwohl sie hätten geladen werden sollen. Umso wichtiger ist der Blick auf die Description. Es geht darum, wie ich sie als Prompt Engineering so formuliere, dass der Skill zum richtigen Zeitpunkt automatisiert und selbstständig von der KI gerufen wird."
       },
       "two-entries": {
         "title": "Zwei Einträge",

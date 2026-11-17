@@ -1629,105 +1629,105 @@
         "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
         "caption": "Jedes Gespräch mit KI fängt bei null an, wenn es darum geht, wie Du arbeitest. Ein Skill gibt ihr Dein bewährtes Vorgehen bei Bedarf mit, und wo die Projektdetails liegen, im Skill oder daneben, entscheidet, wie gut er sich wiederverwenden lässt.",
         "description": "Wann eine Aufgabe, die Du immer wieder erklärst, ein Skill werden sollte, wie Du seine Beschreibung als den Moment schreibst, in dem Du ihn brauchst, was in den Skill gehört und was im Projektkontext bleibt, und was ein geteilter Skill braucht, um richtig zu bleiben: einen Owner, eine Version, Tests und ein Ablaufdatum.",
-        "minutes": 36.7,
+        "minutes": 44.44166666666668,
         "sections": [
           {
             "id": "a-thought-experiment",
             "title": "Ein Gedankenexperiment",
-            "minutes": 1.0583333333333333,
+            "minutes": 1.0333333333333332,
             "items": [
               {
                 "id": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
                 "title": "Ein KI-Modell, das jeden Morgen vergisst",
-                "minutes": 1.25
+                "minutes": 0.8
               },
               {
                 "id": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
                 "title": "Ein Skill gibt der KI Dein Vorgehen",
-                "minutes": 1.4583333333333335
+                "minutes": 1.9166666666666665
               }
             ]
           },
           {
             "id": "what-a-skill-is",
             "title": "Was ein Skill ist",
-            "minutes": 0.7166666666666667,
+            "minutes": 0.6000000000000001,
             "items": [
               {
                 "id": "what-a-skill-is--a-skill-is-a-written-procedure",
                 "title": "Ein Skill ist ein Ordner mit Anweisungen",
-                "minutes": 1.4666666666666666
+                "minutes": 2.4000000000000004
               },
               {
                 "id": "what-a-skill-is--three-levels-of-loading",
                 "title": "Wie die KI einen Skill findet und liest",
-                "minutes": 1.5250000000000001
+                "minutes": 1.8166666666666667
               },
               {
                 "id": "what-a-skill-is--skills-are-dynamic-context",
                 "title": "Skills sind statischer und dynamischer Kontext",
-                "minutes": 1.4083333333333332
+                "minutes": 0.7999999999999999
               },
               {
                 "id": "what-a-skill-is--instructions-skills-and-connectors",
                 "title": "Anweisungen, Skills und Konnektoren",
-                "minutes": 1.4666666666666668
+                "minutes": 2.058333333333333
               },
               {
                 "id": "what-a-skill-is--two-ways-to-call-a-skill",
                 "title": "Zwei Wege, einen Skill aufzurufen",
-                "minutes": 1.0833333333333335
+                "minutes": 1.8833333333333333
               }
             ]
           },
           {
             "id": "when-to-write-one",
             "title": "Wann Du einen schreibst",
-            "minutes": 0.9083333333333333,
+            "minutes": 0.8,
             "items": [
               {
                 "id": "when-to-write-one--the-third-time-is-the-signal",
                 "title": "Beim dritten Mal ist es so weit",
-                "minutes": 1.1
+                "minutes": 2.3166666666666664
               },
               {
                 "id": "when-to-write-one--not-every-repeat-deserves-a-skill",
                 "title": "Nicht jede Wiederholung verdient einen Skill",
-                "minutes": 1.0416666666666667
+                "minutes": 1.6
               },
               {
                 "id": "when-to-write-one--write-it-from-a-good-run",
                 "title": "Schreib ihn aus einem guten Durchlauf",
-                "minutes": 1.3916666666666666
+                "minutes": 1.3833333333333333
               }
             ]
           },
           {
             "id": "the-label",
             "title": "Die Beschreibung",
-            "minutes": 0.5,
+            "minutes": 0.2916666666666667,
             "items": [
               {
                 "id": "the-label--the-description-is-all-the-ai-sees",
                 "title": "Die Beschreibung ist der Auslöser",
-                "minutes": 1.291666666666667
+                "minutes": 1.75
               },
               {
                 "id": "the-label--name-the-moment-not-the-content",
                 "title": "Nenne den Auslöser, nicht den Inhalt",
-                "minutes": 1.575
+                "minutes": 1.4500000000000002
               },
               {
                 "id": "the-label--more-skills-harder-choice",
                 "title": "Mehr Skills, schwerere Wahl",
-                "minutes": 1.666666666666667
+                "minutes": 2.466666666666667
               }
             ]
           },
           {
             "id": "what-goes-inside",
             "title": "Welcher Kontext hineingehört",
-            "minutes": 0.5,
+            "minutes": 0.7666666666666666,
             "items": [
               {
                 "id": "what-goes-inside--what-goes-where-is-information-architecture",
@@ -1737,76 +1737,72 @@
               {
                 "id": "what-goes-inside--one-skill-one-job",
                 "title": "Ein Projektdetail bindet einen Skill an ein Projekt",
-                "minutes": 0.7416666666666667
+                "minutes": 0.9416666666666667
               },
-              { "id": "what-goes-inside--inside-the-skill", "title": "Im Skill", "minutes": 1 }
+              { "id": "what-goes-inside--inside-the-skill", "title": "Im Skill", "minutes": 2.2083333333333335 }
             ]
           },
           {
             "id": "what-stays-beside",
             "title": "Welcher Kontext daneben bleibt",
-            "minutes": 0.5333333333333334,
+            "minutes": 0.3666666666666667,
             "items": [
               {
                 "id": "what-stays-beside--beside-the-skill",
                 "title": "Neben dem Skill",
-                "minutes": 1.0916666666666668
+                "minutes": 1.3833333333333333
               },
               {
                 "id": "what-stays-beside--who-uses-it-and-where",
                 "title": "Wer ihn nutzt, und wo",
-                "minutes": 1.1333333333333333
+                "minutes": 1.4500000000000002
               },
               {
                 "id": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
                 "title": "grill-with-docs hält den Kontext neben dem Skill",
-                "minutes": 0.875
+                "minutes": 1.5333333333333334
               }
             ]
           },
           {
             "id": "sharing-it",
             "title": "Ihn teilen",
-            "minutes": 0.42500000000000004,
+            "minutes": 0.7,
             "items": [
               {
                 "id": "sharing-it--shared-skills-are-knowledge-articles",
                 "title": "Geteilte Skills sind Wissensartikel",
-                "minutes": 1.2166666666666668
+                "minutes": 1.0083333333333333
               },
               {
                 "id": "sharing-it--who-owns-the-shared-skill-library",
                 "title": "Wem die geteilte Skill-Bibliothek gehört",
-                "minutes": 1.0166666666666666
+                "minutes": 0.9666666666666667
               },
               {
                 "id": "sharing-it--does-the-skill-make-things-better",
                 "title": "Macht der Skill es besser?",
-                "minutes": 1.0833333333333333
+                "minutes": 0.9666666666666666
               }
             ]
           },
           {
             "id": "keeping-it-alive",
             "title": "Ihn am Leben halten",
-            "minutes": 0.38333333333333336,
+            "minutes": 0.35,
             "items": [
               {
                 "id": "keeping-it-alive--every-skill-is-a-loan",
                 "title": "Jeder Skill ist ein Kredit",
-                "minutes": 0.8166666666666667
+                "minutes": 0.6333333333333333
               },
               {
                 "id": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
                 "title": "Das Modell ändert sich, der Skill nicht",
-                "minutes": 1.4166666666666665
+                "minutes": 1.4749999999999999
               },
-              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.8916666666666666 },
-              {
-                "id": "keeping-it-alive--the-whole-iceberg",
-                "title": "Der ganze Eisberg",
-                "minutes": 1.0499999999999998
-              }
+              { "id": "keeping-it-alive--retire-skills", "title": "Skills ausmustern", "minutes": 0.9833333333333334 },
+              { "id": "keeping-it-alive--the-whole-iceberg", "title": "Der ganze Eisberg", "minutes": 1.725 }
             ]
           }
         ]

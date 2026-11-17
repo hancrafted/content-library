@@ -1,9 +1,15 @@
 {
   "title": "Anweisungen, Skills und Konnektoren",
   "caption": "Persönliche und Projektanweisungen sind immer geladen, Skills laden bei Bedarf, und Konnektoren reichen in andere Systeme.",
-  "analogy": { "label": "In der Geschichte:", "text": "Dein Notizbuch, die Wand, das Handbuch und das Kabel." },
+  "analogy": {
+    "label": "In der Geschichte:",
+    "text": "Dein Notizbuch, die Wand, das Handbuch und das Kabel."
+  },
   "listLabel": "Anweisungen, Skills und Konnektoren",
-  "tags": { "static": "statisch", "dynamic": "dynamisch" },
+  "tags": {
+    "static": "statisch",
+    "dynamic": "dynamisch"
+  },
   "things": {
     "personal": {
       "term": "Persönliche Anweisungen",
@@ -51,7 +57,11 @@
       }
     }
   },
-  "art": { "brief": "Projektbriefing", "labDatabase": "Labordatenbank", "sonar": "Sonar" },
+  "art": {
+    "brief": "Projektbriefing",
+    "labDatabase": "Labordatenbank",
+    "sonar": "Sonar"
+  },
   "footer": {
     "chat": "Jede App nennt sie anders: ChatGPT sagt Apps; Gemini, Connected Apps.",
     "coding": "Googles Rat aus Day 3: AGENTS.md knapp halten, unten ein kurzer Katalog der Skills; „The cleanest setups use both.“"
@@ -64,8 +74,12 @@
       "header": "Anweisungen sind immer geladen, Skills nicht",
       "description": "Claude Code liest CLAUDE.md „at the start of every session“ und lädt einen Skill „on demand“ [1]. Codex, Gemini CLI und GitHub Copilot dokumentieren dieselbe Trennung für ihre Anweisungsdateien und Skills [2]. Die eigenen und Projektanweisungen von ChatGPT wurden nicht gelesen, und ob die Gemini-App ihre Anweisungen zu Beginn jeder Sitzung lädt, ist nicht belegt; für diese beiden Apps ist die Trennung also nicht bestätigt.",
       "sources": {
-        "anthropic-claude-code-features": { "title": "Anthropic, Extend Claude Code (Claude Code docs)" },
-        "github-copilot-cli-skills": { "title": "GitHub, Adding agent skills for GitHub Copilot CLI" }
+        "anthropic-claude-code-features": {
+          "title": "Anthropic, Extend Claude Code (Claude Code docs)"
+        },
+        "github-copilot-cli-skills": {
+          "title": "GitHub, Adding agent skills for GitHub Copilot CLI"
+        }
       }
     },
     "names-in-chat-apps": {
@@ -75,16 +89,24 @@
         "anthropic-personalization-features": {
           "title": "Anthropic, Understanding Claude's personalization features (Help Center)"
         },
-        "openai-academy-skills": { "title": "OpenAI Academy, Skills" },
-        "google-gemini-apps-workflows": { "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)" }
+        "openai-academy-skills": {
+          "title": "OpenAI Academy, Skills"
+        },
+        "google-gemini-apps-workflows": {
+          "title": "Google, Manage your tasks and workflows in Gemini Apps (Help)"
+        }
       }
     },
     "connectors-reach-skills-know-how": {
       "header": "Konnektoren reichen hin, Skills wissen wie",
       "description": "Konnektoren sind Model-Context-Protocol-Server (MCP), die Tools und Daten hinzufügen, keine Anleitung [1]. Anthropic beschreibt MCP als die Verbindung und einen Skill als das Wissen, wie man sie nutzt [2].",
       "sources": {
-        "github-copilot-mcp": { "title": "GitHub, About Model Context Protocol (MCP) (Copilot docs)" },
-        "anthropic-claude-code-features": { "title": "Anthropic, Extend Claude Code (Claude Code docs)" }
+        "github-copilot-mcp": {
+          "title": "GitHub, About Model Context Protocol (MCP) (Copilot docs)"
+        },
+        "anthropic-claude-code-features": {
+          "title": "Anthropic, Extend Claude Code (Claude Code docs)"
+        }
       }
     },
     "skill-vs-agents-md-as-google-puts-it": {
@@ -105,12 +127,12 @@
       "four-things-in-the-room": {
         "title": "Vier Dinge im Raum",
         "keywords": "",
-        "script": "Vier Dinge bestimmen, was das Modell weiß, und sie haben vier verschiedene Aufgaben: persönliche Anweisungen, Projektanweisungen, Skills und Konnektoren. Im Kontrollraum sind das Dein Notizbuch, das Projektbriefing an der Wand, das Handbuch an der Konsole und das Kabel zum Sonar und zur Labordatenbank."
+        "script": "Zu den Skills gehören noch ein paar weitere Konzepte, die ich kurz erläutern möchte. Wir haben gesehen, was ein Skill ist. Außenrum gibt es drei weitere Dateien oder Konzepte, die man häufiger sieht oder hört. Ich gehe dabei von der Chat-App aus."
       },
       "read-the-tags": {
         "title": "Lies die Schilder",
         "keywords": "",
-        "script": "Nimm sie einzeln. Persönliche Anweisungen sind statisch, und sie folgen Dir in jedes Projekt, so wie Dein Notizbuch mit auf jedes Schiff kommt. Projektanweisungen sind auch statisch, aber nur in diesem einen Projekt. Skills sind dynamisch, weil einer kommt, wenn eine Aufgabe ihn braucht, und die Ergebnisse eines Konnektors sind auch dynamisch, weil sie während der Arbeit aus einem anderen System kommen; der Konnektor lässt das Modell außerdem in diesem System handeln. Das ist die Trennung der letzten Slide, jetzt mit Namen."
+        "script": "Einmal die Personal Instructions. Wenn Du ChatGPT aufmachst und eingeloggt bist, hast Du in den Einstellungen die Möglichkeit, grundlegende Prompts oder Anweisungen zu hinterlegen, zum Beispiel dass ich immer eine kurze, wissenschaftliche Darstellung des Textes haben möchte. Das sind sozusagen die Gewohnheiten, und sie werden immer geladen. Dann gibt es Project Instructions: In ChatGPT gibt es Projekte, wie auch bei Claude, und dort kannst Du für das einzelne Projekt zusätzliche Prompts hinterlegen. Und es gibt Konnektoren, zum Beispiel zu Microsoft SharePoint, in Copilot Studio oder andere MCP-Server nach Jira und in Projektmanagement-Tools, damit sich die KI bei Bedarf daraus weiteren dynamischen Kontext ziehen kann. Ein Beispiel: Lege mir einen Report aus den Einkaufszahlen der letzten zwei Monate an. Dann bedient sich der KI-Agent, falls der Konnektor verfügbar ist, an den Daten und sucht mithilfe des Skills ein vorgefertigtes Template, um den Bericht zu erstellen. Da ist also schon ein bisschen mehr Zusammenhang im Spiel."
       },
       "your-words-may-differ": {
         "title": "Deine Wörter können anders sein",

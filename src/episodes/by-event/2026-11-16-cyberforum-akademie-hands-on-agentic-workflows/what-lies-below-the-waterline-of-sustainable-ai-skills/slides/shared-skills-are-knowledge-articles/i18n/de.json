@@ -93,12 +93,12 @@
       "your-notebook": {
         "title": "Dein Notizbuch",
         "keywords": "",
-        "script": "Ein persönlicher Skill hat gar keinen Kopf, wie eine Karte in deinem eigenen Notizbuch. Das passt, solange er nur dir gehört, denn du weißt, wer ihn geschrieben hat, wann du ihn zuletzt genutzt hast und wer ihn repariert, wenn er bricht."
+        "script": "Wenn ich einen Skill aus meinem persönlichen Schatz für andere Mitarbeitende, Kolleginnen und Kollegen oder andere Teams bereitstellen möchte, dann reden wir nicht mehr von einer Datei, die ich selbst anwende."
       },
       "into-the-fleet-manual": {
         "title": "Ins Flottenhandbuch",
         "keywords": "",
-        "script": "Sobald du ihn in die Skill-Bibliothek deines Teams teilst, ins Flottenhandbuch auf unserem Schiff, braucht er, was jeder Wissensartikel in einer Firma hat: einen Owner, eine Version und ein Datum für die nächste Prüfung. Es ist derselbe Skill mit einem Kontrollblock obendrauf, und deine persönlichen Skills brauchen das erst, wenn du sie teilst."
+        "script": "Wir reden von einem Wissensartikel, einem Knowledge-Management-Artikel. Und wie Ihr alle wisst, sind Knowledge-Management-Artikel lebende Dateien. Sie brauchen einen Owner, eine Versionierung und einen regelmäßigen Review, um sie aktuell zu halten. Das klingt auf jeden Fall schon aufwendiger."
       },
       "why": {
         "title": "Warum",
