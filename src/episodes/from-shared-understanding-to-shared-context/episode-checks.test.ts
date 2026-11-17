@@ -1,6 +1,7 @@
 import { episodeChecks } from '@/episodes/lib/episode-checks';
 import { describe, expect, it } from 'vitest';
 
+// decision: ARCH-003 §4.7
 const PAGE = import.meta.glob('./episode.ts');
 const CHECKS = episodeChecks(import.meta.dirname, import.meta.glob('./slides/*/slide.tsx'), PAGE);
 
