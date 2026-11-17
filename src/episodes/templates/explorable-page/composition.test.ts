@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { explorablePageTemplate } from './episode';
 
-/*
- * What this page composes, Section by Section, as slugs: a content decision the Episode-level checks
- * (`episode-checks.test.ts`) cannot know, so it is written out here, beside the page.
- */
-
 const SECTIONS = explorablePageTemplate.sections.map((section) => section.map(({ slug }) => slug));
 
 describe('success cases', () => {

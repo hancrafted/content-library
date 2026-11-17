@@ -22,7 +22,6 @@ const TRACK = cn(
 const CARD = cn(
   'relative flex h-[24rem] w-[78vw] max-w-[22rem] shrink-0 origin-left snap-start flex-col overflow-hidden rounded-xl border p-6',
   'md:h-[28rem] md:w-[24rem] md:max-w-none',
-  // The active card scales up; the transition list keeps `card-hover--raise`'s lift and shadow animated alongside it.
   'card-hover card-hover--raise bg-background shadow-sm motion-safe:transition-[scale,translate,box-shadow,border-color] motion-safe:duration-500 motion-safe:ease-out',
 );
 
@@ -49,7 +48,6 @@ function measure(track: HTMLElement): TrackGeometry {
   };
 }
 
-/** Follows the track's native scroll (an external system), once per frame. */
 function useTrackReading(trackRef: RefObject<HTMLDivElement | null>): TrackReading {
   const [reading, setReading] = useState<TrackReading>(AT_REST);
   useEffect(() => {
@@ -71,7 +69,6 @@ function useTrackReading(trackRef: RefObject<HTMLDivElement | null>): TrackReadi
   return reading;
 }
 
-/** Scrolls the track by one card; smooth only without reduced motion. */
 function stepperFor(trackRef: RefObject<HTMLDivElement | null>) {
   return (direction: -1 | 1) => {
     const track = trackRef.current;

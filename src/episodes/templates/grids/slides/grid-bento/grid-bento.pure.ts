@@ -40,10 +40,6 @@ function place(board: Board, tile: BentoTile, cursor: number): number {
   return slot;
 }
 
-/**
- * Packs `tiles` the way `grid-auto-flow: row` would on `columns` columns and reports the rows used and the cells left
- * empty, so a layout change that opens a hole fails a test instead of a screenshot review.
- */
 export function packTiles(tiles: readonly BentoTile[], columns: number): { rows: number; holes: number } {
   if (!Number.isInteger(columns) || columns < 1) throw new Error(`"${columns}" is not a column count.`);
   const board: Board = { columns, taken: new Set() };
@@ -57,7 +53,7 @@ export function packTiles(tiles: readonly BentoTile[], columns: number): { rows:
   return { rows, holes: rows * columns - board.taken.size };
 }
 
-/** The lead tile's gradient loop runs in `active` only (FE-009 §6); everywhere else it holds its frame. */
+// decision: FE-009 §6
 export function loopPlayState(zone: SlideZone): 'running' | 'paused' {
   return isPlaying(zone) ? 'running' : 'paused';
 }

@@ -11,12 +11,6 @@ import { PolyBubble } from '@/shared/components/core-components/poly-bubble/poly
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/*
- * The sea life in the gallery, to judge each creature on its own before it meets a Slide. `PolyBubble`
- * (src/shared/components/core-components/poly-bubble/) is the one faceted bubble both the Abyss bubbles and the `bubbles` transition
- * draw, so it stands here on its own at each of its three outlines. Each Specimen's `code` is the JSX it renders,
- * word for word, so a reader can copy it.
- */
 export const seaLife = slide({
   slug: 'sea-life',
   messages: { en, de },

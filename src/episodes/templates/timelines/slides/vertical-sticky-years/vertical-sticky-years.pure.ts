@@ -6,7 +6,6 @@ export interface YearEntry {
 
 export type ChipTone = 'primary' | 'foreground' | 'muted-foreground';
 
-/** Category glyphs a chip carries. Placeholder categories: the timeline has no category keys, so place picks one. */
 export const CHIP_GLYPHS = ['◆', '●', '▲', '■', '✦', '◐'] as const;
 
 const CHIP_TONES: readonly ChipTone[] = ['primary', 'foreground', 'muted-foreground'];
@@ -22,10 +21,6 @@ export interface YearGroup {
   entries: PlacedEntry[];
 }
 
-/**
- * Gather consecutive entries of one year into a group, keeping page order: a year that comes back later opens a new
- * group rather than pulling its entries forward. Throws on a blank date, which would pin an empty year.
- */
 export function groupByYear(entries: readonly YearEntry[]): YearGroup[] {
   return entries.reduce<YearGroup[]>((groups, entry, index) => {
     const year = entry.date.trim();

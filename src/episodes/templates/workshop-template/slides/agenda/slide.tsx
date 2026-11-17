@@ -18,7 +18,6 @@ const BLOCKS: readonly {
   { key: 'practice', kind: 'practice' },
 ];
 
-/** What a kind looks like: the number disc on the rail, the time pill and the label. Colour by kind, structure only. */
 const LOOK: Record<Kind, { disc: string; pill: string; label: string }> = {
   start: { disc: 'bg-muted', pill: 'bg-muted', label: 'text-muted-foreground' },
   theory: { disc: 'bg-(--info) text-info-foreground', pill: 'bg-(--info)/15', label: 'text-(--info)' },

@@ -21,7 +21,6 @@ const TONE_CLASSES: Record<Grid2x3Tone, { card: string; chip: string }> = {
 
 type Grid2x3Copy = Record<Grid2x3Cell, { title: string; caption: string }>;
 
-/** One filled tonal card: icon chip, then title and caption. `card-hover--raise` lifts it on hover; it is not a control. */
 function Card({ cell, title, caption }: { cell: Grid2x3Cell; title: string; caption: string }) {
   const id = `grid-2x3-${useId()}`;
   const Icon = ICONS[cell];

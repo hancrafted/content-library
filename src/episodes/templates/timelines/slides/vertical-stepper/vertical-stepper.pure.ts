@@ -1,8 +1,3 @@
-/*
- * The vertical stepper's state: which step is current, which one is open, what
- * each step reads as, and where arrow keys move focus. No DOM, no React.
- */
-
 export const STEPPER_STEPS = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
 
 export type StepperStep = (typeof STEPPER_STEPS)[number];
@@ -15,7 +10,6 @@ function assertStep(index: number): void {
   }
 }
 
-/** Steps before the current one are done; steps after it are still to come. */
 export function stepStatus(index: number, current: number): StepStatus {
   assertStep(index);
   assertStep(current);
@@ -28,7 +22,6 @@ export interface StepperState {
   readonly open: number | null;
 }
 
-/** Opens on the third step, so the catalog shows done, current and upcoming at once. */
 export const FIRST_STATE: StepperState = { current: 2, open: 2 };
 
 export function toggleStep(state: StepperState, index: number): StepperState {

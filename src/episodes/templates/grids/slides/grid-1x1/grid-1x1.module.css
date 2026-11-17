@@ -1,9 +1,3 @@
-/*
- * Grid 1 × 1: the poster tile's gradient surface. Layout, elevation and the dark-theme tonal lift live in the Slide's
- * Tailwind classes. The gradient is oversized so hover can drift it a few percent; under reduced
- * motion the drift is instant.
- */
-
 .surface {
   background-color: var(--muted);
   background-image:

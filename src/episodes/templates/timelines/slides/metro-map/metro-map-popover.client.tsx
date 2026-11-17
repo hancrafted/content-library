@@ -31,7 +31,7 @@ interface PopoverProps {
   onClose: () => void;
 }
 
-/** A station's date, title and caption, portaled into the Episode portal root (FE-009 §8) so the chrome never covers it. */
+// decision: FE-009 §8
 export function MetroPopover({ id, anchor, copy, lanes, laneNames, onClose }: PopoverProps) {
   const placed = usePopoverPlacement({ anchor, side: 'below', rules: POPOVER_RULES, slot: SLOT, onClose });
   if (placed === null) return null;

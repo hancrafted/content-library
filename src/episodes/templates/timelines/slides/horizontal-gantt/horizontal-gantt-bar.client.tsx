@@ -5,7 +5,6 @@ import type { FocusEvent, MouseEvent } from 'react';
 import type { BarCopy } from './horizontal-gantt-tooltip.client';
 import { barBox, elapsedShare, GANTT_BARS, TODAY, type GanttItem, type GanttLane } from './horizontal-gantt.pure';
 
-/** Each lane's colour, set as `--lane` so the bar, its swatch and its tooltip share it; the tokens carry dark values. */
 export const LANE_CLASS: Record<GanttLane, string> = {
   a: '[--lane:var(--primary)]',
   b: '[--lane:var(--foreground)]',

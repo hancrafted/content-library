@@ -4,8 +4,6 @@ import { Grid3x2 } from './grid-3x2.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// Six outlined cards in 3 rows × 2 columns on a dotted surface, Primer/Atlassian-style.
-// The client widget runs a spotlight along each card's border that follows the pointer; static under reduced motion.
 export const grid3x2 = slide({
   slug: 'grid-3x2',
   messages: { en, de },

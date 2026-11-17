@@ -6,7 +6,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 const cellIds = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9'] as const;
-// Each column carries one decorative tick (primary or foreground; no meaning colour), so a column still reads as one after the wall reflows.
 const columnTick = ['bg-primary', 'bg-foreground', 'bg-primary'] as const;
 
 interface TileProps {
@@ -40,8 +39,6 @@ function Tile({ row, col, title, caption }: TileProps) {
   );
 }
 
-// A dense 3 × 3 tile wall on a hairline grid, collapsing 3 → 2 → 1 columns with each tile keeping its 4:3 shape.
-// Hovering a tile lights its row and column (the crosshair, CSS `:has()` in its CSS module), so no client widget.
 export const grid3x3 = slide({
   slug: 'grid-3x3',
   messages: { en, de },

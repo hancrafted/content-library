@@ -1,8 +1,3 @@
-/*
- * Bento grid: the lead tile's drifting gradient. An oversized layer of three accent blooms turns slowly behind the
- * lead tile's text; `GridBentoLoop` sets its play state from the Slide zone. Under reduced motion the layer rests.
- */
-
 .bloom {
   position: absolute;
   inset: -40%;

@@ -73,7 +73,6 @@ interface CanvasProps {
   baseId: string;
 }
 
-/** The map itself: scrolls sideways on a phone rather than squeezing the stations into each other. */
 function MetroCanvas({ label, items, state, baseId }: CanvasProps) {
   return (
     <div className="-mx-4 overflow-x-auto px-4 py-14 md:mx-0 md:px-0">

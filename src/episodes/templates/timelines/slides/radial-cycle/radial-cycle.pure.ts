@@ -1,10 +1,3 @@
-/*
- * The cycle's clock-face geometry: where each phase's arc runs, which way its
- * label reads, and how far a phase pops outward.
- * Angles are degrees clockwise from 12 o'clock; y grows downward as in SVG.
- * No DOM, no React.
- */
-
 export const CYCLE_ITEMS = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
 
 export type CycleItem = (typeof CYCLE_ITEMS)[number];
@@ -19,7 +12,7 @@ export const RING = {
 
 export const POP_DISTANCE = 10;
 
-export const HAND_TURN_S = 60;
+export const HAND_TURN_SECONDS = 60;
 
 export interface Point {
   readonly x: number;
@@ -32,7 +25,6 @@ export interface PhaseArc {
   readonly midDegrees: number;
   readonly path: string;
   readonly labelAt: Point;
-  /** How far its label turns to follow the ring: the tangent on the top half, half a turn more on the bottom half so it never reads upside down. */
   readonly labelTurnDegrees: number;
 }
 
@@ -50,7 +42,6 @@ function assertInCycle(index: number, count: number): void {
   }
 }
 
-/** Two decimals keep the SVG strings short and stable; `+ 0` turns -0 into 0. */
 function round(value: number): number {
   return Math.round(value * 100) / 100 + 0;
 }

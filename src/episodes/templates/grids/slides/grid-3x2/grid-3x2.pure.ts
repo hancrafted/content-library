@@ -2,13 +2,11 @@ export const GRID_3X2_CELLS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'] as const;
 
 export type Grid3x2Cell = (typeof GRID_3X2_CELLS)[number];
 
-/** A pointer position in viewport pixels, as a pointer event reports it. */
 export interface PointerPoint {
   x: number;
   y: number;
 }
 
-/** The card's box in viewport pixels, as `getBoundingClientRect()` reports it. */
 export interface CardBox {
   left: number;
   top: number;
@@ -16,10 +14,6 @@ export interface CardBox {
   height: number;
 }
 
-/**
- * Where the spotlight centre sits inside a card, in pixels from its top-left corner.
- * The point is clamped to the card so a pointer leaving fast never parks the light outside the border.
- */
 export function spotlightPoint(pointer: PointerPoint, box: CardBox): PointerPoint {
   if (!Number.isFinite(pointer.x) || !Number.isFinite(pointer.y)) {
     throw new Error(`"${pointer.x}, ${pointer.y}" is not a pointer position.`);

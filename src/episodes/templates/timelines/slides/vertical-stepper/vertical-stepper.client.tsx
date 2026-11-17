@@ -35,7 +35,6 @@ function useStepper() {
 interface StepperProps {
   label: string;
   items: Record<StepperStep, StepCopy>;
-  /** Each state in words (done, current, upcoming), announced after a step's title. */
   states: Record<StepStatus, string>;
 }
 
@@ -68,7 +67,6 @@ interface ItemProps {
   index: number;
   copy: StepCopy;
   status: StepStatus;
-  /** The step's state in words, for screen readers: the marker shows it only visually. */
   stateLabel: string;
   open: boolean;
   id: string;
@@ -107,7 +105,6 @@ function StepperItem({ index, copy, status, stateLabel, open, id, headerRef, onT
   );
 }
 
-/** The spine from this step's circle down to the next: hairline when ahead, solid once the step is done. */
 function StepSpine({ filled }: { filled: boolean }) {
   return (
     <span
@@ -131,7 +128,6 @@ const MARKER: Record<StepStatus, string> = {
     'border-border bg-background text-muted-foreground group-hover:border-foreground group-hover:text-foreground',
 };
 
-/** The big numbered circle: a check once done, the number filled while current, the number outlined while ahead. */
 function StepMarker({ index, status }: { index: number; status: StepStatus }) {
   return (
     <span
@@ -163,7 +159,6 @@ function StepHeading({ copy, status, open }: { copy: StepCopy; status: StepStatu
   );
 }
 
-/** The caption under a header; its height opens with `grid-template-rows` 0fr→1fr, animated only when motion is welcome. */
 function StepPanel({ id, open, caption }: { id: string; open: boolean; caption: string }) {
   return (
     <div

@@ -22,16 +22,10 @@ const TODAY_LEFT = `${(TODAY / AXIS_MONTHS) * 100}%`;
 
 interface Open {
   item: GanttItem;
-  /** A click pins the tooltip; a hover or focus only previews it. */
   pinned: boolean;
   anchor: HTMLElement;
 }
 
-/**
- * Which bar's tooltip is open: hover and focus preview, a click pins or
- * unpins, leaving or blurring drops a preview. Each handler reads
- * `currentTarget` at once: React clears it before a state updater runs.
- */
 function useTooltip() {
   const [open, setOpen] = useState<Open | null>(null);
   const close = useCallback(() => setOpen(null), []);
@@ -82,7 +76,6 @@ interface LanesProps extends Omit<GanttProps, 'label'> {
   handlersFor: (item: GanttItem) => BarHandlers;
 }
 
-/** The three lanes, each holding its bars; every bar but the open one dims while a tooltip shows. */
 function GanttLanes({ lanes, items, open, baseId, handlersFor }: LanesProps) {
   return GANTT_LANES.map((lane) => (
     <GanttLaneRow key={lane} lane={lane} name={lanes[lane]} laneId={`${baseId}-${lane}`}>
@@ -122,7 +115,6 @@ function OpenTooltip({ id, open, items, lanes, onClose }: OpenTooltipProps) {
   );
 }
 
-/** Every other quarter shaded, behind the lanes, so a bar's quarters read without gridlines. */
 function QuarterBands() {
   return (
     <div aria-hidden="true" className="pointer-events-none col-start-2 row-span-4 row-start-1 grid grid-cols-4">

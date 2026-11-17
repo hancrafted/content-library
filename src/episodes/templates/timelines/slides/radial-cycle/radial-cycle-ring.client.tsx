@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/utils';
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import {
   CYCLE_ITEMS,
-  HAND_TURN_S,
+  HAND_TURN_SECONDS,
   phaseArc,
   polarPoint,
   POP_DISTANCE,
@@ -18,7 +18,6 @@ import {
 
 const MONTHS = 12;
 
-/** Rotations in CSS turn around the face's centre, not the element's own box. */
 const ABOUT_CENTRE = '[transform-box:view-box] origin-center';
 
 export interface PhaseCopy {
@@ -58,7 +57,6 @@ interface PhaseProps {
   handlers: PhaseHandlers;
 }
 
-/** Focus or a click selects the phase, Enter or Space too; a hover only previews it. */
 function phaseEvents(item: CycleItem, { onSelect, onPreview }: PhaseHandlers) {
   return {
     onFocus: () => onSelect(item),
@@ -120,7 +118,6 @@ function PhaseLabel({ at, turnDegrees, shown, children }: PhaseLabelProps) {
   );
 }
 
-/** The arc's stroke: the accent while shown, a faint track otherwise. */
 function PhaseArc({ path, shown }: { path: string; shown: boolean }) {
   return (
     <>
@@ -135,7 +132,6 @@ function PhaseArc({ path, shown }: { path: string; shown: boolean }) {
   );
 }
 
-/** A wider band behind the arc, shown only while the keyboard focuses it. */
 function FocusHalo({ path }: { path: string }) {
   return (
     <path
@@ -167,7 +163,7 @@ export function PhaseRing({
   );
 }
 
-/** Turns the hand once every `HAND_TURN_S`, only while the Slide is `active` and motion is welcome (FE-009 §6). */
+// decision: FE-009 §6
 function useTurning(zone: SlideZone) {
   const hand = useRef<SVGGElement>(null);
   const turn = useRef<Animation | null>(null);
@@ -175,7 +171,7 @@ function useTurning(zone: SlideZone) {
     const element = hand.current;
     if (element === null || prefersReducedMotion()) return;
     turn.current ??= element.animate([{ rotate: '0deg' }, { rotate: '360deg' }], {
-      duration: HAND_TURN_S * 1000,
+      duration: HAND_TURN_SECONDS * 1000,
       iterations: Number.POSITIVE_INFINITY,
     });
     if (zone === 'active') turn.current.play();
@@ -184,7 +180,6 @@ function useTurning(zone: SlideZone) {
   return hand;
 }
 
-/** A slow "now" hand sweeping the face; it rests at 12 o'clock under reduced motion. */
 export function NowHand({ zone }: { zone: SlideZone }) {
   const hand = useTurning(zone);
   const tip = polarPoint(0, RING.radius + RING.stroke / 2 + 18);

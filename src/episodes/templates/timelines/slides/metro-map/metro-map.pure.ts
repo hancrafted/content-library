@@ -1,9 +1,3 @@
-/*
- * The metro map's geometry: each lane's route as waypoints on a fixed
- * canvas, the stations that sit on those routes, and the rounded path a
- * route draws. No DOM, no React.
- */
-
 import type { PopoverRules } from '@/shared/lib/popover-placement.pure';
 
 export interface Point {
@@ -11,7 +5,6 @@ export interface Point {
   readonly y: number;
 }
 
-/** Keeps the path short: two decimals is far below a pixel at any width the Slide renders. */
 function fmt(value: number): string {
   return String(Math.round(value * 100) / 100);
 }
@@ -58,11 +51,6 @@ const BUNDLE = 12;
 const TOP = 70;
 const BOTTOM = 300;
 
-/**
- * Each lane's waypoints. Lane `a` runs the trunk end to end; `b` branches up
- * after the first station, merges back for the middle stretch and branches
- * up again to end alone; `c` branches down and merges back near the end.
- */
 export const LANE_ROUTES: Record<Lane, readonly Point[]> = {
   a: [
     { x: 40, y: TRUNK },
@@ -97,7 +85,6 @@ export const STATION_AT: Record<Station, Point> = {
   f: { x: 940, y: TOP },
 };
 
-/** Which side of its station a label sits on, picked so no label crosses a line. */
 export const LABEL_SIDE: Record<Station, 'above' | 'below'> = {
   a: 'below',
   b: 'above',
@@ -120,7 +107,6 @@ function distanceToSegment(point: Point, from: Point, to: Point): number {
   return Math.hypot(point.x - (from.x + share * dx), point.y - (from.y + share * dy));
 }
 
-/** The lanes stopping at a station, read from the drawing so a moved route can never disagree with its stations. */
 export function stationLanes(station: Station): Lane[] {
   const at = STATION_AT[station];
   return LANES.filter((lane) =>
@@ -157,6 +143,5 @@ export function contrastRatio(a: string, b: string): number {
 export const POPOVER_RULES: PopoverRules = {
   maxWidth: 288,
   gap: 12,
-  /** The least room below a station before its popover opens above instead. */
   minRoom: 180,
 };

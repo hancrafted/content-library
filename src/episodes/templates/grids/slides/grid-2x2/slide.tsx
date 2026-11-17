@@ -38,10 +38,6 @@ function Quadrant({ quadrant }: { quadrant: QuadrantCopy }) {
   );
 }
 
-// A consulting quadrant matrix inside an outlined card: an axis cross splits four quadrants, and each quadrant sets its
-// title and caption in its outer corner with a faint index in the inner corner by the origin. Hovering a quadrant tints
-// it and lights the two axis arms that border it; the motion is CSS only, so no client widget. Below `sm` the quadrants
-// stack as outlined cards and the axis cross hides.
 export const grid2x2 = slide({
   slug: 'grid-2x2',
   messages: { en, de },

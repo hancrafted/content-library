@@ -9,13 +9,11 @@ const ACROSS = '(min-width: 48rem)';
 
 interface Open {
   item: RailItem;
-  /** A click pins the toggletip; a hover or focus only previews it. */
   pinned: boolean;
   anchor: HTMLElement;
   side: RailSide;
 }
 
-/** Reads the label's element at once: React clears `currentTarget` before a state updater runs. */
 function openFor(
   { item, index }: { item: RailItem; index: number },
   event: MouseEvent | FocusEvent,

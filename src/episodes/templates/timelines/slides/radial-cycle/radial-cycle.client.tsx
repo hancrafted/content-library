@@ -7,7 +7,6 @@ import { CYCLE_ITEMS, RING, type CycleItem } from './radial-cycle.pure';
 
 const DISC_SHARE = `${((2 * (RING.radius - RING.stroke / 2) - 16) / RING.size) * 100}%`;
 
-/** A click or focus selects a phase; a hover previews another without losing the selection. */
 function useShownPhase(): { shown: CycleItem; handlers: PhaseHandlers } {
   const [selected, setSelected] = useState<CycleItem>(CYCLE_ITEMS[0]);
   const [preview, setPreview] = useState<CycleItem | null>(null);

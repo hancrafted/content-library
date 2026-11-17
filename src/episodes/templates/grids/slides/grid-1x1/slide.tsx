@@ -5,7 +5,6 @@ import styles from './grid-1x1.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// The poster tile; the id labels it. The lift sits on a wrapper, so the surface's own drift transition keeps its timing.
 function Poster({ title, caption }: { title: string; caption: string }) {
   const id = `grid-1x1-${useId()}`;
   return (
@@ -32,8 +31,6 @@ function Poster({ title, caption }: { title: string; caption: string }) {
   );
 }
 
-// One feature cell across the whole Foreground: a tall poster tile, title and caption set bottom-left over a drifting
-// gradient. `card-hover--raise` lifts it on hover or focus; the motion is CSS only, so no client widget.
 export const grid1x1 = slide({
   slug: 'grid-1x1',
   messages: { en, de },
