@@ -6,7 +6,6 @@ import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** Questions and answer keys in poll order. */
 const QUESTIONS = [
   {
     key: 'seen',
@@ -30,7 +29,6 @@ const QUESTIONS = [
   tone: PollTone;
 }[];
 
-// A check-in after the Episode onboard-ai-every-time: the way back into the poll (QR from `poll.voteUrl`) on a filled panel for anyone whose phone closed the tab, the questions printed as text beside it, and the Result page loaded only after the click. The Slide header shows the title and caption; the Scene holds the check-in.
 export const checkIn1 = slide({
   slug: 'check-in-1',
   messages: { en, de },

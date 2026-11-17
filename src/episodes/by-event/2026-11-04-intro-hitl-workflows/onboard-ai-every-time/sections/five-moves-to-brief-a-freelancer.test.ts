@@ -8,15 +8,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fiveMovesToBriefAFreelancerSection } from './five-moves-to-brief-a-freelancer';
 
-/*
- * The Section "How do we work with this freelancer?" as the Intro HITL Workflows Event presents it, read through the page's own
- * interface: each Slide localized into this Episode and its Scene rendered. German keeps the English acronyms, so the
- * moves spell BRIEF and the traits PRICE; the Workflow is the summer party, drawn in stages.
- */
-
 const PLACED = placeSections<Slide>([fiveMovesToBriefAFreelancerSection]).flat();
 
-/** A Slide's Scene as the page renders it, with the shared Slide header. */
 function localizedOf(slug: string, locale: Locale) {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
@@ -32,7 +25,6 @@ function localizedOf(slug: string, locale: Locale) {
 
 const sceneOf = (slug: string, locale: Locale) => load(renderToStaticMarkup(localizedOf(slug, locale).content));
 
-/** The letters a Scene sets off as an acronym, in reading order. */
 const initialsOf = ($: ReturnType<typeof sceneOf>, attribute: string): string =>
   $(`[${attribute}]`)
     .map((_, letter) => $(letter).text())

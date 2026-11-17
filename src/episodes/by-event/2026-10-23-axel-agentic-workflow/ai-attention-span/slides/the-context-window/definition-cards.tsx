@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** One card: a small kicker over its sentence; `lit` draws the card the Slide's claim rests on in primary. */
 export interface DefinitionCard {
   readonly name: string;
   readonly kicker: ReactNode;
@@ -10,7 +9,6 @@ export interface DefinitionCard {
   readonly aside?: ReactNode;
 }
 
-/** The three definition cards under the cornerstone: what is resent, the limit, how chat apps differ. */
 export function DefinitionCards({ items }: { readonly items: readonly DefinitionCard[] }) {
   return (
     <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">

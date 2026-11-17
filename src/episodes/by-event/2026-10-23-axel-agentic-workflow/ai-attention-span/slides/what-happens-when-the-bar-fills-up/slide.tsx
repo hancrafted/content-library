@@ -13,11 +13,6 @@ const ANTHROPIC = {
 };
 const CHROMA = { slug: 'hong-context-rot', url: 'https://www.trychroma.com/research/context-rot' };
 
-/**
- * "What happens when the bar fills up" (Spec Option 4a): the live cornerstone in its Slide 4 Preset (the Attention
- * view at step 21, the panel open), its caption naming "context rot" with a Context marker to its explanation, the budget-against-plan strip below. Keeps
- * `basic-page` and `motion: local`: the cornerstone's attention fade, end state shown.
- */
 export const whatHappensWhenTheBarFillsUp = slide({
   slug: 'what-happens-when-the-bar-fills-up',
   messages: { en, de },

@@ -5,7 +5,6 @@ import { managingTheAttentionSpan } from '../slides/managing-the-attention-span/
 import { nowYouKnowHowItFeels } from '../slides/now-you-know-how-it-feels/slide';
 import { theWorkflowForBiggerProjects } from '../slides/the-workflow-for-bigger-projects/slide';
 
-/** Placement marker of the Section "Managing the attention span": its Slides in Spec order, section slide first. */
 export const managingTheAttentionSpanSection: Section = [
   managingTheAttentionSpan,
   everydayHabits,

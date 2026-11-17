@@ -22,17 +22,10 @@ const SOURCES = {
   },
 } as const;
 
-/** The disclosure (Option 2a): the two rooms at rest, then the gap and its label, then the four stones one by one. */
 const REVEAL = { gap: 2, firstStone: 3 } as const;
 const STEPS = 6;
 const STONES = ['breakDown', 'goals', 'review', 'delegate'] as const;
 
-/**
- * You were promoted (Option 2a): two framed rooms on the wall, execution and management, with the misalignment
- * between them as a gap crossed on four stepping stones, each room with its full wall label. Three columns (3 / 6 / 3)
- * when the Scene is wide; narrower, the rooms sit side by side over the gap, and on a phone all three stack in reading
- * order. Overrules `master: horizontal-rail`, keeps `motion: local`.
- */
 export const youWerePromoted = slide({
   slug: 'you-were-promoted',
   messages: { en, de },

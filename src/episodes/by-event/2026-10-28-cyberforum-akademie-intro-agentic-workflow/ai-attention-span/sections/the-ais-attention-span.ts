@@ -5,7 +5,6 @@ import { theContextWindow } from '../slides/the-context-window/slide';
 import { whatHappensWhenTheBarFillsUp } from '../slides/what-happens-when-the-bar-fills-up/slide';
 import { whatWeLearnedSoFar } from '../slides/what-we-learned-so-far/slide';
 
-/** Placement marker of the Section "The AI's attention span": its Slides in Spec order, section slide first. */
 export const theAisAttentionSpanSection: Section = [
   theAisAttentionSpan,
   theContextWindow,

@@ -5,12 +5,6 @@ import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/**
- * The Title slide's hero Scene (the record's `title`), the Hero motif: three visitor badges, one per job, and every
- * one says Day 1. The two behind fade and tilt away; the front one, worn by AI, is the one focal point, raised on
- * hover so the presenter can point at it. The side note says what the row shows. Each section slide echoes the badge.
- * The empty Backdrop is the Title slide's one Backdrop, holding no glow.
- */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
