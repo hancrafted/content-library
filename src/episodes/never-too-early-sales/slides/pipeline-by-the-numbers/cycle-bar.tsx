@@ -27,11 +27,6 @@ const FILL: Record<SegmentId, string> = {
   deal: styles.dealSegment ?? '',
 };
 
-/**
- * The sales cycle drawn to scale: one segment per stage, a tick per month, and each label under its segment. The bar
- * is an inline SVG; its labels are text in the page, so they keep their size at every width. A server part with
- * plain props.
- */
 export function CycleBar({ total, segments, ticks, months }: CycleBarProps) {
   return (
     <div className="@container flex flex-col gap-2">

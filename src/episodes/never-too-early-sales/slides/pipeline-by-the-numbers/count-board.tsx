@@ -32,7 +32,6 @@ const BASIS: Record<CountStage['id'], string> = {
   deal: '@4xl:basis-1/6',
 };
 
-/** Paper tilt cycles note by note, so the board reads as hand-pinned. */
 const TILT = ['-rotate-2', 'rotate-1', 'rotate-2', '-rotate-1', 'rotate-1', '-rotate-2', 'rotate-1', '-rotate-1'];
 
 const PILL = 'rounded-full bg-foreground px-4 py-1 text-caption font-semibold text-background';
