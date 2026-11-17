@@ -242,6 +242,17 @@ describe('test-body-aaa', () => {
     });
   }
 
+  it('counts a marker in a helper between tests toward the test above it', async () => {
+    // ARRANGE
+    const helper = `// ARRANGE\nconst shared = 1;\n`;
+    const source = block('success cases', `${test('t')}${helper}`);
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+  });
+
   it('judges each test on its own markers, not its neighbour’s', async () => {
     // ARRANGE
     const source = block('success cases', test('good') + test('bad', `    expect(1).toBe(1);\n`));
@@ -272,7 +283,7 @@ describe('assert-no-magic', () => {
       test('t', `    // ARRANGE\n    const a = 1;\n    // ACT\n    const b = a;\n    // ASSERT\n${assertion}\n`),
     );
 
-  it('passes the exempt numbers, named constants, strings, regexes, comments and digits inside identifiers', async () => {
+  it('passes the exempt numbers, named constants, strings (a scan cannot tell an expected string from a magic one), regexes, comments and digits inside identifiers', async () => {
     // ARRANGE
     const assertion = [
       '    expect(b).toBe(a);',
