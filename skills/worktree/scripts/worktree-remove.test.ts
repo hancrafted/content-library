@@ -5,8 +5,10 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { removeWorktree } from './worktree-remove.ts';
 
-// A commit hook exports GIT_DIR and friends, which would point these tmp repos at the real one.
-for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+function dropGitVariablesACommitHookExports(): void {
+  for (const name of Object.keys(process.env)) if (name.startsWith('GIT_')) delete process.env[name];
+}
+dropGitVariablesACommitHookExports();
 
 const git = (cwd: string, ...args: string[]): string =>
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd, encoding: 'utf8' }).trim();
