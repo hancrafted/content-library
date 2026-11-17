@@ -21,8 +21,7 @@ interface Violation {
   line?: number;
 }
 
-/** Runs `archgate check --adr FE-013` over a fixture project root holding the FE-013 rule and `files`. */
-function checkFE013(files: Record<string, string>): Violation[] {
+function checkFE013ThroughCliInFixtureRoot(files: Record<string, string>): Violation[] {
   const root = mkdtempSync(path.join(tmpdir(), 'fe013-'));
   roots.push(root);
   for (const file of RULE_FILES) {
@@ -36,9 +35,8 @@ function checkFE013(files: Record<string, string>): Violation[] {
   let out: string;
   try {
     out = execFileSync(ARCHGATE, ['check', '--adr', 'FE-013', '--output', 'json'], { cwd: root, encoding: 'utf8' });
-  } catch (error) {
-    // A violation exits non-zero; the report is still on stdout.
-    out = (error as { stdout: string }).stdout;
+  } catch (nonZeroExitOnViolation) {
+    out = (nonZeroExitOnViolation as { stdout: string }).stdout;
   }
   return (JSON.parse(out) as { results: { violations: Violation[] }[] }).results.flatMap((r) => r.violations);
 }
@@ -70,7 +68,7 @@ describe('field-described through the archgate CLI', () => {
       'export const more = eventSchema.safeExtend({ c: z.boolean() });',
     ].join('\n');
     // ACT
-    const violations = checkFE013({
+    const violations = checkFE013ThroughCliInFixtureRoot({
       'docs/adr/0016-content-data-model.md': '# M\n\n```mermaid\nerDiagram\n    %% store: EVENT\n```\n',
       'src/content-store/store.ts': "import './schemas/event.schema';\n",
       [schemaFile]: source,
