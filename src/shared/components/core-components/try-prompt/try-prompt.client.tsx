@@ -13,7 +13,6 @@ export type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sectio
 export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
 // decision: FE-001 §1
-
 function Chevron({ open }: { open: boolean }) {
   const motion = useMotion(open);
   return (

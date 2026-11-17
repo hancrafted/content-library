@@ -1,6 +1,5 @@
 // decision: FE-010 §4
 // decision: FE-010 §8
-
 export const CONTEXT_REF_ATTR = 'data-context-ref';
 export const TARGET_ATTR = 'data-target';
 export interface TargetProps {

@@ -2,7 +2,6 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { useActiveSlide } from './use-url-state';
 
 // decision: FE-001 §2
-
 export interface DevSlide {
   readonly id: string;
   readonly folder: string;

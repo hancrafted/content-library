@@ -1,5 +1,4 @@
 /* decision: FE-011 §4 */
-
 .bubble {
   --poly-bubble-water: var(--poly-bubble-tint, var(--info));
 

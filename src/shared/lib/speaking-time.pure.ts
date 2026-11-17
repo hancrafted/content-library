@@ -2,7 +2,6 @@ import type { Locale } from './locale.pure';
 import { fillTemplate } from './template.pure';
 
 // decision: FE-010 §3
-
 const WORDS_PER_MINUTE: Readonly<Record<Locale, number>> = { en: 140, de: 120 };
 
 const TAG = /<\/?[a-z][\w-]*>/gi;

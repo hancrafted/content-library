@@ -1,7 +1,6 @@
 import type { SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 
 // decision: FE-010 §8
-
 export interface ContextItem {
   readonly id: string;
   readonly title?: string;

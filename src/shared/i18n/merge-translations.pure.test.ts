@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { localeKeyDrift, mergeTranslationFiles, translationOwner } from './merge-translations.pure';
 
 // decision: FE-003 §4
-
 const CHROME = 'src/shared/page-chrome/i18n';
 const LANDING = 'src/page-assembly/landing/i18n';
 

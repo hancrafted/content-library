@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { cn } from './utils';
 
 // decision: FE-011 §3
-
 describe('success cases', () => {
   it('keeps a type role beside a text colour', () => {
     // ARRANGE

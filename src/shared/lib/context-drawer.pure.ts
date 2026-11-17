@@ -1,5 +1,4 @@
 // decision: FE-010 §3
-
 import type { DrawerMode } from './prefs.pure';
 
 export interface NoteSource {

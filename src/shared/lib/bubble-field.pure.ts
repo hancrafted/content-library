@@ -1,5 +1,4 @@
-// spec: slide-transitions.md#named-transition-interface
-
+// spec: docs/features/slide-transitions.md#named-transition-interface
 export interface Bubble {
   readonly x: number;
   readonly size: number;
