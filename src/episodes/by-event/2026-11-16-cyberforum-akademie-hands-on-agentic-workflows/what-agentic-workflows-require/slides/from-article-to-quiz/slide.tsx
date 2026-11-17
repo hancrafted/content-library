@@ -14,11 +14,7 @@ const ANTHROPIC_AGENTS = {
   url: 'https://www.anthropic.com/engineering/building-effective-agents',
 };
 
-/**
- * The Workflow the Explorable runs. The summer-party Workflow stands in for the quiz Workflow, whose stages it shares
- * (Plan, Requirements, Research, Page); the Slide swaps this one value when the quiz Workflow lands.
- */
-const WORKFLOW: WorkflowId = 'summer-party';
+const SUMMER_PARTY_WORKFLOW_STANDING_IN_FOR_QUIZ_WORKFLOW: WorkflowId = 'summer-party';
 
 type Handoff = 'planRequirements' | 'requirementsResearch' | 'researchPage';
 
@@ -56,7 +52,7 @@ export const fromArticleToQuiz = slide({
             <span data-quiz-goal>{t('goal')}</span>
           </p>
           <HumanInTheLoop
-            workflow={WORKFLOW}
+            workflow={SUMMER_PARTY_WORKFLOW_STANDING_IN_FOR_QUIZ_WORKFLOW}
             locale={locale}
             view="stages"
             diagram={{
