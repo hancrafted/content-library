@@ -15,7 +15,6 @@ export interface HomeCardProps {
   readonly fit: Cost;
   readonly rows: { readonly load: string; readonly fit: string };
   readonly marks: { readonly cost: string; readonly benefit: string };
-  /** The file, when it is read and the lines that hold the depth, in the Coding agent view; code is never translated. */
   readonly coding: { readonly path: string; readonly lead: string; readonly code: readonly (readonly string[])[] };
 }
 

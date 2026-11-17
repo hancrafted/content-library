@@ -15,7 +15,6 @@ const NNG = 'information-architecture-as-nielsen-norman-group-defines-it';
 const AUTHORS = 'information-architecture-in-its-authors-words';
 const TOKENS = 'every-line-of-a-loaded-skill-is-a-recurring-token-cost';
 
-/** The three homes' files in the Coding agent view, and the lines holding the depth: code, so never translated. */
 const SKILL_FILE = 'collect-sediment-sample/SKILL.md';
 const PROJECT_FILE = 'AGENTS.md';
 const CONTEXT_FILE = 'CONTEXT.md';

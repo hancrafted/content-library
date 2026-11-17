@@ -168,10 +168,7 @@
   fill: var(--background);
 }
 
-/*
- * The verdict lights once the note has arrived (Spec Option 14a). The base rule is the rest state, lit, so a still
- * frame and reduced motion show it at once.
- */
+/* spec: docs/features/slide-transitions.md#accessibility-and-static-output */
 @media (prefers-reduced-motion: no-preference) {
   :global([data-zone='active']) .late {
     animation: light-up 480ms ease-out var(--late-delay, 0ms) both;
