@@ -23,11 +23,6 @@ const FIXES = [
   { key: 'prune', before: 'two-sheets', after: 'one-sheet' },
 ] as const;
 
-/**
- * "Keeping the bench clean" (Spec Option 12a): each mess from the rot grid, dulled, turns into its clean state through
- * one verb pill, four columns in Slide 11's order, with the fresh chat as a dark band underneath. Overrules
- * `grid-2x2` so each mess carries across; keeps `motion: none`. Hovering a column dims the others.
- */
 export const keepingTheBenchClean = slide({
   slug: 'keeping-the-bench-clean',
   messages: { en, de },
