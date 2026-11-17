@@ -154,8 +154,6 @@ function write(root: string, files: readonly RegistryFile[]): string[] {
 if (import.meta.main) {
   const root = process.cwd();
   const written = write(root, await formatted(root, sourceFiles(root)));
-  // The compositions import Slides, JSON and aliases plain node cannot load: Vitest's module runner loads them as the
-  // fast suite does, after the source registries above are written, so it reads the current ones.
   const vitest = await createVitest('test', { config: path.join(root, 'vitest.config.mts'), watch: false });
   try {
     const load: SiteLoader = (repoPath) => vitest.import(path.join(root, repoPath));

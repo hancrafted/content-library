@@ -12,7 +12,6 @@ export interface Summaries {
 
 const PAGE_SUMMARIES_PATH = 'src/episodes/lib/page-summaries.generated.json';
 
-/** The one generated summaries file: JSON, since a comment cannot say "generated", its name does. */
 export function pageSummariesFile(summaries: Summaries): RegistryFile {
   return { path: PAGE_SUMMARIES_PATH, text: `${JSON.stringify(summaries)}\n` };
 }

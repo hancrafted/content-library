@@ -10,11 +10,10 @@ const WITH_PAGE: EpisodeFolder = {
     "import { episode } from '@/episodes/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
 };
 const COPY_ID = episodeRef('ai-token-economy', '2026-10-23-axel').id;
-const COPY: EpisodeFolder = {
+const EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME: EpisodeFolder = {
   id: COPY_ID,
   folder: 'by-event/2026-10-23-axel/ai-token-economy',
   files: ['episode-metadata.ts', 'episode.ts', 'i18n', 'slides'],
-  // An Event's `cp -r` copy, under its Event, whose export kept its source's name.
   episodeSource: 'export const aiTokenEconomy = episode({\n',
 };
 const UPCOMING: EpisodeFolder = {
@@ -54,7 +53,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = `export const EPISODE_IDS = ['${COPY_ID}', 'ai-token-economy'] as const;`;
     // ACT
-    const slugs = fileAt([COPY, WITH_PAGE], REGISTRY_PATHS.ids);
+    const slugs = fileAt([EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME, WITH_PAGE], REGISTRY_PATHS.ids);
     // ASSERT
     expect(slugs).toContain(expected);
   });
@@ -68,7 +67,7 @@ describe('success cases', () => {
       `  '${COPY_ID}': _20261023Axel__aiTokenEconomy,`,
     ];
     // ACT
-    const metadata = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.metadata);
+    const metadata = fileAt([WITH_PAGE, EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME], REGISTRY_PATHS.metadata);
     // ASSERT
     expected.forEach((line) => expect(metadata).toContain(line));
   });
@@ -81,7 +80,7 @@ describe('success cases', () => {
       `  '${COPY_ID}': _20261023Axel__aiTokenEconomy,`,
     ];
     // ACT
-    const compositions = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.compositions);
+    const compositions = fileAt([WITH_PAGE, EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME], REGISTRY_PATHS.compositions);
     // ASSERT
     expected.forEach((line) => expect(compositions).toContain(line));
   });
@@ -156,7 +155,10 @@ describe('failure cases', () => {
 
   it("refuses an Event copy's broken episode.ts naming its folder under its Event", () => {
     // ARRANGE
-    const broken: EpisodeFolder = { ...COPY, episodeSource: 'export const notes = [];\n' };
+    const broken: EpisodeFolder = {
+      ...EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME,
+      episodeSource: 'export const notes = [];\n',
+    };
     // ACT
     const generate = () => episodeRegistryFiles([broken]);
     // ASSERT
