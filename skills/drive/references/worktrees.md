@@ -14,13 +14,21 @@ Run `drive worktree done <branch>` from the main checkout, never from inside the
 
 Without `--base`, `done` is for a branch whose PR merged: it runs `worktree.beforeRemove`, removes the worktree, runs `worktree.afterRemove`, deletes the branch once git sees it merged and fast-forwards the local base branch. When the local base branch holds unpushed commits it stops and lists them; move them to a branch or a PR, then rerun.
 
-With `--base <branch>` it first merges the branch into that base: one merge commit, built outside any worktree, then fast-forwarded into the worktree that has the base checked out. Merges into one base run one at a time under the project's lock (`worktree.lock`); a waiting run says so, a lock whose holder died is taken over. While the base's worktree is busy (a merge, rebase or cherry-pick in progress, or local changes in the same files) it prints one `is busy` line, retries for up to 10 minutes and rebuilds onto the base's new tip. A conflict names its paths; then the base, the worktree and the branch stay as they were, the lock is released, and nothing is removed. Once merged it runs `worktree.afterMerge`, removes the worktree and deletes the branch. Read what the hooks print: they carry the project's own warnings.
+With `--base <branch>` it first runs the project's `worktree.beforeMerge` hooks in the task worktree (a failing hook stops the merge), then merges the branch into that base: one merge commit, built outside any worktree, then fast-forwarded into the worktree that has the base checked out. Merges into one base run one at a time under the project's lock (`worktree.lock`); a waiting run says so, a lock whose holder died is taken over. While the base's worktree is busy (a merge, rebase or cherry-pick in progress, or local changes in the same files) it prints one `is busy` line, retries for up to 10 minutes and rebuilds onto the base's new tip. A conflict names its paths; then the base, the worktree and the branch stay as they were, the lock is released, and nothing is removed. Once merged it runs `worktree.afterMerge`, removes the worktree and deletes the branch. Read what the hooks print: they carry the project's own warnings.
 
 When the OS drops a metadata file (`.DS_Store`) into the folder mid-delete, `done` removes the leftover folder itself as long as every file left is metadata, ignored or identical to the branch; otherwise it names the files that hold unsaved work. A rerun after any half-finished `done` continues the same way.
 
 ## sync
 
-`drive worktree sync`, inside a worktree, merges the remote base branch into the current branch; `--base <branch>` merges that local branch instead. It refuses a dirty tree, a detached HEAD and the base branch itself, and it holds the current branch's merge lock, so a `done --base` into this branch waits for it. A sync stopped by a conflict leaves the merge in progress: resolve, commit, and the waiting merges continue. To catch up any branch, sync inside its worktree; a `git pull` in the main checkout advances whatever branch that checkout holds.
+`drive worktree sync`, inside a worktree, merges the remote base branch into the current branch; `--base <branch>` merges that local branch instead. It refuses a dirty tree, a detached HEAD and the base branch itself, and it holds the current branch's merge lock, so a `done --base` into this branch waits for it. In the Integration worktree it also fetches and merges the remote's commits of that branch, which is how a merged Decision PR reaches the local worktree. A sync stopped by a conflict leaves the merge in progress: resolve, commit, and the waiting merges continue. To catch up any branch, sync inside its worktree; a `git pull` in the main checkout advances whatever branch that checkout holds.
+
+## push
+
+`drive push`, inside a worktree, pushes the current branch (setting the upstream when there is none), fails when the push exits non-zero, then fails unless the remote branch equals `HEAD`. It prints `✔ pushed <branch> <old>..<new>`; hook output streams. Run it in the background and read its exit code: never pipe it through `grep` or `tail`, which hides the exit code. Only the Orchestrator pushes.
+
+## pr watch
+
+`drive pr watch <number>` polls the PR in the background. Exit 0 and `merged <sha>`: merged. Exit 2 and `closed`: closed unmerged. Exit 3 with the bodies: a review or comment arrived after the watch started. It skips comments that start with `<!-- drive -->`, so start each reply you post on a PR with it.
 
 ## How a Subagent finishes
 
