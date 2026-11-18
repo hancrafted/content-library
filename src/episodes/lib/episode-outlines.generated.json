@@ -2,16 +2,17 @@
   "2026-10-23-axel-agentic-workflow__ai-attention-span": {
     "folder": "by-event/2026-10-23-axel-agentic-workflow/ai-attention-span",
     "text": {
-      "en": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/i18n/en.json"],
-      "de": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/i18n/de.json"]
+      "en": ["src/episodes/ai-attention-span/i18n/en.json"],
+      "de": ["src/episodes/ai-attention-span/i18n/de.json"]
     },
+    "base": "ai-attention-span",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/hero/i18n/en.json"],
-        "de": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/hero/i18n/de.json"]
+        "en": ["src/episodes/ai-attention-span/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/ai-attention-span/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -21,12 +22,8 @@
           "anchor": "thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -54,12 +51,8 @@
           "anchor": "the-ais-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/de.json"]
           }
         },
         {
@@ -105,12 +98,8 @@
           "anchor": "what-fills-the-window",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/de.json"]
           }
         },
         {
@@ -147,12 +136,8 @@
           "anchor": "managing-the-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/de.json"]
           }
         },
         {
@@ -254,16 +239,17 @@
   "2026-10-23-axel-agentic-workflow__onboard-ai-every-time": {
     "folder": "by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time",
     "text": {
-      "en": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/i18n/en.json"],
-      "de": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/i18n/de.json"]
+      "en": ["src/episodes/onboard-ai-every-time/i18n/en.json"],
+      "de": ["src/episodes/onboard-ai-every-time/i18n/de.json"]
     },
+    "base": "onboard-ai-every-time",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/hero/i18n/en.json"],
-        "de": ["src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/hero/i18n/de.json"]
+        "en": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -273,12 +259,8 @@
           "anchor": "the-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -315,12 +297,8 @@
           "anchor": "five-moves-to-brief-a-freelancer",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"]
           }
         },
         {
@@ -348,23 +326,22 @@
     "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span",
     "text": {
       "en": [
+        "src/episodes/ai-attention-span/i18n/en.json",
         "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/i18n/en.json"
       ],
       "de": [
+        "src/episodes/ai-attention-span/i18n/de.json",
         "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/i18n/de.json"
       ]
     },
+    "base": "ai-attention-span",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/ai-attention-span/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/ai-attention-span/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -374,12 +351,8 @@
           "anchor": "thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -407,11 +380,10 @@
           "anchor": "the-ais-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/overrides/the-ais-attention-span.de.json"
             ]
           }
         },
@@ -458,11 +430,10 @@
           "anchor": "what-fills-the-window",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/de.json",
+              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/overrides/what-fills-the-window.de.json"
             ]
           }
         },
@@ -500,11 +471,10 @@
           "anchor": "managing-the-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/overrides/managing-the-attention-span.de.json"
             ]
           }
         },
@@ -797,23 +767,22 @@
     "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time",
     "text": {
       "en": [
+        "src/episodes/onboard-ai-every-time/i18n/en.json",
         "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/i18n/en.json"
       ],
       "de": [
+        "src/episodes/onboard-ai-every-time/i18n/de.json",
         "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/i18n/de.json"
       ]
     },
+    "base": "onboard-ai-every-time",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -823,12 +792,8 @@
           "anchor": "the-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -865,12 +830,8 @@
           "anchor": "five-moves-to-brief-a-freelancer",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"]
           }
         },
         {
@@ -897,16 +858,23 @@
   "2026-11-04-intro-hitl-workflows__ai-attention-span": {
     "folder": "by-event/2026-11-04-intro-hitl-workflows/ai-attention-span",
     "text": {
-      "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/i18n/en.json"],
-      "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/i18n/de.json"]
+      "en": [
+        "src/episodes/ai-attention-span/i18n/en.json",
+        "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/i18n/en.json"
+      ],
+      "de": [
+        "src/episodes/ai-attention-span/i18n/de.json",
+        "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/i18n/de.json"
+      ]
     },
+    "base": "ai-attention-span",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/hero/i18n/en.json"],
-        "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/hero/i18n/de.json"]
+        "en": ["src/episodes/ai-attention-span/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/ai-attention-span/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -916,12 +884,8 @@
           "anchor": "thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -949,11 +913,10 @@
           "anchor": "the-ais-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/the-ais-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/overrides/the-ais-attention-span.de.json"
             ]
           }
         },
@@ -1000,11 +963,10 @@
           "anchor": "what-fills-the-window",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/what-fills-the-window/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/what-fills-the-window/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/de.json",
+              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/overrides/what-fills-the-window.de.json"
             ]
           }
         },
@@ -1042,11 +1004,10 @@
           "anchor": "managing-the-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/managing-the-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/overrides/managing-the-attention-span.de.json"
             ]
           }
         },
@@ -1239,16 +1200,23 @@
   "2026-11-04-intro-hitl-workflows__onboard-ai-every-time": {
     "folder": "by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time",
     "text": {
-      "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/i18n/en.json"],
-      "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/i18n/de.json"]
+      "en": [
+        "src/episodes/onboard-ai-every-time/i18n/en.json",
+        "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/i18n/en.json"
+      ],
+      "de": [
+        "src/episodes/onboard-ai-every-time/i18n/de.json",
+        "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/i18n/de.json"
+      ]
     },
+    "base": "onboard-ai-every-time",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/hero/i18n/en.json"],
-        "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/hero/i18n/de.json"]
+        "en": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -1258,12 +1226,8 @@
           "anchor": "the-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -1300,12 +1264,8 @@
           "anchor": "five-moves-to-brief-a-freelancer",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"]
           }
         },
         {
@@ -2294,21 +2254,22 @@
     "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span",
     "text": {
       "en": [
+        "src/episodes/ai-attention-span/i18n/en.json",
         "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/i18n/en.json"
       ],
-      "de": ["src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/i18n/de.json"]
+      "de": [
+        "src/episodes/ai-attention-span/i18n/de.json",
+        "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/i18n/de.json"
+      ]
     },
+    "base": "ai-attention-span",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/ai-attention-span/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/ai-attention-span/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -2318,12 +2279,8 @@
           "anchor": "thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -2351,11 +2308,10 @@
           "anchor": "the-ais-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/the-ais-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/overrides/the-ais-attention-span.de.json"
             ]
           }
         },
@@ -2402,11 +2358,10 @@
           "anchor": "what-fills-the-window",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/what-fills-the-window/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/what-fills-the-window/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/what-fills-the-window/i18n/de.json",
+              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/overrides/what-fills-the-window.de.json"
             ]
           }
         },
@@ -2444,11 +2399,10 @@
           "anchor": "managing-the-attention-span",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"
-            ],
+            "en": ["src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/managing-the-attention-span/i18n/de.json"
+              "src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n/de.json",
+              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/overrides/managing-the-attention-span.de.json"
             ]
           }
         },
@@ -2741,23 +2695,22 @@
     "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time",
     "text": {
       "en": [
+        "src/episodes/onboard-ai-every-time/i18n/en.json",
         "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/i18n/en.json"
       ],
       "de": [
+        "src/episodes/onboard-ai-every-time/i18n/de.json",
         "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/i18n/de.json"
       ]
     },
+    "base": "onboard-ai-every-time",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/onboard-ai-every-time/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -2767,12 +2720,8 @@
           "anchor": "the-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n/de.json"]
           }
         },
         {
@@ -2809,12 +2758,8 @@
           "anchor": "five-moves-to-brief-a-freelancer",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"
-            ]
+            "en": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n/de.json"]
           }
         },
         {

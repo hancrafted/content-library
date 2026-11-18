@@ -1,21 +1,5 @@
-import { episode } from '@/episodes/components/slide-master/slide';
-import de from './i18n/de.json';
-import en from './i18n/en.json';
-import { managingTheAttentionSpanSection } from './sections/managing-the-attention-span';
-import { theAisAttentionSpanSection } from './sections/the-ais-attention-span';
-import { thoughtExperimentSection } from './sections/thought-experiment';
-import { whatFillsTheWindowSection } from './sections/what-fills-the-window';
-import { hero } from './slides/hero/slide';
+import { aiAttentionSpan } from '@/episodes/ai-attention-span/episode';
+import { instanceOf } from '@/episodes/lib/episode-instance';
 
-// decision: docs/decision-records/0016-content-data-model.md
-export const axelAiAttentionSpan = episode({
-  slug: 'ai-attention-span',
-  messages: { en, de },
-  title: hero,
-  sections: [
-    thoughtExperimentSection,
-    theAisAttentionSpanSection,
-    whatFillsTheWindowSection,
-    managingTheAttentionSpanSection,
-  ],
-});
+// decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
+export const axelAiAttentionSpan = instanceOf(aiAttentionSpan, {});
