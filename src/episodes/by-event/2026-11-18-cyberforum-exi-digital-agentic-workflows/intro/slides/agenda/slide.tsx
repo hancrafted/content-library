@@ -3,19 +3,22 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-type Kind = 'start' | 'theory' | 'demo' | 'close';
+type Kind = 'start' | 'theory' | 'demo' | 'break' | 'practice' | 'close';
 
 const BLOCKS: readonly {
-  key: 'welcome' | 'first' | 'grill' | 'second' | 'workflow' | 'third' | 'qa';
+  key: 'welcome' | 'first' | 'grill' | 'break' | 'second' | 'third' | 'practice' | 'tracks' | 'handover' | 'qa';
   kind: Kind;
   n?: number;
 }[] = [
   { key: 'welcome', kind: 'start' },
   { key: 'first', kind: 'theory', n: 1 },
   { key: 'grill', kind: 'demo' },
+  { key: 'break', kind: 'break' },
   { key: 'second', kind: 'theory', n: 2 },
-  { key: 'workflow', kind: 'demo' },
   { key: 'third', kind: 'theory', n: 3 },
+  { key: 'practice', kind: 'practice' },
+  { key: 'tracks', kind: 'close' },
+  { key: 'handover', kind: 'close' },
   { key: 'qa', kind: 'close' },
 ];
 
@@ -24,6 +27,8 @@ const LOOK: Record<Kind, { disc: string; label: string }> = {
   close: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
   theory: { disc: 'bg-(--info) text-info-foreground', label: 'text-(--info)' },
   demo: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
+  practice: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
+  break: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
 };
 
 const BESIDE_DISC = 'flex min-h-12 items-center';
@@ -54,7 +59,7 @@ export const agenda = slide({
                 {!last && <span className="w-0.5 grow bg-border" />}
               </div>
               <div
-                className={`grid flex-1 grid-cols-1 items-start gap-x-4 md:grid-cols-[5rem_1fr_10rem] ${last ? '' : 'pb-6'}`}
+                className={`grid flex-1 grid-cols-1 items-start gap-x-4 md:grid-cols-[5rem_1fr_10rem] ${last ? '' : 'pb-2'}`}
               >
                 <span className={`${BESIDE_DISC} text-body font-semibold tabular-nums`}>{t(`blocks.${key}.time`)}</span>
                 <p className={BESIDE_DISC}>
