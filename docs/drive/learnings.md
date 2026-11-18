@@ -31,10 +31,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 
-- **Count:** 2 (last: 2026-11-18, drive-handoff)
+- **Count:** 2 (last: 2026-11-18, onboard-ai-every-time-event-look)
 - **Enforcer:** hook: new PreToolUse hook on `wt:new` that requires a fresh phase marker written by a new `drive status`, architectural
 - **Status:** proposed
-- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide; fortify-decision AR-1 proposes this hook (picks skipped 2026-11-17, count kept at 1: same Workflow); drive-handoff: the Operator wants the Workflow to run to the end with no question or PR mid-run (Decision record 0028 closes the mid-run questions, the phase naming stays unenforced)
+- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide; fortify-decision AR-1 proposes this hook (picks skipped 2026-11-17, count kept at 1: same Workflow); onboard-ai-every-time-event-look: the Operator could not tell whether the Workflow would run to the end without a question or a PR mid-run (Decision record 0028 closes the mid-run questions; the phase naming stays unenforced)
 
 ### Workflow progress lives only in the session, so a quota reset ends it
 
@@ -94,10 +94,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A Subagent skips an acceptance criterion and the report passes the shape check
 
-- **Count:** 2 (last: 2026-11-18, drive-handoff)
+- **Count:** 2 (last: 2026-11-18, ai-gives-you-more-work-pool)
 - **Enforcer:** none deterministic yet: Implementer profile line, quick win; new test for a report parser called by `worktree done`, architectural
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; drive-handoff: a Subagent's report left an acceptance criterion undone and it surfaced in the fix-review brief (W2)
+- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; ai-gives-you-more-work-pool: the fix-review Subagent did not read the `test:build` output its ticket required, and the Orchestrator accepted that because pre-push runs build tests
 
 ### A pool Slide's test references a by-event Episode, and nothing checks it
 
@@ -115,35 +115,35 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A push is not checked against the remote
 
-- **Count:** 2 (last: 2026-11-18, drive-handoff)
+- **Count:** 2 (last: 2026-11-18, ai-gives-you-more-work-pool)
 - **Enforcer:** test-runner: test:slow test for `drive push` that fails when the remote does not hold the pushed commit, architectural
 - **Status:** fixed by #740
-- **Evidence:** drive: pushes piped through `grep` and `tail` three times, masking the push exit code (#695); drive-handoff: the 2026-11-18 runs repeated it
+- **Evidence:** drive: pushes piped through `grep` and `tail` three times, masking the push exit code (#695); ai-attention-span-pool and ai-gives-you-more-work-pool: three more pushes piped through `grep`, `head` or `tail`, and none compared `git ls-remote` with the local commit
 
 ### What is live or scheduled that a change touches is raised only at the PR
 
-- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Count:** 1 (last: 2026-11-18, onboard-ai-every-time-event-look)
 - **Enforcer:** none deterministic yet: the Decision PR body's required section (Decision record 0028), architectural
 - **Status:** fixed by #740
-- **Evidence:** drive-handoff: an Event-date risk surfaced only at the PR, after Implement had started
+- **Evidence:** ai-attention-span-pool: spreading a change to four Episodes never named that one is presented at an Event that day, until the PR-body Subagent found it; ai-gives-you-more-work-pool raised it only at the PR; onboard-ai-every-time-event-look did not name it in Define either (count kept at 1: one Operator, one session of lessons)
 
 ### Fortify evidence is merged into an Integration branch whose PR had already merged
 
-- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
 - **Enforcer:** none deterministic yet: Fortify takes its evidence from the base branch after the merge (Decision record 0028), architectural
 - **Status:** fixed by #740
-- **Evidence:** drive-handoff: Fortify evidence landed on an Integration branch after its PR merged, so it never reached `main`
+- **Evidence:** ai-attention-span-pool: the Fortify evidence Subagent self-merged into the Integration branch after the Operator had merged its PR, so the work landed on a dead branch and had to be recovered
 
 ### ARCH-003's three-describe rule forces filler tests in composition-only section tests
 
-- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Count:** 1 (last: 2026-11-18, ai-gives-you-more-work-pool)
 - **Enforcer:** adr-checker: archgate, narrow the ARCH-003-testing rule for composition-only section tests, quick win
 - **Status:** proposed
-- **Evidence:** drive-handoff: composition-only section tests carried filler `describe` blocks to satisfy the three-describe rule
+- **Evidence:** ai-gives-you-more-work-pool: #729 added two tests that can never fail, only to satisfy the three-describe rule (its own Trade-offs line said so); the review caught them
 
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked "can this session run until end or does it require a human?" and asked for a guide to reviewing the PR. The Orchestrator had not stated the Operator's decision points, or how to review, up front. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked to resume automatically after a quota reset. There is no built-in recovery, so the Orchestrator added a session-only watchdog (a cron job that dies with the session). → Workflow progress lives only in the session, so a quota reset ends it
-- 2026-11-18 drive-handoff: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
+- 2026-11-18 onboard-ai-every-time-event-look: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
