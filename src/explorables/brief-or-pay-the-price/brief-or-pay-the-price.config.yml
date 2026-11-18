@@ -28,6 +28,15 @@ definitions:
       - { id: autonomy-through-intent, letter: A, beatMilliseconds: 2800 }
       - { id: contracts-at-the-seams, letter: C, beatMilliseconds: 2600 }
       - { id: engineer-trust, letter: E, beatMilliseconds: 3000 }
+# The counters table: the traits each move counters, and the source its evidence line cites.
+matrix:
+  break-it-down: { counters: [relentless, every-word-billed], source: 'Zhou et al., Least-to-Most Prompting' }
+  requirements-first: { counters: [probabilistic, confident], source: 'Yang et al., What Prompts Don’t Say' }
+  interview-yourself-with-ai: { counters: [confident, informed], source: 'Vijayvargiya et al., Ambig-SWE' }
+  evaluate-each-step: { counters: [relentless, probabilistic], source: 'Lightman et al., Let’s Verify Step by Step' }
+  fresh-start-for-each-piece:
+    counters: [every-word-billed, relentless, probabilistic]
+    source: 'Laban et al., LLMs Get Lost In Multi-Turn Conversation'
 i18n:
   en:
     chrome:
@@ -37,6 +46,33 @@ i18n:
       dayOne: 'Reset to day one'
       caption: 'Hover a letter to reveal it; click a card to turn it.'
       turn: 'Turn the card to its text'
+      zoom: 'Zoom'
+      agent: 'Agent'
+    matrix:
+      title: 'Five traits cost you. Five moves keep them in check.'
+      corner: 'Moves against traits'
+      legend: 'Legend'
+      counters: 'counters'
+      counterLink: '{move} counters {trait}'
+      cellTitle: '{move} against {trait}'
+      cellName: '{move} counters {trait}: open the Cell'
+      openCell: 'Open the Cell'
+      problem: 'The problem · PRICE'
+      fix: 'The fix · BRIEF'
+      evidence: 'Evidence'
+      back: '← Back'
+      backToMatrix: '← Back to the matrix'
+      previous: 'Previous Cell'
+      next: 'Next Cell'
+      where: 'Where you are'
+      caption: 'Select a Cell for its detail.'
+      cellCaption: 'Esc goes back; ← → step through the Cells. Click a card to turn it.'
+      evidenceOf:
+        break-it-down: 'Solving simpler subproblems in sequence scored 99% or better on a compositional benchmark, against 16% for chain-of-thought.'
+        requirements-first: 'A requirement left unstated varied more than twice as much across prompts as one that was stated.'
+        interview-yourself-with-ai: 'Agents that asked the user for missing information improved by up to 74% on an underspecified coding benchmark.'
+        evaluate-each-step: 'Feedback on each reasoning step significantly outperforms feedback on the final result alone.'
+        fresh-start-for-each-piece: 'Top models scored on average 39% lower in multi-turn conversation than with the full instruction at once.'
     stages:
       tab: 'Stages'
       heads: { freelancer: 'A freelancer team', middle: 'stages', ai: 'AI agents' }
@@ -46,6 +82,7 @@ i18n:
       handbook: 'How we work here'
       bill: 'bill'
       tokens: 'tokens'
+      fresh: 'new'
       handbookWords:
         first: 'We'
         second: 'always'
@@ -179,6 +216,33 @@ i18n:
       dayOne: 'Zurück auf Tag eins'
       caption: 'Fahr über einen Buchstaben, um ihn aufzudecken; klick eine Karte, um sie zu drehen.'
       turn: 'Karte auf ihren Text drehen'
+      zoom: 'Zoom'
+      agent: 'Agent'
+    matrix:
+      title: 'Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie in Schach.'
+      corner: 'Schritte gegen Eigenschaften'
+      legend: 'Legende'
+      counters: 'wirkt gegen'
+      counterLink: '{move} wirkt gegen {trait}'
+      cellTitle: '{move} gegen {trait}'
+      cellName: '{move} wirkt gegen {trait}: Zelle öffnen'
+      openCell: 'Zelle öffnen'
+      problem: 'Das Problem · PRICE'
+      fix: 'Die Lösung · BRIEF'
+      evidence: 'Belege'
+      back: '← Zurück'
+      backToMatrix: '← Zurück zur Matrix'
+      previous: 'Vorige Zelle'
+      next: 'Nächste Zelle'
+      where: 'Wo Du bist'
+      caption: 'Wähle eine Zelle für ihr Detail.'
+      cellCaption: 'Esc geht zurück; ← → blättert durch die Zellen. Klick eine Karte, um sie zu drehen.'
+      evidenceOf:
+        break-it-down: 'Einfachere Teilprobleme der Reihe nach zu lösen erreichte 99 % oder mehr auf einem Kompositions-Benchmark, gegenüber 16 % mit Chain-of-Thought.'
+        requirements-first: 'Eine nicht genannte Anforderung schwankte über Prompts hinweg mehr als doppelt so stark wie eine genannte.'
+        interview-yourself-with-ai: 'Agenten, die fehlende Informationen beim Nutzer erfragten, wurden auf einem unterspezifizierten Coding-Benchmark um bis zu 74 % besser.'
+        evaluate-each-step: 'Feedback zu jedem Denkschritt schneidet deutlich besser ab als Feedback nur zum Endergebnis.'
+        fresh-start-for-each-piece: 'Top-Modelle schnitten im mehrstufigen Gespräch im Schnitt 39 % schlechter ab als mit der vollständigen Anweisung auf einmal.'
     stages:
       tab: 'Phasen'
       heads: { freelancer: 'Ein Freelancer-Team', middle: 'Phasen', ai: 'KI-Agenten' }
@@ -188,6 +252,7 @@ i18n:
       handbook: 'Wie wir arbeiten'
       bill: 'Rechnung'
       tokens: 'Tokens'
+      fresh: 'neu'
       handbookWords:
         first: 'Wir'
         second: 'immer'

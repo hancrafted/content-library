@@ -101,7 +101,7 @@ export function EvaluateEachStepScene({ ai }: SceneProps) {
   );
 }
 
-export function FreshStartScene({ ai }: SceneProps) {
+export function FreshStartScene({ ai, word }: SceneProps & { word: string }) {
   return (
     <SceneSvg width={WIDTH}>
       <g className={styles.out} style={beat({ d: 1.15 })}>
@@ -123,6 +123,9 @@ export function FreshStartScene({ ai }: SceneProps) {
       <g className={styles.pop} style={beat({ d: 1.45, fx: 0 })}>
         <rect x="62" y="28" width="30" height="16" rx="6" className={paperOf(ai)} strokeWidth="1.6" />
       </g>
+      <Mark ai={ai} x={77} y={22} size={8} d={1.6}>
+        {word}
+      </Mark>
     </SceneSvg>
   );
 }

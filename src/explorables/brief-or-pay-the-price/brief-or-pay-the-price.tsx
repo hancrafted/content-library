@@ -13,7 +13,12 @@ export function BriefOrPayThePrice({ locale, words }: BriefOrPayThePriceProps) {
   const data = explorableData(locale, words);
   return (
     <>
-      <BriefOrPayThePriceClient words={data.words} definitions={data.definitions} stages={data.stages} />
+      <BriefOrPayThePriceClient
+        words={data.words}
+        definitions={data.definitions}
+        stages={data.stages}
+        matrix={data.matrix}
+      />
       <ExploreItLink slug="brief-or-pay-the-price" />
     </>
   );
