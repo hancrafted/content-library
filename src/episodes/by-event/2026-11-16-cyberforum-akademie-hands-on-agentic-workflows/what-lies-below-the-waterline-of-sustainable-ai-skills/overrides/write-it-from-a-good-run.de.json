@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "two-starting-points": {
+        "script": "Noch einmal die klare Empfehlung: Wenn Du irgendwann einen Ablauf von vorne bis hinten durchgearbeitet hast und das Ergebnis Deinen Erwartungen entspricht, ist das ein Signal dafür, dass Du wirklich guten Kontext hast."
+      },
+      "capture-the-why": {
+        "script": "Dann ist der Trick: Ich mache nicht direkt einen Skill daraus. Auf Basis des kompletten Prozesses von Ende zu Ende lasse ich die KI mich noch einmal interviewen, weil sich daraus potenziell weitere Anforderungen ergeben, die ich gar nicht berücksichtigt hatte, auch wenn ich den Ablauf schon zum dritten oder vierten Mal gemacht habe."
+      },
+      "while-he-still-knows": {
+        "script": "Dann habe ich genügend Kontext in meinem Fenster, um daraus einen Skill zu machen. Es kann ja sein, dass noch weitere Anforderungen oder Bereicherungen aus dem persönlichen Wissensschatz der Person, die den Skill schreibt, dazukommen, und genau dafür ist der Interview-Schritt da. Er macht nicht nur aus einem einmaligen Erfolgserlebnis etwas, das wiederholbar sein soll, sondern zoomt heraus und fragt: Hast Du mir noch mehr Informationen zu liefern, wie ich diesen Skill wirklich brauchbar und wiederholt brauchbar machen kann?"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "title": "What an agent is",
-  "caption": "An agent is a language model that <b>uses tools in a loop</b> and decides for itself how to reach a goal.",
+  "caption": "An agent is a language model that <b>uses tools in a loop</b> until its goal is met.",
   "explorable": {
     "levels": {
       "agents": {
@@ -38,12 +38,12 @@
       "model-tools-loop": {
         "title": "Model, tools, loop",
         "keywords": "",
-        "script": "An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done."
+        "script": "An agent is a language model that uses tools in a loop until its goal is met. It is not a single chat answer you read and move on from, it is a loop of acting, looking at the result and acting again until it believes it is done."
       },
       "steers-its-own-steps": {
-        "title": "Steers its own steps",
+        "title": "Runs its own loop",
         "keywords": "",
-        "script": "If you have only used a chat tool so far, here is the shift. In a chat you steer every step yourself, because you read each answer and decide what to ask next. An agent steers its own steps, so you cannot assume it takes the steps you would have taken. That is the reason the rest of this Episode is about what you must set up around it."
+        "script": "If you have only used a chat tool so far, here is the shift. In a chat you take every step yourself, because you read each answer and decide what to ask next. An agent takes the next step itself, so it may not take the one you would have taken. That is the reason the rest of this Episode is about what you must set up around it."
       }
     }
   }

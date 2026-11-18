@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "you-are-the-captain": {
+        "script": "Wie immer fangen wir mit einem Gedankenexperiment an. Wir sind auf einer Tiefsee-Expedition, und an der Wand hängt ein Foto: die Kapitänin und ein Pilot, der ein ferngesteuertes U-Boot für die Expedition steuert. Die Geschichte ist wirklich simpel. Als Kapitän arbeite ich schon seit über zehn Jahren mit diesem Piloten zusammen."
+      },
+      "one-settled-condition": {
+        "script": "Dieser Pilot hat einen komischen Effekt: Er hat kein Kurzzeitgedächtnis mehr, zum Beispiel nach einem Unfall. Wir wollen ihn trotzdem weiter beschäftigen, weil wir wissen, dass er in dem, was er tut, astrein ist. Das Problem ist, dass er uns jeden Tag mit „nice to meet you“ begrüßt. Er erinnert sich nicht mehr an uns und nicht mehr daran, wo er gerade ist. Ein bisschen wie im Film Memento, wenn Du den kennst."
+      }
+    }
+  }
+}

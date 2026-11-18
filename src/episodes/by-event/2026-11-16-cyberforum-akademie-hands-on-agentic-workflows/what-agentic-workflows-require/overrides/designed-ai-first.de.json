@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "start-at-the-outcome": {
+        "script": "Die Organisation muss sich grundsätzlich Gedanken machen: Wie kann ein Workflow, der über verschiedene Abteilungen gestaltet werden soll, zum Beispiel ein kompletter AI Product Development Life Cycle, AIPDLC, der mehrere Abteilungen umspannt, so definiert werden, dass er primär für Agenten funktioniert?"
+      },
+      "cut-seams": {
+        "script": "Oft werden dabei Aufgaben zusammengedampft, und Leute fragen sich: Dann brauchen wir die zehn Leute für diesen einen Schritt gar nicht mehr, wenn Agenten die Arbeit erledigen können. Das ist eine sehr harte, aber ehrliche Frage, die man sich stellen muss. Das heißt nicht, dass man Leute loswerden sollte. Nein, man muss die Leute upskillen oder ausbilden, damit sie in diesem neuen Workflow arbeiten können. Das sind zwei der größten Trugschlüsse, auf Englisch Fallacies: Conways Law, dass Leute ihre eigene Kultur und ihre eigenen Abläufe einfach eins zu eins kopieren, KI draufklatschen und sich nicht grundsätzlich überlegen, wie es AI first gehen kann."
+      }
+    }
+  }
+}

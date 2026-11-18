@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "open-question": {
+        "script": "Hier kommt das erste Konzept: Oversight, also die Aufsicht. Wenn wir Aufgaben in einem Ablauf für Agenten definieren, stellt sich die Frage, was der Mensch dabei macht: wie viel Aufsicht er haben soll oder braucht, damit am Ende gute Ergebnisse und auch gute Zwischenergebnisse herauskommen. Dafür hat sich die IT-Welt, wie so häufig, Begriffe aus dem militärischen Bereich ausgeliehen."
+      }
+    }
+  }
+}

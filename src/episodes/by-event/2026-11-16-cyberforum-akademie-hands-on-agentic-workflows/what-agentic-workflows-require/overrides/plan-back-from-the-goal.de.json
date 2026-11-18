@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "start-at-the-goal": {
+        "script": "Das Erste ist die Rückwärtsplanung. Vielleicht kennst Du sie aus dem Projektmanagement, zum Beispiel die Critical Path Method: Man plant einen Projektplan nicht einfach, indem man Aufgaben aneinanderreiht, sondern vom Ergebnis aus rückwärts. Um das Ziel zu einem Zeitpunkt t zu erreichen, müssen bestimmte Kriterien erfüllt sein, und die brichst Du so lange auf, bis einzelne Aufgaben entstehen, die abgearbeitet werden können. Der Hauptgrund, warum das eine der Kernfähigkeiten ist: Wenn Du vom Ergebnis aus planst, ist die Chance sehr hoch, dass alle Aufgaben zu einem bestimmten Ziel führen. Das ist Sinn und Zweck der Sache."
+      },
+      "state-the-outcome": {
+        "script": "Fängst Du an, Aufgabenprozesse zu definieren, etwa: Jemand muss ein Hotel suchen, jemand Reisedistanzen, jemand Kleidung, dann ist das die klassische Vorgehensweise und als Prozess sinnvoll. Aber wenn diese Aufgaben nicht zielführend sind, verirrt sich der Mensch. Das hast Du vielleicht selbst im Geschäftsleben schon erlebt. Genauso kann sich ein KI-Agent verirren. Deshalb gehe ich so vor: Ich habe ein bestimmtes Ergebnis und spanne den Plan vom Ergebnis aus rückwärts auf."
+      },
+      "well-known-and-agents-like-it": {
+        "script": "Das ist eines der Kernprinzipien, und es ist tatsächlich eine Best Practice, die sehr viele Quellen für Agenten empfehlen: Man definiert dem Agenten klare, messbare Ziele als Ergebnisse und lässt den Agenten selbst überlegen, wie er zum Ziel kommt. Dieses Prinzip der Rückwärtsplanung, auf Englisch Backwards Reasoning, deckt sich damit."
+      }
+    }
+  }
+}

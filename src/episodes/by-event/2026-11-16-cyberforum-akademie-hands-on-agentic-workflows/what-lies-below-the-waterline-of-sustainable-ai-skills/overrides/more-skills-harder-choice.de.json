@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "near-twins": {
+        "script": "Wenn sich Skills ansammeln und womöglich ähneln, klingen sie für KI-Agenten generell sehr ähnlich. Dann ist es umso wichtiger, zu entscheiden, wie ich dem Agenten noch mehr Kontext liefere, damit er den richtigen Skill aufruft."
+      },
+      "a-short-list-on-the-wall": {
+        "script": "Neben der Description gibt es dafür zum Beispiel die Project Instruction. Das ist in einem Coding-Agenten die Agents.md oder in einem Chatfenster der Teil für die Projektanweisungen. Bei Claude hast Du zum Beispiel diese Projekte, in denen Du Kontextinformationen und Instructions mitliefern kannst. Das ist bei ChatGPT und anderen relativ ähnlich. Dort könnte ich für ein Projekt festlegen, dass bestimmte Skills für bestimmte Anwendungsfälle zu bevorzugen sind. In einem Coding-Agenten sind das die Agents.md-Dateien, das Äquivalent zur Project Instruction. Auch da kannst Du dem KI-Agenten Zusatzinformationen liefern, welche Skills für das aktuelle Projekt relevant sind. Potenziell hast Du eine Sammlung von Skills, die nicht nur für ein Projekt gedacht ist. Das sind zwei Möglichkeiten, die KI besser zu verleiten. Laut einer Messung liegen wir mit dieser Ansage in der Project Instruction auf einmal bei 79 Prozent statt bei 53 Prozent. Das ist die erste Stufe unter der Wasseroberfläche: Wann wir einen Skill schreiben sollten, nicht zu früh, nicht zu häufig, und wie wir dem Agenten die Entscheidung leichter machen, einen Skill zu laden oder nicht."
+      },
+      "name-it-as-an-action": {
+        "script": "Beim Namen ist empfohlen, ein Verb zu benutzen, eine Gerundform oder Verbform, um den Skill zu benennen. Der Name ist relativ kurz, man kann ihn aber ein bisschen länger ausschreiben."
+      }
+    }
+  }
+}

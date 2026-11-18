@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "beside-not-inside": {
+        "script": "Domänenspezifische oder projektspezifische Informationen etablierst Du ganz klar neben dem Skill."
+      }
+    }
+  }
+}

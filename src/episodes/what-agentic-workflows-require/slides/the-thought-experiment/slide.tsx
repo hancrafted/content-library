@@ -1,15 +1,20 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { SeamSum, type Half, type SeamSumCard } from '@/episodes/components/slide-shared/seam-sum/seam-sum';
+import { CardHeader } from '@/episodes/components/slide-shared/seam-sum/card-header';
+import { Cross, Tick } from '@/episodes/components/slide-shared/seam-sum/marks';
+import { tiltOf } from '@/episodes/components/slide-shared/seam-sum/tilt.pure';
+import { FAIL_CHIP, type Half } from '@/episodes/components/slide-shared/seam-sum/types';
+import { FailureFocus } from './failure-focus.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { PartyResult } from './party-result';
 
 const CARDS = [
   { slug: 'activities', breaks: 'together' },
   { slug: 'travel', breaks: 'safely' },
   { slug: 'venue', breaks: 'safely' },
   { slug: 'food', breaks: 'together' },
-] as const satisfies readonly { slug: SeamSumCard['slug']; breaks: Half }[];
+] as const satisfies readonly { slug: string; breaks: Half }[];
 
 const HALVES = ['together', 'safely'] as const satisfies readonly Half[];
 
@@ -28,50 +33,48 @@ export const theThoughtExperiment = slide({
       ],
     },
   ],
-  segments: [{ slug: 'everyone-delivered' }, { slug: 'none-of-it-adds-up' }, { slug: 'your-question' }],
+  segments: [{ slug: 'everyone-delivered' }, { slug: 'none-of-it-adds-up' }],
   content: ({ t, Marker, target }) => (
-    <SlideFrame className="gap-5">
-      <div {...target('board')}>
-        <SeamSum
-          label={{
-            name: t('board.label'),
-            detail: t('board.detail'),
-            marker: <Marker note="a-real-version-of-the-board" placement="beside" />,
-          }}
-          cards={CARDS.map(({ slug, breaks }) => ({
+    <SlideFrame>
+      <div {...target('board')} className="@container flex flex-col gap-4 rounded-xl bg-muted p-4 shadow-inner">
+        <FailureFocus
+          label={t('cardsLabel')}
+          items={CARDS.map(({ slug, breaks }, index) => ({
             slug,
+            tilt: tiltOf(index),
             label: t(`cards.${slug}.label`),
-            doneBy: 'person',
-            goal: t(`cards.${slug}.goal`),
-            failure: {
-              fact: t(`cards.${slug}.fact`),
-              seam: { card: t(`cards.${slug}.seamCard`), held: t(`cards.${slug}.held`) },
-              result: t(`cards.${slug}.result`),
-              breaks,
-            },
+            body: (
+              <>
+                <CardHeader label={t(`cards.${slug}.label`)} />
+                <div className="flex items-start gap-1.5">
+                  <Tick label={t('done')} />
+                  <p data-fact className="text-body leading-snug font-semibold break-words hyphens-auto">
+                    {t(`cards.${slug}.fact`)}
+                  </p>
+                </div>
+                <div className="relative flex flex-col gap-1.5 rounded-sm border-2 border-destructive px-2 pt-1.5 pb-2">
+                  <Cross label={t('fails')} />
+                  <p data-failure-result className="text-caption font-medium text-destructive">
+                    {t(`cards.${slug}.result`)}
+                  </p>
+                  <span data-breaks className={`self-start ${FAIL_CHIP}`}>
+                    {t(`breaks.${breaks}`)}
+                  </span>
+                </div>
+              </>
+            ),
+            cause: t.rich(`cards.${slug}.cause`, {
+              b: (chunks) => <b className="font-medium text-foreground">{chunks}</b>,
+            }),
           }))}
-          result={{
-            title: t('result.title'),
-            goal: t('result.goal'),
-            broken: HALVES.map((half) => ({ half, by: t(`result.broken.${half}`) })),
-          }}
-          words={{
-            cards: t('cardsLabel'),
-            ownGoal: t('ownGoal'),
-            breaks: { together: t('breaks.together'), safely: t('breaks.safely') },
-            halves: { together: t('halves.together'), safely: t('halves.safely') },
-            doneBy: { person: t('doneBy.person'), agent: t('doneBy.agent') },
-            done: t('done'),
-            fails: t('fails'),
-          }}
         />
-      </div>
-      <div
-        data-question
-        className="flex flex-col gap-1 rounded-sm bg-primary px-5 py-3 text-primary-foreground shadow-xl sm:flex-row sm:items-center sm:gap-4"
-      >
-        <span className="shrink-0 text-caption font-medium uppercase">{t('question.label')}</span>{' '}
-        <p className="text-body font-semibold">{t('question.text')}</p>
+        <PartyResult
+          title={t('result.title')}
+          goal={t('result.goal')}
+          fails={t('fails')}
+          chips={HALVES.map((half) => ({ half, text: t(`result.chips.${half}`) }))}
+          marker={<Marker note="a-real-version-of-the-board" placement="beside" />}
+        />
       </div>
     </SlideFrame>
   ),

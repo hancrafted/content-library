@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "everyone-delivered": {
+        "script": "Teilst Du die Aufgabe einfach nach Feldern auf, zum Beispiel Aktivitäten, Reise, Ort buchen sowie Essen und Trinken, und gibst jedem die Anweisung, so wie Du sie Dir ausdenkst, dann kann es sehr gut sein, dass jeder Agent, oder in diesem Fall auch jeder Mensch, seine Aufgabe perfekt erledigt."
+      },
+      "none-of-it-adds-up": {
+        "script": "Nehmen wir an, Du gibst die Anweisung: Plane eine spaßige sportliche Aktivität für alle 200 Mitarbeiter. Und Du hast vergessen, dem Agenten zu sagen, dass wir auch zehn Kolleginnen und Kollegen im Rollstuhl haben, oder dass wir Spiele mit militärischem Einschlag als Firmenkultur grundsätzlich ablehnen. Dann kann es sein, dass der Agent Paintball bucht. Er ist der Anforderung vollkommen gerecht geworden, hat aber das Ziel verfehlt, das Du ursprünglich als Intent gesetzt hattest. Genauso beim Essen: Vegetarisch einzuplanen war die Vorgabe, aber Du hast 30 indische Kollegen, und bei ihnen kann es sein, dass Eier als nicht vegetarisch gelten. Auf einmal haben sie nichts mehr zu essen. Es steckt also sehr viel relevanter Kontext zwischen den Aufgaben, der für Dich als Person, die die Aufgabe vergibt, vielleicht klar ist, vielleicht auch nicht. Umso wichtiger ist es, darüber nachzudenken, wie Du die Aufgaben gestaltest, nicht nur für den jeweiligen Agenten selbst, sondern auch zwischen den einzelnen Aufgabenbereichen, damit am Ende alles gut herauskommt."
+      }
+    }
+  }
+}

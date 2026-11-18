@@ -1,0 +1,60 @@
+{
+  "a-thought-experiment": {
+    "de.voiceScript.segments.now-you-are-the-manager.script": "fa8808c8e413",
+    "de.voiceScript.segments.four-price-freelancers.script": "c6ecfc8d2515",
+    "de.voiceScript.segments.your-job.script": "ec5f89c8c3ec"
+  },
+  "contracts-at-the-seams": { "de.voiceScript.segments.design-by-contract.script": "1a0d13cf3bb4" },
+  "designed-ai-first": {
+    "de.voiceScript.segments.start-at-the-outcome.script": "6cf9a172ad73",
+    "de.voiceScript.segments.cut-seams.script": "8e66457f4c59"
+  },
+  "how-far-you-step-out": { "de.voiceScript.segments.open-question.script": "793674b50602" },
+  "in-on-or-out-of-the-loop": {
+    "de.voiceScript.segments.in.script": "1b31dfc04d5c",
+    "de.voiceScript.segments.on.script": "0e38e5660794",
+    "de.voiceScript.segments.out.script": "5f3dc5883fed",
+    "de.voiceScript.segments.per-task.script": "7d555df19d31"
+  },
+  "now-with-agents": { "de.voiceScript.segments.speed-not-context.script": "7b805eb18dcc" },
+  "plan-back-from-the-goal": {
+    "de.voiceScript.segments.start-at-the-goal.script": "76ac6d2a77aa",
+    "de.voiceScript.segments.state-the-outcome.script": "766613e40553",
+    "de.voiceScript.segments.well-known-and-agents-like-it.script": "53f35b542e0e"
+  },
+  "reviewability-sets-the-distance": {
+    "de.voiceScript.segments.the-rule.script": "31a2c71d9226",
+    "de.voiceScript.segments.review-builds-the-trust.script": "74b9126b88e6",
+    "de.voiceScript.segments.the-activity-moves.script": "7d72a3aa648a"
+  },
+  "reviewing-the-result": {
+    "de.voiceScript.segments.two-checks.script": "13eca5dcbdab",
+    "de.voiceScript.segments.the-human-part.script": "1d93ea19f7bc"
+  },
+  "the-org-chart-trap": {
+    "de.voiceScript.segments.conways-law.script": "a8f211f6e775",
+    "de.voiceScript.segments.a-teams-draft.script": "fec13973e21d",
+    "de.voiceScript.segments.your-sign.script": "7518cc9ab364"
+  },
+  "the-thought-experiment": {
+    "de.voiceScript.segments.everyone-delivered.script": "6a0774d14ce8",
+    "de.voiceScript.segments.none-of-it-adds-up.script": "60dbfb591d27"
+  },
+  "what-an-agent-is": { "de.voiceScript.segments.model-tools-loop.script": "bdfb4b5d143b" },
+  "what-an-agentic-workflow-is": { "de.voiceScript.segments.name-the-thing.script": "8b2c3f5b9585" },
+  "what-an-agentic-workflow-is-slide": {
+    "de.voiceScript.segments.the-definition.script": "2334eff68fc6",
+    "de.voiceScript.segments.two-levels.script": "c1e603b77476"
+  },
+  "what-it-requires-of-each-person": { "de.voiceScript.segments.skills-behind-the-failures.script": "443e9fc72b70" },
+  "what-it-requires-of-the-organisation": {
+    "de.voiceScript.segments.from-people-to-the-company.script": "dadc8e8437db"
+  },
+  "what-to-look-for-in-your-team": {
+    "de.voiceScript.segments.the-answer.script": "5dc582d72c8e",
+    "de.voiceScript.segments.break-down.script": "2cde51443282",
+    "de.voiceScript.segments.write-contracts.script": "46bf5fad608a",
+    "de.voiceScript.segments.review-twice.script": "a764a84728c6",
+    "de.voiceScript.segments.the-organisation.script": "5cd10785913e"
+  }
+}

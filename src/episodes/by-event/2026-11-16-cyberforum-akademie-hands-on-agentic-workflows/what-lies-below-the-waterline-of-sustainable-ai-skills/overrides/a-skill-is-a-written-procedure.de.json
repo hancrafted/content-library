@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "name-and-use-when": {
+        "script": "Die Definition von Anthropic, den Machern von Claude, sagt: Ein Skill ist a folder of instructions, ein Ordner. Oft denken Leute, es sei nur eine Datei, die Skill.md, aber es steckt mehr dahinter. Stell Dir den Skill als eine Akte vor, die aus drei Abschnitten besteht. Der erste ist der Kopf, in der Coding-Welt der Front Matter. Die Markdown-Datei ist einfach eine Textdatei mit einfacher Formatierung, und für Metadaten gibt es diesen Front Matter. Darin stehen zwei Felder: der Name des Skills und eine Beschreibung. Das war es schon."
+      },
+      "steps-in-the-body": {
+        "script": "Dann kommt der Hauptteil, der Body. Er besteht meist aus einem Satz von Anweisungen: Schritt eins, geh auf diese Homepage, Schritt zwei, such die Wetterinformationen heraus, Schritt drei, fass sie als E-Mail zusammen, Schritt vier, schick die E-Mail raus. Also ein klares Verfahren, das Schritt für Schritt abläuft, damit wir es nicht jedes Mal neu aufschreiben müssen."
+      },
+      "for-developers": {
+        "script": "Anthropic sagt, ein Skill sei ein Ordner, weil es mehr gibt als diese eine Textdatei. Du kannst Referenzen und weitere Dateien hinzufügen, auch Skripte, also kleine Programme, die ein Agent ausführen kann, um Teile der Aufgabe zu erledigen. Im Tiefsee-Beispiel ist das ein Species Guide als Referenz, damit die KI erkennt, welche Lebewesen unterwegs sind, ein Template bei den Assets, an das sich der Agent für seinen Bericht hält, und ein kleines Programm, wie ein Arm bewegt wird, um Proben vom Meeresboden zu sammeln. Die meisten kennen den Skill nur bis zum Hauptteil, aber er kann mehr enthalten. Weil ein Skill Programme enthalten kann, könnte er sogar eine komplette Software mit verschiedensten Funktionen darstellen, die ein KI-Agent bedient. So tief könnte es gehen. Die meisten Skills dienen aber in erster Linie dazu, ein Verfahren aufzuschreiben, das wir nicht jedes Mal wiederholen möchten."
+      }
+    }
+  }
+}

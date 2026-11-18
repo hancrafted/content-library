@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-definition": {
+        "script": "Daraus ergibt sich, was ein Workflow ist: ein Arbeitsplan, ein Arbeitsablauf in verschiedenen Schritten. Diese Schritte können Abhängigkeiten untereinander haben und auch Teilaufgaben, aber sie sind für Agenten geschaffen, nicht für Menschen. Das ist ein sehr wichtiger Unterschied. Jeder einzelne Schritt hat eine Schnittstelle zu allen Abhängigkeiten, also zu den Ergebnissen, die er braucht, damit der nächste Schritt weiterarbeiten kann. Die Kunst, oder die Disziplin, besteht darin, agentische Workflows aufzubauen, die für eine einzelne Person oder auch für ein gesamtes Team oder eine Organisation funktionieren."
+      },
+      "two-levels": {
+        "script": "Hier siehst Du ein ganz einfaches Beispiel, wie sich so ein Workflow aufsetzen lässt. Auf sehr hohem Level machst Du zuerst einen Plan, dann die Anforderungen, brichst die Anforderungen in kleinere Arbeitspakete, die zum Beispiel Agenten ausführen, und am Ende fügst Du die einzelnen Ergebnisse zusammen, damit ein Ganzes entsteht. Hoffentlich ist es dann auch das, was Du Dir vorgestellt hast. Genauso haben wir komplexere Projekte auch ohne KI jahrelang, jahrzehntelang bearbeitet. Komplexere Projekte müssen immer aufgebrochen werden, Abhängigkeiten müssen definiert werden, Verantwortliche müssen definiert werden, und die Aufgaben gingen an die Personen mit dem besten Skillset, potenziell aus verschiedensten Rollen. Am Ende hat sich dann hoffentlich alles zusammengefügt, oder manchmal auch nicht. Dasselbe Konzept findet hier statt, nur sind die Aufgaben für Agenten geschaffen und nicht für Menschen. Das waren zwei kurze Definitionen: was Agenten sind und vor allem was agentische Workflows sind."
+      }
+    }
+  }
+}

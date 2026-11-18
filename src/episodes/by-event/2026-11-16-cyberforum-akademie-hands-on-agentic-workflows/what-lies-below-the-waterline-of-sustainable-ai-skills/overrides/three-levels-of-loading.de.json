@@ -1,0 +1,18 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-concept": {
+        "script": "Kurz dazu, wie ein KI-Agent einen Skill lädt und liest. Dafür gibt es ein Prinzip aus dem UX-Design: Progressive Disclosure. Wir wollen nicht auf Anhieb mit Informationen überflutet werden, sondern Schritt für Schritt zuerst eine Übersicht sehen und dann entscheiden, ob wir mehr lesen. Wenn ich einen Aspekt brauche, zum Beispiel zum Labeln, gehe ich einen Schritt weiter in die Extras und lade mir das Template herunter. Bei der KI ist der Grund klar: Lädst Du alles auf einmal, überlädst Du das Kontextfenster des Agenten mit Informationen, die für die Aufgabe nicht nötig sind. Das gilt nicht nur für Skills, sondern auch für den Aufbau eines Projektordners: Überleg, was relevant ist und was Schritt für Schritt nachgeladen werden kann."
+      },
+      "step-one": {
+        "script": "Bei Skills gibt es drei Schritte. Im ersten wird der Front Matter, also Name und Beschreibung, immer geladen. Alle Skills, die Du in Deinem Ordner oder im Projekt zugänglich gemacht hast, werden in einem Index zusammengefasst, wie in einem Register. Name und Description listen alle Skills auf, und dieser Anteil wird immer geladen. Jede neue Konversation lädt das gesamte Register, damit der Agent weiß, welche Skills zur Verfügung stehen."
+      },
+      "step-two": {
+        "script": "Wird der Skill tatsächlich geladen, wird die Skill.md geladen, also der Hauptteil, der Body."
+      },
+      "step-three": {
+        "script": "Danach entscheidet der KI-Agent, ob der Anwendungsfall es hergibt, noch weitere Dateien aus dem Skill-Ordner nachzuladen."
+      }
+    }
+  }
+}

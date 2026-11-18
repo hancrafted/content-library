@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "too-early": {
+        "script": "Die Warnung lautet: nicht zu früh einen Skill schreiben. Man kann sich überlegen, einen Skill zu schreiben, weil es in dem Moment sinnvoll erscheint und man das Gefühl hat, ihn in Zukunft häufiger zu verwenden. In der Programmierwelt kennt man das: Wir fangen zu früh an, Dinge zu optimieren, obwohl es dafür gar keinen Bedarf gibt. Aus eigener Befriedigung wollen wir alles schön und sauber haben, wir wollen diesen Dopamin-Schuss vom Gehirn."
+      },
+      "a-thin-card-has-a-price": {
+        "script": "Das führt oft dazu, dass Menschen zu früh optimieren und sofort anfangen, Skills zu schreiben, weil sie denken, sie brauchen sie später. Damit müllen wir unseren Skill-Ordner mit Skills zu, die wir potenziell nie wieder verwenden oder nie getestet haben."
+      },
+      "three-questions": {
+        "script": "Deshalb meine klare Empfehlung: Erstelle nicht beim ersten Anlauf einen Skill, sondern überleg Dir, wann der nächste Anwendungsfall ist. Weißt Du es nicht, mach keinen Skill daraus. Weißt Du es schon, kannst Du diese Session abspeichern, beim nächsten Mal aufrufen und darauf aufbauen. Das ist schon der erste Entscheidungsfaden dafür, ob Du einen Skill brauchst oder nicht. Mach das erst, wenn Du weißt, wann Du die Aufgabe das nächste Mal erledigen wirst, und prüf dann, ob Du den Skill brauchst."
+      }
+    }
+  }
+}

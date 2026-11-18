@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "scribbled-in": {
+        "script": "Überleg Dir das Szenario: Wir haben alle diesen Skill geschrieben, weil wir gern Sediment, also Schlamm, vom Meeresboden sammeln möchten. In diesem Skill steht spezifisch, dass wir 40 Meter in die Tiefe tauchen sollen, weil der Meeresboden für das aktuelle Projekt, zu dem wir angereist sind, nun mal 40 Meter tief ist."
+      },
+      "coupling": {
+        "script": "Steckt diese Information im Skill selbst, haben wir eine sehr präzise Anweisung, die der KI-Agent ausführen kann. Gleichzeitig haben wir aber dafür gesorgt, dass dieser Skill beim nächsten Mal potenziell nicht mehr funktioniert: In der Anweisung stand 40 Meter, aber beim nächsten Mal ist der Meeresboden vielleicht 120 Meter tief. Das ist die Aussage dazu, was eigentlich in einen Skill gehört."
+      }
+    }
+  }
+}

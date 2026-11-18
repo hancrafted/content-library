@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "conways-law": {
+        "script": "Das Erste ist eine sehr berühmte Regel, Conways Law. Sie besagt, dass sich in einer Organisation das System oft so spiegelt, wie die Menschen darin kommunizieren: Am Ende spiegeln Software, ein Produkt und oft auch Arbeitsprozesse die menschlichen Kommunikationsmuster wider. Ein Beispiel: Ein Team ist für das Sommerfest oder ein größeres Projekt zuständig, und eines der Subteams ist stark überrepräsentiert, etwa zehn Leute bei den Venue Scouts, während es für Catering und Travel nur eine Person gibt. Bittest Du diese Leute, einen agentischen Workflow oder generell einen Workflow zu definieren, ist die Wahrscheinlichkeit hoch, dass Anforderungen und Tätigkeiten überproportional von diesem Team repräsentiert sind. Das ist Conways Law."
+      },
+      "a-teams-draft": {
+        "script": "Dieses Beispiel habe ich nicht aus der Luft gegriffen, es ist in einem Firmenprojekt passiert, das ich beraten habe. Sie hatten 14 UX-Designer in ihrem Produktteam und vier Engineers, frag mich nicht, wie es dazu gekommen ist. Ihr Workflow hatte tatsächlich zehn einzelne Schritte mit Freigaben und Ähnlichem, die über Design gingen, und nur halb so viele für Engineering und Qualitätssicherung. Das ist Conways Law vom Feinsten."
+      },
+      "your-sign": {
+        "script": "Überlässt Du einer solchen Organisation die Aufgabe, sich selbst einen agentischen Workflow zu definieren, kann es gut sein, dass er für Menschen entworfen ist, aber nicht für Agenten. Das ist ein großer Trugschluss: dass man auf den bestehenden Workflow einfach überall KI draufklatschen kann und am Ende genau das richtige Ergebnis herauskommt. Es kann immer noch das Richtige herauskommen, aber meine Hypothese ist, dass es schwierig wird."
+      }
+    }
+  }
+}
