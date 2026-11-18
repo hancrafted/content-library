@@ -1,0 +1,40 @@
+{
+  "title": "The shared foundation",
+  "caption": "Six Episodes carry both tracks; you have seen the first three today.",
+  "today": "Covered today",
+  "context": "Context engineering",
+  "watch": "Watch the Episode",
+  "newTabHint": "opens in a new tab",
+  "episodes": {
+    "ai-attention-span": {
+      "title": "Why AI has a weird attention span you must learn to manage",
+      "body": "What the model sees decides what it does."
+    },
+    "onboard-ai-every-time": {
+      "title": "Treat AI like a brilliant freelancer with amnesia",
+      "body": "Brief it every session, as you would a new hire."
+    },
+    "ai-gives-you-more-work": {
+      "title": "Will AI reduce your work? It adds work: managing it.",
+      "body": "Delegating to AI is a job of its own: plan, check, decide."
+    },
+    "from-shared-understanding-to-shared-context": {
+      "title": "From shared understanding to shared context",
+      "body": "Requirements first: settle what done means before the work starts."
+    },
+    "what-lies-below-the-waterline-of-sustainable-ai-skills": {
+      "title": "What lies below the waterline of sustainable AI skills",
+      "body": "Skills: how a task is done, kept apart from what the AI knows."
+    },
+    "what-agentic-workflows-require": {
+      "title": "What agentic workflows require of people and organisations",
+      "body": "The principles behind agentic workflows, for people and teams."
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What we did, and what comes next",
+      "description": "The three badged cards are what we did today. The other three are where both tracks go next, whatever tool you use; each is an Episode you can watch. Context engineering runs through almost all of them, so it is a tag, not its own card."
+    }
+  }
+}

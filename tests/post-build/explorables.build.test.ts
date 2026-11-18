@@ -8,7 +8,13 @@ import { exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exporte
 const basePath = resolveBasePath();
 
 // decision: ARCH-003 §1.2
-const SLUGS = ['context-window', 'human-in-the-loop', 'ai-capability', 'software-ecology'] as const;
+const SLUGS = [
+  'context-window',
+  'human-in-the-loop',
+  'ai-capability',
+  'software-ecology',
+  'brief-or-pay-the-price',
+] as const;
 const PAGES = SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({
     slug,
@@ -83,6 +89,7 @@ describe('the Explorables overview', () => {
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));
     const expected = [
       ['ai-capability', 'cumulative-orchestration'],
+      ['brief-or-pay-the-price', 'matrix-to-workflow'],
       ['context-window', 'intention-capacity'],
       ['human-in-the-loop', 'review-funnel'],
       ['software-ecology', 'review-funnel'],
@@ -201,5 +208,37 @@ describe('the "Explore it →" link on an Explorable shown in a Slide', () => {
       .map((anchor) => $(anchor).attr('data-explore-it'));
     // ASSERT
     expect(others).not.toContain('ai-capability');
+  });
+});
+
+describe('the Brief or pay the price Explorable page', () => {
+  it.each(LOCALES)('shows the PRICE mirror with its five chips and its closing line for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/explorables/brief-or-pay-the-price', locale));
+    const expected = { letters: ['P', 'R', 'I', 'C', 'E'], cards: 10, closing: 1 };
+    // ACT
+    const found = {
+      letters: $('#play [data-trait-initial]')
+        .toArray()
+        .map((chip) => $(chip).text()),
+      cards: $('#play [data-card]').length,
+      closing: $('#play [data-target="closing"]').length,
+    };
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('shows each German trait name in English with its gloss in the chip accessible name only', () => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/explorables/brief-or-pay-the-price', 'de'));
+    const expected = ['Probabilistic (probabilistisch): Jedes Mal ein anderes Ergebnis'];
+    // ACT
+    const names = $('#play button[aria-expanded][aria-label]')
+      .toArray()
+      .map((chip) => $(chip).attr('aria-label'))
+      .slice(0, 1);
+    // ASSERT
+    expect(names).toEqual(expected);
+    expect($('#play [data-trait-gloss]').length).toBe(0);
   });
 });

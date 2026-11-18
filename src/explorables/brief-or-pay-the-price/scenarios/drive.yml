@@ -1,0 +1,335 @@
+# One scenario: structure at the top, every word under i18n, keyed by id.
+# Cells name a BRIEF move and a PRICE trait by id. A Cell outside the counters
+# table is allowed; it renders outlined, "in this context".
+# Cell ids are unique within a node; nodes may share a Cell id and its words
+# (here through the YAML anchor &implement).
+id: drive
+acronym: DRIVE
+stages:
+  - { id: define, scene: grill }
+  - { id: reason, scene: plan }
+  - { id: implement, scene: parallel }
+  - { id: verify, scene: check }
+  - { id: evolve, scene: harden }
+nodes:
+  - id: define
+    stage: define
+    cells:
+      - { id: define-ic, move: interview-yourself-with-ai, trait: confident }
+      - { id: define-ii, move: interview-yourself-with-ai, trait: informed }
+      - { id: define-rc, move: requirements-first, trait: confident }
+  - id: reason
+    stage: reason
+    cells:
+      - { id: reason-rp, move: requirements-first, trait: probabilistic }
+      - { id: reason-rc, move: requirements-first, trait: confident }
+  - id: implement-a
+    stage: implement
+    cells: &implement
+      - { id: implement-br, move: break-it-down, trait: relentless }
+      - { id: implement-be, move: break-it-down, trait: every-word-billed }
+      - { id: implement-fr, move: fresh-start-for-each-piece, trait: relentless }
+      - { id: implement-fe, move: fresh-start-for-each-piece, trait: every-word-billed }
+  - id: implement-b
+    stage: implement
+    cells: *implement
+  - id: verify
+    stage: verify
+    cells:
+      - { id: verify-er, move: evaluate-each-step, trait: relentless }
+      - { id: verify-ep, move: evaluate-each-step, trait: probabilistic }
+      - { id: verify-ec, move: evaluate-each-step, trait: confident }
+  - id: evolve
+    stage: evolve
+    cells:
+      - { id: evolve-rp, move: requirements-first, trait: probabilistic }
+      - { id: evolve-ii, move: interview-yourself-with-ai, trait: informed }
+      - { id: evolve-fe, move: fresh-start-for-each-piece, trait: every-word-billed }
+edges:
+  - { from: define, to: reason }
+  - { from: reason, to: implement-a }
+  - { from: reason, to: implement-b }
+  - { from: implement-a, to: verify }
+  - { from: implement-b, to: verify }
+  - { from: verify, to: evolve }
+  - { from: evolve, to: goal }
+annotations:
+  B:
+    - { type: highlight, goal: true, nodes: [define], stages: [define] }
+    - { type: arrow, from: goal, to: define, route: under, text: b-arrow }
+  R:
+    - { type: highlight, nodes: [reason], stages: [reason] }
+    - { type: tag, node: reason, text: r-tag }
+    - { type: group, nodes: [implement-a, implement-b], text: r-group }
+  A:
+    - { type: highlight, nodes: [implement-a, implement-b], stages: [implement] }
+    - { type: mark, nodes: [implement-a, implement-b], kind: intent }
+  C:
+    - type: highlight
+      edges:
+        [define>reason, reason>implement-a, reason>implement-b, implement-a>verify, implement-b>verify, verify>evolve]
+    - { type: chip, edge: define>reason, text: c-requirements }
+    - { type: chip, edge: reason>implement-a, text: c-ticket }
+    - { type: chip, edge: reason>implement-b, text: c-ticket }
+    - { type: chip, edge: implement-a>verify, text: c-report }
+    - { type: chip, edge: implement-b>verify, text: c-report }
+    - { type: chip, edge: verify>evolve, text: c-pr }
+  E:
+    - { type: highlight, nodes: [verify, evolve], stages: [verify, evolve] }
+    - { type: mark, nodes: [verify], kind: check }
+    - { type: arrow, from: evolve, to: define, route: over, text: e-loop }
+i18n:
+  en:
+    title: DRIVE · five stages of an agentic workflow
+    stages:
+      define:
+        {
+          name: Define,
+          short: Requirements written down,
+          analogy: The lead settles with the client what the job must achieve.,
+          ai: The Orchestrator grills you until every requirement is written down.,
+        }
+      reason:
+        {
+          name: Reason,
+          short: A plan and a brief each,
+          analogy: The lead turns it into a plan and a brief for each freelancer.,
+          ai: 'Decision docs, a spec and tickets, each ticket with its brief.',
+        }
+      implement:
+        {
+          name: Implement,
+          short: Pieces built side by side,
+          analogy: 'Each freelancer works their piece, side by side.',
+          ai: 'Subagents work tickets in parallel, each in its own branch.',
+        }
+      verify:
+        {
+          name: Verify,
+          short: Checked against the brief,
+          analogy: The lead checks each piece against its brief.,
+          ai: Review and CI check every merge before the PR.,
+        }
+      evolve:
+        {
+          name: Evolve,
+          short: Lessons become checks,
+          analogy: The team writes down what to do better next time.,
+          ai: Fortify turns each lesson into a check the next run enforces.,
+        }
+    nodes:
+      define: { label: Define, role: Orchestrator grills the Operator }
+      reason: { label: Reason, role: 'Decision docs, spec, tickets' }
+      implement-a: { label: Implement, role: 'Subagent, ticket 1' }
+      implement-b: { label: Implement, role: 'Subagent, ticket 2' }
+      verify: { label: Verify, role: Review and CI }
+      evolve: { label: Evolve, role: Fortify the harness }
+    cells:
+      define-ic:
+        {
+          freelancer: The lead asks the client every open question before anyone guesses.,
+          ai: 'The Orchestrator grills you, one question at a time, until no gap is left to fill.',
+        }
+      define-ii:
+        {
+          freelancer: 'The client’s unwritten rules come out at the kickoff, not at the review.',
+          ai: Your house rules and past decisions go into the grill’s notes.,
+        }
+      define-rc:
+        {
+          freelancer: 'Done means signed off: the client agrees what finished looks like.',
+          ai: Each answer becomes a written requirement the run is held to.,
+        }
+      reason-rp:
+        {
+          freelancer: 'Each piece gets its acceptance test, so any freelancer would build the same thing.',
+          ai: 'Each ticket carries its acceptance criteria, so two runs land on the same result.',
+        }
+      reason-rc:
+        {
+          freelancer: Every open decision is written down before the hand-over.,
+          ai: Decision docs settle the choices a Subagent would otherwise guess.,
+        }
+      implement-br:
+        {
+          freelancer: 'One piece per freelancer, small enough to check in an hour.',
+          ai: 'One ticket per Subagent, small enough to review in one sitting.',
+        }
+      implement-be: { freelancer: 'Small pieces, small invoices.', ai: A small ticket reads and writes few tokens. }
+      implement-fr:
+        {
+          freelancer: 'A clean desk for each freelancer, with only their brief on it.',
+          ai: 'A fresh worktree and a fresh context for each ticket.',
+        }
+      implement-fe:
+        {
+          freelancer: Nobody rereads the whole project file to start.,
+          ai: No Subagent pays for the Orchestrator’s long chat.,
+        }
+      verify-er:
+        {
+          freelancer: The lead checks each piece against its brief as it lands.,
+          ai: Review and CI check every merge against its ticket.,
+        }
+      verify-ep:
+        {
+          freelancer: A second look catches the piece that came out different this time.,
+          ai: Tests fail when a run drifts from the spec.,
+        }
+      verify-ec:
+        {
+          freelancer: 'A confident report is checked, not believed.',
+          ai: A summary that sounds green still has to pass the checks.,
+        }
+      evolve-rp:
+        {
+          freelancer: Each lesson becomes a line in the next brief.,
+          ai: 'A lesson becomes a lint rule or a test, so the next run can’t drift.',
+        }
+      evolve-ii:
+        {
+          freelancer: The team writes down what the client never said.,
+          ai: The Operator’s corrections go into skills and docs.,
+        }
+      evolve-fe:
+        {
+          freelancer: 'The next job starts with a clean, shorter brief.',
+          ai: 'The next run starts fresh, with the lesson in the harness, not in the chat.',
+        }
+    annotations:
+      b-arrow: plan backwards from the goal
+      r-tag: ✓ decisions resolved
+      r-group: independent · in parallel
+      c-requirements: requirements
+      c-ticket: ticket + brief
+      c-report: report
+      c-pr: reviewed PR
+      e-loop: harden the checks after every run
+  de:
+    title: DRIVE · fünf Phasen eines agentischen Workflows
+    stages:
+      define:
+        {
+          name: Define,
+          short: Anforderungen schriftlich,
+          analogy: Die Leitung klärt mit dem Kunden,
+          was der Auftrag erreichen muss.,
+          ai: 'Der Orchestrator befragt dich, bis jede Anforderung aufgeschrieben ist.',
+        }
+      reason:
+        {
+          name: Reason,
+          short: Ein Plan und je ein Briefing,
+          analogy: Die Leitung macht daraus einen Plan und ein Briefing pro Freelancer.,
+          ai: 'Entscheidungsdokumente, Spec und Tickets, jedes Ticket mit Briefing.',
+        }
+      implement:
+        {
+          name: Implement,
+          short: Teile parallel gebaut,
+          analogy: 'Jeder Freelancer arbeitet an seinem Teil, nebeneinander.',
+          ai: 'Subagenten bearbeiten Tickets parallel, jeder im eigenen Branch.',
+        }
+      verify:
+        {
+          name: Verify,
+          short: Gegen das Briefing geprüft,
+          analogy: Die Leitung prüft jedes Teil gegen sein Briefing.,
+          ai: Review und CI prüfen jeden Merge vor dem PR.,
+        }
+      evolve:
+        {
+          name: Evolve,
+          short: Lektionen werden Checks,
+          analogy: 'Das Team schreibt auf, was es nächstes Mal besser macht.',
+          ai: 'Fortify macht aus jeder Lektion einen Check, den der nächste Lauf erzwingt.',
+        }
+    nodes:
+      define: { label: Define, role: Der Orchestrator befragt den Operator }
+      reason: { label: Reason, role: 'Entscheidungen, Spec, Tickets' }
+      implement-a: { label: Implement, role: 'Subagent, Ticket 1' }
+      implement-b: { label: Implement, role: 'Subagent, Ticket 2' }
+      verify: { label: Verify, role: Review und CI }
+      evolve: { label: Evolve, role: Den Harness härten }
+    cells:
+      define-ic:
+        {
+          freelancer: 'Die Leitung stellt dem Kunden jede offene Frage, bevor jemand rät.',
+          ai: 'Der Orchestrator fragt dich Frage für Frage, bis keine Lücke bleibt.',
+        }
+      define-ii:
+        {
+          freelancer: 'Die ungeschriebenen Regeln des Kunden kommen beim Kickoff heraus, nicht beim Review.',
+          ai: Deine Hausregeln und früheren Entscheidungen landen in den Notizen.,
+        }
+      define-rc:
+        {
+          freelancer: 'Fertig heißt abgenommen: Der Kunde sagt, wie fertig aussieht.',
+          ai: 'Jede Antwort wird eine schriftliche Anforderung, an der sich der Lauf misst.',
+        }
+      reason-rp:
+        {
+          freelancer: 'Jedes Teil bekommt seinen Abnahmetest, sodass jeder Freelancer dasselbe bauen würde.',
+          ai: 'Jedes Ticket hat Akzeptanzkriterien, sodass zwei Läufe gleich enden.',
+        }
+      reason-rc:
+        {
+          freelancer: Jede offene Entscheidung steht vor der Übergabe fest.,
+          ai: 'Entscheidungsdokumente klären, was ein Subagent sonst raten würde.',
+        }
+      implement-br:
+        {
+          freelancer: 'Ein Teil pro Freelancer, in einer Stunde prüfbar.',
+          ai: 'Ein Ticket pro Subagent, in einer Sitzung reviewbar.',
+        }
+      implement-be:
+        { freelancer: 'Kleine Teile, kleine Rechnungen.', ai: Ein kleines Ticket liest und schreibt wenige Tokens. }
+      implement-fr:
+        {
+          freelancer: 'Ein leerer Schreibtisch pro Freelancer, nur mit seinem Briefing.',
+          ai: Ein frischer Worktree und ein frischer Kontext pro Ticket.,
+        }
+      implement-fe:
+        {
+          freelancer: Niemand liest zum Start die ganze Projektakte.,
+          ai: Kein Subagent zahlt für den langen Chat des Orchestrators.,
+        }
+      verify-er:
+        {
+          freelancer: 'Die Leitung prüft jedes Teil gegen sein Briefing, sobald es kommt.',
+          ai: Review und CI prüfen jeden Merge gegen sein Ticket.,
+        }
+      verify-ep:
+        {
+          freelancer: 'Ein zweiter Blick findet das Teil, das diesmal anders ausfiel.',
+          ai: 'Tests schlagen fehl, wenn ein Lauf von der Spec abweicht.',
+        }
+      verify-ec:
+        {
+          freelancer: 'Ein selbstsicherer Bericht wird geprüft, nicht geglaubt.',
+          ai: 'Eine Zusammenfassung, die grün klingt, muss trotzdem die Checks bestehen.',
+        }
+      evolve-rp:
+        {
+          freelancer: Jede Lektion wird eine Zeile im nächsten Briefing.,
+          ai: 'Eine Lektion wird eine Lint-Regel oder ein Test, damit der nächste Lauf nicht abweicht.',
+        }
+      evolve-ii:
+        {
+          freelancer: 'Das Team schreibt auf, was der Kunde nie gesagt hat.',
+          ai: Die Korrekturen des Operators wandern in Skills und Docs.,
+        }
+      evolve-fe:
+        {
+          freelancer: 'Der nächste Auftrag beginnt mit einem sauberen, kürzeren Briefing.',
+          ai: 'Der nächste Lauf startet frisch, mit der Lektion im Harness, nicht im Chat.',
+        }
+    annotations:
+      b-arrow: vom Ziel rückwärts planen
+      r-tag: ✓ Entscheidungen geklärt
+      r-group: unabhängig · parallel
+      c-requirements: Anforderungen
+      c-ticket: Ticket + Briefing
+      c-report: Bericht
+      c-pr: geprüfter PR
+      e-loop: nach jedem Lauf die Checks härten

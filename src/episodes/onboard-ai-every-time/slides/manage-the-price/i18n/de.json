@@ -2,60 +2,6 @@
   "title": "Fünf Schritte gegen fünf Eigenschaften",
   "heading": "Fünf Schritte, um einen Freelancer mit Amnesie zu briefen",
   "caption": "Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie im Griff.",
-  "tableLabel": "Welcher Schritt welcher Eigenschaft entgegenwirkt",
-  "corner": "Schritte gegen Eigenschaften",
-  "tick": "wirkt entgegen",
-  "footLabel": "Schritte, die jeder Eigenschaft entgegenwirken",
-  "movesCount": "<figure>{count}</figure> {count, plural, one {Schritt} other {Schritte}}",
-  "traits": {
-    "probabilistic": {
-      "initial": "P",
-      "rest": "robabilistic"
-    },
-    "relentless": {
-      "initial": "R",
-      "rest": "elentless"
-    },
-    "informed": {
-      "initial": "I",
-      "rest": "nformed"
-    },
-    "confident": {
-      "initial": "C",
-      "rest": "onfident"
-    },
-    "every-word-billed": {
-      "initial": "E",
-      "rest": "very word billed"
-    }
-  },
-  "moves": {
-    "break-it-down": {
-      "initial": "B",
-      "rest": "rich es auf",
-      "line": "Gib ein Stück nach dem anderen ab. Kleine Stücke lassen weniger Raum für Fehler und kosten weniger."
-    },
-    "requirements-first": {
-      "initial": "R",
-      "rest": "equirements zuerst",
-      "line": "Schreib auf, wie gut aussieht, bevor die Arbeit beginnt. Dann bringt dasselbe Briefing Ergebnisse, die übereinstimmen."
-    },
-    "interview-yourself-with-ai": {
-      "initial": "I",
-      "rest": "nterviewe Dich mit KI",
-      "line": "Lass Dir zuerst die Fragen der KI stellen. Dein ungeschriebener Kontext kommt heraus, bevor sie rät."
-    },
-    "evaluate-each-step": {
-      "initial": "E",
-      "rest": "valuiere jeden Schritt",
-      "line": "Prüfe jeden Schritt gegen die Anforderungen. Ein Irrweg fällt früh auf, nicht erst nach der letzten Seite."
-    },
-    "fresh-start-for-each-piece": {
-      "initial": "F",
-      "rest": "rischer Start für jedes Teil",
-      "line": "Öffne für jedes Stück einen neuen Chat. Alte Worte türmen sich nicht mehr auf der Rechnung und im Weg."
-    }
-  },
   "notes": {
     "break-it-down": {
       "header": "Zerlege es",

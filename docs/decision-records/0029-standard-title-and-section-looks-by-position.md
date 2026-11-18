@@ -30,7 +30,7 @@ The same Title look is hand-copied into 16 Slide files, and two section looks in
    - **Opening section:** section-band surface, no effect, default space before and after, so the Title's leave runs dark to light.
    - **Later sections:** inverse, softened surface, liquid enter and leave, default space before and after.
 3. **Declaration wins.** A Slide's own `presentation`, or the Title's `title.presentation`, replaces the default in full. Defaults and declarations are never merged key by key, so a Waterline section slide keeps its bubbles.
-4. **Where the defaults apply.** Episode composition applies them in the same resolution step as Episode instance overrides (Decision record _An Event copy is an instance of its Episode_), before adjacent edges are resolved and before the surface clock decides whether it runs. The wrapper and the clock see ordinary declarations.
+4. **Where the defaults apply.** The page record applies them (`recordContent`), after Episode instance overrides have been resolved (Decision record _An Event copy is an instance of its Episode_) and before adjacent edges are resolved and the surface clock decides whether it runs. The wrapper and the clock see ordinary declarations.
 5. **Home.** The standard looks are named constants in the Slide master. They are not a Theme field or a renderer registry.
 
 ## Amends

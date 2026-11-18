@@ -3,6 +3,7 @@
 // after its slug; a folder `src/explorables/<slug>/` is an Explorable.
 import type { ExplorablePageSlug } from '@/content-store/catalogue/record-routes';
 import { explorablePage as aiCapability } from './explorable-pages/ai-capability';
+import { explorablePage as briefOrPayThePrice } from './explorable-pages/brief-or-pay-the-price';
 import { explorablePage as contextWindow } from './explorable-pages/context-window';
 import { explorablePage as humanInTheLoop } from './explorable-pages/human-in-the-loop';
 import { explorablePage as softwareEcology } from './explorable-pages/software-ecology';
@@ -11,6 +12,7 @@ import type { ExplorablePageInput } from './schemas/explorable-page.schema';
 /** Every Explorable page record by slug, so a key and its record's slug must match, and every composition has one. */
 export const EXPLORABLE_PAGE_RECORDS = {
   'ai-capability': aiCapability,
+  'brief-or-pay-the-price': briefOrPayThePrice,
   'context-window': contextWindow,
   'human-in-the-loop': humanInTheLoop,
   'software-ecology': softwareEcology,
@@ -19,6 +21,7 @@ export const EXPLORABLE_PAGE_RECORDS = {
 /** Every Explorable by folder slug, `src/explorables/<slug>/`: an Explorable page's slug names one. */
 export const EXPLORABLE_SLUGS: readonly string[] = [
   'ai-capability',
+  'brief-or-pay-the-price',
   'context-window',
   'human-in-the-loop',
   'software-ecology',

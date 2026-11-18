@@ -16,7 +16,7 @@ _Avoid_: pipeline, process, flow
 **DRIVE**: the five phases of a Workflow, each named by its verb: **D**efine (_clarify_: requirements, grilling), **R**eason (_specify_: design, architecture, Decision docs, spec, tickets), **I**mplement (_codify_: the code), **V**erify (_verify_: review, integration, CI), **E**volve (_fortify_: Fortify). A skill may serve several phases and a phase several skills.
 _Avoid_: stage, step, SDLC
 
-**Fortify**: the Evolve phase. After the Integration branch's last push passes CI, at the latest before cleanup, one decision page offers 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer; the Operator picks one per category. The quick win merges now, the architectural one becomes the single open `fortify` ticket, and the rest are logged with a recurrence count.
+**Fortify**: the Evolve phase. After the Operator merges the Integration branch, on a branch from the base branch, it gathers what went wrong into 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer. Every option is logged with a recurrence count, and the recommended architectural option becomes the single open `fortify` ticket, where the Operator picks a quick win when triaging it. Fortify blocks nothing.
 _Avoid_: retro, retrospective (`/retro` is one evidence source), lessons learned
 
 **Failure mode**: one narrow way the Workflow or the repo went wrong, named so an Enforcer could catch it next time. Fortify proposes options per failure mode, and the learnings file keeps one entry per failure mode with a recurrence count; a count of three or more is a **smell** to raise with the Operator.
@@ -33,10 +33,10 @@ _Avoid_: autonomy level, HITL mode
 
 ## Roles
 
-**Operator**: the person who runs a Workflow: answers the grilling, decides on decision pages, approves Decision docs and merges to the base branch.
+**Operator**: the person who runs a Workflow: answers the grilling, decides on decision pages, passes the Decision gate and merges to the base branch.
 _Avoid_: user, human, reviewer
 
-**Orchestrator**: the main session of a Workflow and its architect. It grills, reasons, plans, reviews, checks every Subagent report and opens the PRs; it stays lean so the conversation stays fluid. Inline it does only what needs its context and leaves no diff in the repo, plus the Decision docs, which travel through their own PR. Everything else goes to Subagents.
+**Orchestrator**: the main session of a Workflow and its architect. It grills, reasons, plans, reviews, checks every Subagent report and opens the PRs; it stays lean so the conversation stays fluid. Inline it does only what needs its context and leaves no diff in the repo, plus the Decision docs, which travel through the Decision PR. Everything else goes to Subagents.
 _Avoid_: main agent, lead agent, coordinator
 
 **Subagent**: an agent the Orchestrator starts for execution: it works on its own Task branch in its own worktree from a Handoff, merges itself into the Integration branch, and never pushes. Any provider can be one.
@@ -47,7 +47,7 @@ _Avoid_: persona, role prompt, agent type
 
 ## Branches and handoffs
 
-**Integration branch**: the branch an Orchestrator works on for one topic, in its own worktree. Every Task branch starts from it and merges back into it, and it reaches the base branch through one PR that the Operator merges.
+**Integration branch**: the branch an Orchestrator works on for one topic, in its own worktree, created and pushed when the Workflow starts. The Decision PR and every Task branch merge into it, and it reaches the base branch through one PR that the Operator merges.
 _Avoid_: feature branch, parent branch, epic branch
 
 **Task branch**: the branch one Subagent works on, started from the Integration branch and named after it with `--<issue>-<task>`, or `--<task>` without a ticket; it merges back as one merge commit, so a failed check reverts one commit.
@@ -62,12 +62,18 @@ _Avoid_: scratchpad (a session's own, lost with it), workspace
 **Decisions log**: the file in the topic folder where the Orchestrator writes each settled term and decision in its exact wording the moment it settles, and each Operator correction at once. Decision docs and the Fortify evidence are written from it.
 _Avoid_: notes, minutes, handoff
 
-**Decision docs**: the glossary, Decision records and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through its own PR to the base branch; a Subagent proposes terms in its report.
+**Decision docs**: the glossary, Decision records and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through the Decision PR; a Subagent proposes terms in its report.
 _Avoid_: specs (a spec lives on the tracker), docs, documentation
+
+**Decision PR**: the one PR of `decisions/<topic>` into the Integration branch. Its body links the spec and every ticket, names what the change touches that is live or scheduled, and states the run's terms: the Operator's remaining stops, the expected duration and the closed reasons to stop. Review comments on it are grilling input; closing it unmerged stops the Workflow.
+_Avoid_: docs PR, ADR PR
+
+**Decision gate**: the one point where the Operator approves a Workflow's Decision docs, spec and tickets together: merging the Decision PR, or an explicit approval in the conversation when no Decision doc changes. Every decision the Workflow can settle early is settled before it; after it the Workflow runs unattended to a ready PR.
+_Avoid_: approval step, sign-off, checkpoint
 
 ## Binding
 
-**Binding**: a project's mapping of the DRIVE phases to the skills it has, the Model tier each phase's Subagents run on and the agent type every agent uses. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
+**Binding**: a project's mapping of the DRIVE phases to the skills it has, the Model tier each phase's Subagents run on, the agent type every agent uses and how the Operator is notified. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
 _Avoid_: config, mapping, registry
 
 **Enforcer**: a deterministic check a project already runs that can govern a failure mode: types, lint, tests, an ADR checker's rule, a hook. A narrow LLM judge counts only when its verdict can be checked. Fortify picks from the project's Enforcers.

@@ -38,7 +38,10 @@ export function planSync(input: {
   baseBranch: string;
   remote: string;
 }): SyncPlan {
-  const target = input.base ?? `${input.remote}/${input.baseBranch}`;
+  const followsItsOwnRemote = input.base === input.branch;
+  const target = followsItsOwnRemote
+    ? `${input.remote}/${input.branch}`
+    : (input.base ?? `${input.remote}/${input.baseBranch}`);
   if (input.branch === '') return { error: 'detached HEAD: check out a branch first' };
   if (input.branch === input.baseBranch) return { error: `run sync inside a worktree, not on ${input.baseBranch}` };
   if (input.dirty) return { error: 'the working tree is dirty; commit or stash first' };

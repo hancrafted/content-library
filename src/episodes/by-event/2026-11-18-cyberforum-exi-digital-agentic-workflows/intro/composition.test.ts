@@ -4,7 +4,7 @@ import { cyberforumIntro } from './episode';
 const SECTIONS = cyberforumIntro.sections.map((section) => section.map(({ slug }) => slug));
 
 describe('success cases', () => {
-  it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode', () => {
+  it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode and the two-tracks close', () => {
     // ARRANGE
     const expected = [
       ['grounding'],
@@ -16,6 +16,7 @@ describe('success cases', () => {
       ['check-in-1'],
       ['check-in-2'],
       ['check-in-3', 'disciplines-recap'],
+      ['overview', 'foundation', 'enablement-claude-desktop', 'ae-harness', 'ae-parallel-cli', 'matrix'],
     ];
     // ACT
     const sections = SECTIONS;

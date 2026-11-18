@@ -123,6 +123,7 @@ export function updateProjectConfig(existing: string | null, facts: ProjectFacts
     remote: worktree.remote,
     invoke: worktree.invoke,
     install,
+    beforeMerge: worktree.beforeMerge,
   };
   if (!root.has('worktree')) root.set('worktree', doc.createNode(seeded));
   addSection(doc, root, {

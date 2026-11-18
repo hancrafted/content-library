@@ -47,6 +47,7 @@ export const TEMPLATE_SLUGS = [
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at `/explorables/<slug>/`. */
 export const EXPLORABLE_PAGE_SLUGS = [
   'ai-capability',
+  'brief-or-pay-the-price',
   'context-window',
   'human-in-the-loop',
   'software-ecology',
