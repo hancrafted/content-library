@@ -293,12 +293,40 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** test-runner: new `drive notify` command whose test fails when the adapter reports no delivery, architectural
 - **Status:** ticket https://github.com/hancrafted/content-library/issues/772
 - **Evidence:** drive-handoff: #768 was ready and the Operator was notified, but Remote Control was off, so no phone push; the Binding's `notify` port (`docs/drive/binding.yml`) names an adapter and checks nothing
+### A grill round's questions are pointed to, not stated where the Operator reads
+
+- **Count:** 1 (last: 2026-11-18, event-copy-derivation)
+- **Enforcer:** none deterministic yet: a Define rule in the drive skill that each round's questions appear in full in the message that asks for answers, architectural
+- **Status:** proposed
+- **Evidence:** event-copy-derivation: the Orchestrator's setup message sent the Operator to "round 1, Q1 to Q4 from my last message" and offered a `/drive resume` line; the Operator had to ask "list round 1 questions"
+
+### Issues stay open after the PR that closes them has merged
+
+- **Count:** 1 (last: 2026-11-18, event-copy-derivation)
+- **Enforcer:** hook: `drive worktree done` closes or lists the issues its Integration branch's PR references, quick win
+- **Status:** proposed
+- **Evidence:** event-copy-derivation: the Orchestrator found #710, #728 and #735 still open after #714, #733 and #737 had merged, and asked the Operator whether to close them
+
+### The Operator skips Fortify, so corrections and options never reach a decision
+
+- **Count:** 3 (last: 2026-11-18, brief-or-pay-the-price)
+- **Enforcer:** none deterministic yet: Fortify runs from the base branch after the merge and its picks are optional (Decision record 0028), architectural
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool, ai-gives-you-more-work-pool, onboard-ai-every-time-event-look: the Operator skipped the Fortify picks on all three Workflows ("skip fortify and repeat the same for the \"ai-gives-you-more-work\" episode"); the entries above stay unpicked at count 1; enablement-vs-agentic-engineering: "skipp fortify" (2026-11-18), its seven entries stay proposed; brief-or-pay-the-price: "skip fority and record qw and ar to learndings.md" (2026-11-18), its picks recorded as proposed
+
+### Parallel Workflows append to learnings.md at the same spot and their PRs conflict with each other
+
+- **Count:** 1 (last: 2026-11-18, drive-learnings-consolidate)
+- **Enforcer:** none deterministic yet: one file per entry (e.g. `docs/drive/learnings/<slug>.md`) or a `merge=union` gitattribute on `docs/drive/learnings.md`, architectural; or Fortify rebases on main right before opening its PR, quick win
+- **Status:** proposed
+- **Evidence:** drive-learnings-consolidate: #774, #776 and #777 each appended failure modes after the last entry and corrections before the last line, so each conflicted with main and the others; merged by hand into one PR, and the "Operator skips Fortify" count was raised from 1 to 3 across them
 
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked "can this session run until end or does it require a human?" and asked for a guide to reviewing the PR. The Orchestrator had not stated the Operator's decision points, or how to review, up front. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked to resume automatically after a quota reset. There is no built-in recovery, so the Orchestrator added a session-only watchdog (a cron job that dies with the session). → Workflow progress lives only in the session, so a quota reset ends it
+- 2026-11-17 ai-attention-span-pool: skip fortify and repeat the same for the "ai-gives-you-more-work" episode. also apply the same transition as with the attention episode → The Operator skips Fortify, so corrections and options never reach a decision
 - 2026-11-18 brief-or-pay-the-price (grill): The PRICE/BRIEF ↔ stages/BRACE symmetry was wrong: PRICE is a problem set that BRIEF solves; stages are a process and BRACE its principles. → The grill frames the domain by a symmetry, a single example or a hard-coded instance
 - 2026-11-18 brief-or-pay-the-price (grill): Stages are agnostic: DRIVE is one scenario, not hard-coded. → The grill frames the domain by a symmetry, a single example or a hard-coded instance
 - 2026-11-18 brief-or-pay-the-price (grill): The summer party is a use case only, not the frame of the definitions. → The grill frames the domain by a symmetry, a single example or a hard-coded instance
@@ -314,7 +342,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 enablement-vs-agentic-engineering: The detached dev server start (`npx next dev` in background) exited 1 with "Errors: 1" and no message; a foreground start worked. → A detached dev server start exits without a message
 - 2026-11-18 enablement-vs-agentic-engineering: slide 3 [Image #4] this si the curernt desktop showing my project. on top left we have projects, meetings, artifacts, schedule. on right we have instrcutions, memory and context. create the graphic in the center and show the content it left and right → A Subagent draws a real product from imagination, and the Operator supplies screenshots a round later
 - 2026-11-18 onboard-ai-every-time-event-look: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
-- 2026-11-18 brief-or-pay-the-price: The Operator skipped the Fortify picks: "skip fority and record qw and ar to learndings.md". → (no failure mode; Fortify outcome)
+- 2026-11-18 brief-or-pay-the-price: The Operator skipped the Fortify picks: "skip fority and record qw and ar to learndings.md". → The Operator skips Fortify, so corrections and options never reach a decision
 - 2026-11-18 drive-handoff: "remove" on the glossary entries Run terms, Interrupt and Notify adapter (Operator, #746 review) → A glossary term is coined for what plain words already say
 - 2026-11-18 drive-handoff: the #745 brief named no evidence source, so its Subagent credited every Evidence line to this Workflow; the Orchestrator then edited learnings.md itself (d81199f95), which fortify.md reserves for a Subagent (Orchestrator's own) → A learnings ticket's brief names no evidence source, so its Subagent credits every line to the current Workflow
 - 2026-11-18 drive-handoff: #744 (skill text describing the #741 CLI) was dispatched in parallel with #741, so it documented the ticket, not the code; `drive worktree sync` without `--base` was wrong; the Orchestrator fixed it inline (76f36928f) (Orchestrator's own) → A ticket that documents code is dispatched before that code merges
@@ -323,3 +351,5 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 drive-handoff: `drive worktree done` refused to remove a worktree over pids that belonged to other sessions (#744) or had already exited (review fix); the first left the worktree on disk (Subagents, twice) → `drive worktree done` refuses over pids that belong to other sessions or have exited
 - 2026-11-18 drive-handoff: one commit hook failed on two unrelated test timeouts while a Subagent ran in parallel (test stage 221 s); the retry passed (Orchestrator's own) → A commit hook times out two unrelated tests while a Subagent runs in parallel
 - 2026-11-18 drive-handoff: the notify port's push notification reached only the terminal; Remote Control was off, so no phone push (gap) → The notify port's push notification reaches only the terminal
+- 2026-11-18 event-copy-derivation: list round 1 questions → A grill round's questions are pointed to, not stated where the Operator reads
+- 2026-11-18 drive-learnings-consolidate: "774,776 and 777 are pr with learndings updates of drive. they have conflices and will cause conflicts of each other." → Parallel Workflows append to learnings.md at the same spot and their PRs conflict with each other
