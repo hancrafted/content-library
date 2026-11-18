@@ -3,9 +3,13 @@ import configSource from './brief-or-pay-the-price.config.yml';
 import {
   DEFINITION_IDS,
   MOVE_IDS,
+  PRESET_IDS,
   type Definition,
+  type Config,
   type DefinitionId,
   type MoveId,
+  type PresetId,
+  type Preset,
   type RowWords,
   type Words,
   type WordsOverride,
@@ -22,6 +26,7 @@ export interface ExplorableData {
   readonly stages: Readonly<Record<string, Definition>>;
   readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly matrix: MatrixData;
+  readonly presets: Readonly<Record<PresetId, Preset>>;
 }
 
 export interface MatrixData {
@@ -78,6 +83,14 @@ function stagesOf(scenario: Scenario, words: Words, locale: Locale): Definition 
   };
 }
 
+function checkPresetScenarios(presets: Config['presets'], scenarios: Readonly<Record<string, unknown>>): void {
+  for (const id of PRESET_IDS) {
+    const { scenario } = presets[id];
+    if (scenarios[scenario] === undefined)
+      throw new Error(`${CONFIG_FILE}: presets.${id}: scenario "${scenario}" is not a Scenario file`);
+  }
+}
+
 export function explorableData(locale: string, override?: WordsOverride): ExplorableData {
   const chosen = isLocale(locale) ? locale : DEFAULT_LOCALE;
   const words = mergeWords(config.i18n[chosen], override);
@@ -104,5 +117,6 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
     counters: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].counters])) as Counters,
     sources: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].source])) as Record<MoveId, string>,
   };
-  return { locale: chosen, words, definitions, stages, scenarios, matrix };
+  checkPresetScenarios(config.presets, scenarios);
+  return { locale: chosen, words, definitions, stages, scenarios, matrix, presets: config.presets };
 }

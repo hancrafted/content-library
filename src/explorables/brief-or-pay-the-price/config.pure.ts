@@ -10,6 +10,7 @@ import {
   type Words,
   type WordsOverride,
 } from './brief-or-pay-the-price.types';
+import { presetsProblems } from './config-presets.pure';
 
 export type ConfigResult = { readonly config: Config } | { readonly problems: readonly string[] };
 
@@ -192,6 +193,7 @@ function checkConfig(source: string): ConfigResult {
   }
   if (!isRecord(doc)) return { problems: ['the file is not a mapping'] };
   const problems = [
+    ...presetsProblems(doc.presets),
     ...structureProblems(doc.definitions),
     ...movesProblems(doc.matrix),
     ...evidenceProblems(doc.i18n),

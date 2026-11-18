@@ -1,7 +1,7 @@
 {
   "title": "Brief or pay the price · hancrafted",
   "description": "An interactive look at AI as a brilliant freelancer with amnesia: the five PRICE traits that cost you, shown side by side for a freelancer and for AI, with a closing line that wipes every card.",
-  "toc": "Collapse contents Your AI is a brilliant freelancer with amnesia. Brief it, or pay the price. 1 Play Open contents : Contents Your AI is a brilliant freelancer with amnesia. Brief it, or pay the price. 1 Play",
+  "toc": "Collapse contents Your AI is a brilliant freelancer with amnesia. Brief it, or pay the price. 1 Play 2 About Open contents : Contents Your AI is a brilliant freelancer with amnesia. Brief it, or pay the price. 1 Play 2 About",
   "slides": [
     {
       "id": "top",
@@ -10,6 +10,10 @@
     {
       "id": "play",
       "text": "Five traits, or you pay the price Point at a letter to see how a freelancer and an AI each meet that trait. Define PRICE BRIEF DRIVE BRACE Zoom Agent Workflow PRICE · five traits of a brilliant freelancer with amnesia The freelancer Five traits AI P Probabilistic Outcome changes every time Give the same brief to a new freelancer, and get a different plan. prompt Outcome changes every time Give the same prompt in a new chat, and get a different answer. R Relentless High output, unknown quality Hand over the job, and they work day and night, producing stacks of polished pages, whether they’re right or not. High output, unknown quality Send the prompt, and it produces pages in seconds, as many as you ask for, whether they’re right or not. I Informed How we work here We always never </> ∑ € § Knowledgeable, but not about you Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture. How we work here We always never Knowledgeable, but not about you Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture. C Confident Fills the gap without question Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right. Fills the gap without question Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence. E Every word billed 0 €1 €2 €3 €4 €5 €6 €7 €8 €9 €10 €11 €12 €13 €14 €15 bill The bill grows every turn They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included. 0 1k 2k 3k 4k 5k 6k 7k 8k 9k 10k 11k 12k 13k 14k 15k tokens The bill grows every turn It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included. Amnesia: after each conversation, they forget everything, so you have to onboard them again, and every job starts from zero. Show all and play Reset to day one Hover a letter to reveal it; click a card to turn it."
+    },
+    {
+      "id": "about",
+      "text": "Why · How · What Why AI needs a brief, how five moves and five principles give it one, and what the Explorable shows. Why You brief an AI, and it forgets, guesses and still sounds sure. Every new chat starts from zero, and when it is unsure it answers anyway instead of asking. ( ) Five traits, PRICE, explain why it costs you, side by side for a freelancer and for AI. How Five moves brief one agent: BRIEF. Break it down, put requirements first, interview yourself with AI, evaluate each step and start fresh for each piece. ( ) Each move counters one or more of the five traits. What Five principles run the work across stages: BRACE. Start backwards from the goal, resolve dependencies early, give autonomy through intent, agree contracts at the seams and engineer trust. ( ) See them on DRIVE: Define, Reason, Implement, Verify, Evolve."
     }
   ],
   "notes": [
@@ -17,13 +21,18 @@
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
-    { "id": "play", "text": "Play No speaker notes for this Slide." }
+    { "id": "play", "text": "Play No speaker notes for this Slide." },
+    {
+      "id": "about",
+      "text": "About The forgetting and the guessing are built in The context window is the model's working memory, and memory across chats exists only where an application stores notes and puts them back, because the memory tool runs client-side 1 2 . Most benchmarks score a guess above an abstention, so training rewards guessing instead of asking 3 (Episode evidence: Pay the price). Sources (3) Anthropic, Context windows ( opens in a new tab ) platform.claude.com Anthropic, Memory tool ( opens in a new tab ) platform.claude.com Kalai et al., Why Language Models Hallucinate ( opens in a new tab ) arxiv.org Each move has evidence behind it Solving simpler subproblems in sequence scored 99% or better on a compositional benchmark against 16% for chain-of-thought prompting with an older model 1 . Results varied more than twice as much for a requirement left unstated as for one stated 2 . Feedback on each reasoning step beats feedback on the final result alone 3 . Top models scored on average 39% lower in multi-turn conversation than with the full instruction at once 4 (Episode evidence: Manage the price). \"Interview yourself with AI\" is backed by two further studies there. Sources (4) Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models ( opens in a new tab ) arxiv.org Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3) ( opens in a new tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( opens in a new tab ) arxiv.org Laban et al., LLMs Get Lost in Multi-Turn Conversation ( opens in a new tab ) arxiv.org BRACE: five principles, each with its own source Anthropic tells builders to define success criteria up front 1 . Planning backwards from the goal is established practice in planning, but no study tests it on agent work (research PLAN-0003). Subagents without detailed tasks \"duplicate work, leave gaps, or fail to find necessary information\", and multi-agent systems are a poor fit where many dependencies run between agents 2 (research SWE-0007, SWE-0008). Army doctrine tells commanders to state the results to be attained, not how, and says trust \"must be earned\" 3 (research AIE-0027). Reliance should match demonstrated reliability 4 , and agents need checkpoints, guardrails and ground truth from the environment 5 (research AIE-0028). Sources (5) Anthropic, Define your success criteria ( opens in a new tab ) platform.claude.com Anthropic, How we built our multi-agent research system ( opens in a new tab ) anthropic.com US Army, ADP 6-0 Mission Command (17 May 2012), copy hosted by Brigham Young University-Idaho ( opens in a new tab ) brightspotcdn.byui.edu Lee and See, Trust in Automation: Designing for Appropriate Reliance (Human Factors, 2004), abstract ( opens in a new tab ) pubmed.ncbi.nlm.nih.gov Anthropic, Building effective agents ( opens in a new tab ) anthropic.com"
+    }
   ],
   "script": [
     {
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
-    { "id": "play", "text": "Play No voice script for this Slide." }
+    { "id": "play", "text": "Play No voice script for this Slide." },
+    { "id": "about", "text": "About No voice script for this Slide." }
   ]
 }

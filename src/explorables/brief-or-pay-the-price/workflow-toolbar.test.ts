@@ -7,7 +7,7 @@ import { start, step, type ExplorableEvent } from './explorable-state.pure';
 import { Toolbar } from './toolbar.client';
 
 const data = explorableData('en');
-const render = (scenarios: { id: string; name: string }[], events: ExplorableEvent[]) =>
+const render = (scenarios: { id: string; name: string }[], events: ExplorableEvent[], picker = true) =>
   load(
     renderToStaticMarkup(
       createElement(Toolbar, {
@@ -15,6 +15,7 @@ const render = (scenarios: { id: string; name: string }[], events: ExplorableEve
         tabs: { ...data.definitions, stages: data.stages.drive as never },
         state: events.reduce(step, start({ price: 5, brief: 5, brace: 5 }, 'drive')),
         scenarios,
+        picker,
         title: '',
         onView: () => undefined,
         onScenario: () => undefined,
@@ -47,6 +48,15 @@ describe('failure cases', () => {
     const $ = render(TWO.slice(0, 1), [WORKFLOW]);
     // ACT
     const pickers = $('[data-scenario-picker]').length;
+    // ASSERT
+    expect(pickers).toBe(0);
+  });
+
+  it('draws no picker when the Preset hides it, with two Scenarios registered at the Workflow level', () => {
+    // ARRANGE
+    const $ = render(TWO, [WORKFLOW], false);
+    // ACT
+    const pickers = $('[data-scenario-picker], [data-scenario-go]').length;
     // ASSERT
     expect(pickers).toBe(0);
   });

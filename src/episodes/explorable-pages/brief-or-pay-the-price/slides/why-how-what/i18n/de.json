@@ -1,0 +1,79 @@
+{
+  "title": "Warum · Wie · Was",
+  "caption": "Warum KI ein Briefing braucht, wie fünf Schritte und fünf Prinzipien es liefern und was die Explorable zeigt.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "Du briefst eine KI, und sie vergisst, rät und klingt trotzdem sicher.",
+      "caption": "<marker>Jeder neue Chat beginnt bei null, und wenn sie unsicher ist, antwortet sie trotzdem, statt zu fragen.</marker> Fünf Eigenschaften, PRICE, erklären, warum das Dich kostet, nebeneinander für einen Freelancer und für KI."
+    },
+    "how": {
+      "title": "Fünf Schritte briefen einen Agenten: BRIEF.",
+      "caption": "<marker>Zerlege es, stelle die Anforderungen voran, interviewe Dich selbst mit KI, prüfe jeden Schritt und starte für jedes Teil frisch.</marker> Jeder Schritt hält eine oder mehrere der fünf Eigenschaften in Schach."
+    },
+    "what": {
+      "title": "Fünf Prinzipien steuern die Arbeit über alle Stufen: BRACE.",
+      "caption": "<marker>Beginne beim Ziel, räume Abhängigkeiten früh aus, gib Autonomie durch Absicht, vereinbare Contracts an den Nahtstellen und erarbeite Vertrauen.</marker> Sieh sie an DRIVE: Define, Reason, Implement, Verify, Evolve."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Das Vergessen und das Raten sind eingebaut",
+      "description": "Das Kontextfenster ist das Arbeitsgedächtnis des Modells, und Gedächtnis über Chats hinweg gibt es nur dort, wo eine Anwendung Notizen speichert und wieder einspielt, weil das Memory-Tool auf der Client-Seite läuft [1][2]. Die meisten Benchmarks werten einen Tipp höher als Enthaltung, also belohnt das Training das Raten statt des Nachfragens [3] (Belege aus der Episode: Pay the price).",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-memory-tool": {
+          "title": "Anthropic, Memory tool"
+        },
+        "kalai-why-models-hallucinate": {
+          "title": "Kalai et al., Why Language Models Hallucinate"
+        }
+      }
+    },
+    "how": {
+      "header": "Hinter jedem Schritt steht Evidenz",
+      "description": "Einfachere Teilprobleme nacheinander zu lösen erreichte auf einem kompositionellen Benchmark 99 % oder mehr, gegenüber 16 % für Chain-of-Thought-Prompting mit einem älteren Modell [1]. Die Ergebnisse schwankten für eine nicht genannte Anforderung mehr als doppelt so stark wie für eine genannte [2]. Feedback zu jedem Denkschritt schneidet besser ab als Feedback nur zum Endergebnis [3]. Spitzenmodelle schnitten im Gespräch über mehrere Runden im Schnitt 39 % schlechter ab als mit der vollständigen Anweisung auf einmal [4] (Belege aus der Episode: Manage the price). Für „Interviewe Dich selbst mit KI“ stehen dort zwei weitere Studien.",
+      "sources": {
+        "zhou-least-to-most": {
+          "title": "Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models"
+        },
+        "yang-underspecification": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3)"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        },
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost in Multi-Turn Conversation"
+        }
+      }
+    },
+    "what": {
+      "header": "BRACE: fünf Prinzipien, jedes mit eigener Quelle",
+      "description": "Anthropic rät Entwicklern, Erfolgskriterien vorab zu definieren [1]. Vom Ziel rückwärts zu planen ist in der Planung etablierte Praxis, aber keine Studie testet es an Agentenarbeit (Recherche PLAN-0003). Subagenten ohne ausführliche Aufgaben „duplizieren Arbeit, lassen Lücken oder finden nötige Informationen nicht“, und Multi-Agenten-Systeme passen schlecht, wo viele Abhängigkeiten zwischen den Agenten liegen [2] (Recherche SWE-0007, SWE-0008). Die Doktrin der US-Armee sagt Kommandeuren, die zu erreichenden Ergebnisse zu nennen, nicht das Wie, und dass Vertrauen „verdient werden muss“ [3] (Recherche AIE-0027). Das Vertrauen sollte zur nachgewiesenen Zuverlässigkeit passen [4], und Agenten brauchen Checkpoints, Leitplanken und Ground Truth aus der Umgebung [5] (Recherche AIE-0028).",
+      "sources": {
+        "anthropic-define-success": {
+          "title": "Anthropic, Define your success criteria"
+        },
+        "anthropic-multi-agent-research": {
+          "title": "Anthropic, How we built our multi-agent research system"
+        },
+        "us-army-adp-6-0-mission-command": {
+          "title": "US Army, ADP 6-0 Mission Command (17 May 2012), copy hosted by Brigham Young University-Idaho"
+        },
+        "lee-see-trust-in-automation": {
+          "title": "Lee and See, Trust in Automation: Designing for Appropriate Reliance (Human Factors, 2004), abstract"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        }
+      }
+    }
+  }
+}

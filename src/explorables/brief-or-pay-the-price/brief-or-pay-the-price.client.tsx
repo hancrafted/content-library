@@ -2,11 +2,10 @@
 
 import { useEffect, useMemo, useReducer, useRef, type Dispatch, type ReactNode, type RefObject } from 'react';
 import type { MatrixData } from './brief-or-pay-the-price-data';
-import type { Definition, DefinitionId, Words } from './brief-or-pay-the-price.types';
+import type { Definition, DefinitionId, Preset, Words } from './brief-or-pay-the-price.types';
 import {
   currentMirror,
   nextTimer,
-  start,
   step,
   type ExplorableEvent,
   type ExplorableState,
@@ -18,6 +17,7 @@ import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
 import type { Layer } from './layer-state.pure';
 import { LEVEL } from './levels.client';
 import { cellsIn } from './matrix-data.pure';
+import { presetStart } from './preset-state.pure';
 import type { WorkflowScenario } from './scenario.types';
 import { Toolbar, type ToolbarProps } from './toolbar.client';
 import { useCellKeys } from './use-cell-keys';
@@ -25,6 +25,7 @@ import { useCellZoom } from './use-cell-zoom';
 import { useZoomFlights } from './use-zoom-flights';
 
 export interface BriefOrPayThePriceClientProps {
+  readonly preset: Preset;
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;
@@ -48,8 +49,13 @@ function useDismiss(open: Target | null, dispatch: Dispatch<ExplorableEvent>) {
   }, [open, dispatch]);
 }
 
-function useExplorable(data: Pick<BriefOrPayThePriceClientProps, 'definitions' | 'stages' | 'matrix'>) {
-  const [state, dispatch] = useReducer(step, data, (own) => start(rowCounts(own), Object.keys(own.stages)[0]));
+const unfilledOf = ({ habits, tryIt }: Pick<BriefOrPayThePriceClientProps, 'habits' | 'tryIt'>): Layer[] => [
+  ...(habits === undefined ? (['habits'] as const) : []),
+  ...(tryIt === undefined ? (['tryIt'] as const) : []),
+];
+
+function useExplorable(data: BriefOrPayThePriceClientProps) {
+  const [state, dispatch] = useReducer(step, data, (own) => presetStart(rowCounts(own), own.preset, unfilledOf(own)));
   const { open, blank, rows } = currentMirror(state);
   const pass = open === null || open === 'closing' ? 0 : (rows[open]?.passes ?? 0);
   const beats = beatsOf(data, state);
@@ -104,11 +110,6 @@ interface ToolbarInput {
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
-const unfilledOf = ({ habits, tryIt }: Pick<BriefOrPayThePriceClientProps, 'habits' | 'tryIt'>): Layer[] => [
-  ...(habits === undefined ? (['habits'] as const) : []),
-  ...(tryIt === undefined ? (['tryIt'] as const) : []),
-];
-
 function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
   const { scenarios, stages, definitions } = data;
   const picks = useMemo(
@@ -129,6 +130,7 @@ function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
     tabs,
     state,
     scenarios: picks,
+    picker: data.preset.picker,
     title: titleOf(data, tabs, { ...state, nodeLabel }),
     onView: (view) => dispatch({ type: 'view', view }),
     onScenario: (scenario) => dispatch({ type: 'scenario', scenario }),
