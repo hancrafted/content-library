@@ -1,20 +1,13 @@
 import { episodeChecks } from '@/episodes/lib/episode-checks';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.7
 const PAGE = import.meta.glob('./episode.ts');
-const CHECKS = episodeChecks(import.meta.dirname, import.meta.glob('./slides/*/slide.tsx'), PAGE);
+const CHECKS = episodeChecks(import.meta.dirname, {}, PAGE);
 
 describe('success cases', () => {
-  it.each(CHECKS.slides)('$name', async ({ findings }) => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const found = await findings();
-    // ASSERT
-    expect(found).toEqual(expected);
-  });
-
   it.each(CHECKS.folder)('$name', async ({ findings }) => {
     // ARRANGE
     const expected: string[] = [];
@@ -37,12 +30,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('finds Slide folders to check, so an empty glob cannot pass', () => {
+  it('keeps no Slide or Section folder: an Episode instance composes its Base Episode', () => {
     // ARRANGE
-    const none = 0;
+    const expected: string[] = [];
     // ACT
-    const checked = CHECKS.slides.length;
+    const own = ['slides', 'sections'].filter((folder) => existsSync(path.join(import.meta.dirname, folder)));
     // ASSERT
-    expect(checked).toBeGreaterThan(none);
+    expect(own).toEqual(expected);
   });
 });
