@@ -3,11 +3,12 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { explorableData } from './brief-or-pay-the-price-data';
+import type { ControlMap } from './controls.types';
 import { start, step, type ExplorableEvent } from './explorable-state.pure';
 import { Toolbar } from './toolbar.client';
 
 const data = explorableData('en');
-const render = (scenarios: { id: string; name: string }[], events: ExplorableEvent[], picker = true) =>
+const render = (scenarios: { id: string; name: string }[], events: ExplorableEvent[], controls: ControlMap = {}) =>
   load(
     renderToStaticMarkup(
       createElement(Toolbar, {
@@ -15,7 +16,7 @@ const render = (scenarios: { id: string; name: string }[], events: ExplorableEve
         tabs: { ...data.definitions, stages: data.stages.drive as never },
         state: events.reduce(step, start({ price: 5, brief: 5, brace: 5 }, 'drive')),
         scenarios,
-        picker,
+        controls,
         title: '',
         onView: () => undefined,
         onScenario: () => undefined,
@@ -54,7 +55,7 @@ describe('failure cases', () => {
 
   it('draws no picker when the Preset hides it, with two Scenarios registered at the Workflow level', () => {
     // ARRANGE
-    const $ = render(TWO, [WORKFLOW], false);
+    const $ = render(TWO, [WORKFLOW], { scenarioPicker: { show: false } });
     // ACT
     const pickers = $('[data-scenario-picker], [data-scenario-go]').length;
     // ASSERT

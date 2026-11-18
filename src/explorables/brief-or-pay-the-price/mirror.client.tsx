@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/shared/lib/utils';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Definition } from './brief-or-pay-the-price.types';
 import type { RowRead } from './explorable-state.pure';
 import type { SceneLabels } from './mirror-card.client';
@@ -89,7 +89,23 @@ function MirrorBody({ definition, reads, wiping, labels, handlers }: MirrorProps
   );
 }
 
-export function Mirror(props: MirrorProps) {
+const readKey = ({ shown, pass, looping, blank, turned }: RowRead): string =>
+  [shown, pass, looping, blank, turned.freelancer, turned.ai].join();
+
+const sameReads = (before: readonly RowRead[], after: readonly RowRead[]): boolean =>
+  before.length === after.length && before.every((read, index) => readKey(read) === readKey(after[index] as RowRead));
+
+export function sameMirror(before: MirrorProps, after: MirrorProps): boolean {
+  return (
+    before.definition === after.definition &&
+    before.wiping === after.wiping &&
+    before.labels === after.labels &&
+    before.handlers === after.handlers &&
+    sameReads(before.reads, after.reads)
+  );
+}
+
+function MirrorView(props: MirrorProps) {
   const { definition } = props;
   const { rootRef, fade } = useCardsFade(definition.id);
   const fading = fade === 'a' ? styles.fadeA : fade === 'b' ? styles.fadeB : undefined;
@@ -99,3 +115,5 @@ export function Mirror(props: MirrorProps) {
     </div>
   );
 }
+
+export const Mirror = memo(MirrorView, sameMirror);

@@ -15,6 +15,7 @@ import {
 } from './explorable-state.pure';
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
 import type { Layer } from './layer-state.pure';
+import type { LevelActions } from './level-actions';
 import { LEVEL } from './levels.client';
 import { cellsIn } from './matrix-data.pure';
 import { presetStart } from './preset-state.pure';
@@ -104,6 +105,18 @@ function useAgent({ state, dispatch, container, data }: AgentInput) {
   return matrixHandlers;
 }
 
+const actionsOf = (dispatch: Dispatch<ExplorableEvent>): LevelActions => ({
+  onShowAll: () => dispatch({ type: 'showAll' }),
+  onReset: () => dispatch({ type: 'reset' }),
+  onWorkflow: () => dispatch({ type: 'zoom', level: 'workflow' }),
+  onCloseCell: () => dispatch({ type: 'closeCell' }),
+  onCell: (cell) => dispatch({ type: 'openCell', cell }),
+  onNode: (node) => dispatch({ type: 'node', node }),
+  onStep: (step) => dispatch({ type: 'braceStep', step }),
+  onPlay: () => dispatch({ type: 'play' }),
+  onTick: () => dispatch({ type: 'tick' }),
+});
+
 interface ToolbarInput {
   readonly data: BriefOrPayThePriceClientProps;
   readonly state: ExplorableState;
@@ -130,7 +143,7 @@ function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
     tabs,
     state,
     scenarios: picks,
-    picker: data.preset.picker,
+    controls: data.preset.controls,
     title: titleOf(data, tabs, { ...state, nodeLabel }),
     onView: (view) => dispatch({ type: 'view', view }),
     onScenario: (scenario) => dispatch({ type: 'scenario', scenario }),
@@ -147,6 +160,7 @@ export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
   const shown = shownOf(props.scenarios, state.scenario);
   const dispatch = useZoomFlights({ container, state, scenario: shown.scenario, dispatch: reduce });
   const matrixHandlers = useAgent({ state, dispatch, container, data: props });
+  const actions = useMemo(() => actionsOf(dispatch), [dispatch]);
   const toolbar = useToolbar({ data: props, state, dispatch });
   const labels = useMemo(() => ({ backs: words.backs, turn: words.chrome.turn }), [words]);
   return (
@@ -158,7 +172,7 @@ export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
     >
       <Toolbar {...toolbar} />
       <div data-zoom-root data-agent-root={state.level === 'agent' ? '' : undefined} className="flex flex-col gap-6">
-        {LEVEL[state.level]({ data: props, state, dispatch, handlers, matrixHandlers, labels })}
+        {LEVEL[state.level]({ data: props, state, actions, handlers, matrixHandlers, labels })}
       </div>
     </div>
   );

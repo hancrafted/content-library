@@ -3,11 +3,12 @@
 # German keeps each trait's English name and adds a gloss (`gloss`); English leaves the gloss empty.
 # Authoring guide: docs/features/explorables/brief-or-pay-the-price-scenarios.md.
 # Presets: how a Slide opens the Explorable. `view` is the Definition tab (price, brief, stages, brace), `level` the zoom
-# (define, agent, workflow), `scenario` a file in scenarios/, `picker: false` hides the Scenario picker, and `layers`
-# are the toggles that start on at that level (a toggle whose slot the Slide leaves empty stays off).
+# (define, agent, workflow), `scenario` a file in scenarios/, `controls` overrides the control registry key by key
+# (code: controls.pure.ts; `show: false` hides one), and `layers` are the toggles that start on at that level (a toggle
+# whose slot the Slide leaves empty stays off).
 presets:
-  play: { view: price, level: define, scenario: drive, picker: true, layers: [] }
-  drive: { view: stages, level: workflow, scenario: drive, picker: false, layers: [] }
+  play: { view: price, level: define, scenario: drive, controls: {}, layers: [] }
+  drive: { view: stages, level: workflow, scenario: drive, controls: { scenarioPicker: { show: false } }, layers: [] }
 definitions:
   price:
     acronym: PRICE
@@ -50,6 +51,7 @@ i18n:
       views: 'Views'
       showAll: 'Show all and play'
       dayOne: 'Reset to day one'
+      reset: 'Reset'
       caption: 'Hover a letter to reveal it; click a card to turn it.'
       turn: 'Turn the card to its text'
       zoom: 'Zoom'
@@ -63,6 +65,14 @@ i18n:
       braceSteps: 'BRACE steps'
       play: 'Play'
       pause: 'Pause'
+      previous: 'Previous step'
+      next: 'Next step'
+      stepLines:
+        backwards-from-the-goal: 'Start at 🏁 and plan every step back from it. Each upstream task exists for the goal.'
+        resolve-dependencies-early: 'Settle the big decisions first, so the agents downstream work on their own, in parallel.'
+        autonomy-through-intent: 'Give each agent the intent, the goal and the why, and let it find the how. No script.'
+        contracts-at-the-seams: 'Every handoff is an artefact: what a step receives, what it delivers, how it is checked.'
+        engineer-trust: 'Review each result against its contract, and harden the checks after every run.'
     layers:
       thoughtExperiment: 'Thought experiment'
       freelancer: 'Freelancer'
@@ -275,6 +285,7 @@ i18n:
       views: 'Ansichten'
       showAll: 'Alle zeigen und abspielen'
       dayOne: 'Zurück auf Tag eins'
+      reset: 'Zurücksetzen'
       caption: 'Fahr über einen Buchstaben, um ihn aufzudecken; klick eine Karte, um sie zu drehen.'
       turn: 'Karte auf ihren Text drehen'
       zoom: 'Zoom'
@@ -288,6 +299,14 @@ i18n:
       braceSteps: 'BRACE-Schritte'
       play: 'Abspielen'
       pause: 'Pause'
+      previous: 'Voriger Schritt'
+      next: 'Nächster Schritt'
+      stepLines:
+        backwards-from-the-goal: 'Starte bei 🏁 und plane jeden Schritt rückwärts. Jede Aufgabe davor existiert für das Ziel.'
+        resolve-dependencies-early: 'Kläre die großen Entscheidungen zuerst, damit die Agenten danach eigenständig und parallel arbeiten.'
+        autonomy-through-intent: 'Gib jedem Agenten die Absicht, das Ziel und das Warum, und lass ihn das Wie finden. Kein Drehbuch.'
+        contracts-at-the-seams: 'Jede Übergabe ist ein Artefakt: was ein Schritt bekommt, was er liefert, wie es geprüft wird.'
+        engineer-trust: 'Prüfe jedes Ergebnis gegen seinen Contract, und härte die Checks nach jedem Lauf.'
     layers:
       thoughtExperiment: 'Gedankenexperiment'
       freelancer: 'Freelancer'

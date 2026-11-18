@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { explorableData } from './brief-or-pay-the-price-data';
 import { start, step } from './explorable-state.pure';
+import { LEVEL } from './levels.client';
 import { WorkflowLevel } from './workflow-level.client';
 
 const render = (locale: 'en' | 'de', events: Parameters<typeof step>[1][] = []) => {
@@ -13,11 +14,14 @@ const render = (locale: 'en' | 'de', events: Parameters<typeof step>[1][] = []) 
     renderToStaticMarkup(
       createElement(WorkflowLevel, {
         words: data.words.workflow,
-        state,
+        slice: { step: state.braceStep, playing: state.playing },
         counters: data.matrix.counters,
         braceRows: data.definitions.brace.rows,
-        scenarios: data.scenarios,
-        dispatch: () => undefined,
+        shown: data.scenarios[state.scenario]!,
+        onNode: () => undefined,
+        onStep: () => undefined,
+        onPlay: () => undefined,
+        onTick: () => undefined,
       }),
     ),
   );
@@ -82,8 +86,35 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('falls back to the first Scenario when the state names an unknown one', () => {
     // ARRANGE
-    const known = render('en', [ZOOM]);
-    const unknown = render('en', [ZOOM, { type: 'scenario', scenario: 'nope' }]);
+    const data = explorableData('en');
+    const via = (scenario: string) => {
+      const none = () => undefined;
+      const state = {
+        ...[ZOOM].reduce(step, start({ price: 5, brief: 5, brace: 5 }, 'drive')),
+        scenario,
+      };
+      const props = {
+        data,
+        state,
+        actions: {
+          onShowAll: none,
+          onReset: none,
+          onWorkflow: none,
+          onCloseCell: none,
+          onCell: none,
+          onNode: none,
+          onStep: none,
+          onPlay: none,
+          onTick: none,
+        },
+        handlers: { onOpen: none, onLeave: none, onTurn: none },
+        matrixHandlers: { onLight: none, onUnlight: none, onOpenCell: none },
+        labels: { backs: data.words.backs, turn: data.words.chrome.turn },
+      };
+      return load(renderToStaticMarkup(LEVEL.workflow(props)));
+    };
+    const known = via('drive');
+    const unknown = via('nope');
     // ACT
     const label = (page: typeof known) => page('[data-workflow]').first().attr('aria-label');
     // ASSERT

@@ -1,8 +1,7 @@
 'use client';
 
-import type { Dispatch, KeyboardEvent, MouseEvent } from 'react';
+import type { KeyboardEvent, MouseEvent } from 'react';
 import type { MirrorRow, MoveId, TraitId, Words } from './brief-or-pay-the-price.types';
-import type { ExplorableEvent, ExplorableState } from './explorable-state.pure';
 import type { Counters } from './matrix-data.pure';
 import { isCounter } from './matrix-data.pure';
 import type { WorkflowScenario } from './scenario.types';
@@ -11,11 +10,14 @@ import { WorkflowView } from './workflow-view';
 
 export interface WorkflowLevelProps {
   readonly words: Words['workflow'];
-  readonly state: ExplorableState;
+  readonly slice: { readonly step: number; readonly playing: boolean };
   readonly counters: Counters;
   readonly braceRows: readonly MirrorRow[];
-  readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
-  readonly dispatch: Dispatch<ExplorableEvent>;
+  readonly shown: WorkflowScenario;
+  readonly onNode: (node: string) => void;
+  readonly onStep: (step: number) => void;
+  readonly onPlay: () => void;
+  readonly onTick: () => void;
 }
 
 const nodeOf = (target: EventTarget): string | undefined =>
@@ -23,8 +25,8 @@ const nodeOf = (target: EventTarget): string | undefined =>
 
 const NODE_KEYS = new Set(['Enter', ' ']);
 
-function nodeHandlers(dispatch: Dispatch<ExplorableEvent>) {
-  const select = (node: string | undefined) => node !== undefined && dispatch({ type: 'node', node });
+function nodeHandlers(onNode: (node: string) => void) {
+  const select = (node: string | undefined) => node !== undefined && onNode(node);
   return {
     onClick: (event: MouseEvent) => select(nodeOf(event.target)),
     onKeyDown: (event: KeyboardEvent) => {
@@ -36,27 +38,49 @@ function nodeHandlers(dispatch: Dispatch<ExplorableEvent>) {
   };
 }
 
-export function WorkflowLevel({ words, state, counters, braceRows, scenarios, dispatch }: WorkflowLevelProps) {
-  const { scenario, words: scenarioWords } = (scenarios[state.scenario] ??
-    Object.values(scenarios)[0]) as WorkflowScenario;
+function Board({
+  words,
+  step,
+  counters,
+  shown,
+  onNode,
+}: Pick<WorkflowLevelProps, 'words' | 'counters' | 'shown' | 'onNode'> & {
+  readonly step: number;
+}) {
+  const { scenario, words: scenarioWords } = shown;
   const shared = {
     scenario,
     words: scenarioWords,
     ui: words,
-    step: state.braceStep,
+    step,
     counters: (move: MoveId, trait: TraitId) => isCounter(counters, { move, trait }),
   };
   return (
-    <>
-      <div data-workflow-root role="presentation" {...nodeHandlers(dispatch)}>
-        <div className="@3xl:hidden">
-          <WorkflowView {...shared} layout={scenario.layouts.vertical} />
-        </div>
-        <div className="hidden @3xl:block">
-          <WorkflowView {...shared} layout={scenario.layouts.horizontal} />
-        </div>
+    <div data-workflow-root role="presentation" {...nodeHandlers(onNode)}>
+      <div className="@3xl:hidden">
+        <WorkflowView {...shared} layout={scenario.layouts.vertical} />
       </div>
-      <WorkflowControls words={words} state={state} braceRows={braceRows} dispatch={dispatch} />
+      <div className="hidden @3xl:block">
+        <WorkflowView {...shared} layout={scenario.layouts.horizontal} />
+      </div>
+    </div>
+  );
+}
+
+export function WorkflowLevel({ slice, braceRows, onStep, onPlay, onTick, ...board }: WorkflowLevelProps) {
+  const { words } = board;
+  return (
+    <>
+      <Board {...board} step={slice.step} />
+      <WorkflowControls
+        words={words}
+        step={slice.step}
+        playing={slice.playing}
+        braceRows={braceRows}
+        onStep={onStep}
+        onPlay={onPlay}
+        onTick={onTick}
+      />
     </>
   );
 }

@@ -44,6 +44,11 @@ export const NARROW_REM = 48;
 
 export const isNarrow = (width: number, rootFontSize: number): boolean => width < NARROW_REM * rootFontSize;
 
+export type Orientation = 'vertical' | 'horizontal';
+
+export const orientationOf = (width: number, rootFontSize: number): Orientation =>
+  isNarrow(width, rootFontSize) ? 'vertical' : 'horizontal';
+
 export const BADGE_INSET = { right: 56, bottom: 54 } as const;
 
 export interface Entry {

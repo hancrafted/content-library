@@ -1,10 +1,17 @@
 import { prefersReducedMotion } from './reduced-motion';
-import { flipFrom, originCss, type Entry, type Origin } from './zoom-geometry.pure';
+import { flipFrom, orientationOf, originCss, type Entry, type Orientation, type Origin } from './zoom-geometry.pure';
 
 export const visibleWorkflow = (container: HTMLElement): SVGSVGElement | undefined =>
   [...container.querySelectorAll<SVGSVGElement>('svg[data-workflow]')].find((svg) => svg.getClientRects().length > 0);
 
+export const orientationIn = (container: HTMLElement | null): Orientation =>
+  orientationOf(
+    container?.clientWidth ?? Infinity,
+    Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
+  );
+
 const EASING = 'cubic-bezier(0.3, 0, 0.2, 1)';
+export const FLIGHT_EASING = 'cubic-bezier(0.5, 0, 0.2, 1)';
 const SHRINK_MILLISECONDS = 620;
 const GROW_MILLISECONDS = 560;
 const LETTER_MILLISECONDS = 620;
@@ -56,7 +63,7 @@ export function shrinkInto(root: HTMLElement, origin: Origin | null): Promise<vo
       { ...at, transform: 'none', opacity: 1 },
       { ...at, transform: 'scale(0.06)', opacity: 0.15 },
     ],
-    { duration: SHRINK_MILLISECONDS, easing: 'cubic-bezier(0.5, 0, 0.2, 1)', fill: 'forwards' },
+    { duration: SHRINK_MILLISECONDS, easing: FLIGHT_EASING, fill: 'forwards' },
   );
   return settled(animation, SHRINK_MILLISECONDS);
 }

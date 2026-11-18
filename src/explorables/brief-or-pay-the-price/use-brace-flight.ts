@@ -1,12 +1,10 @@
-'use client';
-
 import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type RefObject } from 'react';
 import type { ExplorableEvent, Level } from './explorable-state.pure';
 import { scheduleLandings, type Timers } from './flight-schedule.pure';
 import { prefersReducedMotion } from './reduced-motion';
 import { LETTERS, type Letter, type PlainScenario } from './scenario.types';
 import { MAX_STEP, anchorOf, type Point } from './workflow-annotations.pure';
-import { visibleWorkflow } from './zoom-flights';
+import { FLIGHT_EASING, orientationIn, visibleWorkflow } from './zoom-flights';
 
 export interface FlightChip {
   readonly letter: string;
@@ -27,7 +25,6 @@ const CHIP_SELECTOR = '[data-mirror="brace"] [data-trait-initial]';
 const FLIGHT_MILLISECONDS = 900;
 const FIRST_DELAY_MILLISECONDS = 200;
 const STAGGER_MILLISECONDS = 420;
-const EASING = 'cubic-bezier(.5,0,.2,1)';
 const FLYER = 'pointer-events-none fixed z-50 flex items-center justify-center text-heading font-semibold text-ai';
 
 const landsAtMilliseconds = (index: number): number =>
@@ -43,7 +40,7 @@ function flightsOf(container: HTMLElement, chips: readonly FlightChip[], scenari
   const svg = visibleWorkflow(container);
   const matrix = svg?.getScreenCTM();
   if (!svg || !matrix) return [];
-  const layout = scenario.layouts[svg.getAttribute('data-orient') === 'vertical' ? 'vertical' : 'horizontal'];
+  const layout = scenario.layouts[orientationIn(container)];
   return chips.map((chip, index) => {
     const letter = (LETTERS.includes(chip.letter as Letter) ? chip.letter : LETTERS[index]) as Letter;
     const anchor = anchorOf(scenario, layout, letter) ?? { x: layout.w / 2, y: layout.h / 2 };
@@ -73,7 +70,7 @@ function fly({ chip, to }: Flight, index: number): HTMLElement {
     { transform: `${landed} scale(.3)`, opacity: 0 },
   ];
   const delay = FIRST_DELAY_MILLISECONDS + index * STAGGER_MILLISECONDS;
-  flyer.animate(keyframes, { duration: FLIGHT_MILLISECONDS, delay, easing: EASING, fill: 'backwards' });
+  flyer.animate(keyframes, { duration: FLIGHT_MILLISECONDS, delay, easing: FLIGHT_EASING, fill: 'backwards' });
   return flyer;
 }
 

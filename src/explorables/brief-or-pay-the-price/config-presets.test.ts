@@ -4,7 +4,8 @@ import { PRESET_IDS } from './brief-or-pay-the-price.types';
 import { loadConfig, parseConfig } from './config.pure';
 
 const FILE = 'brief-or-pay-the-price.config.yml';
-const DRIVE = 'drive: { view: stages, level: workflow, scenario: drive, picker: false, layers: [] }';
+const DRIVE =
+  'drive: { view: stages, level: workflow, scenario: drive, controls: { scenarioPicker: { show: false } }, layers: [] }';
 const problemsOf = (source: string): readonly string[] => {
   const result = loadConfig(source);
   return 'problems' in result ? result.problems : [];
@@ -13,12 +14,12 @@ const problemsOf = (source: string): readonly string[] => {
 describe('success cases', () => {
   it('loads a Preset for each Slide that shows the Explorable, with the picker hidden on the DRIVE one', () => {
     // ARRANGE
-    const expected = { play: true, drive: false };
+    const expected = { play: {}, drive: { scenarioPicker: { show: false } } };
     // ACT
     const { presets } = parseConfig(configSource);
     // ASSERT
     expect(Object.keys(presets)).toEqual([...PRESET_IDS]);
-    expect({ play: presets.play.picker, drive: presets.drive.picker }).toEqual(expected);
+    expect({ play: presets.play.controls, drive: presets.drive.controls }).toEqual(expected);
   });
 });
 
@@ -36,7 +37,7 @@ describe('failure cases', () => {
     // ARRANGE
     const source = configSource.replace(
       DRIVE,
-      `${DRIVE}\n  extra: { view: price, level: define, scenario: drive, picker: true, layers: [] }`,
+      `${DRIVE}\n  extra: { view: price, level: define, scenario: drive, controls: {}, layers: [] }`,
     );
     // ACT
     const problems = problemsOf(source);
@@ -54,19 +55,34 @@ describe('failure cases', () => {
     expect(problems).toContain(`${FILE}: presets.drive: level "attic" is not one of define, agent, workflow`);
   });
 
-  it('refuses a picker that is not true or false and a Scenario that is not a name', () => {
+  it('refuses a control that is not in the registry, a show that is not true or false, and a Scenario that is not a name', () => {
     // ARRANGE
-    const source = configSource.replace('scenario: drive, picker: false', "scenario: '', picker: maybe");
+    const source = configSource.replace(
+      'scenario: drive, controls: { scenarioPicker: { show: false } }',
+      "scenario: '', controls: { teleport: { show: true }, habits: { show: maybe } }",
+    );
     // ACT
     const problems = problemsOf(source);
     // ASSERT
-    expect(problems).toContain(`${FILE}: presets.drive: picker is true or false`);
+    expect(problems).toContain(
+      `${FILE}: presets.drive: control "teleport" is not one of scenarioPicker, thoughtExperiment, freelancer, habits, tryIt`,
+    );
+    expect(problems).toContain(`${FILE}: presets.drive: control "habits" takes only show: true or false`);
     expect(problems).toContain(`${FILE}: presets.drive: scenario names a Scenario file`);
+  });
+
+  it('refuses a Preset without a controls map', () => {
+    // ARRANGE
+    const source = configSource.replace('controls: { scenarioPicker: { show: false } }, ', '');
+    // ACT
+    const problems = problemsOf(source);
+    // ASSERT
+    expect(problems).toContain(`${FILE}: presets.drive: controls is a map of control ids`);
   });
 
   it('refuses a toggle the Preset’s level does not offer', () => {
     // ARRANGE
-    const source = configSource.replace('picker: false, layers: []', 'picker: false, layers: [habits]');
+    const source = configSource.replace(DRIVE, DRIVE.replace('layers: []', 'layers: [habits]'));
     // ACT
     const problems = problemsOf(source);
     // ASSERT
@@ -78,8 +94,8 @@ describe('edge cases', () => {
   it('accepts a Preset that opens at the Agent level with the habits toggle on', () => {
     // ARRANGE
     const source = configSource.replace(
-      'level: workflow, scenario: drive, picker: false, layers: []',
-      'level: agent, scenario: drive, picker: false, layers: [habits]',
+      'level: workflow, scenario: drive, controls: { scenarioPicker: { show: false } }, layers: []',
+      'level: agent, scenario: drive, controls: {}, layers: [habits]',
     );
     // ACT
     const problems = problemsOf(source);
