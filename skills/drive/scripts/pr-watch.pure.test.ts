@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DRIVE_MARKER, idsOf, judge, parseView, type PullRequestView } from './pr-watch.pure.ts';
+import { DRIVE_MARKER, idsOf, judge, parseReviewComments, parseView, type PullRequestView } from './pr-watch.pure.ts';
 import { watchPullRequest } from './pr-watch.ts';
 
 const open = (over: Partial<PullRequestView> = {}): PullRequestView => ({
@@ -7,6 +7,7 @@ const open = (over: Partial<PullRequestView> = {}): PullRequestView => ({
   mergeCommit: null,
   reviews: [],
   comments: [],
+  reviewComments: [],
   ...over,
 });
 
@@ -48,6 +49,33 @@ describe('judge', () => {
     const verdicts = [judge(open(), new Set()), judge(own, new Set())];
     // ASSERT
     expect(verdicts).toEqual([null, null]);
+  });
+});
+
+describe('inline review comments', () => {
+  it('reports a new inline comment with its file and line', () => {
+    // ARRANGE
+    const view = open({ reviewComments: [{ id: 'rc9', body: 'rename this', path: 'a/b.ts', line: 12 }] });
+    // ACT
+    const verdict = judge(view, new Set());
+    // ASSERT
+    expect(verdict).toEqual({ exit: 3, line: 'a/b.ts:12 rename this' });
+  });
+
+  it('parses the API list, flattening pages and skipping the drive marker', () => {
+    // ARRANGE
+    const pages = JSON.stringify([
+      [{ id: 1, body: 'one', path: 'x.ts', line: 3 }],
+      [{ id: 2, body: '<!-- drive -->\nreply', path: 'x.ts', line: null, original_line: 4 }],
+    ]);
+    // ACT
+    const parsed = parseReviewComments(pages);
+    // ASSERT
+    expect(parsed).toEqual([
+      { id: 'rc1', body: 'one', path: 'x.ts', line: 3 },
+      { id: 'rc2', body: '<!-- drive -->\nreply', path: 'x.ts', line: 4 },
+    ]);
+    expect(judge(open({ reviewComments: parsed as never }), new Set(['rc1']))).toBeNull();
   });
 });
 

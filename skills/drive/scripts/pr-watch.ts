@@ -1,5 +1,5 @@
 import { run } from './git.ts';
-import { idsOf, judge, parseView, type PullRequestView, type Verdict } from './pr-watch.pure.ts';
+import { idsOf, judge, parseReviewComments, parseView, type PullRequestView, type Verdict } from './pr-watch.pure.ts';
 import { fail } from './project.ts';
 import type { Timing } from './worktree-merge.ts';
 
@@ -40,7 +40,12 @@ const FIELDS = 'state,mergeCommit,reviews,comments';
 function ghView(number: string): PullRequestView | { error: string } {
   const result = run('gh', ['pr', 'view', number, '--json', FIELDS]);
   if (result.status !== 0) return { error: `gh pr view ${number} failed:\n${result.stderr}` };
-  return parseView(result.stdout);
+  const view = parseView(result.stdout);
+  if ('error' in view) return view;
+  const inline = run('gh', ['api', '--paginate', '--slurp', `repos/{owner}/{repo}/pulls/${number}/comments`]);
+  if (inline.status !== 0) return { error: `gh api pulls/${number}/comments failed:\n${inline.stderr}` };
+  const reviewComments = parseReviewComments(inline.stdout);
+  return 'error' in reviewComments ? reviewComments : { ...view, reviewComments };
 }
 
 const USAGE = 'usage: drive pr watch <number> [--poll-milliseconds <n>]';

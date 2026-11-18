@@ -422,7 +422,7 @@ describe('drive pr watch', () => {
     views.forEach((view, index) => writeFileSync(path.join(dir, `view${index}.json`), JSON.stringify(view)));
     writeFileSync(
       path.join(dir, 'gh'),
-      `#!/bin/sh\nn=$(cat ${state})\nlast=${views.length - 1}\n[ "$n" -gt "$last" ] && n=$last\ncat ${dir}/view$n.json\necho $((n + 1)) > ${state}\n`,
+      `#!/bin/sh\n[ "$1" = api ] && { echo '[[]]'; exit 0; }\nn=$(cat ${state})\nlast=${views.length - 1}\n[ "$n" -gt "$last" ] && n=$last\ncat ${dir}/view$n.json\necho $((n + 1)) > ${state}\n`,
       { mode: 0o755 },
     );
     return { ...process.env, PATH: `${dir}:${process.env.PATH}` };

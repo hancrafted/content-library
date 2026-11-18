@@ -21,7 +21,7 @@ Announce each phase and its branch changes before acting.
 
 ## Entry check
 
-On every start or resume (a new session and a quota limit included), read the state: the topic folder, its decisions log, the spec and tickets on the tracker, the Integration branch, the Decision PR and the worktrees. A Decision PR still open means you are back at the gate: restart `drive pr watch` on it. Start at the first phase whose _Done when_ is unmet, tell the Operator which phase and the next stop, and wait for confirmation.
+On every start or resume (a new session and a quota limit included), read the state: the topic folder, its decisions log, the spec and tickets on the tracker, the Integration branch, the Decision PR and the worktrees. A Decision PR still open means you are back at the gate: restart `drive pr watch` on it. Start at the first phase whose _Done when_ is unmet, tell the Operator which phase and the next stop. Before the gate, wait for confirmation; after it, notify the phase and next stop and continue.
 
 ```mermaid
 flowchart TD

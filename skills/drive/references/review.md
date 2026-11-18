@@ -13,7 +13,7 @@ The moment a report arrives, check it against its ticket:
 
 A task that fails a check is reverted at once in the Integration branch's worktree: `git revert -m 1 <merge commit>`, then re-dispatch it with the reason. Each task is one merge commit, so a revert touches nothing else.
 
-A task the brief marks _by PR_ (the Operator asked to see its diff or preview): push the Task branch, open its PR into the Integration branch, and check it the same way once the Operator merges it.
+A task the brief marks _by PR_ (the Operator asked to see its diff or preview; list it among the run's terms in the Decision PR, since the Operator's merge is an added stop): push the Task branch, open its PR into the Integration branch, and check it the same way once the Operator merges it.
 
 ## The Integration branch's PR
 
