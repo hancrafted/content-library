@@ -1,0 +1,83 @@
+{
+  "title": "Enablement mit Claude Desktop",
+  "caption": "Die Methoden des Fundaments, in einer App, die jeder installieren kann.",
+  "features": {
+    "projects": {
+      "name": "Projekte",
+      "body": "Ein Ordner je Thema: Chats, Dateien und Anweisungen zusammen."
+    },
+    "meetings": {
+      "name": "Meetings",
+      "body": "Notizen und Aufgaben aus Ihren Calls, bereit für Fragen."
+    },
+    "artifacts": {
+      "name": "Artefakte",
+      "body": "Dokumente, Folien und kleine Apps, die es gebaut hat, zum Wiederöffnen."
+    },
+    "scheduled": {
+      "name": "Geplant",
+      "body": "Aufgaben, die von selbst laufen, etwa ein Montagsbriefing."
+    },
+    "instructions": {
+      "name": "Anweisungen",
+      "body": "Wie jeder Chat im Projekt antworten soll."
+    },
+    "memory": {
+      "name": "Gedächtnis",
+      "body": "Was es aus Ihren Chats behält; einsehbar und änderbar."
+    },
+    "context": {
+      "name": "Kontext",
+      "body": "Die Dateien des Projekts, vor jeder Antwort gelesen."
+    }
+  },
+  "app": {
+    "label": "Zeichnung der Claude-Desktop-App mit geöffnetem Projekt für Angebote",
+    "window": "Projekte / Angebote",
+    "new": "Neu",
+    "search": "Suche",
+    "beta": "Beta",
+    "pinned": "Angeheftet",
+    "project": "Angebote",
+    "by": "Von Ihnen erstellt · Privat",
+    "prompt": "Wie kann ich heute helfen?",
+    "chat": "Chat",
+    "cowork": "Cowork",
+    "chats": "Chats und Aufgaben",
+    "activity": "Aktivität",
+    "instructionsText": "Kurz antworten, in unserer Tonalität. Immer unsere Preisliste nennen.",
+    "onlyYou": "Nur Sie",
+    "memoryText": "Sehen und verwalten, was Claude aus Ihren Chats behält.",
+    "capacity": "8 % der Projektkapazität belegt",
+    "files": {
+      "prices": "preisliste.pdf",
+      "tone": "tonalitaet.md",
+      "cases": "fallstudien.md",
+      "offer": "angebotsvorlage.docx"
+    },
+    "rows": {
+      "proposal": {
+        "name": "Angebot für den Logistik-Lead Müller",
+        "when": "vor 2 Tagen"
+      },
+      "report": {
+        "name": "Wöchentlicher Pipeline-Report",
+        "when": "vor 4 Tagen"
+      },
+      "pricing": {
+        "name": "Preisfragen aus dem Call",
+        "when": "10. Nov."
+      },
+      "case": {
+        "name": "Entwurf Fallstudie: Tourenplanung",
+        "when": "3. Nov."
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Eine Beispielwelt",
+      "description": "Ein Vertriebsteam in einem Logistikunternehmen, ein Projekt für seine Angebote. Links: wo die Dinge liegen, Projekte, Meetings, Artefakte und geplante Aufgaben. Rechts: womit jeder Chat im Projekt startet, Anweisungen, Gedächtnis und Kontextdateien; das ist das stehende Briefing für den Freelancer."
+    }
+  }
+}

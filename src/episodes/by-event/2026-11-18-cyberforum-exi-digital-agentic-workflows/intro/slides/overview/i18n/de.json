@@ -1,0 +1,33 @@
+{
+  "title": "Zwei Tracks, ein Fundament",
+  "caption": "Enablement und Agentic Engineering unterscheiden sich in Werkzeug und Zielgruppe, nicht in der Methode.",
+  "facts": { "who": "Wer", "tool": "Werkzeug", "outcome": "Ergebnis" },
+  "tracks": {
+    "enablement": {
+      "label": "Track 1",
+      "name": "KI-Enablement",
+      "body": "Alle, die mit Dokumenten, Mails und Meetings arbeiten, bringen einen KI-Assistenten in den Alltag.",
+      "who": "Alle Wissensarbeiter",
+      "tool": "Claude Desktop",
+      "outcome": "Stunden pro Woche zurück"
+    },
+    "engineering": {
+      "label": "Track 2",
+      "name": "Agentic Engineering",
+      "body": "Teams, die Software bauen, lassen Agenten Code in einem gesteuerten Repo schreiben, prüfen und ausliefern.",
+      "who": "Entwickler und Tech Leads",
+      "tool": "Claude Code im Terminal",
+      "outcome": "Mehr ausgeliefert, weiter geprüft"
+    }
+  },
+  "foundation": {
+    "label": "Gemeinsames Fundament",
+    "body": "Aufmerksamkeit, Einarbeitung, Specs, Skills und Workflows: dieselben Methoden in beiden Tracks"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Ab hier zwei Wege weiter",
+      "description": "Heute haben Sie das Fundament gesehen. Enablement ist für alle; Agentic Engineering für Teams, die Software bauen. Keiner ist die Fortgeschrittenen-Version des anderen: dieselben Methoden, andere Werkzeuge."
+    }
+  }
+}

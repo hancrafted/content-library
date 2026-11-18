@@ -1,0 +1,40 @@
+{
+  "title": "Das gemeinsame Fundament",
+  "caption": "Sechs Episoden tragen beide Tracks; die ersten drei haben Sie heute gesehen.",
+  "today": "Heute behandelt",
+  "context": "Context engineering",
+  "watch": "Zur Episode",
+  "newTabHint": "öffnet in neuem Tab",
+  "episodes": {
+    "ai-attention-span": {
+      "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst",
+      "body": "Was das Modell sieht, entscheidet, was es tut."
+    },
+    "onboard-ai-every-time": {
+      "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie",
+      "body": "In jeder Session briefen, wie eine neue Kraft."
+    },
+    "ai-gives-you-more-work": {
+      "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
+      "body": "An KI delegieren ist eine eigene Aufgabe: planen, prüfen, entscheiden."
+    },
+    "from-shared-understanding-to-shared-context": {
+      "title": "Vom geteilten Verständnis zum geteilten Kontext",
+      "body": "Erst die Anforderungen: klären, was fertig heißt, bevor die Arbeit beginnt."
+    },
+    "what-lies-below-the-waterline-of-sustainable-ai-skills": {
+      "title": "Was unter der Wasserlinie nachhaltiger KI-Skills liegt",
+      "body": "Skills: wie eine Aufgabe geht, getrennt von dem, was die KI weiß."
+    },
+    "what-agentic-workflows-require": {
+      "title": "Was agentische Workflows von Menschen und Organisationen verlangen",
+      "body": "Die Prinzipien hinter agentischen Workflows, für Menschen und Teams."
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Was wir gemacht haben, und was folgt",
+      "description": "Die drei markierten Karten haben wir heute gemacht. Die anderen drei sind, wohin beide Tracks als Nächstes gehen, egal mit welchem Werkzeug; jede ist eine Episode zum Anschauen. Context Engineering zieht sich durch fast alle, deshalb ist es ein Tag und keine eigene Karte."
+    }
+  }
+}
