@@ -13,7 +13,11 @@ const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and Template's record, so they sit
 // above the Episodes they list and the lib rules below leave them out. composition-summaries and composition-outlines work
 // the page summaries and the Episode outlines out of them for `npm run registry`; no page imports them (FE-004 §4).
-const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries|composition-outlines)';
+// episode-instance-slides.generated types each Base Episode's Slide overrides from its Slides' text files, pool ones
+// included, type-only (Decision record 0028).
+const COMPOSITION_REGISTRY_NAMES =
+  '(registry|episode-registry\\.generated|episode-instance-slides\\.generated|composition-summaries|composition-outlines)';
+const INSTANCE_SLIDES_MAP = '^src/episodes/lib/episode-instance-slides\\.generated\\.ts$';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The Episode-level checks that read one page's composition (ARCH-003 §4.7): like the registries they sit above the
 // Episode they check, rendering its Slides (and, in the checks' own test, a Scene) and reading the store; only each page
@@ -217,7 +221,7 @@ module.exports = {
       severity: 'error',
       comment:
         'A pool Slide (src/episodes/slide-pool/<slide>/) is a content Slide several Episodes compose: only a Section file, <ep>/sections/<section-slug>.ts, imports it. Never the Episode file, so a pool Slide is never a Title slide, and never another Slide (FE-004).',
-      from: { pathNot: [SECTION_FILE, SLIDE_POOL] },
+      from: { pathNot: [SECTION_FILE, SLIDE_POOL, INSTANCE_SLIDES_MAP] },
       to: { path: SLIDE_POOL },
     },
     {

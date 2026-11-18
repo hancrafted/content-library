@@ -64,6 +64,16 @@ const TRIGGERS = [
   'src/explorables/**/*.yml',
   'src/episodes/components/slide-master/**',
   'src/episodes/templates/*/slides/**',
+  // What tools/codegen/registry.test.ts reads from disk: the page folders, each record's source, the content store's
+  // record folders, the Explorables and the generated files and routes it compares; and the override text each page's
+  // outline check reads.
+  'src/episodes/**/episode.ts',
+  'src/episodes/**/episode-metadata.ts',
+  'src/episodes/**/overrides/*.json',
+  'src/content-store/**',
+  'src/explorables/*/',
+  'src/**/*.generated.*',
+  'src/app/**/page.tsx',
   // Fixtures.
   'tests/fixtures/**',
 ];

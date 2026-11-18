@@ -7,6 +7,7 @@ import type { NamedCheck } from '@/shared/lib/folder-check';
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import type { ComposedPage } from './composed-page';
 import { containerLosses, repeatedIds } from './composed-page-render';
+import { staleOutline, type ResolvedOutline } from './episode-outline-check';
 import { placeSections, sectionOf } from './episode.pure';
 import { anchorTitleAt, type PageSummary } from './page-summary.pure';
 import { publishedAnchorFindings, type PublishedSnapshot } from './published-anchors';
@@ -28,6 +29,7 @@ export interface PageContext {
   readonly playlistAnchors: readonly PlaylistAnchor[];
   readonly published: PublishedSnapshot;
   readonly markers: readonly SectionMarker[] | undefined;
+  readonly outline?: ResolvedOutline;
 }
 
 export interface CheckedPage {
@@ -149,6 +151,11 @@ function episodeOnlyChecks(page: ComposedPage, read: Read): NamedCheck[] {
       read,
     ),
     check('gives the Episode at least one Section, each opened by a Slide of its own', sectionFindings, read),
+    check(
+      'says in its Episode outline what its composition says: Slides, anchors, Base Episode and the text its files hold',
+      (composition, { outline }) => staleOutline(composition, outline),
+      read,
+    ),
     check(
       'opens every Playlist entry into it at a Section it has, named as its summary names it',
       playlistAnchorFindings,

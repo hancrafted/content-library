@@ -200,6 +200,7 @@
       "en": ["src/episodes/ai-gives-you-more-work/i18n/en.json"],
       "de": ["src/episodes/ai-gives-you-more-work/i18n/de.json"]
     },
+    "base": "ai-gives-you-more-work",
     "title": {
       "slug": "hero",
       "anchor": "top",
@@ -558,6 +559,7 @@
         "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/i18n/de.json"
       ]
     },
+    "base": "ai-gives-you-more-work",
     "title": {
       "slug": "hero",
       "anchor": "top",
@@ -1099,6 +1101,7 @@
         "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/i18n/de.json"
       ]
     },
+    "base": "ai-gives-you-more-work",
     "title": {
       "slug": "hero",
       "anchor": "top",
@@ -2500,6 +2503,7 @@
         "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/i18n/de.json"
       ]
     },
+    "base": "ai-gives-you-more-work",
     "title": {
       "slug": "hero",
       "anchor": "top",

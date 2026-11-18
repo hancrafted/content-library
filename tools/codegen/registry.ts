@@ -4,10 +4,9 @@ import { createVitest } from 'vitest/node';
 import type * as store from '../../src/content-store/store.ts';
 import type { compositionOutlines } from '../../src/episodes/lib/composition-outlines.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
-import { EPISODES_DIR, pageFolders, SLIDE_POOL_FOLDER } from '../../src/episodes/lib/episode-folders.ts';
-import { LOCALES, type Locale } from '../../src/episodes/lib/episode-outline.ts';
+import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
 import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
-import { episodeOutlinesFile, type TextLayers, type TextSource } from './episode-outline.pure.ts';
+import { episodeOutlinesFile, type OutlineInput } from './episode-outline.pure.ts';
 import {
   episodeRegistryFiles,
   exportedRecord,
@@ -18,6 +17,7 @@ import { episodeRouteFiles, isGeneratedRoute, ROUTE_GROUPS, type EpisodeRoute } 
 import { eventRegistryFiles } from './event-registry.pure.ts';
 import { explorablePageRegistryFile } from './explorable-page-registry.pure.ts';
 import { guideRegistryFile } from './guide-registry.pure.ts';
+import { instanceSlidesFile } from './instance-slides.pure.ts';
 import { pageSummariesFile } from './page-summaries.pure.ts';
 import { templateRegistryFile } from './template-registry.pure.ts';
 
@@ -121,52 +121,21 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
-function existing(root: string, paths: readonly string[]): string[] {
-  return paths.filter((candidate) => existsSync(path.join(root, candidate)));
-}
-
-function layers(root: string, paths: (locale: Locale) => readonly string[]): TextLayers {
-  return Object.fromEntries(LOCALES.map((locale) => [locale, existing(root, paths(locale))])) as unknown as TextLayers;
-}
-
-function episodeTextOf(root: string, folders: readonly string[]): TextLayers {
-  return layers(root, (locale) => [...folders].reverse().map((f) => `${EPISODES_DIR}/${f}/i18n/${locale}.json`));
-}
-
-function textSourceOf(root: string, folders: readonly string[], slug: string): TextSource {
-  const owned = folders.map((folder) => `${EPISODES_DIR}/${folder}/slides/${slug}/i18n`);
-  const pooled = `${EPISODES_DIR}/${SLIDE_POOL_FOLDER}/${slug}/i18n`;
-  const ownerAt = owned.findIndex((candidate) => existsSync(path.join(root, candidate)));
-  if (ownerAt === -1 && !existsSync(path.join(root, pooled)))
-    throw new Error(`Slide "${slug}" of ${folders[0]} has no i18n folder in ${[...owned, pooled].join(' or ')}`);
-  const home = ownerAt === -1 ? pooled : owned[ownerAt];
-  const nearer = folders.slice(0, ownerAt === -1 ? folders.length : ownerAt).reverse();
-  return {
-    pool: ownerAt === -1,
-    text: layers(root, (locale) => [
-      `${home}/${locale}.json`,
-      ...nearer.map((folder) => `${EPISODES_DIR}/${folder}/overrides/${slug}.${locale}.json`),
-    ]),
-  };
-}
-
-async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
+async function outlineInputs(root: string, load: SiteLoader): Promise<OutlineInput[]> {
   const { compositionOutlines: outlines } = await load<{ compositionOutlines: typeof compositionOutlines }>(
     'src/episodes/lib/composition-outlines.ts',
   );
   const folders = new Map(readEpisodeFolders(root).map((page) => [page.id, page.folder]));
-  const episodes = Object.entries(outlines()).map(([id, outline]) => {
+  return Object.entries(outlines()).map(([id, outline]) => {
     const folder = folders.get(id);
     if (folder === undefined) throw new Error(`The Episode registry holds "${id}" but no folder does`);
     return { id, folder, ...outline };
   });
-  return [
-    episodeOutlinesFile(
-      episodes,
-      (folders, slug) => textSourceOf(root, folders, slug),
-      (folders) => episodeTextOf(root, folders),
-    ),
-  ];
+}
+
+async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
+  const inputs = await outlineInputs(root, load);
+  return [episodeOutlinesFile(inputs), instanceSlidesFile(inputs)];
 }
 
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
@@ -187,11 +156,43 @@ function staleOf(root: string, files: readonly RegistryFile[]): RegistryFile[] {
   return files.filter((file) => onDisk(root, file) !== file.text);
 }
 
-export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
+async function staleRoutes(root: string, load: SiteLoader): Promise<string[]> {
   const routes = await formatted(root, episodeRouteFiles(await episodeRoutes(root, load)));
+  return [...staleOf(root, routes).map((file) => file.path), ...obsoleteRoutes(root, routes)];
+}
+
+export async function staleSourceFiles(root: string): Promise<string[]> {
+  return staleOf(root, await formatted(root, sourceFiles(root))).map((file) => file.path);
+}
+
+export async function staleEpisodeRoutes(root: string, load: SiteLoader): Promise<string[]> {
+  return staleRoutes(root, load);
+}
+
+export function episodePageIds(root: string): string[] {
+  return readEpisodeFolders(root)
+    .filter(
+      ({ folder, files }) =>
+        files.includes('episode.ts') &&
+        files.includes('episode-metadata.ts') &&
+        !/^(templates|explorable-pages|guides)\//.test(folder),
+    )
+    .map(({ id }) => id);
+}
+
+export async function staleInstanceSlides(root: string, outlines: Readonly<Record<string, object>>): Promise<string[]> {
+  const inputs = Object.entries(outlines).map(([id, entry]) => ({ id, ...entry }) as OutlineInput);
+  return staleOf(root, await formatted(root, [instanceSlidesFile(inputs)])).map((file) => file.path);
+}
+
+export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
   const outlines = await formatted(root, await outlineFiles(root, load));
-  const stale = staleOf(root, [...(await formatted(root, sourceFiles(root))), ...routes, ...outlines]);
-  return [...stale.map((file) => file.path), ...obsoleteRoutes(root, routes)];
+  const summaries = await formatted(root, await summaryFiles(load));
+  return [
+    ...(await staleSourceFiles(root)),
+    ...(await staleRoutes(root, load)),
+    ...staleOf(root, [...summaries, ...outlines]).map((file) => file.path),
+  ];
 }
 
 function write(root: string, files: readonly RegistryFile[]): string[] {

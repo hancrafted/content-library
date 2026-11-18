@@ -1,5 +1,5 @@
-import outlines from '../../episodes/lib/episode-outlines.generated.json' with { type: 'json' };
 import { LOCALES, type Locale } from '../../shared/lib/locale.pure.ts';
+import outlines from './episode-outlines.generated.json' with { type: 'json' };
 
 // decision: FE-004 §4
 export type TextLayers = Readonly<Record<Locale, readonly string[]>>;
@@ -14,6 +14,7 @@ export interface OutlineSlide {
 }
 
 export interface EpisodeOutline {
+  readonly base?: string;
   readonly text: TextLayers;
   readonly title?: OutlineSlide;
   readonly sections: readonly (readonly OutlineSlide[])[];
