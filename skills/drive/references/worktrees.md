@@ -28,7 +28,7 @@ When the OS drops a metadata file (`.DS_Store`) into the folder mid-delete, `don
 
 ## pr watch
 
-`drive pr watch <number>` polls the PR in the background. Exit 0 and `merged <sha>`: merged. Exit 2 and `closed`: closed unmerged. Exit 3 with the bodies: a review or comment arrived after the watch started. It skips comments that start with `<!-- drive -->`, so start each reply you post on a PR with it.
+`drive pr watch <number>` polls the PR in the background. Exit 0 and `merged <sha>`: merged. Exit 2 and `closed`: closed unmerged. Exit 3 with the bodies: a review, comment or inline review comment (printed as `path:line body`) arrived after the watch started. It skips comments that start with `<!-- drive -->`, so start each reply you post on a PR with it.
 
 ## How a Subagent finishes
 

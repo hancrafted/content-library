@@ -4,7 +4,7 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 
 ## Before each dispatch
 
-1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: tell the Operator before dispatching.
+1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: settle it before the gate and name it in the Decision PR. After the gate, run this ticket after the other work and log the order in `decisions.md`; only a conflict with the spec is an interrupt.
 2. **Ownership.** Give each concurrent ticket the paths it owns, and name the paths it must leave alone. Two tickets that need one file run one after the other.
 3. **Model.** Pass the model explicitly on every dispatch; an inherited model is a bug. The Operator's override for this session wins. The Binding names a **Model tier** (`mid` or `top`); resolve it to a model through this harness's provider entry under `models` in `project.yml` (Claude Code: `models.claude`).
 

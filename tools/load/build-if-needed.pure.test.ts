@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BUILD_COMMANDS, buildIfNeeded } from './build-if-needed.pure.ts';
+import { BUILD_COMMANDS, buildIfNeeded, branchDiffRange } from './build-if-needed.pure.ts';
 
 function stub(statuses: Record<string, number | null> = {}) {
   const ran: string[] = [];
@@ -21,7 +21,11 @@ describe('buildIfNeeded', () => {
       // ARRANGE
       const { ran, run, log } = stub();
       // ACT
-      const ok = buildIfNeeded({ changedPaths: ['src/app/page.tsx', 'docs/a.md'], run, log });
+      const ok = buildIfNeeded({
+        changedPaths: ['src/app/page.tsx', 'docs/a.md'],
+        run,
+        log,
+      });
       // ASSERT
       expect(ok).toBe(true);
       expect(ran).toEqual([...BUILD_COMMANDS]);
@@ -31,7 +35,11 @@ describe('buildIfNeeded', () => {
       // ARRANGE
       const { ran, lines, run, log } = stub();
       // ACT
-      const ok = buildIfNeeded({ changedPaths: ['docs/a.md', 'skills/drive/SKILL.md'], run, log });
+      const ok = buildIfNeeded({
+        changedPaths: ['docs/a.md', 'skills/drive/SKILL.md'],
+        run,
+        log,
+      });
       // ASSERT
       expect(ok).toBe(true);
       expect(ran).toEqual([]);
@@ -77,5 +85,26 @@ describe('buildIfNeeded', () => {
       // ASSERT
       expect(ok).toBe(false);
     });
+  });
+});
+
+describe('branchDiffRange', () => {
+  it('joins base and branch', () => {
+    // ARRANGE
+    // ACT
+    const range = branchDiffRange('main', 'feat/x');
+    // ASSERT
+    expect(range).toBe('main...feat/x');
+  });
+
+  it('refuses an empty base or branch instead of diffing nothing', () => {
+    // ARRANGE
+    // ACT
+    const results = [branchDiffRange('', 'feat/x'), branchDiffRange('main', '')];
+    // ASSERT
+    expect(results).toEqual([
+      { error: expect.stringContaining('DRIVE_BASE') },
+      { error: expect.stringContaining('DRIVE_BRANCH') },
+    ]);
   });
 });
