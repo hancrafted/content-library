@@ -3,6 +3,7 @@ import { MOVE_IDS, TRAIT_IDS } from './brief-or-pay-the-price.types';
 import type { Cell, Layout, ScenarioNode, ScenarioWords } from './scenario.types';
 import { SizedText } from './workflow-text';
 import type { CountersTest, WorkflowViewWords } from './workflow.types';
+import { BADGE_INSET } from './zoom-geometry.pure';
 
 const NODE_ROLE_LINES = 3;
 const ROLE_CHARS_PER_PIXEL = 8.4;
@@ -66,17 +67,23 @@ function Badge({
   readonly counters: CountersTest;
 }) {
   return (
-    <g transform={`translate(${rect.x + rect.w - 56},${rect.y + rect.h - 54})`} data-badge={node.id} aria-hidden="true">
-      {MOVE_IDS.flatMap((move, row) =>
-        TRAIT_IDS.map((trait, column) => (
-          <BadgeCell
-            key={`${move}/${trait}`}
-            state={stateOf(cellOf(node, move, trait), counters)}
-            row={row}
-            column={column}
-          />
-        )),
-      )}
+    <g
+      transform={`translate(${rect.x + rect.w - BADGE_INSET.right},${rect.y + rect.h - BADGE_INSET.bottom})`}
+      data-badge={node.id}
+      aria-hidden="true"
+    >
+      <g data-badge-copy>
+        {MOVE_IDS.flatMap((move, row) =>
+          TRAIT_IDS.map((trait, column) => (
+            <BadgeCell
+              key={`${move}/${trait}`}
+              state={stateOf(cellOf(node, move, trait), counters)}
+              row={row}
+              column={column}
+            />
+          )),
+        )}
+      </g>
     </g>
   );
 }

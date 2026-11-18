@@ -9,7 +9,7 @@ import { cellsOf } from './matrix-data.pure';
 
 const HANDLERS = { onLight: () => undefined, onUnlight: () => undefined, onOpenCell: () => undefined };
 
-function matrix(locale: string, extra: { lit?: Parameters<typeof Matrix>[0]['lit']; arrival?: 'price' | null } = {}) {
+function matrix(locale: string, extra: { lit?: Parameters<typeof Matrix>[0]['lit'] } = {}) {
   const data = explorableData(locale);
   return renderToStaticMarkup(
     createElement(Matrix, {
@@ -18,7 +18,6 @@ function matrix(locale: string, extra: { lit?: Parameters<typeof Matrix>[0]['lit
       moves: data.definitions.brief.rows,
       counters: data.matrix.counters,
       lit: extra.lit ?? null,
-      arrival: extra.arrival ?? null,
       handlers: HANDLERS,
     }),
   );
@@ -32,7 +31,7 @@ function cellView(locale: string, key: { move: 'break-it-down'; trait: 'relentle
   return renderToStaticMarkup(
     createElement(CellView, {
       words: data.words.matrix,
-      agent: data.words.chrome.agent,
+      crumbs: [data.words.chrome.agent],
       cell: key,
       position: { at: 0, of: cells.length },
       trait: data.definitions.price.rows[1]!,
@@ -94,16 +93,6 @@ describe('success cases', () => {
     expect(lit).toHaveLength(headingAndCells);
   });
 
-  it('assembles from the PRICE letters only when it was entered from PRICE', () => {
-    // ARRANGE
-    const entered = matrix('en', { arrival: 'price' });
-    const plain = matrix('en');
-    // ACT
-    const seen = [entered.includes('fromPrice'), plain.includes('fromPrice')];
-    // ASSERT
-    expect(seen).toEqual([true, false]);
-  });
-
   it('shows the problem row over the fix row, the counter link and the evidence line with its source', () => {
     // ARRANGE
     const html = cellView('en', { move: 'break-it-down', trait: 'relentless' });
@@ -147,12 +136,17 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('renders the matrix in its end state, with nothing hidden, when no definition it assembles from is given', () => {
+  it('renders the matrix in its end state, with no animation class or hidden part, for the flights to start from', () => {
     // ARRANGE
     const html = matrix('en');
+    const headsPerAxis = 5;
+    const filledCells = 11;
     // ACT
-    const assembling = html.includes('assembles');
+    const stylesheetClasses = html.match(/class="[^"]*(assembles|fromPrice|letterCol)/g) ?? [];
     // ASSERT
-    expect(assembling).toBe(false);
+    expect(stylesheetClasses).toEqual([]);
+    expect(html.match(/data-head-letter="column"/g)).toHaveLength(headsPerAxis);
+    expect(html.match(/data-head-letter="row"/g)).toHaveLength(headsPerAxis);
+    expect(html.match(/data-dot/g)).toHaveLength(filledCells);
   });
 });
