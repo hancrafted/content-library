@@ -2095,6 +2095,22 @@
             "title": "Check-in: from doing to managing",
             "minutes": 0,
             "items": [{ "id": "check-in-3--disciplines-recap", "title": "Where today's demo sits", "minutes": 0 }]
+          },
+          {
+            "id": "overview",
+            "title": "Two tracks, one foundation",
+            "minutes": 0,
+            "items": [
+              { "id": "overview--foundation", "title": "The shared foundation", "minutes": 0 },
+              { "id": "overview--enablement-claude-desktop", "title": "Enablement with Claude Desktop", "minutes": 0 },
+              { "id": "overview--ae-harness", "title": "Harness engineering", "minutes": 0 },
+              {
+                "id": "overview--ae-parallel-cli",
+                "title": "Operating multiple agents in parallel with the CLI",
+                "minutes": 0
+              },
+              { "id": "overview--matrix", "title": "What each track covers", "minutes": 0 }
+            ]
           }
         ]
       },
@@ -2122,6 +2138,22 @@
             "title": "Check-in: vom Ausführen zum Managen",
             "minutes": 0,
             "items": [{ "id": "check-in-3--disciplines-recap", "title": "Wo die Demo von heute steht", "minutes": 0 }]
+          },
+          {
+            "id": "overview",
+            "title": "Zwei Tracks, ein Fundament",
+            "minutes": 0,
+            "items": [
+              { "id": "overview--foundation", "title": "Das gemeinsame Fundament", "minutes": 0 },
+              { "id": "overview--enablement-claude-desktop", "title": "Enablement mit Claude Desktop", "minutes": 0 },
+              { "id": "overview--ae-harness", "title": "Harness Engineering", "minutes": 0 },
+              {
+                "id": "overview--ae-parallel-cli",
+                "title": "Mehrere Agenten parallel mit der CLI steuern",
+                "minutes": 0
+              },
+              { "id": "overview--matrix", "title": "Was jeder Track abdeckt", "minutes": 0 }
+            ]
           }
         ]
       }

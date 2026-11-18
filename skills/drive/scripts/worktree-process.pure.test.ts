@@ -59,6 +59,21 @@ describe('planSync', () => {
     expect(plans).toEqual([{ target: 'origin/main' }, { target: 'episode/y' }]);
   });
 
+  it('follows its own remote branch when the worktree is on the base it syncs', () => {
+    // ARRANGE
+    const input = {
+      branch: 'feat/x',
+      base: 'feat/x',
+      dirty: false,
+      baseBranch: 'main',
+      remote: 'origin',
+    };
+    // ACT
+    const plan = planSync(input);
+    // ASSERT
+    expect(plan).toEqual({ target: 'origin/feat/x' });
+  });
+
   it('refuses a dirty tree, main and a detached HEAD', () => {
     // ARRANGE
     const where = { baseBranch: 'main', remote: 'origin' };

@@ -270,6 +270,51 @@ describe('drive worktree', () => {
       expect(existsSync(tree)).toBe(true);
     });
 
+    it('runs beforeMerge in the Task worktree and merges when it passes', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(
+        config,
+        readFileSync(config, 'utf8').replace(
+          '  beforeRemove',
+          '  beforeMerge: ["echo ran-in $(pwd -P)"]\n  beforeRemove',
+        ),
+      );
+      git(main, 'commit', '-qam', 'hook');
+      git(main, 'push', '-q', 'origin', 'main');
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stdout).toContain(`ran-in ${tree}`);
+      expect(git(main, 'rev-list', '--merges', '--count', 'feat/x')).toBe('1');
+    });
+
+    it('leaves the Task branch unmerged and the worktree in place when a beforeMerge hook fails', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(
+        config,
+        readFileSync(config, 'utf8').replace('  beforeRemove', '  beforeMerge: ["exit 3"]\n  beforeRemove'),
+      );
+      git(main, 'commit', '-qam', 'failing hook');
+      git(main, 'push', '-q', 'origin', 'main');
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      const baseTip = git(main, 'rev-parse', 'feat/x');
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(1);
+      expect(existsSync(tree)).toBe(true);
+      expect(git(main, 'rev-parse', 'feat/x')).toBe(baseTip);
+      expect(git(main, 'branch', '--list', 'feat/x--1-task')).toContain('feat/x--1-task');
+    });
+
     it('rejects a config that names a lock module without withLock', () => {
       // ARRANGE
       const { main } = fixture(path.join(import.meta.dirname, 'git.ts'));
@@ -279,5 +324,136 @@ describe('drive worktree', () => {
       expect(result.status).toBe(1);
       expect(result.stderr).toContain('does not export withLock');
     });
+  });
+});
+
+const driveGroup = (cwd: string, group: string[], env: NodeJS.ProcessEnv = process.env) =>
+  spawnSync(process.execPath, [CLI, ...group], { cwd, encoding: 'utf8', env });
+
+describe('drive push', () => {
+  it('pushes a branch with no upstream, sets it and prints old..new', () => {
+    // ARRANGE
+    const { main } = fixture();
+    drive(main, 'new', 'feat/x');
+    const tree = path.join(main, '.trees', 'feat-x');
+    // ACT
+    const pushed = driveGroup(tree, ['push']);
+    // ASSERT
+    expect(pushed.status, pushed.stderr).toBe(0);
+    const head = git(tree, 'rev-parse', 'HEAD');
+    expect(pushed.stdout).toContain(`✔ pushed feat/x 0000000..${head.slice(0, 7)}`);
+    expect(git(tree, 'ls-remote', 'origin', 'refs/heads/feat/x')).toContain(head);
+  });
+
+  it('fails with the reason when the push is rejected', () => {
+    // ARRANGE
+    const { main, root } = fixture();
+    drive(main, 'new', 'feat/x');
+    const tree = path.join(main, '.trees', 'feat-x');
+    driveGroup(tree, ['push']);
+    const other = path.join(root, 'other');
+    git(root, 'clone', '-q', path.join(root, 'origin.git'), other);
+    git(other, 'checkout', '-q', 'feat/x');
+    writeFileSync(path.join(other, 'o.txt'), 'o');
+    git(other, 'add', '.');
+    git(other, 'commit', '-qm', 'elsewhere');
+    git(other, 'push', '-q', 'origin', 'feat/x');
+    writeFileSync(path.join(tree, 't.txt'), 't');
+    git(tree, 'add', '.');
+    git(tree, 'commit', '-qm', 'local');
+    // ACT
+    const pushed = driveGroup(tree, ['push']);
+    // ASSERT
+    expect(pushed.status).toBe(1);
+    expect(pushed.stderr).toContain('failed');
+  });
+
+  it('fails when the remote differs from HEAD although git exited 0', () => {
+    // ARRANGE
+    const { main, root } = fixture();
+    drive(main, 'new', 'feat/x');
+    const tree = path.join(main, '.trees', 'feat-x');
+    const hooks = path.join(root, 'origin.git', 'hooks');
+    mkdirSync(hooks, { recursive: true });
+    writeFileSync(path.join(hooks, 'update'), '#!/bin/sh\nexit 0\n', {
+      mode: 0o755,
+    });
+    writeFileSync(path.join(hooks, 'post-receive'), '#!/bin/sh\ngit update-ref refs/heads/feat/x refs/heads/main\n', {
+      mode: 0o755,
+    });
+    writeFileSync(path.join(tree, 't.txt'), 't');
+    git(tree, 'add', '.');
+    git(tree, 'commit', '-qm', 'local');
+    // ACT
+    const pushed = driveGroup(tree, ['push']);
+    // ASSERT
+    expect(pushed.status).toBe(1);
+    expect(pushed.stderr).toContain('the push did not land');
+  });
+});
+
+describe('drive worktree sync on the Integration branch', () => {
+  it('takes a commit someone else pushed to the remote branch', () => {
+    // ARRANGE
+    const { main, root } = fixture();
+    drive(main, 'new', 'feat/x');
+    const tree = path.join(main, '.trees', 'feat-x');
+    expect(driveGroup(tree, ['push']).status).toBe(0);
+    const other = path.join(root, 'other');
+    git(root, 'clone', '-q', path.join(root, 'origin.git'), other);
+    git(other, 'checkout', '-q', 'feat/x');
+    writeFileSync(path.join(other, 'decision.txt'), 'merged on GitHub');
+    git(other, 'add', '.');
+    git(other, 'commit', '-qm', 'decision PR merged');
+    git(other, 'push', '-q', 'origin', 'feat/x');
+    // ACT
+    const synced = drive(tree, 'sync', '--base', 'feat/x');
+    // ASSERT
+    expect(synced.status, synced.stderr).toBe(0);
+    expect(readFileSync(path.join(tree, 'decision.txt'), 'utf8')).toBe('merged on GitHub');
+  });
+});
+
+describe('drive pr watch', () => {
+  const stubbedGh = (views: object[]) => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'drive-gh-'));
+    const state = path.join(dir, 'count');
+    writeFileSync(state, '0');
+    views.forEach((view, index) => writeFileSync(path.join(dir, `view${index}.json`), JSON.stringify(view)));
+    writeFileSync(
+      path.join(dir, 'gh'),
+      `#!/bin/sh\n[ "$1" = api ] && { echo '[[]]'; exit 0; }\nn=$(cat ${state})\nlast=${views.length - 1}\n[ "$n" -gt "$last" ] && n=$last\ncat ${dir}/view$n.json\necho $((n + 1)) > ${state}\n`,
+      { mode: 0o755 },
+    );
+    return { ...process.env, PATH: `${dir}:${process.env.PATH}` };
+  };
+  const watch = (views: object[]) => {
+    const { main } = fixture();
+    return driveGroup(main, ['pr', 'watch', '7', '--poll-milliseconds', '10'], stubbedGh(views));
+  };
+  const open = { state: 'OPEN', mergeCommit: null, reviews: [], comments: [] };
+
+  it('exits 0 with the merge commit when the PR merges', () => {
+    // ARRANGE
+    // ACT
+    const result = watch([open, { ...open, state: 'MERGED', mergeCommit: { oid: 'abc' } }]);
+    // ASSERT
+    expect([result.status, result.stdout.trim()]).toEqual([0, 'merged abc']);
+  });
+
+  it('exits 2 when the PR closes unmerged', () => {
+    // ARRANGE
+    // ACT
+    const result = watch([open, { ...open, state: 'CLOSED' }]);
+    // ASSERT
+    expect([result.status, result.stdout.trim()]).toEqual([2, 'closed']);
+  });
+
+  it('exits 3 with the body of a comment that arrives after the start', () => {
+    // ARRANGE
+    // ACT
+    const result = watch([open, { ...open, comments: [{ id: 'c1', body: 'please change X' }] }]);
+    // ASSERT
+    expect([result.status, result.stdout.trim()]).toEqual([3, 'please change X']);
   });
 });

@@ -6,10 +6,10 @@ title: Aus einer Quelle ein Quiz machen
 description: Entscheide, was ein gutes Quiz braucht, wende es auf eine Quelle an und mach daraus einen Skill, der das nächste Quiz macht.
 
 scenario:
-  summary: Bau einen Quiz-Generator und mach dann aus der Episode "Was agentische Workflows von Menschen und Organisationen verlangen" sein erstes Quiz.
+  summary: Bau einen Quiz-Generator und mach dann aus Googles Paper über Vibe Coding sein erstes Quiz.
   facts:
     - 'Das Ziel: Ein Quiz-Generator-Prompt, mit dem die KI jede Webseite oder jedes PDF in ein unterhaltsames Quiz verwandelt: eine eigenständige HTML-Datei mit modernen Visuals und gamifizierten Animationen.'
-    - 'Die erste Quelle: https://hancrafted.net/de/episodes/what-agentic-workflows-require/'
+    - 'Die erste Quelle: https://drive.google.com/file/d/1IR7CddF_2FyQo_PdfBNTaEA50EGiVt2r/view'
 
 purposes:
   role: Mit einer Rolle bestimmst du Ton und Tiefe der Antwort.
@@ -777,7 +777,7 @@ stages:
             mode: single
             free: true
             label: Die Quelle (eine URL oder der Name des PDFs, das du anhängst)
-            sample: https://hancrafted.net/de/episodes/what-agentic-workflows-require/
+            sample: https://drive.google.com/file/d/1IR7CddF_2FyQo_PdfBNTaEA50EGiVt2r/view
         details:
           why: Die Spezifikation entstand, bevor jemand diese Quelle gesehen hat, also zeigt das Quiz, ob deine Anforderungen tragen. Ein Quiz, das du spielen kannst, zeigt in einer Minute, was eine Liste von Anforderungen verbirgt.
           techniques: [cite-sources, allow-unknown, delimiters]
@@ -786,7 +786,7 @@ stages:
             - Die Lernziele und Fragen folgen den Regeln der Spezifikation.
             - Das Quiz öffnet sich per Doppelklick und funktioniert auf dem Handy.
             - Punkte, sofortiges Feedback mit Zitat und ein Endbildschirm funktionieren.
-        instructions: 'Melde dich bei Gemini an, öffne einen neuen Chat, trag die Quelle in das Feld ein und füge den Prompt ein. Speichere den HTML-Block als quiz.html, öffne ihn in deinem Browser und spiel das Quiz einmal durch, und notiere, was dir auffällt.'
+        instructions: 'Melde dich bei Gemini an, öffne einen neuen Chat, trag die Quelle in das Feld ein und füge den Prompt ein. Lade quiz.html herunter, öffne sie in deinem Browser und spiel das Quiz einmal durch, und notiere, was dir auffällt.'
         do:
           simple:
             - heading: Deine Rolle
@@ -839,7 +839,7 @@ stages:
             - heading: Format
               purpose: template
               text: |
-                Antworte mit der ganzen Seite in einem Codeblock, der mit ```html beginnt. Schreibe unter den Block genau: "Speichere das als quiz.html, öffne es in deinem Browser und spiel es durch." Wenn deine Antwort abbricht, starte ich einen neuen Chat und füge diesen Prompt noch einmal ein.
+                Liefere die ganze Seite als Datei namens quiz.html, die ich herunterladen kann, nie als Text im Chat. Schreibe unter die Datei genau: "Lade quiz.html herunter, öffne sie in deinem Browser und spiel sie durch." Nur wenn du keine Dateien erstellen kannst, antworte mit der ganzen Seite in einem Codeblock, der mit ```html beginnt, und schreibe stattdessen "Speichere das als quiz.html". Wenn deine Antwort abbricht, starte ich einen neuen Chat und füge diesen Prompt noch einmal ein.
           technical:
             - heading: Aufgabe
               purpose: task

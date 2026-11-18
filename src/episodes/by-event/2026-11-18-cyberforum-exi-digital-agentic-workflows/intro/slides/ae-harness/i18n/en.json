@@ -1,0 +1,127 @@
+{
+  "title": "Harness engineering",
+  "caption": "This site's own repo: context and rules for the agent, the same checks locally and in CI, then live.",
+  "flowLabel": "One change, from the agent to the live site",
+  "nodes": {
+    "agent": {
+      "label": "Claude Code",
+      "head": "Agent on a branch, in its own worktree",
+      "items": {
+        "you": "You: spec and review"
+      }
+    },
+    "context": {
+      "label": "Reads first",
+      "head": "Context and rules",
+      "items": {
+        "agents": "AGENTS.md",
+        "skills": "skills/",
+        "adrs": "ADRs in .archgate/",
+        "drive": "docs/drive/"
+      }
+    },
+    "quick": {
+      "label": "Local · while coding",
+      "head": "verify:quick",
+      "items": {
+        "lint": "lint · format · typecheck",
+        "tests": "tests of changed files"
+      }
+    },
+    "commit": {
+      "label": "Local · pre-commit",
+      "head": "verify:commit",
+      "items": {
+        "archgate": "archgate check --staged",
+        "message": "+ commit-message gate"
+      }
+    },
+    "push": {
+      "label": "Local · pre-push",
+      "head": "verify:push",
+      "items": {
+        "slow": "verify · test:slow",
+        "build": "+ build on push to main"
+      }
+    },
+    "ci": {
+      "label": "GitHub CI · every PR",
+      "head": "The same checks, again",
+      "items": {
+        "checks": "archgate:full · lint · typecheck",
+        "build": "unit tests · build · test:build"
+      }
+    },
+    "nightly": {
+      "label": "nightly",
+      "head": "test:slow",
+      "items": {
+        "slow": "the slow suite, every night"
+      }
+    },
+    "live": {
+      "label": "After green CI on main",
+      "head": "Cloudflare Pages",
+      "items": {
+        "site": "hancrafted.net",
+        "build": "the tested build goes live"
+      }
+    }
+  },
+  "toolsLabel": "Built with, on GitHub",
+  "githubHint": "repository on GitHub, opens in a new tab",
+  "tools": {
+    "archgate": {
+      "name": "archgate",
+      "body": "ADRs as automated checks"
+    },
+    "markdown-harness": {
+      "name": "markdown-harness",
+      "body": "Rules for the docs folder"
+    },
+    "mattpocock-skills": {
+      "name": "mattpocock/skills",
+      "body": "Engineering skills for agents"
+    },
+    "oxlint": {
+      "name": "oxlint",
+      "body": "Fast lint and format"
+    },
+    "vitest": {
+      "name": "Vitest",
+      "body": "The test runner"
+    },
+    "dependency-cruiser": {
+      "name": "dependency-cruiser",
+      "body": "Import direction, enforced"
+    },
+    "knip": {
+      "name": "Knip",
+      "body": "Finds unused files and exports"
+    },
+    "husky": {
+      "name": "husky",
+      "body": "Runs the local gates on git hooks"
+    },
+    "playwright": {
+      "name": "Playwright",
+      "body": "Browser checks of the pages"
+    },
+    "next": {
+      "name": "Next.js",
+      "body": "Builds the static site"
+    }
+  },
+  "demo": {
+    "label": "Live demo",
+    "name": "hancrafted.net/dashboard",
+    "body": "An Episode pipeline Run, Job by Job",
+    "newTabHint": "opens in a new tab"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Left to right is one change",
+      "description": "The agent reads AGENTS.md, skills and ADRs, then every gate checks the change. Locally the gates answer in seconds; CI repeats them so nothing skips them; only a green main goes live. Demo: open a prepared Episode folder on /dashboard in Chrome or Edge and walk its Run."
+    }
+  }
+}

@@ -1,0 +1,23 @@
+# Structure only: groups, row keys, track marks and the "covered today" flag.
+# Labels live in i18n/{en,de}.json under groups.<key> and rows.<key>; matrix.pure.test.ts fails on a missing one.
+groups:
+  - key: foundation
+    rows:
+      - { key: attention, enablement: true, engineering: true, today: true }
+      - { key: freelancer, enablement: true, engineering: true, today: true }
+      - { key: more-work, enablement: true, engineering: true, today: true }
+      - { key: spec, enablement: true, engineering: true }
+      - { key: skills, enablement: true, engineering: true }
+      - { key: workflows, enablement: true, engineering: true }
+  - key: enablement
+    rows:
+      - { key: projects, enablement: true, engineering: false }
+      - { key: connectors, enablement: true, engineering: true }
+      - { key: documents, enablement: true, engineering: false }
+      - { key: voice, enablement: true, engineering: false }
+      - { key: scheduling, enablement: true, engineering: false }
+  - key: engineering
+    rows:
+      - { key: harness, enablement: false, engineering: true }
+      - { key: ci-cd, enablement: false, engineering: true }
+      - { key: parallel-cli, enablement: false, engineering: true }

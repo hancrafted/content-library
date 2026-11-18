@@ -4,15 +4,14 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 
 ## Before each dispatch
 
-1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: tell the Operator before dispatching.
+1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: settle it before the gate and name it in the Decision PR. After the gate, run this ticket after the other work and log the order in `decisions.md`; only a conflict with the spec is an interrupt.
 2. **Ownership.** Give each concurrent ticket the paths it owns, and name the paths it must leave alone. Two tickets that need one file run one after the other.
 3. **Model.** Pass the model explicitly on every dispatch; an inherited model is a bug. The Operator's override for this session wins. The Binding names a **Model tier** (`mid` or `top`); resolve it to a model through this harness's provider entry under `models` in `project.yml` (Claude Code: `models.claude`).
 
    | Work                       | Tier                       |
    | -------------------------- | -------------------------- |
    | implementation, fixes      | `implement`'s              |
-   | decision page, Reason      | by the fidelity rule below |
-   | decision page, Fortify     | by the fidelity rule below |
+   | decision page              | by the fidelity rule below |
    | log mining, review support | `verify`'s                 |
    | Fortify evidence           | `evolve`'s                 |
 
@@ -28,7 +27,7 @@ A Subagent's report with no **Merge** line means it stopped early: resume that S
 
 ## A decision page
 
-Reason's pages and Fortify's page share one task shape. The brief passes `docs/drive/review.md` as the page skill's caller inputs, so it skips calibration, and names the items. The Subagent's _Done when_:
+Reason's pages share one task shape. The brief passes `docs/drive/review.md` as the page skill's caller inputs, so it skips calibration, and names the items. The Subagent's _Done when_:
 
 1. the page is built in the mode `review.md` gives for this use;
 2. it holds a screenshot at two widths (the review width and a narrower one), in light and dark, taken with the Binding's `visual-check` skill when a phase binds it under `verify`, else with the page skill's own verification;
@@ -50,21 +49,26 @@ Profile: the implementer's, in <path to this skill>/references/profiles.md, exte
 
 1. Before anything, confirm your worktree's branch contains <Integration branch>.
 2. Build the ticket with the skills its **Skills** line names.
-3. Verify with <the project's quick and full verification commands>; commit the project's way.
-4. Finish as <path to this skill>/references/worktrees.md "How a Subagent finishes" says.
-5. Never push, open a PR or run the pre-push verification; never edit installed skills; never edit Decision docs: propose terms under **Terms** instead.
+3. Every acceptance criterion is done, or reported `not done` with the blocker that stopped you; judging one unnecessary is not a blocker.
+4. Verify with <the project's quick and full verification commands>; commit the project's way.
+5. Finish as <path to this skill>/references/worktrees.md "How a Subagent finishes" says.
+6. Never push, open a PR or run the pre-push verification; never edit installed skills; never edit Decision docs: propose terms under **Terms** instead.
 
 ## Report
 
 <the report template below>
 ```
 
+## Follow-up briefs
+
+A fix, review-fix or fixture task gets its own task brief, in the same shape. Its first line points at the shared `brief.md`, whose Rules and Report bind it as they bind a ticket; the findings or failures to fix stand in for the ticket's acceptance criteria, one line each in its report.
+
 ## The task brief
 
 `.scratch/<topic>/<task>.brief.md`, short; it points rather than inlines:
 
 ```markdown
-Ticket: <tracker ref> (read its comments too). Brief: .scratch/<topic>/brief.md.
+Ticket: <tracker ref> (read its comments too), or the findings to fix. Brief: .scratch/<topic>/brief.md; its Rules bind this task.
 Worktree: <path>. Task branch: <name>. Integration branch: <name>. Model: <model>.
 You own: <paths>. Leave alone: <paths, and why>.
 Merge: self-merge | by PR (stop after commit).
