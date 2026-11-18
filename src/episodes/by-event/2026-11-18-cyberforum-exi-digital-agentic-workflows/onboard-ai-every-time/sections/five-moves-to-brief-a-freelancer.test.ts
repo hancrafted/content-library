@@ -41,22 +41,16 @@ describe('success cases', () => {
     expect(initialsOf($, 'data-move-initial')).toBe(expected);
   });
 
-  it('spells BRIEF down the moves of "Manage the price" in German', () => {
+  it('mounts the Explorable on the BRIEF x PRICE Agent matrix in "Manage the price"', () => {
     // ARRANGE
-    const expected = 'BRIEF';
+    const expected = { explorable: 'brief-or-pay-the-price', level: 'agent' };
     // ACT
     const $ = sceneOf('manage-the-price', 'de');
     // ASSERT
-    expect(initialsOf($, 'data-move-initial')).toBe(expected);
-  });
-
-  it('spells PRICE across the traits of "Manage the price" in German', () => {
-    // ARRANGE
-    const expected = 'PRICE';
-    // ACT
-    const $ = sceneOf('manage-the-price', 'de');
-    // ASSERT
-    expect(initialsOf($, 'data-trait-initial')).toBe(expected);
+    expect({
+      explorable: $('[data-explorable]').attr('data-explorable'),
+      level: $('[data-explorable]').attr('data-level'),
+    }).toEqual(expected);
   });
 
   it('draws the summer-party Workflow in the Stages view, with the Interview chat and its forgotten question', () => {
@@ -107,7 +101,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('renders no heading in a Scene, since the shared Slide header owns it', () => {
     // ARRANGE
-    const slugs = ['five-moves-to-brief-a-freelancer', 'manage-the-price', 'first-human-in-the-loop-agentic-workflow'];
+    const slugs = ['five-moves-to-brief-a-freelancer', 'first-human-in-the-loop-agentic-workflow'];
     // ACT
     const withHeading = slugs.filter((slug) => sceneOf(slug, 'de')('h1, h2, h3').length > 0);
     // ASSERT
@@ -116,17 +110,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('spells the same acronyms in English as in German', () => {
+  it('spells the same acronym in English as in German on the section slide', () => {
     // ARRANGE
-    const expected = { moves: 'BRIEF', traits: 'PRICE', section: 'BRIEF' };
+    const expected = 'BRIEF';
     // ACT
-    const matrix = sceneOf('manage-the-price', 'en');
     const section = sceneOf('five-moves-to-brief-a-freelancer', 'en');
     // ASSERT
-    expect({
-      moves: initialsOf(matrix, 'data-move-initial'),
-      traits: initialsOf(matrix, 'data-trait-initial'),
-      section: initialsOf(section, 'data-move-initial'),
-    }).toEqual(expected);
+    expect(initialsOf(section, 'data-move-initial')).toBe(expected);
   });
 });

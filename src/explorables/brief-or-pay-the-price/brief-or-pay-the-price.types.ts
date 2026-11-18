@@ -208,7 +208,7 @@ export interface MoveCounters {
 
 export type { Layer };
 
-export const PRESET_IDS = ['play', 'drive'] as const;
+export const PRESET_IDS = ['play', 'manage', 'drive'] as const;
 export type PresetId = (typeof PRESET_IDS)[number];
 
 export const LEVEL_IDS = ['define', 'agent', 'workflow'] as const;
