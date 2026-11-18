@@ -61,13 +61,25 @@ describe('success cases', () => {
   });
 
   describe('instanceExportName', () => {
-    it('names the record by the Event name after its date and the Episode slug', () => {
+    it('names the record by the whole Event name after its date and the Episode slug', () => {
       // ARRANGE
       const event = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
       // ACT
       const name = instanceExportName(event, 'ai-attention-span');
       // ASSERT
-      expect(name).toBe('cyberforumAiAttentionSpan');
+      expect(name).toBe('cyberforumAkademieIntroAgenticWorkflowAiAttentionSpan');
+    });
+
+    it('gives two Events sharing a first word the same Episode, two names', () => {
+      // ARRANGE
+      const events = [
+        '2026-10-28-cyberforum-akademie-intro-agentic-workflow',
+        '2026-11-18-cyberforum-exi-digital-agentic-workflows',
+      ];
+      // ACT
+      const names = events.map((event) => instanceExportName(event, 'ai-attention-span'));
+      // ASSERT
+      expect(new Set(names).size).toBe(events.length);
     });
   });
 

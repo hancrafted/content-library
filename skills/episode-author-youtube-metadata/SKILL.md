@@ -17,7 +17,7 @@ Two branches:
 1. Run `npm run youtube:recording -- <episode> --lang <lang>`; take `<lang>` from the file names in `recording/`. _Done when_ the composition table prints, the Slide starts are present and the Event (if any) is known from the folder path.
 2. Read `references/description.<lang>.md`: the template, its budgets, the YouTube Help sentences behind them and its Learned rules, which bind like the template. Open only the file of the recorded language.
 3. Gather the facts:
-   - **Content**: `npm run youtube:voice-script -- <episode> --lang <lang>` for what the talk says; the Episode's `i18n/<lang>.json` for its title, caption and description.
+   - **Content**: `npm run youtube:voice-script -- <episode> --lang <lang>` for what the talk says; its title, caption and description from `episodes.<episode id>.<lang>` in `src/episodes/lib/page-summaries.generated.json`, never from the folder's `i18n/` (an Event copy's `i18n/` holds only notes; the summary holds the text it shows).
    - **Episode link**: `https://hancrafted.net` + `/de` for German (English has no prefix) + `/episodes/<slug>/` for a public Episode, or `/events/<event>/episodes/<slug>/` for an Event copy. The trailing slash stays.
    - **About links**: the `linkedin` entry of `SOCIAL_LINKS` in `src/shared/lib/social-links.ts`, and the site root. Copy each URL from the file.
    - **Research questions**: the titles of the research files the Episode's claims rest on, found under `docs/llm-wiki/research/` through its index. The site publishes no page per Research question, so the list carries titles only and no URL, until #446 publishes them.

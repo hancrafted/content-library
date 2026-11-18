@@ -71,12 +71,14 @@ export function overrideFileOf(slug: string, language: SpokenLanguage): string {
 }
 
 export function writeSurface(
-  row: { readonly slug: string; readonly files: readonly string[]; readonly pool: boolean },
+  row: { readonly slug: string; readonly files: readonly string[]; readonly pool: boolean; readonly inline?: number },
   language: SpokenLanguage,
   instance: boolean,
 ): string {
-  if (instance)
-    return `write ${overrideFileOf(row.slug, language)} (Episode override; the Base Episode's i18n stays untouched)`;
+  if (instance) {
+    const inline = row.inline ? `; ${row.inline} inline override in episode.ts also applies` : '';
+    return `write ${overrideFileOf(row.slug, language)} (Episode override; the Base Episode's i18n stays untouched${inline})`;
+  }
   if (row.files.length === 0) return 'NO I18N FILE';
   return `${row.files.join(' + ')}${row.pool ? ' (POOL: shared, read only)' : ''}`;
 }

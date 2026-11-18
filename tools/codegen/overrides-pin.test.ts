@@ -80,5 +80,21 @@ describe('edge cases', () => {
       // ASSERT
       expect(existsSync(path.join(dir, pins.PIN_LOCK_FILE))).toBe(false);
     });
+
+    it('says there is nothing to pin when no Slide text is overridden, and whether it removed a stale lock', async () => {
+      // ARRANGE
+      const { root, dir } = rootWithInstance();
+      const instance = instanceOf(BASE, {});
+      const loader = loaderOf({ [INSTANCE_ID]: instance });
+      const clean = await pinOverrides(root, INSTANCE_ID, loader);
+      writeFileSync(path.join(dir, pins.PIN_LOCK_FILE), '{}');
+      // ACT
+      const stale = await pinOverrides(root, INSTANCE_ID, loader);
+      // ASSERT
+      expect({ clean, stale }).toEqual({
+        clean: `${INSTANCE_ID} overrides no Slide text: nothing to pin`,
+        stale: expect.stringContaining('nothing to pin, removed the stale'),
+      });
+    });
   });
 });

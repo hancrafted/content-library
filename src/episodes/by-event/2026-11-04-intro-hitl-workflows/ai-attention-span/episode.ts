@@ -7,7 +7,7 @@ import theAisAttentionSpanDe from './overrides/the-ais-attention-span.de.json';
 import whatFillsTheWindowDe from './overrides/what-fills-the-window.de.json';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
-export const introHitlAiAttentionSpan = instanceOf(aiAttentionSpan, {
+export const introHitlWorkflowsAiAttentionSpan = instanceOf(aiAttentionSpan, {
   title: {
     notes: [{ slug: 'check-in', target: 'title' }],
     messages: { en, de },

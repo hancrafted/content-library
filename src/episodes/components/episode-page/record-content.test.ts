@@ -1,8 +1,8 @@
-import { introHitlAiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
-import { introHitlAiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
+import { introHitlWorkflowsAiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
+import { introHitlWorkflowsAiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
 import { introHitlWorkflows } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
-import { introHitlOnboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
-import { whatLiesBelowTheWaterlineOfSustainableAiSkills as eventWaterline } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
+import { introHitlWorkflowsOnboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
+import { cyberforumAkademieHandsOnAgenticWorkflowsWhatLiesBelowTheWaterlineOfSustainableAiSkills as eventWaterline } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import { STANDARD_TITLE_LOOK } from '@/episodes/components/slide-master/standard-looks';
@@ -110,9 +110,9 @@ describe('success cases', () => {
   });
 
   it.each([
-    [introHitlAiAttentionSpan, 'thought-experiment'],
-    [introHitlAiGivesYouMoreWork, 'from-execution-to-management'],
-    [introHitlOnboardAiEveryTime, 'the-thought-experiment'],
+    [introHitlWorkflowsAiAttentionSpan, 'thought-experiment'],
+    [introHitlWorkflowsAiGivesYouMoreWork, 'from-execution-to-management'],
+    [introHitlWorkflowsOnboardAiEveryTime, 'the-thought-experiment'],
   ] as const)(
     'renders inverse Event Titles with trailing reading space and independent ink departure',
     async (record, firstSection) => {
@@ -149,7 +149,7 @@ describe('success cases', () => {
   );
   it.each([
     [
-      introHitlAiAttentionSpan,
+      introHitlWorkflowsAiAttentionSpan,
       [
         ['top→thought-experiment', 'var(--section-band)'],
         [
@@ -169,9 +169,9 @@ describe('success cases', () => {
         ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
       ],
     ],
-    [introHitlAiGivesYouMoreWork, [['top→from-execution-to-management', 'var(--section-band)']]],
+    [introHitlWorkflowsAiGivesYouMoreWork, [['top→from-execution-to-management', 'var(--section-band)']]],
     [
-      introHitlOnboardAiEveryTime,
+      introHitlWorkflowsOnboardAiEveryTime,
       [
         ['top→the-thought-experiment', 'var(--section-band)'],
         [

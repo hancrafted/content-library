@@ -1,4 +1,3 @@
-import type { ComposedId } from '@/content-store/catalogue/record-routes';
 import type { PlacedListSlide, SlideLevel } from '@/episodes/lib/episode.pure';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -8,7 +7,7 @@ import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } from './slide-header-text';
-import { slideKit, type ReferenceLabels, type SlideKitInput } from './slide-kit';
+import { slideKit, type PageIdentity, type ReferenceLabels, type SlideKitInput } from './slide-kit';
 import type { SlidePresentation } from './slide-presentation';
 
 // decision: docs/decision-records/0001-the-slide-is-a-self-contained-folder.md
@@ -41,14 +40,12 @@ export type LocalizedSlide = Placement &
     | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
   );
 
-export interface EpisodeContext {
-  readonly episode: ComposedId;
-  readonly route?: string;
+export type EpisodeContext = PageIdentity & {
   readonly locale: Locale;
   readonly placed: readonly PlacedListSlide<Slide>[];
   readonly referenceLabels: ReferenceLabels;
   readonly header: HeaderMode;
-}
+};
 
 export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
   const t = createTranslator({

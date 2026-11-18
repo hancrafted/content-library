@@ -1,6 +1,4 @@
 import { episodeChecks } from '@/episodes/lib/episode-checks';
-import { existsSync } from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.7
@@ -30,12 +28,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps no Slide or Section folder: an Episode instance composes its Base Episode', () => {
+  it('runs folder checks, so an empty list cannot pass', () => {
     // ARRANGE
-    const expected: string[] = [];
+    const none = 0;
     // ACT
-    const own = ['slides', 'sections'].filter((folder) => existsSync(path.join(import.meta.dirname, folder)));
+    const checked = CHECKS.folder.length;
     // ASSERT
-    expect(own).toEqual(expected);
+    expect(checked).toBeGreaterThan(none);
   });
 });

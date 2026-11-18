@@ -1,4 +1,4 @@
-import { cyberforumAiGivesYouMoreWork as episode } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/episode';
+import { cyberforumExiDigitalAgenticWorkflowsAiGivesYouMoreWork as episode } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from '../../../../params';

@@ -1,4 +1,4 @@
-import { cyberforumAiAttentionSpan as episode } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/episode';
+import { cyberforumAkademieIntroAgenticWorkflowAiAttentionSpan as episode } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from '../../../../params';

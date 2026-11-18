@@ -1,4 +1,4 @@
-import { whatAgenticWorkflowsRequire as episode } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode';
+import { cyberforumAkademieHandsOnAgenticWorkflowsWhatAgenticWorkflowsRequire as episode } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';

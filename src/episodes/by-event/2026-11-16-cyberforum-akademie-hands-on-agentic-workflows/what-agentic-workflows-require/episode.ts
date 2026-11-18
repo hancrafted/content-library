@@ -19,7 +19,7 @@ import whatItRequiresOfTheOrganisationDe from './overrides/what-it-requires-of-t
 import whatToLookForInYourTeamDe from './overrides/what-to-look-for-in-your-team.de.json';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
-export const whatAgenticWorkflowsRequire = instanceOf(base, {
+export const cyberforumAkademieHandsOnAgenticWorkflowsWhatAgenticWorkflowsRequire = instanceOf(base, {
   slides: {
     'a-thought-experiment': { messages: { de: aThoughtExperimentDe } },
     'contracts-at-the-seams': { messages: { de: contractsAtTheSeamsDe } },

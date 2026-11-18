@@ -97,6 +97,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('says an inline override in episode.ts also applies to an instance Slide, so the writer does not miss it', () => {
+    // ARRANGE
+    const row = { slug: 'the-hook', files: [], pool: false, inline: 1 };
+    // ACT
+    const found = writeSurface(row, 'de', true);
+    // ASSERT
+    expect(found).toContain('inline override in episode.ts');
+  });
+
   it('still flags a Slide with no i18n file when the Episode is no instance', () => {
     // ARRANGE
     const row = { slug: 'orphan', files: [], pool: false };

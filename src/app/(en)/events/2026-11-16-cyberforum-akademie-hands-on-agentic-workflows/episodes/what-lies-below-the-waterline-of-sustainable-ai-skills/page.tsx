@@ -1,4 +1,4 @@
-import { whatLiesBelowTheWaterlineOfSustainableAiSkills as episode } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
+import { cyberforumAkademieHandsOnAgenticWorkflowsWhatLiesBelowTheWaterlineOfSustainableAiSkills as episode } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';

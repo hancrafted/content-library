@@ -1,4 +1,4 @@
-import { introHitlAiAttentionSpan as episode } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
+import { introHitlWorkflowsAiAttentionSpan as episode } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from '../../../../params';
