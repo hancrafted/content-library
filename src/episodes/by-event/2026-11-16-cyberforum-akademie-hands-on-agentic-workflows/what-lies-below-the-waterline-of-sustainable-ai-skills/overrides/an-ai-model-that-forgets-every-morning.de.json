@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "three-mornings": {
+        "script": "Jeden Tag müssen wir diesen Piloten, der weiß, wie man das U-Boot steuert, neu einarbeiten: Was ist der Auftrag, was ist die Aufgabe für heute? Und das ist jeden Tag quasi das Gleiche."
+      },
+      "what-would-you-do": {
+        "script": "Deshalb die Frage: Wenn das die Situation ist, was können wir tun, um diesen fähigen Piloten einfacher und präziser zu onboarden, damit er die Aufgabe für diesen Tag sauber und gut erledigt?"
+      }
+    }
+  }
+}

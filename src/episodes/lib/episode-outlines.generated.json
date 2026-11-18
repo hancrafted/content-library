@@ -1604,24 +1604,17 @@
   "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require": {
     "folder": "by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require",
     "text": {
-      "en": [
-        "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/i18n/en.json"
-      ],
-      "de": [
-        "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/i18n/de.json"
-      ]
+      "en": ["src/episodes/what-agentic-workflows-require/i18n/en.json"],
+      "de": ["src/episodes/what-agentic-workflows-require/i18n/de.json"]
     },
+    "base": "what-agentic-workflows-require",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/what-agentic-workflows-require/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/what-agentic-workflows-require/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -1631,11 +1624,10 @@
           "anchor": "a-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/a-thought-experiment/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/a-thought-experiment/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/a-thought-experiment/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/a-thought-experiment/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/a-thought-experiment.de.json"
             ]
           }
         },
@@ -1644,11 +1636,10 @@
           "anchor": "a-thought-experiment--the-thought-experiment",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-thought-experiment/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/the-thought-experiment/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-thought-experiment/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/the-thought-experiment/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/the-thought-experiment.de.json"
             ]
           },
           "targets": ["board"]
@@ -1658,11 +1649,10 @@
           "anchor": "a-thought-experiment--now-with-agents",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/now-with-agents/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/now-with-agents/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/now-with-agents/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/now-with-agents/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/now-with-agents.de.json"
             ]
           },
           "targets": ["context"]
@@ -1674,11 +1664,10 @@
           "anchor": "what-an-agentic-workflow-is",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-an-agentic-workflow-is.de.json"
             ]
           }
         },
@@ -1687,11 +1676,10 @@
           "anchor": "what-an-agentic-workflow-is--what-an-agent-is",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agent-is/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/what-an-agent-is/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agent-is/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-an-agent-is/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-an-agent-is.de.json"
             ]
           },
           "targets": ["agents"]
@@ -1701,11 +1689,10 @@
           "anchor": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-an-agentic-workflow-is-slide.de.json"
             ]
           },
           "targets": ["caption", "minimal", "research"]
@@ -1717,11 +1704,10 @@
           "anchor": "how-far-you-step-out",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/how-far-you-step-out/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/how-far-you-step-out/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/how-far-you-step-out/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/how-far-you-step-out/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/how-far-you-step-out.de.json"
             ]
           }
         },
@@ -1730,11 +1716,10 @@
           "anchor": "how-far-you-step-out--in-on-or-out-of-the-loop",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/in-on-or-out-of-the-loop.de.json"
             ]
           },
           "targets": ["origin", "on-level", "caption", "out-level", "forces"]
@@ -1744,11 +1729,10 @@
           "anchor": "how-far-you-step-out--reviewability-sets-the-distance",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/reviewability-sets-the-distance.de.json"
             ]
           },
           "targets": ["hedge", "check-card", "board", "caption", "guest-list"]
@@ -1760,11 +1744,10 @@
           "anchor": "what-it-requires-of-each-person",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-it-requires-of-each-person.de.json"
             ]
           }
         },
@@ -1773,11 +1756,10 @@
           "anchor": "what-it-requires-of-each-person--plan-back-from-the-goal",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/plan-back-from-the-goal.de.json"
             ]
           },
           "targets": ["caption", "kitchen", "tree", "callout", "goal"]
@@ -1787,11 +1769,10 @@
           "anchor": "what-it-requires-of-each-person--contracts-at-the-seams",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/contracts-at-the-seams.de.json"
             ]
           },
           "targets": ["caption", "contract", "one-side"]
@@ -1801,11 +1782,10 @@
           "anchor": "what-it-requires-of-each-person--reviewing-the-result",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewing-the-result/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/reviewing-the-result/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewing-the-result/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/reviewing-the-result/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/reviewing-the-result.de.json"
             ]
           },
           "targets": ["caption", "verification", "validation"]
@@ -1818,10 +1798,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n/en.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-it-requires-of-the-organisation.de.json"
             ]
           }
         },
@@ -1830,11 +1811,10 @@
           "anchor": "what-it-requires-of-the-organisation--the-org-chart-trap",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/the-org-chart-trap.de.json"
             ]
           },
           "targets": ["quote", "org-chart", "hedges", "draft"]
@@ -1844,11 +1824,10 @@
           "anchor": "what-it-requires-of-the-organisation--designed-ai-first",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/designed-ai-first/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/designed-ai-first/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/designed-ai-first/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/designed-ai-first/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/designed-ai-first.de.json"
             ]
           },
           "targets": ["board", "tips"]
@@ -1858,11 +1837,10 @@
           "anchor": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/de.json"
+              "src/episodes/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/overrides/what-to-look-for-in-your-team.de.json"
             ]
           },
           "targets": ["person", "footnote"]
@@ -1872,12 +1850,8 @@
           "anchor": "what-it-requires-of-the-organisation--from-article-to-quiz",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/en.json"
-            ],
-            "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/de.json"
-            ]
+            "en": ["src/episodes/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/en.json"],
+            "de": ["src/episodes/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/de.json"]
           },
           "targets": ["two-levels"]
         }
@@ -1887,24 +1861,17 @@
   "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills": {
     "folder": "by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills",
     "text": {
-      "en": [
-        "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/i18n/en.json"
-      ],
-      "de": [
-        "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/i18n/de.json"
-      ]
+      "en": ["src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/i18n/en.json"],
+      "de": ["src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/i18n/de.json"]
     },
+    "base": "what-lies-below-the-waterline-of-sustainable-ai-skills",
     "title": {
       "slug": "hero",
       "anchor": "top",
       "pool": false,
       "text": {
-        "en": [
-          "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n/en.json"
-        ],
-        "de": [
-          "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n/de.json"
-        ]
+        "en": ["src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n/en.json"],
+        "de": ["src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n/de.json"]
       }
     },
     "sections": [
@@ -1915,10 +1882,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/a-thought-experiment.de.json"
             ]
           }
         },
@@ -1928,10 +1896,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/an-ai-model-that-forgets-every-morning.de.json"
             ]
           },
           "targets": ["caption"]
@@ -1942,10 +1911,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/a-skill-hands-the-ai-your-procedure.de.json"
             ]
           },
           "targets": ["skill-tile"]
@@ -1958,10 +1928,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/what-a-skill-is.de.json"
             ]
           }
         },
@@ -1971,10 +1942,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/a-skill-is-a-written-procedure.de.json"
             ]
           },
           "targets": ["folder", "app-names", "routing", "caption"]
@@ -1985,10 +1957,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/three-levels-of-loading.de.json"
             ]
           },
           "targets": ["caption", "other-apps", "level-extras", "level-index", "concept-skills", "concept"]
@@ -1999,10 +1972,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/skills-are-dynamic-context.de.json"
             ]
           },
           "targets": ["static", "always-loaded", "rule-of-thumb"]
@@ -2013,10 +1987,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/instructions-skills-and-connectors.de.json"
             ]
           },
           "targets": ["thing-personal", "footer", "thing-connectors", "thing-project"]
@@ -2027,10 +2002,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/two-ways-to-call-a-skill.de.json"
             ]
           },
           "targets": ["by-name", "by-description", "stat", "stat-scope"]
@@ -2043,10 +2019,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/when-to-write-one.de.json"
             ]
           }
         },
@@ -2056,10 +2033,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/the-third-time-is-the-signal.de.json"
             ]
           },
           "targets": ["fowler", "comic", "skill-file"]
@@ -2070,10 +2048,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/not-every-repeat-deserves-a-skill.de.json"
             ]
           },
           "targets": ["callout", "price"]
@@ -2084,10 +2063,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/write-it-from-a-good-run.de.json"
             ]
           },
           "targets": ["run", "interview", "notes-lane"]
@@ -2099,11 +2079,10 @@
           "anchor": "the-label",
           "pool": false,
           "text": {
-            "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n/en.json"
-            ],
+            "en": ["src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n/en.json"],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/the-label.de.json"
             ]
           }
         },
@@ -2113,10 +2092,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/the-description-is-all-the-ai-sees.de.json"
             ]
           },
           "targets": ["caption", "scent"]
@@ -2127,10 +2107,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/name-the-moment-not-the-content.de.json"
             ]
           },
           "targets": ["moment", "caption", "not-for", "hedge"]
@@ -2141,10 +2122,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/more-skills-harder-choice.de.json"
             ]
           },
           "targets": ["hick", "vercel", "caption", "naming"]
@@ -2157,10 +2139,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/what-goes-inside.de.json"
             ]
           }
         },
@@ -2170,10 +2153,10 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/de.json"
             ]
           },
           "targets": ["ia-callout", "homes"]
@@ -2184,10 +2167,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/one-skill-one-job.de.json"
             ]
           },
           "targets": ["pointer", "coupling-card"]
@@ -2198,10 +2182,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/inside-the-skill.de.json"
             ]
           },
           "targets": ["long-rule", "contents-rule", "files-head", "disclosure"]
@@ -2214,10 +2199,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/what-stays-beside.de.json"
             ]
           }
         },
@@ -2227,10 +2213,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/beside-the-skill.de.json"
             ]
           },
           "targets": ["caption"]
@@ -2241,10 +2228,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/who-uses-it-and-where.de.json"
             ]
           },
           "targets": ["shared", "stamp", "evals"]
@@ -2255,10 +2243,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/how-grill-me-and-grill-with-docs-work.de.json"
             ]
           },
           "targets": ["run-2"]
@@ -2271,10 +2260,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/sharing-it.de.json"
             ]
           }
         },
@@ -2284,10 +2274,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/shared-skills-are-knowledge-articles.de.json"
             ]
           },
           "targets": ["owner", "review", "format"]
@@ -2298,10 +2289,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/who-owns-the-shared-skill-library.de.json"
             ]
           },
           "targets": ["tier", "add", "cost", "caption"]
@@ -2312,10 +2304,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/does-the-skill-make-things-better.de.json"
             ]
           },
           "targets": ["callout", "harm", "description-test", "footnote", "vercel"]
@@ -2328,10 +2321,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/keeping-it-alive.de.json"
             ]
           }
         },
@@ -2341,10 +2335,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/every-skill-is-a-loan.de.json"
             ]
           },
           "targets": ["debt"]
@@ -2355,10 +2350,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/the-model-changes-the-skill-doesn-t.de.json"
             ]
           },
           "targets": ["lehman", "caption", "analogy-only", "switch"]
@@ -2369,10 +2365,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/retire-skills.de.json"
             ]
           },
           "targets": ["archive"]
@@ -2383,10 +2380,11 @@
           "pool": false,
           "text": {
             "en": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/en.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/en.json"
             ],
             "de": [
-              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/de.json"
+              "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/de.json",
+              "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/overrides/the-whole-iceberg.de.json"
             ]
           },
           "targets": ["governance"]

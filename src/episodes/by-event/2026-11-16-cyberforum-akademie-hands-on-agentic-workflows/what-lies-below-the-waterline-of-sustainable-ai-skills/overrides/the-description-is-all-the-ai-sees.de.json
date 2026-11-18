@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-pilots-view": {
+        "script": "Wenn ich zu viele Skills habe, die vielleicht auch noch ähnlich heißen, ist das ein Problem. Es kann gut sein, dass ich nicht einmal mehr weiß, welche Skills ich schon angelegt habe. Diese mentale Last trägt nicht jeder mit sich. Ich habe dann ähnliche Beschreibungen und ähnliche Namen, und für die KI wird es umso schwieriger, den richtigen Skill zum richtigen Zeitpunkt herauszuziehen. Vorhin haben wir gesehen, dass Skills in einem erheblichen Teil der Fälle nicht geladen werden, obwohl sie hätten geladen werden sollen. Umso wichtiger ist der Blick auf die Description. Es geht darum, wie ich sie als Prompt Engineering so formuliere, dass der Skill zum richtigen Zeitpunkt automatisiert und selbstständig von der KI gerufen wird."
+      }
+    }
+  }
+}

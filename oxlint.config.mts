@@ -190,6 +190,8 @@ export default defineConfig({
       rules: { [RESTRICTED_SYNTAX]: restrict(C.NO_STATIC_MARKER, C.NO_USE_CLIENT, C.HISTORY_WRITE) },
     },
     { files: ['**/*.test.ts'], rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' } },
+    // A generated file grows with its input, never by hand: the Slide map holds one entry per Base Episode Slide.
+    { files: ['**/*.generated.ts'], rules: { 'max-lines': 'off' } },
     {
       // The rule guards the Pages Router; an App Router root layout renders its own <head>, which carries the
       // pre-paint `js` class script (Decision record 0012 §5).

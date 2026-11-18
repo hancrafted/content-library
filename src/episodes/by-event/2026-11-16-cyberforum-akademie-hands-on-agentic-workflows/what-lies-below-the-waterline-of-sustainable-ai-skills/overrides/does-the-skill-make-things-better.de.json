@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "same-task-twice": {
+        "script": "Und letztlich gibt es die Frage: Bringt der Skill überhaupt etwas? Wie kann ich diesen Skill evaluieren, damit er wirklich das macht, was er tun soll?"
+      },
+      "the-callout": {
+        "script": "Mit jedem Modell-Update werden die Modelle besser und schlauer. Es kann sein, dass ich den Skill vorher gebraucht habe und danach nicht mehr. Also muss ich dafür sorgen, dass diese Skills regelmäßig evaluiert werden, damit sie auch das tun, was sie tun sollen."
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-archive-box": {
+        "script": "Genauso ist das Thema, wie wir Skills archivieren und löschen, weil sie nicht mehr benötigt werden, entweder weil sie nicht verwendet wurden oder weil ein Modell-Update, ein Software-Update oder ein Projekt-Update dazu führt, dass sie nicht gebraucht werden."
+      }
+    }
+  }
+}

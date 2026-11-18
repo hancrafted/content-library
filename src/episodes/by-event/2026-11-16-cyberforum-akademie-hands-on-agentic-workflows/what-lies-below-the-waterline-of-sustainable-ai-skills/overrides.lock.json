@@ -1,0 +1,117 @@
+{
+  "a-skill-hands-the-ai-your-procedure": { "de.voiceScript.segments.the-answer.script": "7461cbcb3223" },
+  "a-skill-is-a-written-procedure": {
+    "de.voiceScript.segments.name-and-use-when.script": "ca0912e1b6c9",
+    "de.voiceScript.segments.steps-in-the-body.script": "d5983c55dd32",
+    "de.voiceScript.segments.for-developers.script": "b283d811afb6"
+  },
+  "a-thought-experiment": {
+    "de.voiceScript.segments.you-are-the-captain.script": "8e81db91e7b5",
+    "de.voiceScript.segments.one-settled-condition.script": "bbccaa5c4d5b"
+  },
+  "an-ai-model-that-forgets-every-morning": {
+    "de.voiceScript.segments.three-mornings.script": "da3b49916018",
+    "de.voiceScript.segments.what-would-you-do.script": "9b2efa58c486"
+  },
+  "beside-the-skill": {
+    "de.voiceScript.segments.the-card-points.script": "863d705dc79e",
+    "de.voiceScript.segments.same-card-any-site.script": "502914de5b2e"
+  },
+  "does-the-skill-make-things-better": {
+    "de.voiceScript.segments.same-task-twice.script": "70bf147cbe27",
+    "de.voiceScript.segments.the-callout.script": "55ea1c69ba26"
+  },
+  "every-skill-is-a-loan": {
+    "de.voiceScript.segments.quick-to-write.script": "f50b2e784e9f",
+    "de.voiceScript.segments.a-running-tab.script": "4c851c79c5cd"
+  },
+  "how-grill-me-and-grill-with-docs-work": {
+    "de.voiceScript.segments.the-interview-is-the-card.script": "9d9a68a276da",
+    "de.voiceScript.segments.follow-the-arrow.script": "2ab41d6bf56f",
+    "de.voiceScript.segments.skills-can-run-skills.script": "2fbd8ac05ed0"
+  },
+  "inside-the-skill": {
+    "de.voiceScript.segments.extras-by-step.script": "5dbb6033fd42",
+    "de.voiceScript.segments.the-long-step.script": "2c40f0589486",
+    "de.voiceScript.segments.contents-first.script": "eec59e2a88b6"
+  },
+  "instructions-skills-and-connectors": {
+    "de.voiceScript.segments.four-things-in-the-room.script": "33eadca2c5ef",
+    "de.voiceScript.segments.read-the-tags.script": "f9842afda24a"
+  },
+  "keeping-it-alive": { "de.voiceScript.segments.the-abyss.script": "da9881a280f7" },
+  "more-skills-harder-choice": {
+    "de.voiceScript.segments.near-twins.script": "5d943d1036b3",
+    "de.voiceScript.segments.a-short-list-on-the-wall.script": "de6e40a23321",
+    "de.voiceScript.segments.name-it-as-an-action.script": "e9cbab9249c0"
+  },
+  "name-the-moment-not-the-content": {
+    "de.voiceScript.segments.two-labels.script": "71be1029e530",
+    "de.voiceScript.segments.your-request.script": "5f1dad528680",
+    "de.voiceScript.segments.the-closing-line.script": "899b28372849"
+  },
+  "not-every-repeat-deserves-a-skill": {
+    "de.voiceScript.segments.too-early.script": "d225ecf3fa1c",
+    "de.voiceScript.segments.a-thin-card-has-a-price.script": "1b176118e34e",
+    "de.voiceScript.segments.three-questions.script": "b0df2d50b56e"
+  },
+  "one-skill-one-job": {
+    "de.voiceScript.segments.scribbled-in.script": "8b028afb873c",
+    "de.voiceScript.segments.coupling.script": "5e6c9b0347d3"
+  },
+  "retire-skills": { "de.voiceScript.segments.the-archive-box.script": "2e2369bd9f7d" },
+  "shared-skills-are-knowledge-articles": {
+    "de.voiceScript.segments.your-notebook.script": "6e72b8efc362",
+    "de.voiceScript.segments.into-the-fleet-manual.script": "b97b97e3c31d"
+  },
+  "sharing-it": { "de.voiceScript.segments.midnight.script": "73e3af01c5b5" },
+  "skills-are-dynamic-context": {
+    "de.voiceScript.segments.the-standing-part.script": "ee2ecf823936",
+    "de.voiceScript.segments.filling-as-you-dive.script": "f6ca7a88604b"
+  },
+  "the-description-is-all-the-ai-sees": { "de.voiceScript.segments.the-pilots-view.script": "f0e48856a120" },
+  "the-label": {
+    "de.voiceScript.segments.the-label-decides.script": "c76d55a43dee",
+    "de.voiceScript.segments.name-description.script": "b5de3c1ed0e0"
+  },
+  "the-model-changes-the-skill-doesn-t": { "de.voiceScript.segments.not-the-only-pilot.script": "9c15bca466e6" },
+  "the-third-time-is-the-signal": {
+    "de.voiceScript.segments.three-tries.script": "b75fa9f2ee8e",
+    "de.voiceScript.segments.not-only-repetition.script": "575401978229"
+  },
+  "the-whole-iceberg": { "de.voiceScript.segments.the-honest-caveat.script": "74b0bff6139e" },
+  "three-levels-of-loading": {
+    "de.voiceScript.segments.the-concept.script": "37aee29e083f",
+    "de.voiceScript.segments.step-one.script": "749463fd39e7",
+    "de.voiceScript.segments.step-two.script": "6efdb972e049",
+    "de.voiceScript.segments.step-three.script": "0572d863342c"
+  },
+  "two-ways-to-call-a-skill": {
+    "de.voiceScript.segments.by-name.script": "6314114e8407",
+    "de.voiceScript.segments.by-description.script": "2218c52d45ef",
+    "de.voiceScript.segments.unused-is-real.script": "73d0669d4a84"
+  },
+  "what-a-skill-is": { "de.voiceScript.segments.surface-first.script": "3237c822e3ea" },
+  "what-goes-inside": {
+    "de.voiceScript.segments.twilight.script": "63bd6410154b",
+    "de.voiceScript.segments.a-decision-not-a-law.script": "48d38bf1f625"
+  },
+  "what-stays-beside": { "de.voiceScript.segments.beside-not-inside.script": "0d7f7c0428ed" },
+  "when-to-write-one": {
+    "de.voiceScript.segments.sunlight.script": "c2a44b305ede",
+    "de.voiceScript.segments.why-a-rule-of-thumb.script": "281b9ac38fac"
+  },
+  "who-owns-the-shared-skill-library": {
+    "de.voiceScript.segments.back-to-the-square.script": "c55e86a95a7a",
+    "de.voiceScript.segments.what-the-front-page-needs.script": "aad325367652"
+  },
+  "who-uses-it-and-where": {
+    "de.voiceScript.segments.two-questions.script": "d5cf65358dd6",
+    "de.voiceScript.segments.four-squares.script": "1a0dae2ced7a"
+  },
+  "write-it-from-a-good-run": {
+    "de.voiceScript.segments.two-starting-points.script": "e279a0cd53c5",
+    "de.voiceScript.segments.capture-the-why.script": "e1d2357d2b15",
+    "de.voiceScript.segments.while-he-still-knows.script": "a8c0072e7edd"
+  }
+}

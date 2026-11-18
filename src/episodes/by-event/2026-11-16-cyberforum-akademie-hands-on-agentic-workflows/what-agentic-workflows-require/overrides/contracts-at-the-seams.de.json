@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "design-by-contract": {
+        "script": "Das Nächste ist Contracts at the seams. In der Programmierwelt sagt man oft Design by Contract. Es ist wichtiger, drumherum zu definieren, was genau die Schnittstellen zwischen verschiedenen Aufgaben oder Entitäten sind, zum Beispiel auch zwischen Menschen und KI-Agenten, und dass wir uns dabei an bestimmte Regeln halten. Alles links und rechts davon können die Beteiligten dann unabhängig voneinander bearbeiten. Das deckt sich mit der Rückwärtsplanung: Wenn die Ziele im Vertrag an der Schnittstelle sauber definiert sind, braucht es keine Absprache zwischen den Parteien mehr, und KI-Agenten können unabhängig und auch parallel arbeiten. Das ist ein sehr großer Gewinn, wenn Aufgaben nicht mehr sequenziell, sondern parallel bearbeitet werden. Dafür braucht es diese sauberen Schnittstellen und die Befähigung, abstrakt zu denken, um sie zu definieren. Das ist eine sehr schwierige, aber notwendige Disziplin, um saubere Workflows zu definieren."
+      }
+    }
+  }
+}

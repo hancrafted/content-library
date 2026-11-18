@@ -1,0 +1,21 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "script": "Zum Ende der ersten Theorie-Episode: Was ist erforderlich? Auf der einen Seite muss ein Mensch kritisch, abstrakt und systematisch denken können."
+      },
+      "break-down": {
+        "script": "Er muss überlegen, wie sich Aufgaben aufbrechen lassen."
+      },
+      "write-contracts": {
+        "script": "Er muss die Anforderungen, insbesondere die Ergebnisse, so klar definieren, dass ein Vertrag entsteht, damit verschiedene Agenten unabhängig voneinander arbeiten können."
+      },
+      "review-twice": {
+        "script": "Das Ergebnis am Ende des Tages kann ich jederzeit nachprüfen. Das ist der Schritt, mit dem ich nach und nach mehr Vertrauen in mein System gewinne, um Schritt für Schritt aus dem System herauszutreten, von in the Loop über on the Loop bis out of the Loop."
+      },
+      "the-organisation": {
+        "script": "Auf der anderen Seite steht für Organisationen ein klares Signal: Wie definiere ich einen AI-first Workflow, der nicht auf meine bestehenden Prozesse, meine bestehende Kultur und meine Mannschaft abgebildet ist? Überlasse ich das diesen, sieht der Workflow nach Conways Law aus, und das System spiegelt die Struktur und die Kommunikationsmuster der aktuellen Organisation. Das war's auch schon mit der ersten Theorie-Episode."
+      }
+    }
+  }
+}

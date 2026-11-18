@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "back-to-the-square": {
+        "script": "Soll ein Skill nicht nur für einen projektspezifischen Anwendungsfall über verschiedene Leute geteilt werden, sondern universell für die ganze Firma oder für mehrere Organisationen gelten, dann stellen sich Fragen, die unter Skill Governance fallen."
+      },
+      "what-the-front-page-needs": {
+        "script": "Wer darf was ändern? Wer darf den Skill anwenden? Was kostet das Ganze, zum Beispiel an Tokenkosten? Wer darf Veränderungen machen oder den Skill sogar löschen? Das sind alles Fragen der Governance, die sich Firmen gerade stellen."
+      }
+    }
+  }
+}

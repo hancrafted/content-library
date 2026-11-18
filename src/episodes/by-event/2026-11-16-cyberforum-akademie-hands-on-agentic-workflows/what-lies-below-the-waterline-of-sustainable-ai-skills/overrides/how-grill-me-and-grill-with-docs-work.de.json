@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-interview-is-the-card": {
+        "script": "Um das zu zeigen, nehme ich einen Skill, den wir im zweiten Schritt angewendet haben, als Beispiel dafür, wie er an sich funktioniert."
+      },
+      "follow-the-arrow": {
+        "script": "Während des Ablaufs entsteht Vokabular, und es entstehen Entscheidungen, die potenziell längerfristige Auswirkungen auf das Projekt haben. Diese Informationen speichert der Skill in zwei Dateien: einmal ein Vokabularschatz, ein Glossar, und einmal Dateien, die Entscheidungen festhalten. Durch die häufigere Anwendung entsteht so im Projektordner Kontext, der in Zukunft weiterverwendet werden kann. Dieser Skill ist so gut wiederverwendbar, weil er keine Ahnung von der Domäne selbst und vom Projektanwendungsfall hat, sondern sich über die Zeit über Dateien im Projektordner diesen Kontext aufbaut. Das klingt erst mal cool, und das ist es auch. Der Haken ist, dass diese Dateien Wissensdateien sind, die gewartet werden müssen. Sie können ablaufen, sie können auseinanderdriften. Wie gesagt, alles ein Kompromiss, ein Trade-off."
+      },
+      "skills-can-run-skills": {
+        "script": "Der Skill besteht aus zwei zusammenhängenden Skills: einem, den wir am Anfang beim ersten Schritt verwendet haben, und einem weiteren. Er fasst also zwei Skills zusammen. Auch das ist möglich: Ein Skill kann mehrere Skills zusammenfassen. Er folgt genau der Technik, die ich beschrieben habe."
+      }
+    }
+  }
+}

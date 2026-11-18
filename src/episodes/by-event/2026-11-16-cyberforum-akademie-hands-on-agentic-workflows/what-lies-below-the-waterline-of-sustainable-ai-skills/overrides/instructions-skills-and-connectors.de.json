@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "four-things-in-the-room": {
+        "script": "Zu den Skills gehören noch ein paar weitere Konzepte, die ich kurz erläutern möchte. Wir haben gesehen, was ein Skill ist. Außenrum gibt es drei weitere Dateien oder Konzepte, die man häufiger sieht oder hört. Ich gehe dabei von der Chat-App aus."
+      },
+      "read-the-tags": {
+        "script": "Einmal die Personal Instructions. Wenn Du ChatGPT aufmachst und eingeloggt bist, hast Du in den Einstellungen die Möglichkeit, grundlegende Prompts oder Anweisungen zu hinterlegen, zum Beispiel dass ich immer eine kurze, wissenschaftliche Darstellung des Textes haben möchte. Das sind sozusagen die Gewohnheiten, und sie werden immer geladen. Dann gibt es Project Instructions: In ChatGPT gibt es Projekte, wie auch bei Claude, und dort kannst Du für das einzelne Projekt zusätzliche Prompts hinterlegen. Und es gibt Konnektoren, zum Beispiel zu Microsoft SharePoint, in Copilot Studio oder andere MCP-Server nach Jira und in Projektmanagement-Tools, damit sich die KI bei Bedarf daraus weiteren dynamischen Kontext ziehen kann. Ein Beispiel: Lege mir einen Report aus den Einkaufszahlen der letzten zwei Monate an. Dann bedient sich der KI-Agent, falls der Konnektor verfügbar ist, an den Daten und sucht mithilfe des Skills ein vorgefertigtes Template, um den Bericht zu erstellen. Da ist also schon ein bisschen mehr Zusammenhang im Spiel."
+      }
+    }
+  }
+}

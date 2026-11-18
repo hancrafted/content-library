@@ -30,62 +30,38 @@ const textsOf = ($: ReturnType<typeof sceneOf>, selector: string) =>
     .map((node) => $(node).text().replace(/\s+/g, ' ').trim());
 
 describe('success cases', () => {
-  it('hands 31 vegetarian from Food & drinks to the venue kitchen across one seam', () => {
+  it('shows four ticked cards, numbered 1 to 4, each done by a person', () => {
     // ARRANGE
-    const expected = {
-      teams: ['Food & drinks', 'Venue kitchen'],
-      facts: ['Dinner for 200', 'Menu at 19:00'],
-      details: ['31 vegetarian', 'how: the kitchen’s choice'],
-    };
+    const expected = { cards: 4, numbers: ['1', '2', '3', '4'], people: 4 };
     // ACT
     const $ = sceneOf('en');
     const actual = {
-      teams: textsOf($, '[data-seam-card] [data-team]'),
-      facts: textsOf($, '[data-seam-card] [data-fact]'),
-      details: textsOf($, '[data-seam-card] [data-detail]'),
+      cards: $('[data-ticked-card]').length,
+      numbers: textsOf($, '[data-card-number]'),
+      people: $('[data-ticked-card] [aria-label="Done by a person"]').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('puts the contract at the seam, with the definition set off', () => {
+  it('ends the sum in a broken goal, the failure cross on its corner', () => {
     // ARRANGE
-    const expected = {
-      label: ['Contract at the seam'],
-      terms: ['Receives', 'Delivers', 'Checked by'],
-      values: [
-        '200 guests, 31 vegetarian, defined as no meat, fish or eggs',
-        'dinner for 200 at 19:00',
-        'the menu against the definition',
-      ],
-      definition: ['no meat, fish or eggs'],
-    };
+    const expected = { goal: ['Goal'], broken: ['Broken'] };
     // ACT
     const $ = sceneOf('en');
     const actual = {
-      label: textsOf($, '[data-contract] [data-contract-label]'),
-      terms: textsOf($, '[data-contract] dt'),
-      values: textsOf($, '[data-contract] dd'),
-      definition: textsOf($, '[data-contract] dd b'),
+      goal: textsOf($, '[data-broken-goal] [data-goal-label]'),
+      broken: $('[data-broken-goal] [role="img"]')
+        .toArray()
+        .map((node) => $(node).attr('aria-label')),
     };
     // ASSERT
     expect(actual).toEqual(expected);
   });
 
-  it('ends the board in the goal note', () => {
+  it('gives the Title slide its short caption', () => {
     // ARRANGE
-    const expected = { label: ['Goal'], text: ['20 June: everyone celebrates together and gets home safely'] };
-    // ACT
-    const $ = sceneOf('en');
-    const actual = { label: textsOf($, '[data-goal] span'), text: textsOf($, '[data-goal] p') };
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
-
-  it('gives the Title slide its caption from the Hero motif', () => {
-    // ARRANGE
-    const expected =
-      'Everyone delivered exactly what was asked, and none of it added up: an agentic workflow is a goal broken into handoffs you can check, designed around the goal, not the org chart.';
+    const expected = 'Everyone delivered, none of it added up.';
     // ACT
     const actual = titleLinesOf(hero, 'en').caption;
     // ASSERT
@@ -94,18 +70,23 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('marks the agent on the Food & drinks card and the kitchen as external, never the other way round', () => {
+  it('shows no word but "Goal": no team name, no party, no contract', () => {
     // ARRANGE
-    const expected = { agent: ['Food & drinks'], external: ['Venue kitchen'] };
+    const expected = { words: ['Goal'], teams: 0, contract: 0 };
     // ACT
     const $ = sceneOf('en');
-    const teamOf = (selector: string) =>
-      $(selector)
-        .toArray()
-        .map((card) => $(card).find('[data-team]').text().trim());
+    const visible = $('[data-goal-sum]')
+      .clone()
+      .find('[role="img"][aria-label], [aria-hidden="true"], [data-card-number]')
+      .remove()
+      .end()
+      .text()
+      .replace(/\s+/g, ' ')
+      .trim();
     const actual = {
-      agent: teamOf('[data-seam-card][data-agent]'),
-      external: teamOf('[data-seam-card][data-external]'),
+      words: visible === '' ? [] : [visible],
+      teams: $('[data-team]').length,
+      contract: $('[data-contract]').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
@@ -122,20 +103,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('writes the board in German on the German page', () => {
+  it('writes the one word and the caption in German on the German page', () => {
     // ARRANGE
-    const expected = {
-      teams: ['Essen & Getränke', 'Location-Küche'],
-      terms: ['Erhält', 'Liefert', 'Geprüft durch'],
-      external: ['extern'],
-    };
+    const expected = { goal: ['Ziel'], caption: 'Alle haben geliefert, nichts davon passte zusammen.' };
     // ACT
     const $ = sceneOf('de');
-    const actual = {
-      teams: textsOf($, '[data-seam-card] [data-team]'),
-      terms: textsOf($, '[data-contract] dt'),
-      external: textsOf($, '[data-external-tag]'),
-    };
+    const actual = { goal: textsOf($, '[data-goal-label]'), caption: titleLinesOf(hero, 'de').caption };
     // ASSERT
     expect(actual).toEqual(expected);
   });
