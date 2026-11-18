@@ -3,8 +3,11 @@
 # `skills` and `model` (a tier, mid or top, mapped to models in project.yml) per phase are yours to change;
 # `seen` lists the skills setup has already offered, so one you
 # remove here is not added back.
+# `notify.adapter` (push-notification | none) names how the Orchestrator reaches you at the Decision gate;
+# the CLI sends nothing.
 
 agentType: archgate:developer
+notify: { adapter: push-notification }
 phases:
   define:
     model: mid
