@@ -3,10 +3,11 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
 import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
+import { explorableData } from '@/explorables/brief-or-pay-the-price/brief-or-pay-the-price-data';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-const LETTERS = ['P', 'R', 'I', 'C', 'E'] as const;
+const LETTERS = explorableData('en').definitions.price.rows.map((row) => row.letter);
 
 export const hero = slide({
   slug: 'hero',

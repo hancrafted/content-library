@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { BriefOrPayThePrice } from './brief-or-pay-the-price';
-import { configOf, explorableData } from './brief-or-pay-the-price-data';
+import { explorableData } from './brief-or-pay-the-price-data';
 import configSource from './brief-or-pay-the-price.config.yml';
 import { TRAIT_IDS } from './brief-or-pay-the-price.types';
 import { keyPaths, loadConfig, mergeWords } from './config.pure';
@@ -106,7 +106,9 @@ describe('failure cases', () => {
   it('reports a missing German string by its path', () => {
     // ARRANGE
     const source = configSource.replace(/ {12}ai: ["']Gib denselben Prompt[^\n]*\n/, '');
-    const expected = ['i18n.de.definitions.price.rows.probabilistic.ai: missing, English has it'];
+    const expected = [
+      'brief-or-pay-the-price.config.yml: i18n.de.definitions.price.rows.probabilistic.ai: missing, English has it',
+    ];
     // ACT
     const result = loadConfig(source);
     // ASSERT
@@ -129,7 +131,9 @@ describe('failure cases', () => {
     // ACT
     const result = loadConfig(source);
     // ASSERT
-    expect('problems' in result && result.problems[0]).toContain('not valid YAML');
+    expect('problems' in result && result.problems[0]).toContain(
+      'brief-or-pay-the-price.config.yml: the file is not valid YAML',
+    );
   });
 
   it('refuses an empty string outside the English gloss', () => {
@@ -139,7 +143,7 @@ describe('failure cases', () => {
     const result = loadConfig(source);
     // ASSERT
     expect('problems' in result && result.problems).toContain(
-      'i18n.en.definitions.price.rows.probabilistic.short: needs words',
+      'brief-or-pay-the-price.config.yml: i18n.en.definitions.price.rows.probabilistic.short: needs words',
     );
   });
 });
@@ -155,7 +159,7 @@ describe('edge cases', () => {
     expect(german.definitions.price.rows.map((row) => row.id)).toEqual(
       english.definitions.price.rows.map((row) => row.id),
     );
-    expect(configOf().i18n.de.definitions.price.rows.probabilistic.gloss).not.toBe('');
+    expect(german.words.definitions.price.rows.probabilistic.gloss).not.toBe('');
   });
 
   it('falls back to English for a locale it does not know', () => {

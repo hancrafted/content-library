@@ -1,5 +1,6 @@
+import { DEFAULT_LOCALE, isLocale, type Locale } from '@/shared/lib/locale.pure';
 import configSource from './brief-or-pay-the-price.config.yml';
-import type { Definition, DefinitionId, Locale, Words, WordsOverride } from './brief-or-pay-the-price.types';
+import type { Definition, DefinitionId, Words, WordsOverride } from './brief-or-pay-the-price.types';
 import { mergeWords, parseConfig } from './config.pure';
 
 export interface ExplorableData {
@@ -10,10 +11,8 @@ export interface ExplorableData {
 
 const config = parseConfig(configSource);
 
-export const localeOf = (locale: string): Locale => (locale === 'de' ? 'de' : 'en');
-
 export function explorableData(locale: string, override?: WordsOverride): ExplorableData {
-  const chosen = localeOf(locale);
+  const chosen = isLocale(locale) ? locale : DEFAULT_LOCALE;
   const words = mergeWords(config.i18n[chosen], override);
   const definitionOf = (id: DefinitionId): Definition => ({
     id,
@@ -23,5 +22,3 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
   });
   return { locale: chosen, words, definitions: { price: definitionOf('price') } };
 }
-
-export const configOf = () => config;

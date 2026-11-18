@@ -1,11 +1,10 @@
+import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { parse } from 'yaml';
 import {
   DEFINITION_IDS,
-  LOCALES,
   TRAIT_IDS,
   type Config,
   type DefinitionId,
-  type Locale,
   type Words,
   type WordsOverride,
 } from './brief-or-pay-the-price.types';
@@ -118,7 +117,15 @@ function emptyOutsideEnglishGlossProblems(i18n: unknown): string[] {
   );
 }
 
+export const CONFIG_FILE = 'brief-or-pay-the-price.config.yml';
+
 export function loadConfig(source: string): ConfigResult {
+  const result = checkConfig(source);
+  if (!('problems' in result)) return result;
+  return { problems: result.problems.map((problem) => `${CONFIG_FILE}: ${problem}`) };
+}
+
+function checkConfig(source: string): ConfigResult {
   let doc: unknown;
   try {
     doc = parse(source);
@@ -137,7 +144,7 @@ export function loadConfig(source: string): ConfigResult {
 
 export function parseConfig(source: string): Config {
   const result = loadConfig(source);
-  if ('problems' in result) throw new Error(`brief-or-pay-the-price config:\n${result.problems.join('\n')}`);
+  if ('problems' in result) throw new Error(result.problems.join('\n'));
   return result.config;
 }
 

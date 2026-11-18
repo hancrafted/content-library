@@ -1,11 +1,6 @@
+import type { HandbookWords } from './brief-or-pay-the-price.types';
 import styles from './mirror.module.css';
 import { AiIcon, SceneSvg, beat, Label, Person, type SceneProps } from './scene-parts';
-
-export interface HandbookWords {
-  first: string;
-  second: string;
-  last: string;
-}
 
 const LINES = [
   { word: 'first', y: 30, size: 9, from: 28 },

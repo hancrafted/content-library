@@ -1,5 +1,4 @@
-export const LOCALES = ['en', 'de'] as const;
-export type Locale = (typeof LOCALES)[number];
+import type { Locale } from '@/shared/lib/locale.pure';
 
 export const DEFINITION_IDS = ['price'] as const;
 export type DefinitionId = (typeof DEFINITION_IDS)[number];

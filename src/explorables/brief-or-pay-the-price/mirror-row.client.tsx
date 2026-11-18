@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/shared/lib/utils';
-import type { MouseEvent, PointerEvent } from 'react';
+import { memo, type MouseEvent, type PointerEvent } from 'react';
 import type { Definition } from './brief-or-pay-the-price.types';
 import type { RowRead, Side, Target } from './explorable-state.pure';
 import { Card, type SceneLabels } from './mirror-card.client';
@@ -110,13 +110,30 @@ function SideCard({ row, index, read, handlers, labels, side }: RowProps & { rea
       pass={read.pass}
       turned={read.turned[side]}
       labels={labels}
-      onTurn={() => handlers.onTurn(index, side)}
+      index={index}
+      onTurn={handlers.onTurn}
       className={side === 'ai' ? '@3xl:order-3' : '@3xl:order-1'}
     />
   );
 }
 
-export function Row(props: RowProps) {
+const sameRead = (a: RowRead, b: RowRead): boolean =>
+  a.shown === b.shown &&
+  a.pass === b.pass &&
+  a.looping === b.looping &&
+  a.blank === b.blank &&
+  a.turned.freelancer === b.turned.freelancer &&
+  a.turned.ai === b.turned.ai;
+
+const sameRowByRead = (before: RowProps, after: RowProps): boolean =>
+  before.row === after.row &&
+  before.index === after.index &&
+  before.handlers === after.handlers &&
+  before.labels === after.labels &&
+  sameRead(before.read, after.read);
+
+// decision: FE-012 §4.2
+export const Row = memo(function Row(props: RowProps) {
   const { shown, pass, looping, blank } = props.read;
   return (
     <li
@@ -134,7 +151,7 @@ export function Row(props: RowProps) {
       <SideCard {...props} side="ai" />
     </li>
   );
-}
+}, sameRowByRead);
 
 export function ClosingLine({
   lead,
