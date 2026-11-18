@@ -24,6 +24,7 @@ import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { slideSizeOf } from './episode-page-container.pure';
+import { standardTitleLook, withStandardSlideLooks } from './standard-looks.pure';
 
 export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 
@@ -64,8 +65,8 @@ export async function recordContent(
   const episode = contextOf(record, { episode: id, route, locale }, drawer);
   const { title, caption } = record.messages[locale];
   const lines = record.title ? titleLinesOf(record.title, locale) : {};
-  const slides = episode.placed.map((placed) => localizeSlide(placed, episode));
-  const transitions = transitionsOf(record, slides, episode.header);
+  const slides = withStandardSlideLooks(episode.placed.map((placed) => localizeSlide(placed, episode)));
+  const { transitions, titleAppearance } = composedLooks(record, slides, episode.header);
   return {
     agentView: record.agentView,
     tocEntrance: record.tocEntrance,
@@ -77,17 +78,26 @@ export async function recordContent(
     ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
     header: episode.header,
     entrance: record.entrance ?? 'typewriter',
-    titleAppearance: titleAppearanceOf(record, slides, transitions.has(TITLE_ANCHOR)),
+    titleAppearance,
     slides,
   };
+}
+
+function composedLooks(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
+  const title = standardTitleLook(record.title?.presentation, record.tone);
+  const transitions = transitionsOf({ title, precedence: record.transitionPrecedence }, slides, header);
+  const titleAppearance = titleAppearanceOf(record, slides, {
+    presentation: title,
+    outgoingEdge: transitions.has(TITLE_ANCHOR),
+  });
+  return { transitions, titleAppearance };
 }
 
 function titleAppearanceOf(
   record: EpisodeComposition,
   slides: readonly LocalizedSlide[],
-  outgoingEdge: boolean,
+  { presentation, outgoingEdge }: { presentation: SlidePresentation | undefined; outgoingEdge: boolean },
 ): TitleAppearance {
-  const presentation = record.title?.presentation;
   const tone = presentation?.tone ?? record.tone ?? 'normal';
   if (presentation) return { tone, presentation: { ...presentation, tone } };
   return { tone, legacyTone: record.tone, inkTarget: legacyInkTarget(record.tone, slides[0]?.id, outgoingEdge) };
@@ -131,16 +141,20 @@ function resolveTransitions(
   return resolved;
 }
 
-function transitionsOf(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
+function transitionsOf(
+  {
+    title,
+    precedence,
+  }: { title: SlidePresentation | undefined; precedence: EpisodeComposition['transitionPrecedence'] },
+  slides: readonly LocalizedSlide[],
+  header: HeaderMode,
+) {
   const surfaces = slides.map((slide) => ({
     id: slide.id,
     presentation: slide.presentation,
     surface: header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
   }));
-  return resolveTransitions(
-    [{ id: TITLE_ANCHOR, presentation: record.title?.presentation }, ...surfaces],
-    record.transitionPrecedence,
-  );
+  return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...surfaces], precedence);
 }
 
 function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePresentation['enter'], precedence: string) {

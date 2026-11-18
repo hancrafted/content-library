@@ -101,25 +101,14 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('inks the Title slide out, and every later section slide in and out on an inverse surface', () => {
+  it('declares no presentation on the Title or any section slide, so the standard looks apply', () => {
     // ARRANGE
-    const ink = 'liquid';
-    const expected = {
-      hero: { tone: 'inverse', enter: undefined, leave: ink },
-      'every-product-is-a-translation': { tone: 'inverse', enter: ink, leave: ink },
-      'context-is-the-requirement': { tone: 'inverse', enter: ink, leave: ink },
-      'creating-context-for-agents': { tone: 'inverse', enter: ink, leave: ink },
-    };
-    const slides = [fromSharedUnderstandingToSharedContext.title as Slide, ...OPENERS.slice(1)];
+    const expected = [undefined, undefined, undefined, undefined, undefined];
+    const slides = [fromSharedUnderstandingToSharedContext.title as Slide, ...OPENERS];
     // ACT
-    const actual = Object.fromEntries(
-      slides.map(({ slug, presentation }) => [
-        slug,
-        { tone: presentation?.tone, enter: presentation?.enter?.effect, leave: presentation?.leave?.effect },
-      ]),
-    );
+    const declared = slides.map(({ presentation }) => presentation);
     // ASSERT
-    expect(actual).toEqual(expected);
+    expect(declared).toEqual(expected);
   });
 });
 
