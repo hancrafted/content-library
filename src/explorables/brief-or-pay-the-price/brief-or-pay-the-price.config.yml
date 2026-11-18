@@ -48,6 +48,15 @@ i18n:
       turn: 'Turn the card to its text'
       zoom: 'Zoom'
       agent: 'Agent'
+      workflow: 'Workflow'
+    workflow:
+      goal: 'Goal'
+      thenGoal: 'then the goal'
+      zoomNode: '{label}, {role}: zoom in to its PRICE × BRIEF'
+      scenario: 'Scenario'
+      braceSteps: 'BRACE steps'
+      play: 'Play'
+      pause: 'Pause'
     matrix:
       title: 'Five traits cost you. Five moves keep them in check.'
       corner: 'Moves against traits'
@@ -218,6 +227,15 @@ i18n:
       turn: 'Karte auf ihren Text drehen'
       zoom: 'Zoom'
       agent: 'Agent'
+      workflow: 'Workflow'
+    workflow:
+      goal: 'Ziel'
+      thenGoal: 'dann das Ziel'
+      zoomNode: '{label}, {role}: hineinzoomen zu PRICE × BRIEF'
+      scenario: 'Szenario'
+      braceSteps: 'BRACE-Schritte'
+      play: 'Abspielen'
+      pause: 'Pause'
     matrix:
       title: 'Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie in Schach.'
       corner: 'Schritte gegen Eigenschaften'

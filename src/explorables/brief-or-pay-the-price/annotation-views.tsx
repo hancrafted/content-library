@@ -44,7 +44,7 @@ function MarkIcon({ kind }: { readonly kind: MarkKind }) {
     return (
       <path
         d="M-7 0l4.5 4.5 9 -9"
-        className="fill-none stroke-success"
+        className="fill-none stroke-(--success)"
         strokeWidth={3}
         strokeLinecap="round"
         strokeLinejoin="round"

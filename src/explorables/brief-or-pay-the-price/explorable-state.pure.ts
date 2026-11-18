@@ -13,6 +13,7 @@ import {
   type AgentSlice,
 } from './agent-state.pure';
 import { DEFINITION_IDS, type ViewId } from './brief-or-pay-the-price.types';
+import { braceStep, selectNode, tick, togglePlay, type WorkflowEvent } from './workflow-state.pure';
 
 export { ZOOM_LEVELS, type CellKey, type Level, type Lit, type ZoomLevel } from './agent-state.pure';
 
@@ -39,6 +40,7 @@ export interface ExplorableState extends AgentSlice<MirrorMemory> {
 
 export type ExplorableEvent =
   | AgentEvent
+  | WorkflowEvent
   | { readonly type: 'view'; readonly view: View }
   | { readonly type: 'scenario'; readonly scenario: string }
   | { readonly type: 'open'; readonly target: Target }
@@ -129,6 +131,10 @@ const ON: Handlers = {
   light: (state, { lit }) => light(state, lit),
   unlight: (state) => unlight(state),
   focused: (state) => focused(state),
+  node: (state, { node }) => selectNode(state, node),
+  braceStep: (state, { step }) => braceStep(state, step),
+  play: (state) => togglePlay(state),
+  tick: (state) => tick(state),
   scenario: (state, { scenario }) => (state.scenario === scenario ? state : { ...state, scenario }),
   open: (state, { target }) => open(state, target),
   leave: (state, { target }) =>

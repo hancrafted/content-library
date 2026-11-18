@@ -7,11 +7,11 @@ import { scenarioFor } from './scenarios';
 import { anchorOf, groupBoxOf, litOf, pillAt, stepState } from './workflow-annotations.pure';
 import { wrapWords } from './workflow-node-view';
 import { WorkflowView } from './workflow-view';
-import type { WorkflowWords } from './workflow.types';
+import type { WorkflowViewWords } from './workflow.types';
 
 const scenario = scenarioFor('drive');
 const words = scenario.i18n.en;
-const ui: WorkflowWords = { goal: 'Goal', thenGoal: 'then the goal', zoomNode: '{label}, {role}: zoom in' };
+const ui: WorkflowViewWords = { goal: 'Goal', thenGoal: 'then the goal', zoomNode: '{label}, {role}: zoom in' };
 const render = (orient: Orientation, step: number, extra: { counters?: () => boolean } = {}) =>
   load(
     renderToStaticMarkup(

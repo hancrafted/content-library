@@ -1,7 +1,7 @@
 import type { Annotation, Layout } from './scenario.types';
 import { SizedText } from './workflow-text';
 
-export const ARROW_MARKER_ID = 'workflow-arrow';
+export const markerIdOf = (layout: Layout): string => `workflow-arrow-${layout.orient}`;
 
 type Arrow = Extract<Annotation, { type: 'arrow' }>;
 
@@ -25,7 +25,7 @@ function NarrowArrow({ annotation, layout, text }: ArrowProps) {
   const d = `M${startX} ${from.cy}H${lane}V${to.cy}H${endX}`;
   return (
     <>
-      <path className={STROKE} strokeWidth={4} d={d} markerEnd={`url(#${ARROW_MARKER_ID})`} />
+      <path className={STROKE} strokeWidth={4} d={d} markerEnd={`url(#${markerIdOf(layout)})`} />
       <SizedText className="fill-ai font-semibold" size={17} x={textX} y={midY} turn={under ? -90 : 90}>
         {text}
       </SizedText>
@@ -43,7 +43,7 @@ function WideArrow({ annotation, layout, text }: ArrowProps) {
     : `M${from.cx} ${from.top - 10}V${lane}H${to.cx}V${to.top - 14}`;
   return (
     <>
-      <path className={STROKE} strokeWidth={4} d={d} markerEnd={`url(#${ARROW_MARKER_ID})`} />
+      <path className={STROKE} strokeWidth={4} d={d} markerEnd={`url(#${markerIdOf(layout)})`} />
       <SizedText
         className="fill-ai font-semibold"
         size={19}

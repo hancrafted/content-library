@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib/utils';
 import { MOVE_IDS, TRAIT_IDS } from './brief-or-pay-the-price.types';
 import type { Cell, Layout, ScenarioNode } from './scenario.types';
 import { SizedText } from './workflow-text';
-import type { CountersTest, ScenarioWords, WorkflowWords } from './workflow.types';
+import type { CountersTest, ScenarioWords, WorkflowViewWords } from './workflow.types';
 
 const NODE_ROLE_LINES = 3;
 const ROLE_CHARS_PER_PIXEL = 8.4;
@@ -85,7 +85,7 @@ interface NodeProps {
   readonly node: ScenarioNode;
   readonly layout: Layout;
   readonly words: ScenarioWords;
-  readonly ui: WorkflowWords;
+  readonly ui: WorkflowViewWords;
   readonly lit: boolean;
   readonly counters: CountersTest;
 }
@@ -117,7 +117,7 @@ function NodeBox({ rect, lit }: { readonly rect: Layout['nodes'][string]; readon
   );
 }
 
-const zoomLabel = (ui: WorkflowWords, text: { readonly label: string; readonly role: string }): string =>
+const zoomLabel = (ui: WorkflowViewWords, text: { readonly label: string; readonly role: string }): string =>
   ui.zoomNode.replace('{label}', text.label).replace('{role}', text.role);
 
 export function NodeView({ node, layout, words, ui, lit, counters }: NodeProps) {

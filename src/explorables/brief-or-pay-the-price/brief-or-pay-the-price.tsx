@@ -14,6 +14,7 @@ export function BriefOrPayThePrice({ locale, words }: BriefOrPayThePriceProps) {
   return (
     <>
       <BriefOrPayThePriceClient
+        locale={data.locale}
         words={data.words}
         definitions={data.definitions}
         stages={data.stages}

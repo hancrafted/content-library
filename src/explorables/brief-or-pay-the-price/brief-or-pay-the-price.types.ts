@@ -104,6 +104,16 @@ export interface MatrixWords {
   readonly evidenceOf: Readonly<Record<MoveId, string>>;
 }
 
+export interface WorkflowWords {
+  readonly goal: string;
+  readonly thenGoal: string;
+  readonly zoomNode: string;
+  readonly scenario: string;
+  readonly braceSteps: string;
+  readonly play: string;
+  readonly pause: string;
+}
+
 export interface Words {
   readonly chrome: {
     readonly define: string;
@@ -114,7 +124,9 @@ export interface Words {
     readonly turn: string;
     readonly zoom: string;
     readonly agent: string;
+    readonly workflow: string;
   };
+  readonly workflow: WorkflowWords;
   readonly matrix: MatrixWords;
   readonly backs: {
     readonly prompt: string;

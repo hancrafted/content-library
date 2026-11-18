@@ -6,7 +6,7 @@ import { SizedText } from './workflow-text';
 type PillKind = 'tag' | 'chip';
 
 const OUTLINE: Record<PillKind, string> = {
-  tag: 'fill-success/20 stroke-success',
+  tag: 'fill-(--success)/20 stroke-(--success)',
   chip: 'fill-card stroke-ai',
 };
 const PAST = 'fill-card stroke-foreground/25';

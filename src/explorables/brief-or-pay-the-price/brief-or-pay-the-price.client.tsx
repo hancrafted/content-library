@@ -17,11 +17,13 @@ import {
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
 import { LEVEL } from './levels.client';
 import { cellsOf } from './matrix-data.pure';
+import type { ScenarioLocale } from './scenario.types';
 import { Toolbar } from './toolbar.client';
 import { useCellKeys } from './use-cell-keys';
 import { useCellZoom } from './use-cell-zoom';
 
 export interface BriefOrPayThePriceClientProps {
+  readonly locale: ScenarioLocale;
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;

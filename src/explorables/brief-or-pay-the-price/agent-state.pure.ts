@@ -1,6 +1,6 @@
 import type { MoveId, TraitId, ViewId } from './brief-or-pay-the-price.types';
 
-export const ZOOM_LEVELS = ['agent'] as const;
+export const ZOOM_LEVELS = ['agent', 'workflow'] as const;
 export type ZoomLevel = (typeof ZOOM_LEVELS)[number];
 export type Level = 'define' | ZoomLevel;
 
@@ -29,10 +29,22 @@ export interface AgentSlice<Memory> {
   readonly restore: CellKey | null;
   readonly lit: Lit | null;
   readonly arrival: ViewId | null;
+  readonly node: string | null;
+  readonly step: number;
+  readonly playing: boolean;
   readonly mirrors: Readonly<Record<string, Memory>>;
 }
 
-export const AGENT_REST = { level: 'define', cell: null, restore: null, lit: null, arrival: null } as const;
+export const AGENT_REST = {
+  level: 'define',
+  cell: null,
+  restore: null,
+  lit: null,
+  arrival: null,
+  node: null,
+  step: 0,
+  playing: false,
+} as const;
 
 export const sameCell = (a: CellKey | null, b: CellKey | null): boolean =>
   a === b || (a !== null && b !== null && a.move === b.move && a.trait === b.trait);
@@ -47,13 +59,14 @@ export function zoomTo<S extends AgentSlice<unknown>>(state: S, level: Level): S
   if (level === state.level && state.cell === null) return state;
   if (level === 'define') return { ...state, ...AGENT_REST };
   const arrival = state.level === 'define' ? state.view : state.arrival;
-  return { ...state, ...AGENT_REST, level, arrival };
+  const step = level === 'workflow' ? 1 : 0;
+  return { ...state, ...AGENT_REST, level, arrival, step };
 }
 
 export function openCell<Memory, S extends AgentSlice<Memory>>(state: S, cell: CellKey, played: Memory): S {
   if (sameCell(state.cell, cell) && state.level === 'agent') return state;
   const mirrors = { ...state.mirrors, [CELL_MEMORY]: played };
-  return { ...state, level: 'agent', cell, restore: null, lit: null, arrival: null, mirrors };
+  return { ...state, level: 'agent', cell, restore: null, lit: null, arrival: null, node: null, mirrors };
 }
 
 export function closeCell<Memory, S extends AgentSlice<Memory>>(state: S, played: Memory): S {

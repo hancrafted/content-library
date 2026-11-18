@@ -1,12 +1,12 @@
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
-import { ARROW_MARKER_ID } from './annotation-arrow-view';
+import { markerIdOf } from './annotation-arrow-view';
 import { AnnotationView } from './annotation-views';
 import { LETTERS, type Layout, type Scenario } from './scenario.types';
 import { annotationsOf, stepState, type Lit } from './workflow-annotations.pure';
 import { NodeView } from './workflow-node-view';
 import { SizedText } from './workflow-text';
-import type { ScenarioWords, WorkflowViewProps, WorkflowWords } from './workflow.types';
+import type { ScenarioWords, WorkflowViewProps, WorkflowViewWords } from './workflow.types';
 
 const TRANSITION = 'motion-safe:transition-[stroke-width,fill] motion-safe:duration-300';
 
@@ -43,7 +43,7 @@ function Edges({ layout, lit }: { readonly layout: Layout; readonly lit: Lit }) 
             d={edge.d}
             className={cn('fill-none', TRANSITION, on ? 'stroke-ai' : 'stroke-foreground')}
             strokeWidth={on ? 4.5 : 2}
-            markerEnd={edge.arrow ? `url(#${ARROW_MARKER_ID})` : undefined}
+            markerEnd={edge.arrow ? `url(#${markerIdOf(layout)})` : undefined}
           />
         );
       })}
@@ -82,7 +82,7 @@ function BandLabels({
   );
 }
 
-function Goal({ layout, lit, ui }: { readonly layout: Layout; readonly lit: boolean; readonly ui: WorkflowWords }) {
+function Goal({ layout, lit, ui }: { readonly layout: Layout; readonly lit: boolean; readonly ui: WorkflowViewWords }) {
   const { cx, cy, r } = layout.goal;
   return (
     <g data-goal data-lit={lit}>
@@ -136,10 +136,10 @@ function Annotations({
   );
 }
 
-const Defs = () => (
+const Defs = ({ layout }: { readonly layout: Layout }) => (
   <defs>
     <marker
-      id={ARROW_MARKER_ID}
+      id={markerIdOf(layout)}
       viewBox="0 0 10 10"
       refX={9}
       refY={5}
@@ -184,7 +184,7 @@ export function WorkflowView(props: WorkflowViewProps) {
       aria-label={accessibleName(props)}
       className="h-auto w-full"
     >
-      <Defs />
+      <Defs layout={layout} />
       <Bands layout={layout} lit={lit} />
       <Edges layout={layout} lit={lit} />
       <BandLabels scenario={scenario} layout={layout} words={words} />

@@ -19,9 +19,11 @@ import { cellsOf, neighbour } from './matrix-data.pure';
 import type { SceneLabels } from './mirror-card.client';
 import type { MirrorHandlers } from './mirror-row.client';
 import { Mirror } from './mirror.client';
+import type { ScenarioLocale } from './scenario.types';
+import { WorkflowLevel } from './workflow-level.client';
 
 export interface LevelProps {
-  readonly data: ViewData & { readonly matrix: MatrixData };
+  readonly data: ViewData & { readonly matrix: MatrixData; readonly locale: ScenarioLocale };
   readonly state: ExplorableState;
   readonly dispatch: Dispatch<ExplorableEvent>;
   readonly handlers: MirrorHandlers;
@@ -116,7 +118,22 @@ function AgentLevel(props: LevelProps) {
   return cell === null ? <MatrixLevel {...props} /> : <CellLevel {...props} cell={cell} />;
 }
 
+function WorkflowZoom({ data, state, dispatch }: LevelProps) {
+  return (
+    <WorkflowLevel
+      words={data.words.workflow}
+      locale={data.locale}
+      state={state}
+      counters={data.matrix.counters}
+      braceRows={data.definitions.brace.rows}
+      stages={data.stages}
+      dispatch={dispatch}
+    />
+  );
+}
+
 export const LEVEL: Readonly<Record<Level, (props: LevelProps) => ReactNode>> = {
   define: (props) => <DefineLevel {...props} />,
   agent: (props) => <AgentLevel {...props} />,
+  workflow: (props) => <WorkflowZoom {...props} />,
 };
