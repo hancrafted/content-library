@@ -136,6 +136,7 @@ function Foot({
 export function BriefOrPayThePriceClient({ words, definitions }: BriefOrPayThePriceClientProps) {
   const { state, dispatch, handlers } = useExplorable({ definitions });
   const definition = definitions[state.view];
+  const labels = useMemo(() => ({ backs: words.backs, turn: words.chrome.turn }), [words]);
   return (
     <div data-explorable="brief-or-pay-the-price" className="@container flex w-full flex-col gap-6 text-body">
       <DefineBar
@@ -148,7 +149,7 @@ export function BriefOrPayThePriceClient({ words, definitions }: BriefOrPayThePr
         definition={definition}
         reads={definition.rows.map((_, index) => rowAt(state, index))}
         wiping={isWiping(state)}
-        labels={{ backs: words.backs, turn: words.chrome.turn }}
+        labels={labels}
         handlers={handlers}
       />
       <Foot

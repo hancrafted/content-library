@@ -53,34 +53,31 @@ export function start(rowCounts: Readonly<Record<DefinitionId, number>>): Explor
 }
 
 export const currentMirror = (state: ExplorableState): MirrorMemory => state.mirrors[state.view];
-const mirrorOf = currentMirror;
 
 const withMirror = (state: ExplorableState, mirror: MirrorMemory): ExplorableState => ({
   ...state,
   mirrors: { ...state.mirrors, [state.view]: mirror },
 });
 
-const mapRows = (rows: readonly RowMemory[], change: (row: RowMemory, index: number) => RowMemory) => rows.map(change);
-
 const played = (row: RowMemory): RowMemory => ({ ...row, passes: Math.max(row.passes, 1) });
 const replayed = (row: RowMemory): RowMemory => ({ ...row, passes: row.passes + 1 });
 
 function open(state: ExplorableState, target: Target): ExplorableState {
-  const mirror = mirrorOf(state);
+  const mirror = currentMirror(state);
   if (mirror.open === target) return state;
   if (target === 'closing')
-    return withMirror(state, { rows: mapRows(mirror.rows, (row) => played(row)), open: target, blank: false });
+    return withMirror(state, { rows: mirror.rows.map((row) => played(row)), open: target, blank: false });
   return withMirror(state, {
-    rows: mapRows(mirror.rows, (row, index) => (index === target ? replayed(row) : row)),
+    rows: mirror.rows.map((row, index) => (index === target ? replayed(row) : row)),
     open: target,
     blank: false,
   });
 }
 
 function turn(state: ExplorableState, row: number, side: Side): ExplorableState {
-  const mirror = mirrorOf(state);
+  const mirror = currentMirror(state);
   if ((mirror.rows[row]?.passes ?? 0) === 0) return state;
-  const rows = mapRows(mirror.rows, (each, index) => {
+  const rows = mirror.rows.map((each, index) => {
     if (index !== row) return each;
     const turned = each.turned.includes(side) ? each.turned.filter((one) => one !== side) : [...each.turned, side];
     return { ...each, turned };
@@ -99,31 +96,35 @@ const ON: Handlers = {
   view: (state, { view }) => (state.view === view ? state : { ...state, view }),
   open: (state, { target }) => open(state, target),
   leave: (state, { target }) =>
-    mirrorOf(state).open === target ? withMirror(state, { ...mirrorOf(state), open: null, blank: false }) : state,
+    currentMirror(state).open === target
+      ? withMirror(state, { ...currentMirror(state), open: null, blank: false })
+      : state,
   dismiss: (state) =>
-    mirrorOf(state).open === null ? state : withMirror(state, { ...mirrorOf(state), open: null, blank: false }),
+    currentMirror(state).open === null
+      ? state
+      : withMirror(state, { ...currentMirror(state), open: null, blank: false }),
   replay: (state, { row }) => {
-    const mirror = mirrorOf(state);
+    const mirror = currentMirror(state);
     if (mirror.open !== row) return state;
     return withMirror(state, {
       ...mirror,
-      rows: mapRows(mirror.rows, (each, index) => (index === row ? replayed(each) : each)),
+      rows: mirror.rows.map((each, index) => (index === row ? replayed(each) : each)),
     });
   },
   turn: (state, { row, side }) => turn(state, row, side),
   blank: (state) => {
-    const mirror = mirrorOf(state);
+    const mirror = currentMirror(state);
     return mirror.open === 'closing' && !mirror.blank ? withMirror(state, { ...mirror, blank: true }) : state;
   },
   showAll: (state) => {
-    const mirror = mirrorOf(state);
+    const mirror = currentMirror(state);
     return withMirror(state, {
-      rows: mapRows(mirror.rows, (row) => (row.passes > 0 ? replayed(row) : played(row))),
+      rows: mirror.rows.map((row) => (row.passes > 0 ? replayed(row) : played(row))),
       open: null,
       blank: false,
     });
   },
-  reset: (state) => withMirror(state, emptyMirror(mirrorOf(state).rows.length)),
+  reset: (state) => withMirror(state, emptyMirror(currentMirror(state).rows.length)),
 };
 
 export function step(state: ExplorableState, event: ExplorableEvent): ExplorableState {
@@ -139,7 +140,7 @@ export interface RowRead {
 }
 
 export function rowAt(state: ExplorableState, row: number): RowRead {
-  const mirror = mirrorOf(state);
+  const mirror = currentMirror(state);
   const memory = mirror.rows[row] ?? { passes: 0, turned: [] };
   return {
     shown: memory.passes > 0,
@@ -150,7 +151,7 @@ export function rowAt(state: ExplorableState, row: number): RowRead {
   };
 }
 
-export const isWiping = (state: ExplorableState): boolean => mirrorOf(state).open === 'closing';
+export const isWiping = (state: ExplorableState): boolean => currentMirror(state).open === 'closing';
 
 export function nextTimer(
   { open, blank }: Pick<MirrorMemory, 'open' | 'blank'>,
