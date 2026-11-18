@@ -2,7 +2,7 @@ import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { parse } from 'yaml';
 import {
   DEFINITION_IDS,
-  TRAIT_IDS,
+  ROW_IDS_OF,
   type Config,
   type DefinitionId,
   type Words,
@@ -35,24 +35,34 @@ function valueProblems(row: Record<string, unknown>, at: string): string[] {
   ];
 }
 
-function oneRowProblems(row: unknown, at: string, seen: Set<string>): string[] {
+interface RowCheck {
+  readonly at: string;
+  readonly seen: Set<string>;
+  readonly allowed: readonly string[];
+}
+
+function oneRowProblems(row: unknown, { at, seen, allowed }: RowCheck): string[] {
   if (!isRecord(row)) return [`${at}: needs id, letter and beatMilliseconds`];
   const problems: string[] = [];
   const id = String(row.id);
-  if (!(TRAIT_IDS as readonly string[]).includes(id))
-    problems.push(`${at}: id "${id}" is not one of ${TRAIT_IDS.join(', ')}`);
+  if (!allowed.includes(id)) problems.push(`${at}: id "${id}" is not one of ${allowed.join(', ')}`);
   else if (seen.has(id)) problems.push(`${at}: id "${id}" appears twice`);
   seen.add(id);
   return [...problems, ...valueProblems(row, at)];
 }
 
-function rowProblems(definition: unknown, id: string): string[] {
+function rowProblems(definition: unknown, id: DefinitionId): string[] {
   if (!isRecord(definition) || typeof definition.acronym !== 'string' || !Array.isArray(definition.rows))
     return [`definitions.${id}: needs an acronym and a list of rows`];
+  const wipe =
+    definition.wipe === undefined || typeof definition.wipe === 'boolean'
+      ? []
+      : [`definitions.${id}: wipe is true or false`];
   const seen = new Set<string>();
-  return definition.rows.flatMap((row: unknown, index) =>
-    oneRowProblems(row, `definitions.${id}.rows[${index}]`, seen),
+  const rows = definition.rows.flatMap((row: unknown, index) =>
+    oneRowProblems(row, { at: `definitions.${id}.rows[${index}]`, seen, allowed: ROW_IDS_OF[id] }),
   );
+  return [...wipe, ...rows];
 }
 
 function structureProblems(definitions: unknown): string[] {
@@ -63,7 +73,7 @@ function structureProblems(definitions: unknown): string[] {
   return [
     ...unknown.map((id) => `definitions.${id}: not a definition of this Explorable`),
     ...missing.map((id) => `definitions.${id}: missing`),
-    ...ids.flatMap((id) => rowProblems(definitions[id], id)),
+    ...DEFINITION_IDS.filter((id) => ids.includes(id)).flatMap((id) => rowProblems(definitions[id], id)),
   ];
 }
 
@@ -122,7 +132,9 @@ export const CONFIG_FILE = 'brief-or-pay-the-price.config.yml';
 export function loadConfig(source: string): ConfigResult {
   const result = checkConfig(source);
   if (!('problems' in result)) return result;
-  return { problems: result.problems.map((problem) => `${CONFIG_FILE}: ${problem}`) };
+  return {
+    problems: result.problems.map((problem) => `${CONFIG_FILE}: ${problem}`),
+  };
 }
 
 function checkConfig(source: string): ConfigResult {
@@ -130,7 +142,9 @@ function checkConfig(source: string): ConfigResult {
   try {
     doc = parse(source);
   } catch (error) {
-    return { problems: [`the file is not valid YAML: ${error instanceof Error ? error.message : String(error)}`] };
+    return {
+      problems: [`the file is not valid YAML: ${error instanceof Error ? error.message : String(error)}`],
+    };
   }
   if (!isRecord(doc)) return { problems: ['the file is not a mapping'] };
   const problems = [
