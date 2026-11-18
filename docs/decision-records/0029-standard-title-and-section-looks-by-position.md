@@ -10,7 +10,7 @@ The Title slide and section slides get a standard presentation by default, chose
 
 ## Human acceptance
 
-**Approver:** Han. **Decision:** Q3 and Q16 of the `event-copy-derivation` grill, 2026-11-18: "1, with a default beforePx and afterPx that makes it look good". The rendered values need Han's acceptance on a preview before they are recorded in the feature doc.
+**Approver:** Han. **Decision:** Q3 and Q16 of the `event-copy-derivation` grill, 2026-11-18: "1, with a default beforePx and afterPx that makes it look good". Q20 and the spacing, 2026-11-18: the Title is no longer inverse, so every section slide gets one uniform look; section slides take 200px before and after.
 
 ## Why
 
@@ -20,15 +20,13 @@ The same Title look is hand-copied into 16 Slide files, and two section looks in
 
 1. **Kinds.**
    - **Standard Title look:** the Title slide's look.
-   - **Standard opening section look:** the first Section's section slide.
-   - **Standard section look:** every later section slide.
+   - **Standard section look:** every section slide, the first included.
 
    Position decides the kind, using the container's existing recognition (`level: 'h2'`, not `withoutSectionSlide`).
 
-2. **Values.** These start from today's Event look and are tuned by visual check, then accepted by Han:
-   - **Title:** inverse, softened surface, liquid leave, default space after.
-   - **Opening section:** section-band surface, no effect, default space before and after, so the Title's leave runs dark to light.
-   - **Later sections:** inverse, softened surface, liquid enter and leave, default space before and after.
+2. **Values,** accepted by Han:
+   - **Title:** normal tone and surface, no effect, 160px space after.
+   - **Section slide:** inverse, softened surface, liquid enter and leave, 200px space before and after. A normal Title makes the first section slide's edge the same light-to-dark enter as every later one, so no opening variant is needed, whether or not the first Section has a section slide.
 3. **Declaration wins.** A Slide's own `presentation`, or the Title's `title.presentation`, replaces the default in full. Defaults and declarations are never merged key by key, so a Waterline section slide keeps its bubbles.
 4. **Where the defaults apply.** The page record applies them (`recordContent`), after Episode instance overrides have been resolved (Decision record _An Event copy is an instance of its Episode_) and before adjacent edges are resolved and the surface clock decides whether it runs. The wrapper and the clock see ordinary declarations.
 5. **Home.** The standard looks are named constants in the Slide master. They are not a Theme field or a renderer registry.
