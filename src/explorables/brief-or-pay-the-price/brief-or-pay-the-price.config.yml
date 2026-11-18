@@ -5,9 +5,11 @@
 # Presets: how a Slide opens the Explorable. `view` is the Definition tab (price, brief, stages, brace), `level` the zoom
 # (define, agent, workflow), `scenario` a file in scenarios/, `controls` overrides the control registry key by key
 # (code: controls.pure.ts; `show: false` hides one), and `layers` are the toggles that start on at that level (a toggle
-# whose slot the Slide leaves empty stays off).
+# whose slot the Slide leaves empty stays off). `play` opens on the PRICE definition, `manage` on the BRIEF x PRICE
+# Agent matrix, `drive` on the Stages view.
 presets:
   play: { view: price, level: define, scenario: drive, controls: {}, layers: [] }
+  manage: { view: brief, level: agent, scenario: drive, controls: {}, layers: [] }
   drive: { view: stages, level: workflow, scenario: drive, controls: { scenarioPicker: { show: false } }, layers: [] }
 definitions:
   price:
