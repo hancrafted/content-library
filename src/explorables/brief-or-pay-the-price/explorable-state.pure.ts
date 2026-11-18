@@ -6,14 +6,22 @@ import {
   focused,
   light,
   openCell,
-  toDefinition,
   unlight,
-  zoomTo,
   type AgentEvent,
-  type AgentSlice,
 } from './agent-state.pure';
 import { DEFINITION_IDS, type ViewId } from './brief-or-pay-the-price.types';
-import { braceStep, selectNode, tick, togglePlay, type WorkflowEvent } from './workflow-state.pure';
+import {
+  WORKFLOW_REST,
+  braceStep,
+  selectNode,
+  showDefinition,
+  switchScenario,
+  tick,
+  togglePlay,
+  zoomTo,
+  type WorkflowEvent,
+  type WorkflowSlice,
+} from './workflow-state.pure';
 
 export { ZOOM_LEVELS, type CellKey, type Level, type Lit, type ZoomLevel } from './agent-state.pure';
 
@@ -34,7 +42,7 @@ export interface MirrorMemory {
   readonly blank: boolean;
 }
 
-export interface ExplorableState extends AgentSlice<MirrorMemory> {
+export interface ExplorableState extends WorkflowSlice<MirrorMemory> {
   readonly scenario: string;
 }
 
@@ -70,6 +78,7 @@ export function start(rowCounts: Readonly<Record<string, number>>, scenario = ''
   const counts = { ...rowCounts, [CELL_MEMORY]: CELL_ROWS };
   return {
     ...AGENT_REST,
+    ...WORKFLOW_REST,
     view: DEFINITION_IDS[0],
     scenario,
     mirrors: Object.fromEntries(Object.entries(counts).map(([key, count]) => [key, emptyMirror(count)])),
@@ -124,7 +133,7 @@ const playedCell: MirrorMemory = {
 };
 
 const ON: Handlers = {
-  view: (state, { view }) => toDefinition(state, view),
+  view: (state, { view }) => showDefinition(state, view),
   zoom: (state, { level }) => zoomTo(state, level),
   openCell: (state, { cell }) => openCell(state, cell, playedCell),
   closeCell: (state) => closeCell(state, playedCell),
@@ -135,7 +144,7 @@ const ON: Handlers = {
   braceStep: (state, { step }) => braceStep(state, step),
   play: (state) => togglePlay(state),
   tick: (state) => tick(state),
-  scenario: (state, { scenario }) => (state.scenario === scenario ? state : { ...state, scenario }),
+  scenario: (state, { scenario }) => switchScenario(state, scenario),
   open: (state, { target }) => open(state, target),
   leave: (state, { target }) =>
     currentMirror(state).open === target

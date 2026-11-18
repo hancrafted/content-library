@@ -13,11 +13,10 @@ const render = (locale: 'en' | 'de', events: Parameters<typeof step>[1][] = []) 
     renderToStaticMarkup(
       createElement(WorkflowLevel, {
         words: data.words.workflow,
-        locale,
         state,
         counters: data.matrix.counters,
         braceRows: data.definitions.brace.rows,
-        stages: data.stages,
+        scenarios: data.scenarios,
         dispatch: () => undefined,
       }),
     ),
@@ -81,13 +80,14 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('draws no picker while only one Scenario is registered', () => {
+  it('falls back to the first Scenario when the state names an unknown one', () => {
     // ARRANGE
-    const $ = render('en', [ZOOM]);
+    const known = render('en', [ZOOM]);
+    const unknown = render('en', [ZOOM, { type: 'scenario', scenario: 'nope' }]);
     // ACT
-    const pickers = $('[data-scenario-picker]').length;
+    const label = (page: typeof known) => page('[data-workflow]').first().attr('aria-label');
     // ASSERT
-    expect(pickers).toBe(0);
+    expect(label(unknown)).toBe(label(known));
   });
 });
 
@@ -100,6 +100,29 @@ describe('edge cases', () => {
     const labels = [idle('[data-play]').text(), playing('[data-play]').text()];
     // ASSERT
     expect(labels).toEqual(['Play', 'Pause']);
+  });
+
+  it('keeps the BRACE steps and Play in the footer, after the Workflow', () => {
+    // ARRANGE
+    const $ = render('en', [ZOOM]);
+    // ACT
+    const footer = $('[data-workflow-foot]');
+    const order = $('[data-workflow-root], [data-workflow-foot]')
+      .toArray()
+      .map((el) => ('data-workflow-foot' in el.attribs ? 'foot' : 'root'));
+    // ASSERT
+    expect(footer.find('[data-brace-steps] [data-play]')).toHaveLength(1);
+    expect(order).toEqual(['root', 'foot']);
+  });
+
+  it('gives a focused node a visible ring, in tokens only', () => {
+    // ARRANGE
+    const $ = render('en', [ZOOM]);
+    // ACT
+    const box = $('[data-workflow]').first().find('[data-node]').first();
+    // ASSERT
+    expect(box.attr('class')).toContain('group');
+    expect(box.find('rect').first().attr('class')).toContain('group-focus-visible:stroke-ring');
   });
 
   it('makes each node reachable as a button the delegated handler can find', () => {

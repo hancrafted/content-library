@@ -7,13 +7,22 @@ const run = (events: readonly ExplorableEvent[], from: ExplorableState = REST) =
 const IN_WORKFLOW: readonly ExplorableEvent[] = [{ type: 'zoom', level: 'workflow' }];
 
 describe('success cases', () => {
-  it('zooms to the Workflow level at BRACE step one, remembering the definition it came from', () => {
+  it('zooms to the Workflow level at step zero from the BRACE tab, remembering the definition it came from', () => {
     // ARRANGE
     const onBrace = run([{ type: 'view', view: 'brace' }]);
     // ACT
     const workflow = step(onBrace, { type: 'zoom', level: 'workflow' });
     // ASSERT
-    expect(workflow).toMatchObject({ level: 'workflow', step: 1, arrival: 'brace', playing: false });
+    expect(workflow).toMatchObject({ level: 'workflow', braceStep: 0, arrival: 'brace', playing: false });
+  });
+
+  it('zooms to the Workflow level at BRACE step one from any other place', () => {
+    // ARRANGE
+    const onPrice = run([{ type: 'view', view: 'price' }]);
+    // ACT
+    const workflow = step(onPrice, { type: 'zoom', level: 'workflow' });
+    // ASSERT
+    expect(workflow).toMatchObject({ level: 'workflow', braceStep: 1, arrival: 'price' });
   });
 
   it('sets the BRACE step and stops a running play', () => {
@@ -23,7 +32,7 @@ describe('success cases', () => {
     // ACT
     const stepped = step(playing, { type: 'braceStep', step: third });
     // ASSERT
-    expect(stepped).toMatchObject({ step: third, playing: false });
+    expect(stepped).toMatchObject({ braceStep: third, playing: false });
   });
 
   it('advances one step on each tick while playing and stops at the last letter', () => {
@@ -32,7 +41,7 @@ describe('success cases', () => {
     // ACT
     const done = run([...IN_WORKFLOW, { type: 'play' }, ...ticks]);
     // ASSERT
-    expect(done).toMatchObject({ step: MAX_STEP, playing: false });
+    expect(done).toMatchObject({ braceStep: MAX_STEP, playing: false });
   });
 
   it('zooms to the Agent level on a node click, remembering the node', () => {
@@ -62,8 +71,8 @@ describe('failure cases', () => {
     const high = run([...IN_WORKFLOW, { type: 'braceStep', step: beyond }]);
     const low = run([...IN_WORKFLOW, { type: 'braceStep', step: -beyond }]);
     // ASSERT
-    expect(high.step).toBe(MAX_STEP);
-    expect(low.step).toBe(0);
+    expect(high.braceStep).toBe(MAX_STEP);
+    expect(low.braceStep).toBe(0);
   });
 });
 
@@ -74,7 +83,7 @@ describe('edge cases', () => {
     // ACT
     const replay = step(atEnd, { type: 'play' });
     // ASSERT
-    expect(replay).toMatchObject({ step: 1, playing: true });
+    expect(replay).toMatchObject({ braceStep: 1, playing: true });
   });
 
   it('pauses a running play on a second toggle', () => {
@@ -92,7 +101,16 @@ describe('edge cases', () => {
     // ACT
     const define = step(inWorkflow, { type: 'zoom', level: 'define' });
     // ASSERT
-    expect(define).toMatchObject({ step: 0, node: null, level: 'define' });
+    expect(define).toMatchObject({ braceStep: 0, node: null, level: 'define' });
+  });
+
+  it('resets the BRACE step to one and stops Play when the Scenario switches (Seam 1)', () => {
+    // ARRANGE
+    const playing = run([...IN_WORKFLOW, { type: 'braceStep', step: 4 }, { type: 'play' }]);
+    // ACT
+    const switched = step(playing, { type: 'scenario', scenario: 'other' });
+    // ASSERT
+    expect(switched).toMatchObject({ scenario: 'other', braceStep: 1, playing: false });
   });
 
   it('keeps the picked Scenario across levels', () => {

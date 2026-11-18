@@ -1,4 +1,7 @@
-import { LETTERS, type Annotation, type Layout, type Letter, type Scenario } from './scenario.types';
+import { arrowSpot, tagSpot, type Point } from './annotation-spots.pure';
+import { LETTERS, type Annotation, type Layout, type Letter, type PlainScenario } from './scenario.types';
+
+export type { Point } from './annotation-spots.pure';
 
 export interface Lit {
   readonly nodes: readonly string[];
@@ -7,19 +10,16 @@ export interface Lit {
   readonly goal: boolean;
 }
 
-export interface Point {
-  readonly x: number;
-  readonly y: number;
-}
-
 export const NO_LIT: Lit = { nodes: [], edges: [], stages: [], goal: false };
 
 export const MAX_STEP = LETTERS.length;
 
-export const annotationsOf = (scenario: Scenario, letter: Letter): readonly Annotation[] =>
+export const clampStep = (step: number): number => Math.min(Math.max(Math.trunc(step), 0), MAX_STEP);
+
+export const annotationsOf = (scenario: PlainScenario, letter: Letter): readonly Annotation[] =>
   scenario.annotations?.[letter] ?? [];
 
-export function litOf(scenario: Scenario, letter: Letter): Lit {
+export function litOf(scenario: PlainScenario, letter: Letter): Lit {
   return annotationsOf(scenario, letter).reduce<Lit>((lit, annotation) => {
     if (annotation.type !== 'highlight') return lit;
     return {
@@ -31,8 +31,8 @@ export function litOf(scenario: Scenario, letter: Letter): Lit {
   }, NO_LIT);
 }
 
-export function stepState(scenario: Scenario, step: number) {
-  const shown = Math.min(Math.max(Math.trunc(step), 0), MAX_STEP);
+export function stepState(scenario: PlainScenario, step: number) {
+  const shown = clampStep(step);
   return {
     shown,
     isShown: (letter: Letter): boolean => LETTERS.indexOf(letter) < shown,
@@ -76,11 +76,6 @@ export function pillAt(
   };
 }
 
-export const rightEdgeOf = (layout: Layout): number => {
-  const band = layout.stages[0];
-  return band === undefined ? layout.w : band.x + band.w - 12;
-};
-
 const NARROW_GROUP_PAD = 10;
 const WIDE_GROUP_PAD = 24;
 
@@ -110,12 +105,8 @@ const spotOfHighlight = (layout: Layout, annotation: Extract<Annotation, { type:
   return rect && { x: rect.cx, y: rect.cy };
 };
 
-const spotOfArrow = (layout: Layout, annotation: Extract<Annotation, { type: 'arrow' }>): Point => {
-  const a = layout.box(annotation.from);
-  const b = layout.box(annotation.to);
-  const lane = annotation.route === 'under' ? layout.lanes.under : layout.lanes.over;
-  return layout.orient === 'vertical' ? { x: lane, y: (a.cy + b.cy) / 2 } : { x: (a.cx + b.cx) / 2, y: lane };
-};
+const spotOfArrow = (layout: Layout, annotation: Extract<Annotation, { type: 'arrow' }>): Point =>
+  arrowSpot(layout, annotation).mid;
 
 const spotOfGroup = (layout: Layout, annotation: Extract<Annotation, { type: 'group' }>): Point => {
   const box = groupBoxOf(layout, annotation.nodes);
@@ -124,10 +115,7 @@ const spotOfGroup = (layout: Layout, annotation: Extract<Annotation, { type: 'gr
 
 const spotOfTag = (layout: Layout, annotation: Extract<Annotation, { type: 'tag' }>): Point | undefined => {
   const rect = layout.nodes[annotation.node];
-  if (rect === undefined) return undefined;
-  return layout.orient === 'vertical'
-    ? { x: rightEdgeOf(layout) - 60, y: rect.y - 32 }
-    : { x: rect.cx, y: rect.y - 30 };
+  return rect && tagSpot(layout, rect).anchor;
 };
 
 const spotOfChip = (layout: Layout, annotation: Extract<Annotation, { type: 'chip' }>): Point | undefined =>
@@ -150,7 +138,7 @@ const SPOT_OF = {
 const spotOf = (layout: Layout, annotation: Annotation): Point | undefined =>
   (SPOT_OF[annotation.type] as unknown as Spot)(layout, annotation as never);
 
-export function anchorOf(scenario: Scenario, layout: Layout, letter: Letter): Point | undefined {
+export function anchorOf(scenario: PlainScenario, layout: Layout, letter: Letter): Point | undefined {
   const spots = annotationsOf(scenario, letter).map((annotation) => ({
     weak: annotation.type === 'highlight',
     at: spotOf(layout, annotation),

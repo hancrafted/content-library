@@ -15,19 +15,26 @@ export const fans = (file: ScenarioFile) => ({
 export const drawsArrow = (file: ScenarioFile, edge: Edge): boolean =>
   fans(file).into(edge.to) <= 1 || edge === file.edges.filter((each) => each.to === edge.to).at(-1);
 
-export const boxOf =
-  (plan: Pick<Plan, 'nodes' | 'goal'>, goalBelow: number) =>
-  (id: string): Box => {
-    const { goal, nodes } = plan;
-    if (id === 'goal')
-      return {
-        cx: goal.cx,
-        cy: goal.cy,
-        top: goal.cy - goal.r,
-        bottom: goal.cy + goal.r + goalBelow,
-        left: goal.cx - goal.r,
-        right: goal.cx + goal.r,
-      };
-    const node = nodes[id] as NodeRect;
-    return { cx: node.cx, cy: node.cy, top: node.y, bottom: node.y + node.h, left: node.x, right: node.x + node.w };
+const boxOfNode = (node: NodeRect): Box => ({
+  cx: node.cx,
+  cy: node.cy,
+  top: node.y,
+  bottom: node.y + node.h,
+  left: node.x,
+  right: node.x + node.w,
+});
+
+export const boxesOf = (plan: Pick<Plan, 'nodes' | 'goal'>, goalBelow: number): Record<string, Box> => {
+  const { goal, nodes } = plan;
+  return {
+    ...Object.fromEntries(Object.entries(nodes).map(([id, node]) => [id, boxOfNode(node)])),
+    goal: {
+      cx: goal.cx,
+      cy: goal.cy,
+      top: goal.cy - goal.r,
+      bottom: goal.cy + goal.r + goalBelow,
+      left: goal.cx - goal.r,
+      right: goal.cx + goal.r,
+    },
   };
+};

@@ -14,10 +14,10 @@ export function BriefOrPayThePrice({ locale, words }: BriefOrPayThePriceProps) {
   return (
     <>
       <BriefOrPayThePriceClient
-        locale={data.locale}
         words={data.words}
         definitions={data.definitions}
         stages={data.stages}
+        scenarios={data.scenarios}
         matrix={data.matrix}
       />
       <ExploreItLink slug="brief-or-pay-the-price" />

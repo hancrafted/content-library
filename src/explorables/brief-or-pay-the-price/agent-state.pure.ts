@@ -30,8 +30,6 @@ export interface AgentSlice<Memory> {
   readonly lit: Lit | null;
   readonly arrival: ViewId | null;
   readonly node: string | null;
-  readonly step: number;
-  readonly playing: boolean;
   readonly mirrors: Readonly<Record<string, Memory>>;
 }
 
@@ -42,8 +40,6 @@ export const AGENT_REST = {
   lit: null,
   arrival: null,
   node: null,
-  step: 0,
-  playing: false,
 } as const;
 
 export const sameCell = (a: CellKey | null, b: CellKey | null): boolean =>
@@ -55,12 +51,11 @@ const sameLit = (a: Lit | null, b: Lit | null): boolean =>
 export const toDefinition = <S extends AgentSlice<unknown>>(state: S, view: ViewId): S =>
   state.view === view && state.level === 'define' ? state : { ...state, ...AGENT_REST, view };
 
-export function zoomTo<S extends AgentSlice<unknown>>(state: S, level: Level): S {
+export function zoomAgent<S extends AgentSlice<unknown>>(state: S, level: Level): S {
   if (level === state.level && state.cell === null) return state;
   if (level === 'define') return { ...state, ...AGENT_REST };
   const arrival = state.level === 'define' ? state.view : state.arrival;
-  const step = level === 'workflow' ? 1 : 0;
-  return { ...state, ...AGENT_REST, level, arrival, step };
+  return { ...state, ...AGENT_REST, level, arrival };
 }
 
 export function openCell<Memory, S extends AgentSlice<Memory>>(state: S, cell: CellKey, played: Memory): S {

@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 import { ArrowView } from './annotation-arrow-view';
 import { ChipView, TagView } from './annotation-pill-view';
-import type { Annotation, Layout, MarkKind, Scenario } from './scenario.types';
-import { groupBoxOf, rightEdgeOf } from './workflow-annotations.pure';
+import { rightEdgeOf } from './annotation-spots.pure';
+import type { Annotation, Layout, MarkKind, PlainScenario } from './scenario.types';
+import { groupBoxOf } from './workflow-annotations.pure';
 import { SizedText } from './workflow-text';
 
 interface GroupProps {
@@ -79,7 +80,7 @@ export function MarkView({
 }
 
 export interface AnnotationContext {
-  readonly scenario: Scenario;
+  readonly scenario: PlainScenario;
   readonly layout: Layout;
   readonly words: Readonly<Record<string, string>>;
   readonly past: boolean;

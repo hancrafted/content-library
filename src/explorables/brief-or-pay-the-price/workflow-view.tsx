@@ -2,11 +2,11 @@ import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { markerIdOf } from './annotation-arrow-view';
 import { AnnotationView } from './annotation-views';
-import { LETTERS, type Layout, type Scenario } from './scenario.types';
+import { LETTERS, type Layout, type PlainScenario, type ScenarioWords } from './scenario.types';
 import { annotationsOf, stepState, type Lit } from './workflow-annotations.pure';
 import { NodeView } from './workflow-node-view';
 import { SizedText } from './workflow-text';
-import type { ScenarioWords, WorkflowViewProps, WorkflowViewWords } from './workflow.types';
+import type { WorkflowViewProps, WorkflowViewWords } from './workflow.types';
 
 const TRANSITION = 'motion-safe:transition-[stroke-width,fill] motion-safe:duration-300';
 
@@ -51,7 +51,7 @@ function Edges({ layout, lit }: { readonly layout: Layout; readonly lit: Lit }) 
   );
 }
 
-const bandLetter = (scenario: Scenario, index: number): ReactNode =>
+const bandLetter = (scenario: PlainScenario, index: number): ReactNode =>
   scenario.acronym === undefined ? `${index + 1} · ` : <tspan className="fill-ai">{scenario.acronym[index]} </tspan>;
 
 function BandLabels({
@@ -59,7 +59,7 @@ function BandLabels({
   layout,
   words,
 }: {
-  readonly scenario: Scenario;
+  readonly scenario: PlainScenario;
   readonly layout: Layout;
   readonly words: ScenarioWords;
 }) {

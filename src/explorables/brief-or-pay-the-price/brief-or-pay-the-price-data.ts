@@ -12,7 +12,7 @@ import {
 } from './brief-or-pay-the-price.types';
 import { CONFIG_FILE, mergeWords, parseConfig } from './config.pure';
 import type { Counters } from './matrix-data.pure';
-import type { Scenario } from './scenario.types';
+import type { Scenario, WorkflowScenario } from './scenario.types';
 import { allScenarios } from './scenarios';
 
 export interface ExplorableData {
@@ -20,6 +20,7 @@ export interface ExplorableData {
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;
+  readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly matrix: MatrixData;
 }
 
@@ -96,9 +97,12 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
     Definition
   >;
   const stages = Object.fromEntries(allScenarios().map((scenario) => [scenario.id, stagesOf(scenario, words, chosen)]));
+  const scenarios = Object.fromEntries(
+    allScenarios().map(({ i18n, ...scenario }) => [scenario.id, { scenario, words: i18n[chosen] }]),
+  );
   const matrix: MatrixData = {
     counters: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].counters])) as Counters,
     sources: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].source])) as Record<MoveId, string>,
   };
-  return { locale: chosen, words, definitions, stages, matrix };
+  return { locale: chosen, words, definitions, stages, scenarios, matrix };
 }
