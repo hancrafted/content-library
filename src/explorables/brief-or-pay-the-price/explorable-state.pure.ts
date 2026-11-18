@@ -10,6 +10,7 @@ import {
   type AgentEvent,
 } from './agent-state.pure';
 import { DEFINITION_IDS, type ViewId } from './brief-or-pay-the-price.types';
+import { LAYERS_REST, toggleLayer, type LayerEvent, type LayerSlice } from './layer-state.pure';
 import {
   WORKFLOW_REST,
   braceStep,
@@ -42,13 +43,14 @@ export interface MirrorMemory {
   readonly blank: boolean;
 }
 
-export interface ExplorableState extends WorkflowSlice<MirrorMemory> {
+export interface ExplorableState extends WorkflowSlice<MirrorMemory>, LayerSlice {
   readonly scenario: string;
 }
 
 export type ExplorableEvent =
   | AgentEvent
   | WorkflowEvent
+  | LayerEvent
   | { readonly type: 'view'; readonly view: View }
   | { readonly type: 'scenario'; readonly scenario: string }
   | { readonly type: 'open'; readonly target: Target }
@@ -79,6 +81,7 @@ export function start(rowCounts: Readonly<Record<string, number>>, scenario = ''
   return {
     ...AGENT_REST,
     ...WORKFLOW_REST,
+    layers: LAYERS_REST,
     view: DEFINITION_IDS[0],
     scenario,
     mirrors: Object.fromEntries(Object.entries(counts).map(([key, count]) => [key, emptyMirror(count)])),
@@ -140,6 +143,7 @@ const ON: Handlers = {
   light: (state, { lit }) => light(state, lit),
   unlight: (state) => unlight(state),
   focused: (state) => focused(state),
+  layer: (state, { layer }) => toggleLayer(state, layer),
   node: (state, { node }) => selectNode(state, node),
   braceStep: (state, { step }) => braceStep(state, step),
   play: (state) => togglePlay(state),

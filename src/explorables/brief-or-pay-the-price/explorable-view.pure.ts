@@ -7,6 +7,7 @@ import {
   type Words,
 } from './brief-or-pay-the-price.types';
 import type { ExplorableState } from './explorable-state.pure';
+import { hasLayer } from './layer-state.pure';
 import { format, plain } from './matrix-data.pure';
 
 export interface ViewData {
@@ -43,10 +44,12 @@ export function beatsOf(
 export function titleOf(
   { words, definitions }: Pick<ViewData, 'words' | 'definitions'>,
   tabs: Readonly<Record<ViewId, Definition>>,
-  state: Pick<ExplorableState, 'view' | 'level' | 'cell'> & { readonly nodeLabel?: string },
+  state: Pick<ExplorableState, 'view' | 'level' | 'cell' | 'layers'> & { readonly nodeLabel?: string },
 ): string {
   const { cell, nodeLabel } = state;
   if (state.level === 'define') return tabs[state.view].words.title;
+  if (hasLayer(state, 'thoughtExperiment'))
+    return words.thoughtExperiment[state.level === 'agent' ? 'agent' : 'board'].title;
   if (state.level === 'workflow') return tabs.stages.words.title;
   if (cell === null)
     return nodeLabel === undefined ? words.matrix.title : format(words.matrix.nodeTitle, { label: nodeLabel });

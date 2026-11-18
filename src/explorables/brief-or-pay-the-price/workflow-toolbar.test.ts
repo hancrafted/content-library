@@ -19,6 +19,7 @@ const render = (scenarios: { id: string; name: string }[], events: ExplorableEve
         onView: () => undefined,
         onScenario: () => undefined,
         onZoom: () => undefined,
+        onLayer: () => undefined,
       }),
     ),
   );

@@ -3,6 +3,7 @@
 import { Button } from '@/shared/components/ui/button';
 import type { Dispatch, ReactNode } from 'react';
 import { Matrix, type MatrixHandlers } from './agent-matrix.client';
+import { BoardThoughtExperiment } from './board-thought-experiment.client';
 import type { MatrixData } from './brief-or-pay-the-price-data';
 import type { Words } from './brief-or-pay-the-price.types';
 import { CellView } from './cell-view.client';
@@ -15,18 +16,27 @@ import {
   type Level,
 } from './explorable-state.pure';
 import { definitionOf, rowOf, type ViewData } from './explorable-view.pure';
+import { FreelancerCardView } from './freelancer-layer-view';
+import { hasLayer } from './layer-state.pure';
 import { cellsIn, format, isCounter, neighbour } from './matrix-data.pure';
 import type { SceneLabels } from './mirror-card.client';
 import type { MirrorHandlers } from './mirror-row.client';
 import { Mirror } from './mirror.client';
 import { RoleStripView } from './role-strip-view';
 import type { WorkflowScenario } from './scenario.types';
+import { SlotRegionView } from './slot-region-view';
+import { AgentThoughtExperimentView } from './thought-experiment-agent-view';
 import { WorkflowLevel } from './workflow-level.client';
 
 type Scenarios = Readonly<Record<string, WorkflowScenario>>;
 
 export interface LevelProps {
-  readonly data: ViewData & { readonly matrix: MatrixData; readonly scenarios: Scenarios };
+  readonly data: ViewData & {
+    readonly matrix: MatrixData;
+    readonly scenarios: Scenarios;
+    readonly habits?: ReactNode;
+    readonly tryIt?: ReactNode;
+  };
   readonly state: ExplorableState;
   readonly dispatch: Dispatch<ExplorableEvent>;
   readonly handlers: MirrorHandlers;
@@ -91,10 +101,29 @@ function BackToWorkflow({ label, dispatch }: { readonly label: string; readonly 
   );
 }
 
+function LayerSlot({
+  on,
+  slot,
+  label,
+  content,
+}: {
+  readonly on: boolean;
+  readonly slot: string;
+  readonly label: string;
+  readonly content: ReactNode;
+}) {
+  return on ? (
+    <SlotRegionView slot={slot} label={label}>
+      {content}
+    </SlotRegionView>
+  ) : null;
+}
+
 function MatrixLevel(props: LevelProps) {
   const { data, state, matrixHandlers, dispatch } = props;
   const { words, definitions, matrix } = data;
   const from = nodeOf(props);
+  const freelancer = hasLayer(state, 'freelancer');
   return (
     <>
       {from ? <BackToWorkflow label={words.matrix.backToWorkflow} dispatch={dispatch} /> : null}
@@ -105,10 +134,13 @@ function MatrixLevel(props: LevelProps) {
         moves={definitions.brief.rows}
         counters={matrix.counters}
         node={from?.node ?? null}
+        shortLines={freelancer}
         lit={state.lit}
         handlers={matrixHandlers}
       />
+      {freelancer ? <FreelancerCardView words={words.freelancerLayer} /> : null}
       <p className="text-caption text-muted-foreground">{from ? words.matrix.nodeCaption : words.matrix.caption}</p>
+      <LayerSlot on={hasLayer(state, 'habits')} slot="habits" label={words.layers.habits} content={data.habits} />
     </>
   );
 }
@@ -167,20 +199,28 @@ function CellLevel({ cell, ...props }: LevelProps & { readonly cell: CellKey }) 
 }
 
 function AgentLevel(props: LevelProps) {
-  const { cell } = props.state;
-  return cell === null ? <MatrixLevel {...props} /> : <CellLevel {...props} cell={cell} />;
+  const { state, data } = props;
+  if (state.cell !== null) return <CellLevel {...props} cell={state.cell} />;
+  if (hasLayer(state, 'thoughtExperiment'))
+    return <AgentThoughtExperimentView words={data.words.thoughtExperiment.agent} />;
+  return <MatrixLevel {...props} />;
 }
 
 function WorkflowZoom({ data, state, dispatch }: LevelProps) {
+  if (hasLayer(state, 'thoughtExperiment'))
+    return <BoardThoughtExperiment words={data.words.thoughtExperiment.board} />;
   return (
-    <WorkflowLevel
-      words={data.words.workflow}
-      state={state}
-      counters={data.matrix.counters}
-      braceRows={data.definitions.brace.rows}
-      scenarios={data.scenarios}
-      dispatch={dispatch}
-    />
+    <>
+      <WorkflowLevel
+        words={data.words.workflow}
+        state={state}
+        counters={data.matrix.counters}
+        braceRows={data.definitions.brace.rows}
+        scenarios={data.scenarios}
+        dispatch={dispatch}
+      />
+      <LayerSlot on={hasLayer(state, 'tryIt')} slot="tryIt" label={data.words.layers.tryIt} content={data.tryIt} />
+    </>
   );
 }
 

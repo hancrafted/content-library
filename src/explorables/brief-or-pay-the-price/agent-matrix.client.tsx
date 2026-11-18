@@ -2,6 +2,7 @@
 
 import type { MatrixWords, MirrorRow, MoveId, TraitId } from './brief-or-pay-the-price.types';
 import type { Lit } from './explorable-state.pure';
+import { TraitShortLineView } from './freelancer-layer-view';
 import { markOf, plain, type CellMark, type Counters } from './matrix-data.pure';
 import { MatrixLegendView } from './matrix-legend-view';
 import { ColumnHead, MatrixCell, RowHead, isOn, type MatrixHandlers } from './matrix-parts.client';
@@ -16,10 +17,11 @@ export interface MatrixProps {
   readonly counters: Counters;
   readonly lit: Lit | null;
   readonly node?: ScenarioNode | null;
+  readonly shortLines?: boolean;
   readonly handlers: MatrixHandlers;
 }
 
-type PartsProps = Pick<MatrixProps, 'words' | 'traits' | 'moves' | 'lit' | 'handlers'> & {
+type PartsProps = Pick<MatrixProps, 'words' | 'traits' | 'moves' | 'lit' | 'handlers' | 'shortLines'> & {
   readonly node: ScenarioNode | null;
 };
 
@@ -39,6 +41,19 @@ function ColumnHeads({ words, traits, lit, handlers, node }: PartsProps) {
           on={isOn(lit, 'trait', trait.id)}
           handlers={handlers}
         />
+      ))}
+    </tr>
+  );
+}
+
+function ShortLines({ traits }: Pick<PartsProps, 'traits'>) {
+  return (
+    <tr data-trait-shorts>
+      <td />
+      {traits.map((trait) => (
+        <td key={trait.id} className="p-1 text-center align-top">
+          <TraitShortLineView trait={trait.id} text={trait.words.short} />
+        </td>
       ))}
     </tr>
   );
@@ -94,6 +109,7 @@ export function Matrix({ counters, node = null, ...props }: MatrixProps) {
         <caption className="sr-only">{node === null ? props.words.corner : props.words.nodeCorner}</caption>
         <thead>
           <ColumnHeads {...props} node={node} />
+          {props.shortLines ? <ShortLines traits={props.traits} /> : null}
         </thead>
         <tbody>
           {props.moves.map((move) => (

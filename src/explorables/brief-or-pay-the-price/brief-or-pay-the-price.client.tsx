@@ -15,6 +15,7 @@ import {
   type Target,
 } from './explorable-state.pure';
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
+import type { Layer } from './layer-state.pure';
 import { LEVEL } from './levels.client';
 import { cellsIn } from './matrix-data.pure';
 import type { WorkflowScenario } from './scenario.types';
@@ -103,6 +104,11 @@ interface ToolbarInput {
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
+const unfilledOf = ({ habits, tryIt }: Pick<BriefOrPayThePriceClientProps, 'habits' | 'tryIt'>): Layer[] => [
+  ...(habits === undefined ? (['habits'] as const) : []),
+  ...(tryIt === undefined ? (['tryIt'] as const) : []),
+];
+
 function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
   const { scenarios, stages, definitions } = data;
   const picks = useMemo(
@@ -127,6 +133,8 @@ function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
     onView: (view) => dispatch({ type: 'view', view }),
     onScenario: (scenario) => dispatch({ type: 'scenario', scenario }),
     onZoom: (level) => dispatch({ type: 'zoom', level }),
+    onLayer: (layer) => dispatch({ type: 'layer', layer }),
+    unfilled: unfilledOf(data),
   };
 }
 
