@@ -182,7 +182,6 @@ export interface Words {
     readonly showAll: string;
     readonly dayOne: string;
     readonly reset: string;
-    readonly caption: string;
     readonly turn: string;
     readonly zoom: string;
     readonly agent: string;

@@ -41,7 +41,7 @@ export function MirrorHeadsView({ heads }: { readonly heads: Heads }) {
       <p
         className={cn(
           'order-first w-full text-center text-caption font-semibold tracking-wide uppercase',
-          '@3xl:order-none @3xl:w-60 @3xl:shrink-0 @3xl:self-center',
+          '@3xl:order-none @3xl:w-64 @3xl:shrink-0 @3xl:self-center',
         )}
       >
         {heads.middle}

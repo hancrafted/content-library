@@ -228,7 +228,7 @@ describe('the Brief or pay the price Explorable page', () => {
     expect(found).toEqual(expected);
   });
 
-  it('shows each German trait name in English with its gloss below, in the chip and in its accessible name', () => {
+  it('shows each German trait name in English with its gloss in the chip accessible name only', () => {
     // ARRANGE
     const $ = exportedPage(localizePath('/explorables/brief-or-pay-the-price', 'de'));
     const expected = ['Probabilistic (probabilistisch): Jedes Mal ein anderes Ergebnis'];
@@ -239,6 +239,6 @@ describe('the Brief or pay the price Explorable page', () => {
       .slice(0, 1);
     // ASSERT
     expect(names).toEqual(expected);
-    expect($('#play [data-trait-gloss]').length).toBe(5);
+    expect($('#play [data-trait-gloss]').length).toBe(0);
   });
 });

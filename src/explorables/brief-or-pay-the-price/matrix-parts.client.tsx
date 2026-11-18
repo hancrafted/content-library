@@ -60,7 +60,11 @@ export const ColumnHead = memo(function ColumnHead({ row, head, on, handlers }: 
       className={cn('p-1 align-bottom font-normal', on && LIT)}
     >
       <span className="flex flex-col items-center gap-0.5 text-center">
-        <span translate="no" data-head-letter="column" className="inline-block text-heading leading-none font-semibold">
+        <span
+          translate="no"
+          data-head-letter="column"
+          className="inline-block text-subheading leading-none font-semibold"
+        >
           {row.letter}
         </span>
         <span data-head-rest className="flex flex-col items-center">
@@ -84,7 +88,7 @@ export const RowHead = memo(function RowHead({ row, head, on, handlers }: HeadPr
         <span
           translate="no"
           data-head-letter="row"
-          className="inline-block text-heading leading-none font-semibold text-ai"
+          className="inline-block text-subheading leading-none font-semibold text-ai"
         >
           {row.letter}
         </span>
@@ -115,7 +119,7 @@ const sameCell = (before: CellProps, after: CellProps): boolean =>
   before.handlers === after.handlers;
 
 const BUTTON_BASE =
-  'mx-auto flex min-h-11 w-11 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring @3xl:w-auto @3xl:min-w-11 @3xl:px-2';
+  'mx-auto flex min-h-11 w-11 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-lg outline-none hover:-translate-y-0.5 hover:shadow-md focus-visible:-translate-y-0.5 focus-visible:shadow-md focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0 @3xl:w-auto @3xl:min-w-11 @3xl:px-2';
 
 const BUTTON: Readonly<Record<Exclude<CellMark, 'none'>, string>> = {
   on: 'bg-ai/20 hover:bg-ai/35',

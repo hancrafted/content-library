@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useReducer, useRef, type Dispatch, type ReactNode, type RefObject } from 'react';
 import type { MatrixData } from './brief-or-pay-the-price-data';
-import type { Definition, DefinitionId, Preset, Words } from './brief-or-pay-the-price.types';
+import type { Definition, DefinitionId, Preset, ViewId, Words } from './brief-or-pay-the-price.types';
 import {
   currentMirror,
   nextTimer,
@@ -14,7 +14,7 @@ import {
   type Target,
 } from './explorable-state.pure';
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
-import type { Layer } from './layer-state.pure';
+import { LAYERS_REST, type Layer } from './layer-state.pure';
 import type { LevelActions } from './level-actions';
 import { LEVEL } from './levels.client';
 import { cellsIn } from './matrix-data.pure';
@@ -106,8 +106,6 @@ function useAgent({ state, dispatch, container, data }: AgentInput) {
 }
 
 const actionsOf = (dispatch: Dispatch<ExplorableEvent>): LevelActions => ({
-  onShowAll: () => dispatch({ type: 'showAll' }),
-  onReset: () => dispatch({ type: 'reset' }),
   onWorkflow: () => dispatch({ type: 'zoom', level: 'workflow' }),
   onCloseCell: () => dispatch({ type: 'closeCell' }),
   onCell: (cell) => dispatch({ type: 'openCell', cell }),
@@ -123,6 +121,11 @@ interface ToolbarInput {
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
+const zoomTitlesOf = (data: BriefOrPayThePriceClientProps, tabs: ToolbarProps['tabs'], view: ViewId) => ({
+  agent: titleOf(data, tabs, { view, level: 'agent', cell: null, layers: LAYERS_REST }),
+  workflow: titleOf(data, tabs, { view, level: 'workflow', cell: null, layers: LAYERS_REST }),
+});
+
 function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
   const { scenarios, stages, definitions } = data;
   const picks = useMemo(
@@ -137,18 +140,19 @@ function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
     () => ({ ...definitions, stages: stages[state.scenario] as Definition }),
     [definitions, stages, state.scenario],
   );
-  const nodeLabel = shownOf(scenarios, state.scenario).words.nodes[state.node ?? '']?.label;
   return {
     words: data.words,
     tabs,
     state,
     scenarios: picks,
     controls: data.preset.controls,
-    title: titleOf(data, tabs, { ...state, nodeLabel }),
+    titles: zoomTitlesOf(data, tabs, state.view),
     onView: (view) => dispatch({ type: 'view', view }),
     onScenario: (scenario) => dispatch({ type: 'scenario', scenario }),
     onZoom: (level) => dispatch({ type: 'zoom', level }),
     onLayer: (layer) => dispatch({ type: 'layer', layer }),
+    onShowAll: () => dispatch({ type: 'showAll' }),
+    onReset: () => dispatch({ type: 'reset' }),
     unfilled: unfilledOf(data),
   };
 }

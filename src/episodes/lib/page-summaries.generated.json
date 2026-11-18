@@ -4082,7 +4082,7 @@
       "en": {
         "title": "Brief or pay the price",
         "caption": "A brilliant freelancer with amnesia, every time: five traits to manage, and the AI shares every one.",
-        "description": "An interactive look at AI as a brilliant freelancer with amnesia: the five PRICE traits that cost you, shown side by side for a freelancer and for AI, with a closing line that wipes every card.",
+        "description": "An interactive look at AI as a brilliant freelancer with amnesia: the five PRICE traits that cost you, shown side by side for a freelancer and for AI, then BRIEF, DRIVE and BRACE to manage a team of them.",
         "minutes": 0,
         "sections": [
           { "id": "play", "title": "Play", "minutes": 0, "items": [] },
@@ -4092,7 +4092,7 @@
       "de": {
         "title": "Briefe es, oder Du zahlst den Preis",
         "caption": "Ein brillanter Freelancer mit Amnesie, jedes Mal: fünf Eigenschaften, die Du steuern musst, und die KI teilt jede davon.",
-        "description": "Ein interaktiver Blick auf KI als brillanten Freelancer mit Amnesie: die fünf PRICE-Eigenschaften, die Dich kosten, nebeneinander für einen Freelancer und für die KI, mit einer Schlusszeile, die jede Karte löscht.",
+        "description": "Ein interaktiver Blick auf KI als brillanten Freelancer mit Amnesie: die fünf PRICE-Eigenschaften, die Dich kosten, nebeneinander für einen Freelancer und für die KI, dann BRIEF, DRIVE und BRACE, um ein Team davon zu führen.",
         "minutes": 0,
         "sections": [
           { "id": "play", "title": "Ausprobieren", "minutes": 0, "items": [] },

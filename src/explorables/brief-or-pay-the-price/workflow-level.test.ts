@@ -97,8 +97,6 @@ describe('failure cases', () => {
         data,
         state,
         actions: {
-          onShowAll: none,
-          onReset: none,
           onWorkflow: none,
           onCloseCell: none,
           onCell: none,

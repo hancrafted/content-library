@@ -29,7 +29,7 @@ export function SceneSvg({ width, children }: { width: number; children: ReactNo
     <svg
       className={styles.anim}
       viewBox={`0 0 ${width} 72`}
-      style={{ flexBasis: `${width / 16}rem`, aspectRatio: `${width} / 72` }}
+      style={{ aspectRatio: `${width} / 72` }}
       aria-hidden="true"
     >
       {children}

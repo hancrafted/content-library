@@ -38,7 +38,7 @@ describe('success cases', () => {
     const $ = html(createElement(BriefOrPayThePrice, { preset: 'play', locale }));
     // ACT
     const level = $('[data-explorable]').attr('data-level');
-    const pressed = $('[data-view-go][aria-pressed="true"]').attr('data-view-go');
+    const pressed = $('[data-view-go][aria-checked="true"]').attr('data-view-go');
     // ASSERT
     expect({ level, pressed }).toEqual({ level: 'define', pressed: 'price' });
   });
@@ -48,7 +48,7 @@ describe('success cases', () => {
     const $ = html(createElement(BriefOrPayThePrice, { preset: 'drive', locale }));
     // ACT
     const level = $('[data-explorable]').attr('data-level');
-    const pressed = $('[data-zoom-go][aria-pressed="true"]').attr('data-zoom-go');
+    const pressed = $('[data-zoom-go][aria-checked="true"]').attr('data-zoom-go');
     // ASSERT
     expect({ level, pressed }).toEqual({ level: 'workflow', pressed: 'workflow' });
   });

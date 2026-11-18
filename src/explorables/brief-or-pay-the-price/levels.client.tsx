@@ -38,49 +38,16 @@ export interface LevelProps {
   readonly labels: SceneLabels;
 }
 
-function DefineFoot({
-  chrome,
-  resetLabel,
-  onShowAll,
-  onReset,
-}: {
-  readonly chrome: Words['chrome'];
-  readonly resetLabel: string;
-  readonly onShowAll: () => void;
-  readonly onReset: () => void;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Button type="button" size="sm" variant="outline" data-show-all onClick={onShowAll}>
-        {chrome.showAll}
-      </Button>
-      <Button type="button" size="sm" variant="outline" data-reset onClick={onReset}>
-        {resetLabel}
-      </Button>
-      <span className="text-caption text-muted-foreground">{chrome.caption}</span>
-    </div>
-  );
-}
-
-function DefineLevel({ data, state, actions, handlers, labels }: LevelProps) {
+function DefineLevel({ data, state, handlers, labels }: LevelProps) {
   const definition = definitionOf(data, state);
-  const { chrome } = data.words;
   return (
-    <>
-      <Mirror
-        definition={definition}
-        reads={definition.rows.map((_, index) => rowAt(state, index))}
-        wiping={isWiping(state)}
-        labels={labels}
-        handlers={handlers}
-      />
-      <DefineFoot
-        chrome={chrome}
-        resetLabel={state.view === 'price' ? chrome.dayOne : chrome.reset}
-        onShowAll={actions.onShowAll}
-        onReset={actions.onReset}
-      />
-    </>
+    <Mirror
+      definition={definition}
+      reads={definition.rows.map((_, index) => rowAt(state, index))}
+      wiping={isWiping(state)}
+      labels={labels}
+      handlers={handlers}
+    />
   );
 }
 
