@@ -10,8 +10,12 @@ import {
   type PlaylistAnchor,
   type SectionMarker,
 } from './composed-page-checks';
+import { EPISODES_DIR } from './episode-folders';
+import { resolvedOutlineOf } from './episode-outline-check';
 import { summaryOf } from './page-summary';
 import { producedAnchors, readPublishedSnapshot, type MissingSnapshot } from './published-anchors';
+
+const ROOT = path.resolve(import.meta.dirname, '../../..');
 
 export function exportsCarrying<T extends object>(module: unknown, keys: readonly (keyof T & string)[]): T[] {
   return Object.values(module as object).filter(
@@ -69,6 +73,9 @@ export async function readPage(dir: string, page: ComposedPage, load: () => Prom
     playlistAnchors: playlistAnchorsOf(page),
     published: await readPublishedSnapshot(dir, producedAnchors(composition)),
     markers: await markersIn(dir),
+    ...(page.kind === 'standalone' || page.kind === 'event-copy'
+      ? { outline: resolvedOutlineOf(ROOT, path.relative(path.join(ROOT, EPISODES_DIR), dir)) }
+      : {}),
   };
   return { composition, context };
 }

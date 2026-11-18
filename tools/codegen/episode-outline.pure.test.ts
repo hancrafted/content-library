@@ -1,99 +1,65 @@
 import { describe, expect, it } from 'vitest';
-import { episodeOutlinesFile } from './episode-outline.pure.ts';
+import { episodeOutlinesFile, type OutlineInput } from './episode-outline.pure.ts';
 
-const layerOf = (folder: string, slug: string) => ({
-  en: [`src/episodes/${folder}/slides/${slug}/i18n/en.json`],
-  de: [`src/episodes/${folder}/slides/${slug}/i18n/de.json`],
+const layerOf = (home: string) => ({
+  en: [`src/episodes/${home}/i18n/en.json`],
+  de: [`src/episodes/${home}/i18n/de.json`],
 });
 
-const textSourceOf = ([folder]: readonly string[], slug: string) => ({
-  text: layerOf(folder ?? '', slug),
-  pool: slug === 'shared',
-});
+const CASH: OutlineInput = {
+  id: 'cash',
+  folder: 'cash',
+  text: layerOf('cash'),
+  title: { slug: 'hero', anchor: 'top', text: layerOf('cash/slides/hero') },
+  sections: [
+    [
+      { slug: 'why', anchor: 'why', text: layerOf('cash/slides/why') },
+      { slug: 'shared', anchor: 'why--shared', text: layerOf('slide-pool/shared') },
+    ],
+  ],
+};
 
-const lastFolderHolding = (folders: readonly string[], slug: string) => ({
-  text: layerOf(folders.at(-1) ?? '', slug),
-  pool: false,
-});
-
-const episodeLayersOf = (folders: readonly string[]) => ({
-  en: [...folders].reverse().map((folder) => `src/episodes/${folder}/i18n/en.json`),
-  de: [...folders].reverse().map((folder) => `src/episodes/${folder}/i18n/de.json`),
-});
-
-function outlinesOf(episodes: Parameters<typeof episodeOutlinesFile>[0], slideText = textSourceOf): unknown {
-  return JSON.parse(episodeOutlinesFile(episodes, slideText, episodeLayersOf).text);
-}
+const outlinesOf = (episodes: readonly OutlineInput[]) =>
+  JSON.parse(episodeOutlinesFile(episodes).text) as Record<string, Record<string, unknown>>;
 
 describe('success cases', () => {
   describe('episodeOutlinesFile', () => {
-    it('writes each Episode by id with its Title, Sections, anchors and every Slide text source', () => {
+    it('writes each Episode by id with its folder, Title, Sections, anchors and every text layer, as the record traced them', () => {
       // ARRANGE
-      const episodes = [
-        {
-          id: 'cash',
-          folder: 'cash',
-          title: { slug: 'hero', anchor: 'top' },
-          sections: [
-            [
-              { slug: 'why', anchor: 'why' },
-              { slug: 'watch', anchor: 'why--watch' },
-            ],
-          ],
-        },
-      ];
       const expected = {
         cash: {
           folder: 'cash',
-          text: episodeLayersOf(['cash']),
-          title: { slug: 'hero', anchor: 'top', text: layerOf('cash', 'hero'), pool: false },
+          text: layerOf('cash'),
+          title: { slug: 'hero', anchor: 'top', text: layerOf('cash/slides/hero'), pool: false },
           sections: [
             [
-              { slug: 'why', anchor: 'why', text: layerOf('cash', 'why'), pool: false },
-              { slug: 'watch', anchor: 'why--watch', text: layerOf('cash', 'watch'), pool: false },
+              { slug: 'why', anchor: 'why', text: layerOf('cash/slides/why'), pool: false },
+              { slug: 'shared', anchor: 'why--shared', text: layerOf('slide-pool/shared'), pool: true },
             ],
           ],
         },
       };
       // ACT
-      const outlines = outlinesOf(episodes);
+      const outlines = outlinesOf([CASH]);
       // ASSERT
       expect(outlines).toEqual(expected);
     });
 
-    it("looks an Episode instance's Slides up in its own folder first, then in its Base Episode's", () => {
+    it('keeps the Base Episode an instance names', () => {
       // ARRANGE
-      const sections = [[{ slug: 'why', anchor: 'why' }]];
-      const episodes = [
-        { id: 'cash', folder: 'cash', sections },
-        { id: 'axel__cash', folder: 'by-event/axel/cash', base: 'cash', sections },
-      ];
-      const expected = [{ slug: 'why', anchor: 'why', text: layerOf('cash', 'why'), pool: false }];
+      const instance = { ...CASH, id: 'axel__cash', folder: 'by-event/axel/cash', base: 'cash' };
+      const expected = 'cash';
       // ACT
-      const outlines = outlinesOf(episodes, lastFolderHolding) as Record<string, { sections: unknown[] }>;
+      const outlines = outlinesOf([CASH, instance]);
       // ASSERT
-      expect(outlines['axel__cash'].sections[0]).toEqual(expected);
-    });
-
-    it("gives an Episode instance its Base Episode's Episode text layer first, then its own", () => {
-      // ARRANGE
-      const sections = [[{ slug: 'why', anchor: 'why' }]];
-      const episodes = [
-        { id: 'cash', folder: 'cash', sections },
-        { id: 'axel__cash', folder: 'by-event/axel/cash', base: 'cash', sections },
-      ];
-      const expected = episodeLayersOf(['by-event/axel/cash', 'cash']);
-      // ACT
-      const outlines = outlinesOf(episodes) as Record<string, { text: unknown }>;
-      // ASSERT
-      expect(outlines['axel__cash'].text).toEqual(expected);
+      expect(outlines['axel__cash']['base']).toBe(expected);
     });
 
     it('writes to the checked-in path the stale-file check compares', () => {
       // ARRANGE
       const expected = 'src/episodes/lib/episode-outlines.generated.json';
       // ACT
-      const { path } = episodeOutlinesFile([], textSourceOf, episodeLayersOf);
+      const { path } = episodeOutlinesFile([]);
       // ASSERT
       expect(path).toBe(expected);
     });
@@ -102,16 +68,14 @@ describe('success cases', () => {
 
 describe('failure cases', () => {
   describe('episodeOutlinesFile', () => {
-    it('lets the text source lookup refuse a Slide that has no i18n folder', () => {
+    it('refuses a Slide whose text the record traced to no file', () => {
       // ARRANGE
-      const episodes = [{ id: 'cash', folder: 'cash', sections: [[{ slug: 'ghost', anchor: 'ghost' }]] }];
-      const missing = () => {
-        throw new Error('ghost has no i18n folder');
-      };
+      const ghost = { ...CASH, sections: [[{ slug: 'ghost', anchor: 'ghost', text: { en: [], de: [] } }]] };
+      const expected = 'Slide "ghost" of cash has no text file';
       // ACT
-      const write = () => episodeOutlinesFile(episodes, missing, episodeLayersOf);
+      const write = () => episodeOutlinesFile([ghost]);
       // ASSERT
-      expect(write).toThrow(/ghost has no i18n folder/);
+      expect(write).toThrow(expected);
     });
   });
 });
@@ -120,14 +84,13 @@ describe('edge cases', () => {
   describe('episodeOutlinesFile', () => {
     it('lists Episodes in id order, so the file is stable, and leaves out a missing Title slide', () => {
       // ARRANGE
-      const section = [[{ slug: 'a', anchor: 'a' }]];
-      const episodes = [
-        { id: 'b', folder: 'b', sections: section },
-        { id: 'a', folder: 'a', sections: section },
-      ];
+      const { title: _title, ...untitled } = CASH;
       const expected = ['a', 'b'];
       // ACT
-      const outlines = outlinesOf(episodes) as Record<string, { title?: unknown }>;
+      const outlines = outlinesOf([
+        { ...untitled, id: 'b' },
+        { ...untitled, id: 'a' },
+      ]);
       // ASSERT
       expect(Object.keys(outlines)).toEqual(expected);
       expect(outlines['a']).not.toHaveProperty('title');

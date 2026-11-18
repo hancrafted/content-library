@@ -33,13 +33,15 @@ const TRIGGERS = [
   'raw-text-files.mts',
   'src/episodes/components/slide-shared/iceberg/scenery/*.module.css',
   'src/episodes/components/slide-shared/deep-sea-expedition/ship.module.css',
-  // What tools/codegen/registry.slow.test.ts reads: every Episode record, Section, i18n and override file, and the content store.
+  // What tools/codegen/registry.slow.test.ts reads: every Episode record, Section, i18n and override file, the content
+  // store and the generated files it compares byte for byte.
   'src/episodes/**/episode.ts',
   'src/episodes/**/episode-metadata.ts',
   'src/episodes/**/sections/*.ts',
   'src/episodes/**/i18n/*.json',
   'src/episodes/**/overrides/*.json',
   'src/content-store/**',
+  'src/**/*.generated.*',
   // The FE-013 and GEN-006 rules the archgate CLI tests copy into their fixture projects.
   '.archgate/config.json',
   '.archgate/adrs/FE-013-content-store.*',

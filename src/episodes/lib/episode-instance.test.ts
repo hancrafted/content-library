@@ -1,15 +1,31 @@
 import { describe, expect, it } from 'vitest';
-import { baseOf, instanceOf, overrideSlide } from './episode-instance';
-import { withoutSectionSlide, type SectionList } from './episode.pure';
+import { baseOf, instanceOf, instanceTrailOf } from './episode-instance';
+import type { SectionList } from './episode.pure';
 
-interface FakeSlide<S extends string = string, M extends object = object> {
-  readonly slug: S;
-  readonly messages: { readonly en: M; readonly de: M };
+interface WhyMessages {
+  readonly title: string;
+  readonly steps: { readonly one: string; readonly two: string };
+  readonly list: string[];
+}
+
+declare module './episode-instance' {
+  interface BaseSlideMessages {
+    'episode-instance-demo': {
+      readonly hero: { readonly en: { readonly goal: string }; readonly de: { readonly goal: string } };
+      readonly why: { readonly en: WhyMessages; readonly de: WhyMessages };
+      readonly price: { readonly en: { readonly title: string }; readonly de: { readonly title: string } };
+    };
+  }
+}
+
+interface FakeSlide {
+  readonly slug: string;
+  readonly messages: { readonly en: object; readonly de: object };
   readonly presentation?: { readonly tone?: 'inverse' };
 }
 
 interface FakeEpisode {
-  readonly slug: 'demo';
+  readonly slug: 'episode-instance-demo';
   readonly messages: {
     readonly en: { readonly title: string; readonly notes?: Readonly<Record<string, unknown>> };
     readonly de: { readonly title: string; readonly notes?: Readonly<Record<string, unknown>> };
@@ -19,45 +35,33 @@ interface FakeEpisode {
   readonly sections: readonly SectionList<FakeSlide>[];
 }
 
-function fake<const S extends string, M extends object>(slug: S, en: M, de: M): FakeSlide<S, M> {
-  return { slug, messages: { en, de } };
-}
-
-const HERO = fake('hero', { goal: 'Managing it' }, { goal: 'Es managen' });
-const WHY = fake(
-  'why',
-  { title: 'Why', steps: { one: 'One', two: 'Two' }, list: ['a', 'b'] },
-  {
-    title: 'Warum',
-    steps: { one: 'Eins', two: 'Zwei' },
-    list: ['x', 'y'],
+const HERO: FakeSlide = { slug: 'hero', messages: { en: { goal: 'Managing it' }, de: { goal: 'Es managen' } } };
+const WHY: FakeSlide = {
+  slug: 'why',
+  messages: {
+    en: { title: 'Why', steps: { one: 'One', two: 'Two' }, list: ['a', 'b'] },
+    de: { title: 'Warum', steps: { one: 'Eins', two: 'Zwei' }, list: ['x', 'y'] },
   },
-);
-const PRICE = fake('price', { title: 'Price' }, { title: 'Preis' });
-const LOOP = fake('loop', { title: 'Loop' }, { title: 'Schleife' });
-const HOW = fake('how', { title: 'How' }, { title: 'Wie' });
-const WATCH = fake('watch', { title: 'Watch' }, { title: 'Schauen' });
+};
+const PRICE: FakeSlide = { slug: 'price', messages: { en: { title: 'Price' }, de: { title: 'Preis' } } };
 
 const BASE: FakeEpisode = {
-  slug: 'demo',
+  slug: 'episode-instance-demo',
   messages: { en: { title: 'Demo' }, de: { title: 'Demo-de' } },
   title: HERO,
-  sections: [
-    [WHY, PRICE, LOOP],
-    [HOW, WATCH],
-  ],
+  sections: [[WHY, PRICE]],
 };
 
-const slugsOf = (record: FakeEpisode) => record.sections.map((section) => section.map(({ slug }) => slug));
-
 describe('success cases', () => {
-  it('resolves an instance with no Episode override into a record equal to its Base Episode', () => {
+  it('overrides a Slide by its slug, typed from the generated map, without importing the Slide', () => {
     // ARRANGE
-    const expected = BASE;
+    const expected = { title: 'Why', steps: { one: 'First', two: 'Two' }, list: ['only'] };
     // ACT
-    const instance = instanceOf(BASE, {});
+    const instance = instanceOf(BASE, {
+      slides: { why: { messages: { en: { steps: { one: 'First' }, list: ['only'] } } } },
+    });
     // ASSERT
-    expect(instance).toEqual(expected);
+    expect(instance.sections[0][0].messages.en).toEqual(expected);
   });
 
   it('remembers the Base Episode an instance resolves from, through every layer', () => {
@@ -70,179 +74,86 @@ describe('success cases', () => {
     expect(baseOf(first)).toBe(BASE);
   });
 
-  it('merges a Slide text override into its locale: objects by key, arrays whole, the other locale untouched', () => {
+  it('keeps the layers of every instanceOf call in order, so tools trace each text to its file', () => {
     // ARRANGE
-    const expected = {
-      en: { title: 'Why', steps: { one: 'First', two: 'Two' }, list: ['only'] },
-      de: WHY.messages.de,
-    };
+    const outer = { title: { messages: { en: { title: 'Outer' } } } };
+    const inner = { slides: { price: { messages: { de: { title: 'Innen' } } } } };
     // ACT
-    const instance = instanceOf(BASE, {
-      slides: [overrideSlide(WHY, { messages: { en: { steps: { one: 'First' }, list: ['only'] } } })],
-    });
+    const trail = instanceTrailOf(instanceOf(instanceOf(BASE, inner), outer));
     // ASSERT
-    expect(instance.sections[0][0].messages).toEqual(expected);
-  });
-
-  it('overrides the Title slide and replaces a Slide presentation', () => {
-    // ARRANGE
-    const expected = {
-      hero: { en: { goal: 'Manage' }, de: HERO.messages.de },
-      presentation: { tone: 'inverse' },
-    };
-    // ACT
-    const instance = instanceOf(BASE, {
-      slides: [
-        overrideSlide(HERO, { messages: { en: { goal: 'Manage' } } }),
-        overrideSlide(PRICE, { presentation: { tone: 'inverse' } }),
-      ],
-    });
-    // ASSERT
-    expect({ hero: instance.title?.messages, presentation: instance.sections[0][1].presentation }).toEqual(expected);
-  });
-
-  it('gives the Title notes and merges their text into the Episode text', () => {
-    // ARRANGE
-    const notes = [{ slug: 'check-in', target: 'title' }];
-    const expected = {
-      notes,
-      messages: {
-        en: { title: 'Demo', notes: { 'check-in': { header: 'Check-in' } } },
-        de: { title: 'Demo-de', notes: { 'check-in': { header: 'Check-in-de' } } },
-      },
-    };
-    // ACT
-    const instance = instanceOf(BASE, {
-      title: {
-        notes,
-        messages: {
-          en: { notes: { 'check-in': { header: 'Check-in' } } },
-          de: { notes: { 'check-in': { header: 'Check-in-de' } } },
-        },
-      },
-    });
-    // ASSERT
-    expect({ notes: instance.notes, messages: instance.messages }).toEqual(expected);
-  });
-
-  it('moves, hides and inserts Slides by slug, so the base keeps reaching the instance', () => {
-    // ARRANGE
-    const added = fake('added', { title: 'Added' }, { title: 'Neu' });
-    const expected = [
-      ['why', 'loop', 'price'],
-      ['how', 'added'],
-    ];
-    // ACT
-    const instance = instanceOf(BASE, {
-      sections: [{ move: PRICE, after: LOOP }, { hide: WATCH }, { insert: added, after: HOW }],
-    });
-    // ASSERT
-    expect(slugsOf(instance)).toEqual(expected);
-  });
-
-  it('applies layers in order, a later layer over an earlier one', () => {
-    // ARRANGE
-    const expected = { title: 'Last', steps: { one: 'One', two: 'Two' }, list: ['a', 'b'] };
-    // ACT
-    const instance = instanceOf(
-      BASE,
-      { slides: [overrideSlide(WHY, { messages: { en: { title: 'First' } } })] },
-      { slides: [overrideSlide(WHY, { messages: { en: { title: 'Last' } } })] },
-    );
-    // ASSERT
-    expect(instance.sections[0][0].messages.en).toEqual(expected);
+    expect(trail?.base).toBe(BASE);
+    expect(trail?.layers).toEqual([inner, outer]);
   });
 });
 
 describe('failure cases', () => {
-  it('refuses an Episode override for a Slide its base does not compose', () => {
+  it('makes an unknown slug, an unknown key, an unknown nested key and a value of another type compile errors', () => {
     // ARRANGE
-    const stray = fake('stray', { title: 'Stray' }, { title: 'Streuner' });
-    const expected = 'Slide "stray" is not in the Base Episode "demo"';
+    const expected = 'Slide "stray" is not in the Base Episode "episode-instance-demo"';
     // ACT
-    const resolve = () => instanceOf(BASE, { slides: [overrideSlide(stray, { messages: { en: { title: 'x' } } })] });
-    // ASSERT
-    expect(resolve).toThrow(expected);
-  });
-
-  it('refuses a Section operation naming a Slide its base does not compose', () => {
-    // ARRANGE
-    const stray = fake('stray', { title: 'Stray' }, { title: 'Streuner' });
-    const expected = 'Slide "stray" is not in the Base Episode "demo"';
-    // ACT
-    const resolve = () => instanceOf(BASE, { sections: [{ move: stray, after: WHY }] });
-    // ASSERT
-    expect(resolve).toThrow(expected);
-  });
-
-  it('refuses to move a section slide, which names its Section and its anchors', () => {
-    // ARRANGE
-    const expected = 'Slide "how" opens a Section: hide the Section instead of moving it';
-    // ACT
-    const resolve = () => instanceOf(BASE, { sections: [{ move: HOW, after: LOOP }] });
-    // ASSERT
-    expect(resolve).toThrow(expected);
-  });
-
-  it('refuses to insert a Slide whose slug the Episode already composes', () => {
-    // ARRANGE
-    const expected = 'Slide "watch" is already in the Base Episode "demo"';
-    // ACT
-    const resolve = () => instanceOf(BASE, { sections: [{ insert: WATCH, after: WHY }] });
-    // ASSERT
-    expect(resolve).toThrow(expected);
-  });
-
-  it('makes an unknown key, an unknown nested key, an imported partial with an unknown key and a value of another type compile errors', () => {
-    // ARRANGE
-    const renamed = { titel: 'Typo' };
-    const expected = ['why', 'why', 'why', 'why'];
-    // ACT
-    const overrides = [
+    const resolve = () =>
+      instanceOf(BASE, {
+        slides: {
+          // @ts-expect-error
+          stray: { messages: { en: { title: 'x' } } },
+        },
+      });
+    const typed = () => [
       // @ts-expect-error
-      overrideSlide(WHY, { messages: { en: { heading: 'Typo' } } }),
+      instanceOf(BASE, { slides: { why: { messages: { en: { heading: 'Typo' } } } } }),
       // @ts-expect-error
-      overrideSlide(WHY, { messages: { de: { steps: { three: 'Drei' } } } }),
+      instanceOf(BASE, { slides: { why: { messages: { de: { steps: { three: 'Drei' } } } } } }),
       // @ts-expect-error
-      overrideSlide(WHY, { messages: { en: renamed } }),
-      // @ts-expect-error
-      overrideSlide(WHY, { messages: { en: { list: 'not an array' } } }),
+      instanceOf(BASE, { slides: { why: { messages: { en: { list: 'not an array' } } } } }),
     ];
     // ASSERT
-    expect(overrides.map(({ slug }) => slug)).toEqual(expected);
+    expect(resolve).toThrow(expected);
+    expect(typed).toBeTypeOf('function');
+  });
+
+  it('makes an imported partial with an unknown key a compile error, for a Slide and for the Title text', () => {
+    // ARRANGE
+    const renamed = { titel: 'Typo' };
+    const expected = 'function';
+    // ACT
+    const typed = () => [
+      // @ts-expect-error
+      instanceOf(BASE, { slides: { price: { messages: { en: renamed } } } }),
+      // @ts-expect-error
+      instanceOf(BASE, { title: { messages: { de: renamed } } }),
+    ];
+    // ASSERT
+    expect(typed).toBeTypeOf(expected);
+  });
+
+  it('makes a Section operation naming a slug the base does not compose a compile error', () => {
+    // ARRANGE
+    const expected = 'Slide "typo" is not in the Base Episode "episode-instance-demo"';
+    // ACT
+    const resolve = () =>
+      // @ts-expect-error
+      instanceOf(BASE, { sections: [{ hide: 'typo' }] });
+    // ASSERT
+    expect(resolve).toThrow(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('keeps a Section without a section slide flagged as one through every operation', () => {
+  it('overrides the Title slide by its slug, the same way as a Section Slide', () => {
     // ARRANGE
-    const flagged: FakeEpisode = { ...BASE, sections: [withoutSectionSlide([WHY, PRICE, LOOP])] };
-    const expected = false;
+    const expected = { en: { goal: 'Manage' }, de: HERO.messages.de };
     // ACT
-    const instance = instanceOf(flagged, { sections: [{ move: PRICE, after: LOOP }] });
+    const instance = instanceOf(BASE, { slides: { hero: { messages: { en: { goal: 'Manage' } } } } });
     // ASSERT
-    expect(instance.sections[0].sectionSlide).toBe(expected);
+    expect(instance.title?.messages).toEqual(expected);
   });
 
-  it('hides a whole Section when the hidden Slide is its section slide', () => {
+  it('gives a record that is no instance no trail', () => {
     // ARRANGE
-    const expected = [['why', 'price', 'loop']];
+    const expected = undefined;
     // ACT
-    const instance = instanceOf(BASE, { sections: [{ hide: HOW }] });
+    const trail = instanceTrailOf(BASE);
     // ASSERT
-    expect(slugsOf(instance)).toEqual(expected);
-  });
-
-  it('leaves the Base Episode and its Slides unchanged', () => {
-    // ARRANGE
-    const before = structuredClone({ messages: BASE.messages, sections: slugsOf(BASE), why: WHY.messages });
-    // ACT
-    instanceOf(BASE, {
-      title: { messages: { en: { title: 'Changed' } } },
-      slides: [overrideSlide(WHY, { messages: { en: { title: 'Changed' } } })],
-      sections: [{ hide: WATCH }],
-    });
-    // ASSERT
-    expect({ messages: BASE.messages, sections: slugsOf(BASE), why: WHY.messages }).toEqual(before);
+    expect(trail).toBe(expected);
   });
 });
