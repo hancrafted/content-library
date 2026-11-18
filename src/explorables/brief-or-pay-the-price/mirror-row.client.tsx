@@ -3,10 +3,10 @@
 import { cn } from '@/shared/lib/utils';
 import { memo, type MouseEvent, type PointerEvent } from 'react';
 import type { Definition, ViewId } from './brief-or-pay-the-price.types';
+import { useFlip } from './chip-flip.client';
 import type { RowRead, Side, Target } from './explorable-state.pure';
 import { Card, type SceneLabels } from './mirror-card.client';
 import styles from './mirror.module.css';
-import { MorphText } from './morph-text.client';
 
 export interface MirrorHandlers {
   readonly onOpen: (target: Target) => void;
@@ -52,30 +52,25 @@ function accessibleName({ words }: RowView): string {
   return `${name}: ${words.short}`;
 }
 
-function ChipFace({ row, index }: { readonly row: RowView; readonly index: number }) {
+function ChipFace({ row }: { readonly row: RowView }) {
   const { words } = row;
   return (
     <>
-      <span data-trait-initial translate="no" className="text-heading leading-none font-semibold">
-        <MorphText text={row.letter} index={index} />
+      <span data-trait-initial translate="no" className="text-subheading leading-none font-semibold">
+        {row.letter}
       </span>
-      <span translate="no" className="text-center text-caption leading-tight text-balance text-primary-foreground/80">
-        <MorphText text={words.name} index={index} />
+      <span
+        translate="no"
+        className="flex h-9 items-center justify-center text-center text-caption leading-tight text-balance text-primary-foreground/80"
+      >
+        <span className="line-clamp-2">{words.name}</span>
       </span>
-      {words.gloss === '' ? null : (
-        <span
-          data-trait-gloss
-          className="text-center text-caption leading-tight text-balance text-primary-foreground/70"
-        >
-          {words.gloss}
-        </span>
-      )}
     </>
   );
 }
 
 const CHIP =
-  'flex w-44 touch-manipulation flex-col items-center gap-1 rounded-full bg-primary px-4 py-2 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
+  'flex h-24 w-48 touch-manipulation flex-col items-center justify-center rounded-full bg-primary px-4 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
 interface RowProps {
   readonly definitionId: ViewId;
@@ -87,17 +82,19 @@ interface RowProps {
 }
 
 function ChipTrack({ row, index, read, handlers }: Omit<RowProps, 'labels'>) {
+  const { ref, shown } = useFlip(row, index);
   return (
-    <div className="flex items-center justify-center gap-1 @3xl:order-2 @3xl:w-60 @3xl:shrink-0">
+    <div data-chip-track className="flex items-center justify-center gap-1 @3xl:order-2 @3xl:w-64 @3xl:shrink-0">
       <Arrow toAi={false} />
       <button
+        ref={ref}
         type="button"
         aria-expanded={read.shown}
         aria-label={accessibleName(row)}
         {...controlHandlers(index, handlers)}
         className={cn(styles.chip, CHIP)}
       >
-        <ChipFace row={row} index={index} />
+        <ChipFace row={shown} />
       </button>
       <Arrow toAi />
     </div>

@@ -68,8 +68,8 @@ function Scene({ id, ...props }: SceneProps & { readonly id: SceneKey }) {
   return SCENES[id](props);
 }
 
-const TEXT = 'flex items-center rounded-2xl px-6 py-4 text-body';
-const BEAT = 'flex items-center justify-between gap-4 rounded-2xl px-5 py-3';
+const TEXT = 'flex h-24 items-center rounded-2xl px-6 py-3 text-caption';
+const BEAT = 'flex h-24 items-center justify-between gap-4 rounded-2xl px-5 py-3';
 const FREELANCER_SURFACE = 'border border-border bg-card';
 const AI_SURFACE = 'border border-ai/40 bg-linear-to-l from-ai/10 to-card shadow-sm shadow-ai/20';
 

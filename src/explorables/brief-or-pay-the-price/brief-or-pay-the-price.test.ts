@@ -52,7 +52,7 @@ describe('success cases', () => {
     for (const text of expected) expect(html).toContain(text);
   });
 
-  it('keeps each trait name English in German and shows its gloss below, on the chip and in its accessible name', () => {
+  it('keeps each trait name English in German, with its gloss in the chip accessible name only', () => {
     // ARRANGE
     const html = render('de');
     const expected = [
@@ -64,10 +64,9 @@ describe('success cases', () => {
     ];
     // ACT
     const names = [...html.matchAll(/aria-expanded="false" aria-label="([^"]+)"/g)].map(([, name]) => name);
-    const glosses = [...html.matchAll(/data-trait-gloss[^>]*>([^<]+)</g)].map(([, gloss]) => gloss);
     // ASSERT
     expect(names).toEqual(expected);
-    expect(glosses).toEqual(['probabilistisch', 'unermüdlich', 'informiert', 'selbstsicher', 'jedes Wort berechnet']);
+    expect(html).not.toContain('data-trait-gloss');
   });
 
   it('shows no gloss in English, and names each chip by its trait and its short line', () => {
@@ -91,7 +90,7 @@ describe('success cases', () => {
     ];
     // ACT
     const html = render('en');
-    const tabs = [...html.matchAll(/aria-pressed="(true|false)"[^>]*data-view-go="([a-z]+)"[^>]*>([^<]+)</g)].map(
+    const tabs = [...html.matchAll(/aria-checked="(true|false)"[^>]*data-view-go="([a-z]+)"[^>]*>([^<]+)</g)].map(
       ([, pressed, view, label]) => [view, pressed, label],
     );
     // ASSERT

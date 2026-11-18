@@ -22,8 +22,6 @@ function level(locale: 'en' | 'de', events: readonly ExplorableEvent[]) {
     data,
     state,
     actions: {
-      onShowAll: none,
-      onReset: none,
       onWorkflow: none,
       onCloseCell: none,
       onCell: none,

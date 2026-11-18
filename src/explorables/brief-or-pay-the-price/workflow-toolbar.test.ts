@@ -17,7 +17,7 @@ const render = (scenarios: { id: string; name: string }[], events: ExplorableEve
         state: events.reduce(step, start({ price: 5, brief: 5, brace: 5 }, 'drive')),
         scenarios,
         controls,
-        title: '',
+        titles: { agent: '', workflow: '' },
         onView: () => undefined,
         onScenario: () => undefined,
         onZoom: () => undefined,
@@ -36,10 +36,10 @@ describe('success cases', () => {
     // ARRANGE
     const $ = render(TWO, [WORKFLOW]);
     // ACT
-    const buttons = $('[data-tools] [data-scenario-go]');
+    const buttons = $('[role="toolbar"] [data-scenario-go]');
     // ASSERT
     expect(buttons.toArray().map((el) => $(el).attr('data-scenario-go'))).toEqual(['drive', 'other']);
-    expect($('[data-scenario-go][aria-pressed="true"]').attr('data-scenario-go')).toBe('drive');
+    expect($('[data-scenario-go][aria-checked="true"]').attr('data-scenario-go')).toBe('drive');
   });
 });
 

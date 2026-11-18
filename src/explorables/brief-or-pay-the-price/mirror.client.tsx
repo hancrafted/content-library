@@ -30,6 +30,7 @@ function fadeOutCopy(root: HTMLElement, { copy }: Frozen) {
   copy.setAttribute('inert', '');
   copy.setAttribute('data-ghost', '');
   copy.removeAttribute('data-mirror');
+  copy.querySelectorAll<HTMLElement>('[data-chip-track]').forEach((track) => (track.style.visibility = 'hidden'));
   copy.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
   root.append(copy);
   const animation = copy.animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE_MILLISECONDS, fill: 'forwards' });
