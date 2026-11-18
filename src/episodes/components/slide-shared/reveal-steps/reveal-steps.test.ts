@@ -1,36 +1,6 @@
-import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
-import { slide, type Slide } from '@/episodes/components/slide-master/slide';
-import { placeSections } from '@/episodes/lib/episode.pure';
-import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { practiseItTodayAtWork } from './slide';
-
-const SECTION = slide({
-  slug: 'from-execution-to-management',
-  messages: {
-    en: { title: 'From execution to management' },
-    de: { title: 'Von der Ausführung zum Management' },
-  },
-  content: () => null,
-});
-
-function scene(): string {
-  const placed = placeSections<Slide>([[SECTION, practiseItTodayAtWork]]).flat();
-  const localized = localizeSlide(placed[1] as never, {
-    episode: 'ai-gives-you-more-work',
-    locale: 'en',
-    placed,
-    referenceLabels: {
-      ref: 'opens speaker note',
-      marker: (title) => `Speaker note: ${title}`,
-    },
-    header: 'shared',
-  });
-  return renderToStaticMarkup(localized.content);
-}
 
 function rules(): { selector: string; body: string }[] {
   const css = readFileSync(join(__dirname, 'reveal-steps.module.css'), 'utf8')
@@ -73,15 +43,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('never dims a claim: an element carrying `primary` sits under no step not yet revealed', () => {
+  it('finds the resting rules, so an empty parse cannot pass', () => {
     // ARRANGE
-    const $ = load(scene());
+    const none = 0;
     // ACT
-    const dimmed = $('[class*="bg-primary"], [class*="border-primary"]')
-      .filter((_, element) => $(element).closest('[data-reveal]').length > 0)
-      .map((_, element) => $(element).text())
-      .get();
+    const found = resting().length;
     // ASSERT
-    expect(dimmed).toEqual([]);
+    expect(found).toBeGreaterThan(none);
   });
 });

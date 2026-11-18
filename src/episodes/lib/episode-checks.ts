@@ -107,6 +107,37 @@ export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntri
   return { slides, folder: [...folder, codeFolders, ...pageChecks(dir, page)] };
 }
 
-export function slidePoolChecks(dir: string, entries: GlobEntries): EpisodeChecks {
-  return slideFolderChecks(dir, '', entries);
+const MIN_BASE_EPISODES = 2;
+
+interface ComposedSections {
+  sections: readonly (readonly { slug: string }[])[];
+}
+
+// decision: FE-004 §7
+function sharedCheck(dir: string, bases: GlobEntries): NamedCheck {
+  return {
+    name: `composes every pool Slide in ${MIN_BASE_EPISODES} or more Base Episodes, so a Slide one Episode uses lives in it`,
+    findings: async () => {
+      const pooled = subfolders(dir);
+      if (pooled.length === 0) return [];
+      const composed = await Promise.all(
+        Object.values(bases).map(async (load) =>
+          exportsCarrying<ComposedSections>(await load(), ['sections']).flatMap(({ sections }) =>
+            sections.flat().map(({ slug }) => slug),
+          ),
+        ),
+      );
+      return pooled.flatMap((slug) => {
+        const count = composed.filter((slugs) => slugs.includes(slug)).length;
+        return count >= MIN_BASE_EPISODES
+          ? []
+          : [`${slug} is composed by ${count} Base Episode(s): move it into its Episode, or compose it twice`];
+      });
+    },
+  };
+}
+
+export function slidePoolChecks(dir: string, entries: GlobEntries, bases: GlobEntries = {}): EpisodeChecks {
+  const { slides, folder } = slideFolderChecks(dir, '', entries);
+  return { slides, folder: [...folder, sharedCheck(dir, bases)] };
 }

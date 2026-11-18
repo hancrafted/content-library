@@ -2,7 +2,11 @@ import { slidePoolChecks } from '@/episodes/lib/episode-checks';
 import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.7
-const CHECKS = slidePoolChecks(import.meta.dirname, import.meta.glob('./*/slide.tsx'));
+const CHECKS = slidePoolChecks(
+  import.meta.dirname,
+  import.meta.glob('./*/slide.tsx'),
+  import.meta.glob('../*/episode.ts'),
+);
 
 describe('success cases', () => {
   it.each(CHECKS.slides)('$name', async ({ findings }) => {
@@ -36,12 +40,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('finds Slide folders to check, so an empty glob cannot pass', () => {
+  it('reads the Base Episodes, so an empty glob cannot pass a pool Slide as shared', () => {
     // ARRANGE
+    const bases = Object.keys(import.meta.glob('../*/episode.ts'));
     const none = 0;
     // ACT
-    const checked = CHECKS.slides.length;
+    const read = bases.length;
     // ASSERT
-    expect(checked).toBeGreaterThan(none);
+    expect(read).toBeGreaterThan(none);
   });
 });

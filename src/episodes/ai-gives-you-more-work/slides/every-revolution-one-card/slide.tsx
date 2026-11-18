@@ -1,10 +1,10 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { RevealSteps } from '@/episodes/components/slide-shared/reveal-steps/reveal-steps.client';
 import { Exhibit } from './exhibit';
 import { Fork } from './fork';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { RevealSteps } from './reveal-steps.client';
 
 const SOURCES = {
   jevons: { slug: 'jevons-coal-question', url: 'https://www.econlib.org/library/YPDBooks/Jevons/jvnCQ.html' },
