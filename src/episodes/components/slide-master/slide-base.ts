@@ -41,6 +41,8 @@ export interface RuntimeTranslator {
   has(key: string): boolean;
 }
 
+export type KitTargetProps = TargetProps & { readonly hidden?: true };
+
 export interface RuntimeKit {
   readonly t: RuntimeTranslator;
   readonly locale: Locale;
@@ -49,6 +51,7 @@ export interface RuntimeKit {
   readonly ref: (note: string) => RichTag;
   readonly marker: (note: string, className?: string) => RichTag;
   readonly Marker: MarkerComponent;
-  readonly target: (name: string) => TargetProps;
+  readonly target: (name: string) => KitTargetProps;
+  readonly explorables: Readonly<Record<string, string>>;
   readonly Title: TitleComponent;
 }

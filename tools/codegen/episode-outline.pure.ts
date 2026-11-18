@@ -12,6 +12,8 @@ export interface TracedSlide {
   readonly slug: string;
   readonly anchor: string;
   readonly text: TextLayers;
+  readonly targets?: readonly string[];
+  readonly explorables?: readonly string[];
 }
 
 export interface OutlineSlide extends TracedSlide {
@@ -38,7 +40,8 @@ export interface OutlineEntry {
 function pooled(id: string, slide: TracedSlide): OutlineSlide {
   const home = Object.values(slide.text)[0]?.[0];
   if (typeof home !== 'string') throw new Error(`Slide "${slide.slug}" of ${id} has no text file`);
-  return { slug: slide.slug, anchor: slide.anchor, pool: home.startsWith(POOL_PREFIX), text: slide.text };
+  const { slug, anchor, text, ...addresses } = slide;
+  return { slug, anchor, pool: home.startsWith(POOL_PREFIX), text, ...addresses };
 }
 
 function entryOf({ id, folder, base, text, title, sections }: OutlineInput): OutlineEntry {

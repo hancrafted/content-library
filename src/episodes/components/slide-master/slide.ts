@@ -1,9 +1,10 @@
 import { withoutSectionSlide as markWithoutSectionSlide, type SectionList } from '@/episodes/lib/episode.pure';
-import type { TargetProps } from '@/shared/lib/context-link.pure';
+import type { ExplorablePresetsOf, ExplorablesDeclaration } from '@/episodes/lib/explorable-presets';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {
+  KitTargetProps,
   MarkerComponent,
   NoteSpec,
   PerLocale,
@@ -26,7 +27,11 @@ export type OwnTemplateKey<M> = MessageKeys<M, NestedKeyOf<M>>;
 
 export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTranslator<M>>;
 
-export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
+export interface OwnSlideKit<
+  M extends SlideMessages,
+  N extends NoteSpec,
+  E extends ExplorablesDeclaration = Record<never, never>,
+> {
   readonly t: OwnTranslator<M>;
   readonly locale: Locale;
   readonly slideHref: (slug: string) => string;
@@ -34,7 +39,8 @@ export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly ref: (note: N['slug']) => RichTag;
   readonly marker: (note: N['slug'], className?: string) => RichTag;
   readonly Marker: MarkerComponent<N['slug']>;
-  readonly target: (name: N['target']) => TargetProps;
+  readonly target: (name: N['target']) => KitTargetProps;
+  readonly explorables: ExplorablePresetsOf<E>;
   readonly Title: TitleComponent;
 }
 
@@ -44,6 +50,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly messages: PerLocale<M>;
   readonly notes: readonly NoteSpec[];
   readonly segments: readonly SegmentSpec[];
+  readonly explorables?: Readonly<Record<string, string>>;
+  readonly hidden?: readonly string[];
   readonly captionNote?: string;
   readonly captionNotes?: readonly string[];
   readonly headerAction?: (kit: RuntimeKit) => ReactNode;
@@ -52,16 +60,22 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
 
 export type TitledSlide = Slide<string, { readonly title: string }>;
 
-export interface OwnSlideSpec<S extends string, M extends SlideMessages, N extends NoteSpec> {
+export interface OwnSlideSpec<
+  S extends string,
+  M extends SlideMessages,
+  N extends NoteSpec,
+  E extends ExplorablesDeclaration = Record<never, never>,
+> {
   readonly presentation?: SlidePresentation;
   readonly slug: S;
   readonly messages: { readonly en: M; readonly de: NoInfer<M> };
   readonly notes?: readonly N[];
+  readonly explorables?: E;
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   readonly captionNote?: N['slug'];
   readonly captionNotes?: readonly N['slug'][];
-  readonly headerAction?: (kit: OwnSlideKit<M, N>) => ReactNode;
-  readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
+  readonly headerAction?: (kit: OwnSlideKit<M, N, E>) => ReactNode;
+  readonly content: (kit: OwnSlideKit<M, N, E>) => ReactNode;
 }
 
 function captionOf(spec: {
@@ -80,12 +94,14 @@ export function slide<
   const S extends string,
   M extends SlideMessages,
   const N extends NoteSpec<OwnNoteSlug<M>> = never,
->(spec: OwnSlideSpec<S, M, N>): Slide<S, M> {
+  const E extends ExplorablesDeclaration = Record<never, never>,
+>(spec: OwnSlideSpec<S, M, N, E>): Slide<S, M> {
   return {
     ...(spec.presentation && { presentation: spec.presentation }),
     slug: spec.slug,
     messages: spec.messages,
     notes: spec.notes ?? [],
+    ...(spec.explorables !== undefined && { explorables: spec.explorables }),
     segments: spec.segments ?? [],
     ...captionOf(spec),
     ...(spec.headerAction !== undefined && {

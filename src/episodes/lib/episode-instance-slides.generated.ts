@@ -182,10 +182,12 @@ declare module './episode-instance' {
       readonly 'the-long-phone-call-story': {
         readonly en: typeof aiAttentionSpan__theLongPhoneCallStory__en;
         readonly de: typeof aiAttentionSpan__theLongPhoneCallStory__de;
+        readonly targets: 'middle' | 'start' | 'end' | 'standout' | 'lab-note';
       };
       readonly 'ai-forgets-the-middle-too': {
         readonly en: typeof aiAttentionSpan__aiForgetsTheMiddleToo__en;
         readonly de: typeof aiAttentionSpan__aiForgetsTheMiddleToo__de;
+        readonly targets: 'middle' | 'start' | 'end' | 'study-note';
       };
       readonly 'the-ais-attention-span': {
         readonly en: typeof aiAttentionSpan__theAisAttentionSpan__en;
@@ -194,18 +196,22 @@ declare module './episode-instance' {
       readonly 'the-context-window': {
         readonly en: typeof aiAttentionSpan__theContextWindow__en;
         readonly de: typeof aiAttentionSpan__theContextWindow__de;
+        readonly targets: 'resend' | 'limit' | 'apps';
       };
       readonly 'what-happens-when-the-bar-fills-up': {
         readonly en: typeof aiAttentionSpan__whatHappensWhenTheBarFillsUp__en;
         readonly de: typeof aiAttentionSpan__whatHappensWhenTheBarFillsUp__de;
+        readonly targets: 'caption' | 'reason' | 'first';
       };
       readonly 'attention-is-a-budget': {
         readonly en: typeof aiAttentionSpan__attentionIsABudget__en;
         readonly de: typeof aiAttentionSpan__attentionIsABudget__de;
+        readonly targets: 'attention' | 'lost' | 'zones';
       };
       readonly 'what-we-learned-so-far': {
         readonly en: typeof aiAttentionSpan__whatWeLearnedSoFar__en;
         readonly de: typeof aiAttentionSpan__whatWeLearnedSoFar__de;
+        readonly targets: 'same';
       };
       readonly 'what-fills-the-window': {
         readonly en: typeof aiAttentionSpan__whatFillsTheWindow__en;
@@ -214,14 +220,17 @@ declare module './episode-instance' {
       readonly 'whats-really-in-the-window': {
         readonly en: typeof aiAttentionSpan__whatsReallyInTheWindow__en;
         readonly de: typeof aiAttentionSpan__whatsReallyInTheWindow__de;
+        readonly targets: 'memory' | 'start' | 'named';
       };
       readonly 'one-innocent-question': {
         readonly en: typeof aiAttentionSpan__oneInnocentQuestion__en;
         readonly de: typeof aiAttentionSpan__oneInnocentQuestion__de;
+        readonly targets: 'card' | 'sizes' | 'illustrative';
       };
       readonly 'you-cant-watch-the-meter': {
         readonly en: typeof aiAttentionSpan__youCantWatchTheMeter__en;
         readonly de: typeof aiAttentionSpan__youCantWatchTheMeter__de;
+        readonly targets: 'after' | 'footer' | 'chat';
       };
       readonly 'managing-the-attention-span': {
         readonly en: typeof aiAttentionSpan__managingTheAttentionSpan__en;
@@ -230,14 +239,17 @@ declare module './episode-instance' {
       readonly 'everyday-habits': {
         readonly en: typeof aiAttentionSpan__everydayHabits__en;
         readonly de: typeof aiAttentionSpan__everydayHabits__de;
+        readonly targets: 'habit-next-chat' | 'habit-one-chat' | 'habit-handoff';
       };
       readonly 'the-workflow-for-bigger-projects': {
         readonly en: typeof aiAttentionSpan__theWorkflowForBiggerProjects__en;
         readonly de: typeof aiAttentionSpan__theWorkflowForBiggerProjects__de;
+        readonly targets: 'after' | 'after-note';
       };
       readonly 'human-in-the-loop-workflow': {
         readonly en: typeof aiAttentionSpan__humanInTheLoopWorkflow__en;
         readonly de: typeof aiAttentionSpan__humanInTheLoopWorkflow__de;
+        readonly targets: 'workers' | 'loop-note';
       };
       readonly 'now-you-know-how-it-feels': {
         readonly en: typeof aiAttentionSpan__nowYouKnowHowItFeels__en;
@@ -256,14 +268,17 @@ declare module './episode-instance' {
       readonly 'every-revolution-one-card': {
         readonly en: typeof aiGivesYouMoreWork__everyRevolutionOneCard__en;
         readonly de: typeof aiGivesYouMoreWork__everyRevolutionOneCard__de;
+        readonly targets: 'caption' | 'lifted-people' | 'farming' | 'steam-fork' | 'ai';
       };
       readonly 'you-were-promoted': {
         readonly en: typeof aiGivesYouMoreWork__youWerePromoted__en;
         readonly de: typeof aiGivesYouMoreWork__youWerePromoted__de;
+        readonly targets: 'gap' | 'caption' | 'first-stone' | 'stones';
       };
       readonly 'practise-it-today-at-work': {
         readonly en: typeof aiGivesYouMoreWork__practiseItTodayAtWork__en;
         readonly de: typeof aiGivesYouMoreWork__practiseItTodayAtWork__de;
+        readonly targets: 'exhibits' | 'onboard' | 'closing' | 'chunks';
       };
     };
     readonly 'onboard-ai-every-time': {
@@ -278,10 +293,12 @@ declare module './episode-instance' {
       readonly 'you-are-the-new-hire': {
         readonly en: typeof onboardAiEveryTime__youAreTheNewHire__en;
         readonly de: typeof onboardAiEveryTime__youAreTheNewHire__de;
+        readonly targets: 'hidden' | 'handover';
       };
       readonly 'pay-the-price': {
         readonly en: typeof onboardAiEveryTime__payThePrice__en;
         readonly de: typeof onboardAiEveryTime__payThePrice__de;
+        readonly targets: 'relentless' | 'probabilistic' | 'every-word-billed' | 'confident' | 'informed' | 'closing';
       };
       readonly 'one-prompt': {
         readonly en: typeof onboardAiEveryTime__onePrompt__en;
@@ -294,10 +311,17 @@ declare module './episode-instance' {
       readonly 'first-human-in-the-loop-agentic-workflow': {
         readonly en: typeof onboardAiEveryTime__firstHumanInTheLoopAgenticWorkflow__en;
         readonly de: typeof onboardAiEveryTime__firstHumanInTheLoopAgenticWorkflow__de;
+        readonly targets: 'requirements' | 'interview' | 'research' | 'caption' | 'page';
       };
       readonly 'manage-the-price': {
         readonly en: typeof onboardAiEveryTime__manageThePrice__en;
         readonly de: typeof onboardAiEveryTime__manageThePrice__de;
+        readonly targets:
+          | 'break-it-down'
+          | 'requirements-first'
+          | 'interview-yourself-with-ai'
+          | 'evaluate-each-step'
+          | 'fresh-start-for-each-piece';
       };
     };
     readonly 'what-agentic-workflows-require': {
@@ -312,10 +336,12 @@ declare module './episode-instance' {
       readonly 'the-thought-experiment': {
         readonly en: typeof whatAgenticWorkflowsRequire__theThoughtExperiment__en;
         readonly de: typeof whatAgenticWorkflowsRequire__theThoughtExperiment__de;
+        readonly targets: 'board';
       };
       readonly 'now-with-agents': {
         readonly en: typeof whatAgenticWorkflowsRequire__nowWithAgents__en;
         readonly de: typeof whatAgenticWorkflowsRequire__nowWithAgents__de;
+        readonly targets: 'context';
       };
       readonly 'what-an-agentic-workflow-is': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatAnAgenticWorkflowIs__en;
@@ -324,10 +350,12 @@ declare module './episode-instance' {
       readonly 'what-an-agent-is': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatAnAgentIs__en;
         readonly de: typeof whatAgenticWorkflowsRequire__whatAnAgentIs__de;
+        readonly targets: 'agents';
       };
       readonly 'what-an-agentic-workflow-is-slide': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatAnAgenticWorkflowIsSlide__en;
         readonly de: typeof whatAgenticWorkflowsRequire__whatAnAgenticWorkflowIsSlide__de;
+        readonly targets: 'caption' | 'minimal' | 'research';
       };
       readonly 'how-far-you-step-out': {
         readonly en: typeof whatAgenticWorkflowsRequire__howFarYouStepOut__en;
@@ -336,10 +364,12 @@ declare module './episode-instance' {
       readonly 'in-on-or-out-of-the-loop': {
         readonly en: typeof whatAgenticWorkflowsRequire__inOnOrOutOfTheLoop__en;
         readonly de: typeof whatAgenticWorkflowsRequire__inOnOrOutOfTheLoop__de;
+        readonly targets: 'origin' | 'on-level' | 'caption' | 'out-level' | 'forces';
       };
       readonly 'reviewability-sets-the-distance': {
         readonly en: typeof whatAgenticWorkflowsRequire__reviewabilitySetsTheDistance__en;
         readonly de: typeof whatAgenticWorkflowsRequire__reviewabilitySetsTheDistance__de;
+        readonly targets: 'hedge' | 'check-card' | 'board' | 'caption' | 'guest-list';
       };
       readonly 'what-it-requires-of-each-person': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatItRequiresOfEachPerson__en;
@@ -348,14 +378,17 @@ declare module './episode-instance' {
       readonly 'plan-back-from-the-goal': {
         readonly en: typeof whatAgenticWorkflowsRequire__planBackFromTheGoal__en;
         readonly de: typeof whatAgenticWorkflowsRequire__planBackFromTheGoal__de;
+        readonly targets: 'caption' | 'kitchen' | 'tree' | 'callout' | 'goal';
       };
       readonly 'contracts-at-the-seams': {
         readonly en: typeof whatAgenticWorkflowsRequire__contractsAtTheSeams__en;
         readonly de: typeof whatAgenticWorkflowsRequire__contractsAtTheSeams__de;
+        readonly targets: 'caption' | 'contract' | 'one-side';
       };
       readonly 'reviewing-the-result': {
         readonly en: typeof whatAgenticWorkflowsRequire__reviewingTheResult__en;
         readonly de: typeof whatAgenticWorkflowsRequire__reviewingTheResult__de;
+        readonly targets: 'caption' | 'verification' | 'validation';
       };
       readonly 'what-it-requires-of-the-organisation': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatItRequiresOfTheOrganisation__en;
@@ -364,18 +397,22 @@ declare module './episode-instance' {
       readonly 'the-org-chart-trap': {
         readonly en: typeof whatAgenticWorkflowsRequire__theOrgChartTrap__en;
         readonly de: typeof whatAgenticWorkflowsRequire__theOrgChartTrap__de;
+        readonly targets: 'quote' | 'org-chart' | 'hedges' | 'draft';
       };
       readonly 'designed-ai-first': {
         readonly en: typeof whatAgenticWorkflowsRequire__designedAiFirst__en;
         readonly de: typeof whatAgenticWorkflowsRequire__designedAiFirst__de;
+        readonly targets: 'board' | 'tips';
       };
       readonly 'what-to-look-for-in-your-team': {
         readonly en: typeof whatAgenticWorkflowsRequire__whatToLookForInYourTeam__en;
         readonly de: typeof whatAgenticWorkflowsRequire__whatToLookForInYourTeam__de;
+        readonly targets: 'person' | 'footnote';
       };
       readonly 'from-article-to-quiz': {
         readonly en: typeof whatAgenticWorkflowsRequire__fromArticleToQuiz__en;
         readonly de: typeof whatAgenticWorkflowsRequire__fromArticleToQuiz__de;
+        readonly targets: 'two-levels';
       };
     };
     readonly 'what-lies-below-the-waterline-of-sustainable-ai-skills': {
@@ -390,10 +427,12 @@ declare module './episode-instance' {
       readonly 'an-ai-model-that-forgets-every-morning': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__anAiModelThatForgetsEveryMorning__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__anAiModelThatForgetsEveryMorning__de;
+        readonly targets: 'caption';
       };
       readonly 'a-skill-hands-the-ai-your-procedure': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__aSkillHandsTheAiYourProcedure__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__aSkillHandsTheAiYourProcedure__de;
+        readonly targets: 'skill-tile';
       };
       readonly 'what-a-skill-is': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whatASkillIs__en;
@@ -402,22 +441,27 @@ declare module './episode-instance' {
       readonly 'a-skill-is-a-written-procedure': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__aSkillIsAWrittenProcedure__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__aSkillIsAWrittenProcedure__de;
+        readonly targets: 'folder' | 'app-names' | 'routing' | 'caption';
       };
       readonly 'three-levels-of-loading': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__threeLevelsOfLoading__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__threeLevelsOfLoading__de;
+        readonly targets: 'caption' | 'other-apps' | 'level-extras' | 'level-index' | 'concept-skills' | 'concept';
       };
       readonly 'skills-are-dynamic-context': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__skillsAreDynamicContext__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__skillsAreDynamicContext__de;
+        readonly targets: 'static' | 'always-loaded' | 'rule-of-thumb';
       };
       readonly 'instructions-skills-and-connectors': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__instructionsSkillsAndConnectors__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__instructionsSkillsAndConnectors__de;
+        readonly targets: 'thing-personal' | 'footer' | 'thing-connectors' | 'thing-project';
       };
       readonly 'two-ways-to-call-a-skill': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__twoWaysToCallASkill__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__twoWaysToCallASkill__de;
+        readonly targets: 'by-name' | 'by-description' | 'stat' | 'stat-scope';
       };
       readonly 'when-to-write-one': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whenToWriteOne__en;
@@ -426,14 +470,17 @@ declare module './episode-instance' {
       readonly 'the-third-time-is-the-signal': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theThirdTimeIsTheSignal__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theThirdTimeIsTheSignal__de;
+        readonly targets: 'fowler' | 'comic' | 'skill-file';
       };
       readonly 'not-every-repeat-deserves-a-skill': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__notEveryRepeatDeservesASkill__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__notEveryRepeatDeservesASkill__de;
+        readonly targets: 'callout' | 'price';
       };
       readonly 'write-it-from-a-good-run': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__writeItFromAGoodRun__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__writeItFromAGoodRun__de;
+        readonly targets: 'run' | 'interview' | 'notes-lane';
       };
       readonly 'the-label': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theLabel__en;
@@ -442,14 +489,17 @@ declare module './episode-instance' {
       readonly 'the-description-is-all-the-ai-sees': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theDescriptionIsAllTheAiSees__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theDescriptionIsAllTheAiSees__de;
+        readonly targets: 'caption' | 'scent';
       };
       readonly 'name-the-moment-not-the-content': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__nameTheMomentNotTheContent__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__nameTheMomentNotTheContent__de;
+        readonly targets: 'moment' | 'caption' | 'not-for' | 'hedge';
       };
       readonly 'more-skills-harder-choice': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__moreSkillsHarderChoice__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__moreSkillsHarderChoice__de;
+        readonly targets: 'hick' | 'vercel' | 'caption' | 'naming';
       };
       readonly 'what-goes-inside': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whatGoesInside__en;
@@ -458,14 +508,17 @@ declare module './episode-instance' {
       readonly 'what-goes-where-is-information-architecture': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whatGoesWhereIsInformationArchitecture__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whatGoesWhereIsInformationArchitecture__de;
+        readonly targets: 'ia-callout' | 'homes';
       };
       readonly 'one-skill-one-job': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__oneSkillOneJob__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__oneSkillOneJob__de;
+        readonly targets: 'pointer' | 'coupling-card';
       };
       readonly 'inside-the-skill': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__insideTheSkill__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__insideTheSkill__de;
+        readonly targets: 'long-rule' | 'contents-rule' | 'files-head' | 'disclosure';
       };
       readonly 'what-stays-beside': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whatStaysBeside__en;
@@ -474,14 +527,17 @@ declare module './episode-instance' {
       readonly 'beside-the-skill': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__besideTheSkill__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__besideTheSkill__de;
+        readonly targets: 'caption';
       };
       readonly 'who-uses-it-and-where': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whoUsesItAndWhere__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whoUsesItAndWhere__de;
+        readonly targets: 'shared' | 'stamp' | 'evals';
       };
       readonly 'how-grill-me-and-grill-with-docs-work': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__howGrillMeAndGrillWithDocsWork__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__howGrillMeAndGrillWithDocsWork__de;
+        readonly targets: 'run-2';
       };
       readonly 'sharing-it': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__sharingIt__en;
@@ -490,14 +546,17 @@ declare module './episode-instance' {
       readonly 'shared-skills-are-knowledge-articles': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__sharedSkillsAreKnowledgeArticles__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__sharedSkillsAreKnowledgeArticles__de;
+        readonly targets: 'owner' | 'review' | 'format';
       };
       readonly 'who-owns-the-shared-skill-library': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whoOwnsTheSharedSkillLibrary__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__whoOwnsTheSharedSkillLibrary__de;
+        readonly targets: 'tier' | 'add' | 'cost' | 'caption';
       };
       readonly 'does-the-skill-make-things-better': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__doesTheSkillMakeThingsBetter__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__doesTheSkillMakeThingsBetter__de;
+        readonly targets: 'callout' | 'harm' | 'description-test' | 'footnote' | 'vercel';
       };
       readonly 'keeping-it-alive': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__keepingItAlive__en;
@@ -506,18 +565,22 @@ declare module './episode-instance' {
       readonly 'every-skill-is-a-loan': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__everySkillIsALoan__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__everySkillIsALoan__de;
+        readonly targets: 'debt';
       };
       readonly 'the-model-changes-the-skill-doesn-t': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theModelChangesTheSkillDoesnT__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theModelChangesTheSkillDoesnT__de;
+        readonly targets: 'lehman' | 'caption' | 'analogy-only' | 'switch';
       };
       readonly 'retire-skills': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__retireSkills__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__retireSkills__de;
+        readonly targets: 'archive';
       };
       readonly 'the-whole-iceberg': {
         readonly en: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theWholeIceberg__en;
         readonly de: typeof whatLiesBelowTheWaterlineOfSustainableAiSkills__theWholeIceberg__de;
+        readonly targets: 'governance';
       };
     };
   }
