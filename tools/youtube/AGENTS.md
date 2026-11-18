@@ -14,7 +14,7 @@ Each takes `<episode folder | page url | video id>` and infers the language from
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `youtube:transcript`   | YouTube captions and length (`yt-dlp`) | `transcript.<lang>.vtt`, `video.<lang>.json`                              |
 | `youtube:recording`    | the composition, the Recording folder  | nothing; prints the Slide table, then violations                          |
-| `youtube:voice-script` | transcript, Slide starts, Slide i18n   | nothing; prints the reading copy                                          |
+| `youtube:voice-script` | transcript, Slide starts, Slide i18n   | nothing; prints the reading copy and, per Slide, where to write it        |
 | `youtube:chapters`     | Slide starts                           | the chapter block of `youtube.<lang>.md`                                  |
 | `youtube:apply`        | `youtube.<lang>.md`, the remote video  | the video description, a comment; the comment ID, the applied fingerprint |
 | `youtube:pull`         | `youtube.<lang>.md`, the remote video  | nothing; prints the word diff and who changed it                          |

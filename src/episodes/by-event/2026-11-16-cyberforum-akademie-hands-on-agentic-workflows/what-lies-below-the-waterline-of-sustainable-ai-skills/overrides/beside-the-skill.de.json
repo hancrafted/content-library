@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-card-points": {
+        "script": "Was genau bedeutet das? Wir hatten vorhin das Beispiel, in dem wir 40 Meter in der Skill.md als Anweisung übergeben haben. Stattdessen geben wir im Skill nicht die spezifischen Meter an, sondern sagen: Lies die Tauchtiefe aus dem heutigen Projektplan. Das ist die Anweisung. Wir haben also verallgemeinert: Statt zu sagen, tauche für dieses Projekt 40 Meter tief, schau heute in meine Projektdatei, zum Beispiel meine Agents.md oder meinen Projektordner, was die Aufgabe ist. Damit habe ich eine Stufe abstrahiert und mache den Skill wiederverwendbarer. Das ist das allgemeine Konzept davon, welchen Kontext ich neben den Skill platzieren sollte."
+      },
+      "same-card-any-site": {
+        "script": "Damit erlaube ich es, dass der Skill beim nächsten Aufruf die Information richtig herausliest und die Aufgabe im jeweiligen Projektkontext richtig ausführt. Das ist die Idee von „neben dem Skill“."
+      }
+    }
+  }
+}

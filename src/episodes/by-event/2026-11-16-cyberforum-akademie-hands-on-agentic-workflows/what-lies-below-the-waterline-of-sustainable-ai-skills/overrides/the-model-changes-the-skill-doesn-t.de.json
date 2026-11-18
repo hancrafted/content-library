@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "not-the-only-pilot": {
+        "script": "Vor allem kann es mit jedem Update des KI-Modells sein, dass Skills, die vorher funktioniert haben, danach nicht mehr funktionieren. Das ist, wie wenn wir einen neuen Piloten haben. Er hat dieselbe Zertifizierung gemacht und darf das U-Boot bedienen, hat es aber an einer anderen Schule gelernt. Er wird Anweisungen leicht anders interpretieren, und darauf müssen wir vorbereitet sein."
+      }
+    }
+  }
+}

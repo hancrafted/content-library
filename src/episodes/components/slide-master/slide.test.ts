@@ -35,6 +35,7 @@ function recordingKit(): { kit: RuntimeKit; calls: string[] } {
     marker: (note) => (calls.push(`marker:${note}`), (chunks) => chunks),
     Marker: ({ note }) => (calls.push(`Marker:${note}`), null as never),
     target: (name) => (calls.push(`target:${name}`), { 'data-target': name }),
+    explorables: {},
     Title: () => null as never,
   };
   return { kit, calls };

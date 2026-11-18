@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
+import {
+  cutBySlide,
+  overrideFileOf,
+  parseCues,
+  readingMinutes,
+  spokenWords,
+  writeSurface,
+} from './voice-script.pure.ts';
 
 const VTT = `WEBVTT
 Kind: captions
@@ -76,5 +83,47 @@ describe('success cases', () => {
     };
     // ASSERT
     expect(found).toEqual(expected);
+  });
+
+  it('points an Episode instance at the Slide override file, never at the Base Episode i18n, pool Slide or not', () => {
+    // ARRANGE
+    const row = { slug: 'the-hook', files: ['src/episodes/base/slides/the-hook/i18n/de.json'], pool: true };
+    // ACT
+    const found = writeSurface(row, 'de', true);
+    // ASSERT
+    expect(found).toContain(overrideFileOf('the-hook', 'de'));
+    expect(found).not.toContain('POOL');
+  });
+});
+
+describe('failure cases', () => {
+  it('says an inline override in episode.ts also applies to an instance Slide, so the writer does not miss it', () => {
+    // ARRANGE
+    const row = { slug: 'the-hook', files: [], pool: false, inline: 1 };
+    // ACT
+    const found = writeSurface(row, 'de', true);
+    // ASSERT
+    expect(found).toContain('inline override in episode.ts');
+  });
+
+  it('still flags a Slide with no i18n file when the Episode is no instance', () => {
+    // ARRANGE
+    const row = { slug: 'orphan', files: [], pool: false };
+    // ACT
+    const found = writeSurface(row, 'de', false);
+    // ASSERT
+    expect(found).toBe('NO I18N FILE');
+  });
+});
+
+describe('edge cases', () => {
+  it('names the override file by Slide slug and spoken language, and keeps a Slide start of 0 as a start', () => {
+    // ARRANGE
+    const expected = 'overrides/the-hook.en.json';
+    // ACT
+    const found = overrideFileOf('the-hook', 'en');
+    // ASSERT
+    expect(found).toBe(expected);
+    expect(cutBySlide([{ start: 0, text: 'a' }], ['s'], { s: 0 })).toEqual({ s: 'a' });
   });
 });

@@ -30,6 +30,18 @@ const SUMMARY: LocaleSummary = {
   ],
 };
 
+const titled = (title: string) => ({ en: { title }, de: { title } });
+
+const OUTLINE = {
+  text: { en: OWN_TEXT, de: OWN_TEXT },
+  sections: [
+    [
+      { slug: 'intro', anchor: 'intro', text: titled('Intro') },
+      { slug: 'detail', anchor: 'intro--detail', text: titled('Detail') },
+    ],
+  ],
+};
+
 function contextOf(fields: Partial<PageContext> = {}): PageContext {
   return {
     status: 'published',
@@ -37,6 +49,7 @@ function contextOf(fields: Partial<PageContext> = {}): PageContext {
     playlistAnchors: [{ event: 'demo-event', anchor: 'intro' }],
     published: { anchors: ['intro', 'intro--detail'] },
     markers: [{ name: 'intro', exports: [INTRO] }],
+    outline: OUTLINE,
     ...fields,
   };
 }
@@ -119,6 +132,23 @@ describe('failure cases', () => {
     const expected = ['its de summary is stale: run `npm run registry`'];
     // ACT
     const found = await findingsOf(checks, 'says in its summary');
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('names an Episode whose outline traces a Slide text to files holding other text', async () => {
+    // ARRANGE
+    const stale = {
+      ...OUTLINE,
+      sections: [[OUTLINE.sections[0][0], { ...OUTLINE.sections[0][1], text: titled('Old') }]],
+    };
+    const checks = checksOf(EPISODE, compositionOf(EPISODE), contextOf({ outline: stale }));
+    const expected = [
+      'its outline traces the en text of intro--detail to files holding other text: run `npm run registry`',
+      'its outline traces the de text of intro--detail to files holding other text: run `npm run registry`',
+    ];
+    // ACT
+    const found = await findingsOf(checks, 'says in its Episode outline');
     // ASSERT
     expect(found).toEqual(expected);
   });

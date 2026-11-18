@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "two-labels": {
+        "script": "Dazu gibt es verschiedenste Meinungen, weil das Feld relativ neu ist, aber eine Meinung, in der sich viele treffen, lautet: Beschreib nicht noch einmal den Skill, sondern beschreib den Moment, den Trigger, wann dieser Skill auszuführen ist. Das ist quasi Kontext. Das Beispiel hier hat ganz klar einen kurzen Satz dazu, was der Skill ist, und das Signal, wann er zu benutzen ist: wenn wir an einem neuen Forschungsort angekommen sind und Samples vom Meeresboden holen sollen."
+      },
+      "your-request": {
+        "script": "Im Beispiel sagt die Kapitänin: Lass uns ein bisschen Schlamm vom Meeresboden aufsammeln, bevor wir weiterfahren."
+      },
+      "the-closing-line": {
+        "script": "In einigen Papers, zum Beispiel einem von Google, das ich hier verlinkt habe und das Du gerne nachlesen kannst, wird zusätzlich empfohlen, einen Satz zu schreiben, wann der Skill nicht aufgerufen wird. Es geht also mehr darum, zu überlegen: Was sind die Szenarien, was ist ein potenzielles Triggerwort, das den Agenten dazu verleitet, diesen Skill zu zücken? Und weniger darum, den Skill noch einmal zusammenzufassen und zu beschreiben. Wirklich wichtig ist, wann und in welchen Situationen der Skill aufgerufen werden soll."
+      }
+    }
+  }
+}

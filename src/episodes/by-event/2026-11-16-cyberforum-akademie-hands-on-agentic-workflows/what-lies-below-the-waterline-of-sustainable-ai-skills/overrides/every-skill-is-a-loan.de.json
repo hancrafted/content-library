@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "quick-to-write": {
+        "script": "Es ist sehr billig, einen Skill zu schreiben, genau wie es billig ist, Code zu produzieren."
+      },
+      "a-running-tab": {
+        "script": "Aber damit der Skill über einen längeren Zeitraum nicht zu Schulden wird, nicht zu Debt, braucht es Gedanken dazu, wie wir mit diesen Schulden umgehen, quasi wie auch bei Software."
+      }
+    }
+  }
+}

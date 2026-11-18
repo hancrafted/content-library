@@ -3,18 +3,9 @@ import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.7
 const PAGE = import.meta.glob('./episode.ts');
-const CHECKS = episodeChecks(import.meta.dirname, import.meta.glob('./slides/*/slide.tsx'), PAGE);
+const CHECKS = episodeChecks(import.meta.dirname, {}, PAGE);
 
 describe('success cases', () => {
-  it.each(CHECKS.slides)('$name', async ({ findings }) => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const found = await findings();
-    // ASSERT
-    expect(found).toEqual(expected);
-  });
-
   it.each(CHECKS.folder)('$name', async ({ findings }) => {
     // ARRANGE
     const expected: string[] = [];
@@ -37,11 +28,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('finds Slide folders to check, so an empty glob cannot pass', () => {
+  it('runs folder checks, so an empty list cannot pass', () => {
     // ARRANGE
     const none = 0;
     // ACT
-    const checked = CHECKS.slides.length;
+    const checked = CHECKS.folder.length;
     // ASSERT
     expect(checked).toBeGreaterThan(none);
   });

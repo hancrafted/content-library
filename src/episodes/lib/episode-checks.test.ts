@@ -4,6 +4,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { episodeChecks, slidePoolChecks, type EpisodeChecks } from './episode-checks';
+import { instanceOf } from './episode-instance';
+import type { InstanceBase } from './episode-instance.pure';
 
 const NO_PAGE: GlobEntries = {};
 
@@ -21,14 +23,49 @@ function fixture(folders: readonly string[]): string {
 }
 
 function slide(slug: string, notes: readonly string[] = [], noteKeys: readonly string[] = notes) {
-  const strings = { notes: Object.fromEntries(noteKeys.map((key) => [key, { text: key }])) };
-  return { slug, notes: notes.map((note) => ({ slug: note })), messages: { en: strings, de: strings } };
+  const strings = {
+    notes: Object.fromEntries(noteKeys.map((key) => [key, { text: key }])),
+  };
+  return {
+    slug,
+    notes: notes.map((note) => ({ slug: note })),
+    messages: { en: strings, de: strings },
+  };
 }
 
 function entries(modules: Record<string, object>, prefix = './slides/'): GlobEntries {
   return Object.fromEntries(
     Object.entries(modules).map(([folder, module]) => [`${prefix}${folder}/slide.tsx`, async () => module]),
   );
+}
+
+function composing(...bases: readonly (readonly { slug: string }[])[]): GlobEntries {
+  return Object.fromEntries(
+    bases.map((composed, at) => [
+      `../base-${at}/episode.ts`,
+      async () => ({
+        composition: {
+          messages: {},
+          sections: [[...composed]],
+        },
+      }),
+    ]),
+  );
+}
+
+const BASE: InstanceBase = {
+  slug: 'base',
+  messages: { en: {}, de: {} },
+  sections: [[{ slug: 'hero', messages: { en: {}, de: {} } }]],
+};
+
+function pageOf(record: object): GlobEntries {
+  return { './episode.ts': async () => ({ record }) };
+}
+
+async function instanceFindings(checks: EpisodeChecks): Promise<string[]> {
+  const own = checks.folder.filter(({ name }) => name.includes('Episode instance'));
+  return (await Promise.all(own.map(({ findings }) => findings()))).flat();
 }
 
 async function findingsOf(checks: EpisodeChecks): Promise<string[]> {
@@ -42,7 +79,10 @@ describe('success cases', () => {
     const dir = fixture(['slides/hero', 'slides/the-spine']);
     const checks = episodeChecks(
       dir,
-      entries({ hero: { hero: slide('hero') }, 'the-spine': { theSpine: slide('the-spine', ['source']) } }),
+      entries({
+        hero: { hero: slide('hero') },
+        'the-spine': { theSpine: slide('the-spine', ['source']) },
+      }),
       NO_PAGE,
     );
     const expected: string[] = [];
@@ -69,6 +109,40 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('flags a pool Slide only one Base Episode composes, so it moves into that Episode', async () => {
+    // ARRANGE
+    const dir = fixture(['lonely']);
+    const lonely = slide('lonely');
+    const entry = entries({ lonely: { lonely } }, './');
+    const expected = ['lonely is composed by 1 Base Episode(s): move it into its Episode, or compose it twice'];
+    // ACT
+    const found = await findingsOf(slidePoolChecks(dir, entry, composing([lonely], [slide('other')])));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('counts a pool Slide by identity, so a local Slide of the same slug in another Episode is no second user', async () => {
+    // ARRANGE
+    const dir = fixture(['hero']);
+    const pooled = slide('hero');
+    const entry = entries({ hero: { hero: pooled } }, './');
+    const expected = ['hero is composed by 1 Base Episode(s): move it into its Episode, or compose it twice'];
+    // ACT
+    const found = await findingsOf(slidePoolChecks(dir, entry, composing([pooled], [slide('hero')])));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('names a slides/ or sections/ folder in an Episode instance, which composes its Base Episode', async () => {
+    // ARRANGE
+    const dir = fixture(['slides', 'sections']);
+    const expected = ['slides', 'sections'];
+    // ACT
+    const found = await instanceFindings(episodeChecks(dir, {}, pageOf(instanceOf(BASE))));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
   it('names a Slide folder whose server entry declares another slug', async () => {
     // ARRANGE
     const dir = fixture(['slides/hero']);
@@ -98,7 +172,13 @@ describe('failure cases', () => {
     ];
     // ACT
     const found = await findingsOf(
-      episodeChecks(dir, entries({ hero: { hero: slide('hero', ['source'], ['source', 'stray']) } }), NO_PAGE),
+      episodeChecks(
+        dir,
+        entries({
+          hero: { hero: slide('hero', ['source'], ['source', 'stray']) },
+        }),
+        NO_PAGE,
+      ),
     );
     // ASSERT
     expect(found).toEqual(expected);
@@ -116,6 +196,38 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('finds nothing in an empty Slide pool, however few Episodes there are', async () => {
+    // ARRANGE
+    const dir = fixture([]);
+    const expected: string[] = [];
+    // ACT
+    const found = await findingsOf(slidePoolChecks(dir, {}, composing([slide('a')])));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('passes a pool Slide two Base Episodes compose', async () => {
+    // ARRANGE
+    const dir = fixture(['shared']);
+    const shared = slide('shared');
+    const entry = entries({ shared: { shared } }, './');
+    const expected: string[] = [];
+    // ACT
+    const found = await findingsOf(slidePoolChecks(dir, entry, composing([shared], [shared])));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('lets a base Episode keep its own slides/ folder', async () => {
+    // ARRANGE
+    const dir = fixture(['slides/hero']);
+    const expected: string[] = [];
+    // ACT
+    const found = await instanceFindings(episodeChecks(dir, entries({ hero: { hero: slide('hero') } }), pageOf(BASE)));
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
   it('names a server entry that exports two Slides, so a folder never holds a Slide under another name', async () => {
     // ARRANGE
     const dir = fixture(['slides/hero']);
@@ -139,8 +251,16 @@ describe('edge cases', () => {
       found: ['one-prompt declares [another], not [one-prompt]', 'orphan has no slide.tsx'],
     };
     // ACT
-    const checks = slidePoolChecks(dir, entries({ 'one-prompt': { onePrompt: slide('another') } }, './'));
-    const seen = { names: checks.slides.map(({ name }) => name), found: await findingsOf(checks) };
+    const pooled = slide('another');
+    const checks = slidePoolChecks(
+      dir,
+      entries({ 'one-prompt': { onePrompt: pooled } }, './'),
+      composing([pooled], [pooled]),
+    );
+    const seen = {
+      names: checks.slides.map(({ name }) => name),
+      found: await findingsOf(checks),
+    };
     // ASSERT
     expect(seen).toEqual(expected);
   });

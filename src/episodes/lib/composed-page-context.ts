@@ -1,6 +1,6 @@
 import { listEpisodes, listEvents } from '@/content-store/store';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { ComposedPage } from './composed-page';
 import {
@@ -10,8 +10,13 @@ import {
   type PlaylistAnchor,
   type SectionMarker,
 } from './composed-page-checks';
+import { EPISODES_DIR } from './episode-folders';
+import { resolvedOutlineOf } from './episode-outline-check';
+import { PIN_LOCK_FILE, type PinLock } from './override-pins.pure';
 import { summaryOf } from './page-summary';
 import { producedAnchors, readPublishedSnapshot, type MissingSnapshot } from './published-anchors';
+
+const ROOT = path.resolve(import.meta.dirname, '../../..');
 
 export function exportsCarrying<T extends object>(module: unknown, keys: readonly (keyof T & string)[]): T[] {
   return Object.values(module as object).filter(
@@ -53,6 +58,11 @@ async function markersIn(dir: string): Promise<SectionMarker[] | undefined> {
   );
 }
 
+function pinsIn(dir: string): PinLock | undefined {
+  const file = path.join(dir, PIN_LOCK_FILE);
+  return existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as PinLock) : undefined;
+}
+
 export async function missingPublishedSnapshot(
   dir: string,
   load: () => Promise<unknown>,
@@ -69,6 +79,9 @@ export async function readPage(dir: string, page: ComposedPage, load: () => Prom
     playlistAnchors: playlistAnchorsOf(page),
     published: await readPublishedSnapshot(dir, producedAnchors(composition)),
     markers: await markersIn(dir),
+    ...(page.kind === 'standalone' || page.kind === 'event-copy'
+      ? { outline: resolvedOutlineOf(ROOT, path.relative(path.join(ROOT, EPISODES_DIR), dir)), pins: pinsIn(dir) }
+      : {}),
   };
   return { composition, context };
 }

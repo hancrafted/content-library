@@ -15,13 +15,15 @@ export interface ReferenceLabels {
   readonly marker: (title: string) => string;
 }
 
-export interface EpisodeKitInput {
-  readonly episode: ComposedId;
-  readonly route?: string;
+export type PageIdentity =
+  | { readonly episode: ComposedId; readonly route?: string }
+  | { readonly episode?: undefined; readonly route: string };
+
+export type EpisodeKitInput = PageIdentity & {
   readonly locale: Locale;
   readonly anchors: ReadonlyMap<string, string>;
   readonly referenceLabels: ReferenceLabels;
-}
+};
 
 export interface SlideKitInput {
   readonly t: RuntimeTranslator;
@@ -30,6 +32,8 @@ export interface SlideKitInput {
   readonly notes: readonly string[];
   readonly slideId: string;
   readonly titleTaken?: string;
+  readonly hidden?: readonly string[];
+  readonly explorables?: Readonly<Record<string, string>>;
 }
 
 function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
@@ -38,11 +42,16 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
 }
 
+function routeOf(page: PageIdentity): string {
+  return page.episode === undefined ? page.route : (page.route ?? ownRouteOf(page.episode));
+}
+
 function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['slideHref'] {
   return (slug) => {
     const anchor = episode.anchors.get(slug);
-    if (anchor === undefined) throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
-    return localizePath(episode.route ?? ownRouteOf(episode.episode), episode.locale, anchor);
+    if (anchor === undefined)
+      throw new Error(`No Slide "${slug}" in "${episode.episode ?? episode.route}" to link from "${slideId}".`);
+    return localizePath(routeOf(episode), episode.locale, anchor);
   };
 }
 
@@ -103,11 +112,13 @@ export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): Runtim
   const { slideId } = slide;
   const Title = titleOf(slide);
   const t = withDefaultTags(slide.t);
+  const hidden = new Set(slide.hidden);
   return {
     t,
     locale: episode.locale,
     ...contextRefsOf(episode, slide),
-    target: (name) => ({ 'data-target': name }),
+    target: (name) => ({ 'data-target': name, ...(hidden.has(name) && { hidden: true as const }) }),
+    explorables: slide.explorables ?? {},
     Title,
     slideHref: slideHrefOf(episode, slideId),
     template: templateOf(slide.t, slideId),

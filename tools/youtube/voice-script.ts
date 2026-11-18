@@ -1,8 +1,6 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
-import { readRecordingFolder, slideI18nFile, slideRows } from './recording-disk.ts';
-import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
+import { baseEpisodeOf, readRecordingFolder, slideRows } from './recording-disk.ts';
+import { cutBySlide, parseCues, readingMinutes, spokenWords, writeSurface } from './voice-script.pure.ts';
 
 interface Messages {
   voiceScript?: { segments?: Record<string, { title?: string; script?: string; bridge?: string }> } | null;
@@ -24,6 +22,7 @@ if (transcript === undefined || startsFile === undefined)
 
 const { starts } = JSON.parse(startsFile) as { starts: Record<string, number> };
 const rows = slideRows(ROOT, dir, language);
+const base = baseEpisodeOf(ROOT, dir);
 const speech = cutBySlide(
   parseCues(transcript),
   rows.map(({ slug }) => slug),
@@ -33,17 +32,13 @@ const speech = cutBySlide(
 const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
-console.log(`# ${episode.id} (${language})`);
-for (const { slug, section, title } of rows) {
-  const found = slideI18nFile({ root: ROOT, episodeDir: dir }, slug, language);
-  const messages = found === undefined ? {} : (JSON.parse(readFileSync(found.file, 'utf8')) as Messages);
+console.log(`# ${episode.id} (${language})${base === undefined ? '' : `, an Episode instance of ${base}`}`);
+for (const { slug, section, title, text, files, inline, pool } of rows) {
+  const messages = text as Messages;
   const segments = Object.entries(messages.voiceScript?.segments ?? {});
   const texts = segments.flatMap(([, { script = '', bridge = '' }]) => [script, bridge]);
   scripts.push(...texts);
-  const where =
-    found === undefined
-      ? 'NO I18N FILE'
-      : `${path.relative(ROOT, found.file)}${found.pool ? ' (POOL: shared, read only)' : ''}`;
+  const where = writeSurface({ slug, files, inline, pool }, language, base !== undefined);
   const start = starts[slug];
   console.log(`\n## ${title} {#${slug}} section ${section}, start ${start === undefined ? 'unmatched' : clock(start)}`);
   console.log(`file: ${where}`);

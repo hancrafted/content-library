@@ -1,4 +1,3 @@
-import type { ComposedId } from '@/content-store/catalogue/record-routes';
 import type { PlacedListSlide, SlideLevel } from '@/episodes/lib/episode.pure';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -8,7 +7,7 @@ import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } from './slide-header-text';
-import { slideKit, type ReferenceLabels } from './slide-kit';
+import { slideKit, type PageIdentity, type ReferenceLabels, type SlideKitInput } from './slide-kit';
 import type { SlidePresentation } from './slide-presentation';
 
 // decision: docs/decision-records/0001-the-slide-is-a-self-contained-folder.md
@@ -41,14 +40,12 @@ export type LocalizedSlide = Placement &
     | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
   );
 
-export interface EpisodeContext {
-  readonly episode: ComposedId;
-  readonly route?: string;
+export type EpisodeContext = PageIdentity & {
   readonly locale: Locale;
   readonly placed: readonly PlacedListSlide<Slide>[];
   readonly referenceLabels: ReferenceLabels;
   readonly header: HeaderMode;
-}
+};
 
 export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
   const t = createTranslator({
@@ -142,6 +139,10 @@ export function episodeMinutes(record: EpisodeComposition, locale: Locale): numb
     );
 }
 
+function stateOf({ hidden, explorables }: Slide): Pick<SlideKitInput, 'hidden' | 'explorables'> {
+  return { ...(hidden !== undefined && { hidden }), ...(explorables !== undefined && { explorables }) };
+}
+
 export function localizeTitleScene(slide: Slide, episode: EpisodeContext): ReactNode {
   if (slide.notes.length > 0 || slide.segments.length > 0) {
     throw new Error(`Title slide Scene "${slide.slug}" declares notes or a Voice script: put them on the record.`);
@@ -154,6 +155,7 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
       level: 'h2',
       notes: [],
       slideId: slide.slug,
+      ...stateOf(slide),
       titleTaken: `The Title slide's h1 is the Episode title, which the container renders: drop <Title> from "${slide.slug}".`,
     },
   );
@@ -180,6 +182,7 @@ export function localizeSlide(
       level,
       notes,
       slideId: id,
+      ...stateOf(slide),
       ...(shared && { titleTaken: titleTakenBy(id) }),
     },
   );

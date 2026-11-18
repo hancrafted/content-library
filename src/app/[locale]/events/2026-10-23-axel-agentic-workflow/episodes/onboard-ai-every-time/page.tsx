@@ -1,4 +1,4 @@
-import { axelOnboardAiEveryTime as episode } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/episode';
+import { axelAgenticWorkflowOnboardAiEveryTime as episode } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from '../../../../params';

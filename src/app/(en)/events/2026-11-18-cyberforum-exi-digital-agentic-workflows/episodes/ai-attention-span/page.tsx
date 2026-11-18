@@ -1,4 +1,4 @@
-import { cyberforumAiAttentionSpan as episode } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/episode';
+import { cyberforumExiDigitalAgenticWorkflowsAiAttentionSpan as episode } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';

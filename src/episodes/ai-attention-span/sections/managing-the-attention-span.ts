@@ -1,9 +1,9 @@
 import type { Section } from '@/episodes/components/slide-master/slide';
-import { everydayHabits } from '@/episodes/slide-pool/everyday-habits/slide';
-import { humanInTheLoopWorkflow } from '@/episodes/slide-pool/human-in-the-loop-workflow/slide';
-import { nowYouKnowHowItFeels } from '@/episodes/slide-pool/now-you-know-how-it-feels/slide';
-import { theWorkflowForBiggerProjects } from '@/episodes/slide-pool/the-workflow-for-bigger-projects/slide';
+import { everydayHabits } from '../slides/everyday-habits/slide';
+import { humanInTheLoopWorkflow } from '../slides/human-in-the-loop-workflow/slide';
 import { managingTheAttentionSpan } from '../slides/managing-the-attention-span/slide';
+import { nowYouKnowHowItFeels } from '../slides/now-you-know-how-it-feels/slide';
+import { theWorkflowForBiggerProjects } from '../slides/the-workflow-for-bigger-projects/slide';
 
 export const managingTheAttentionSpanSection: Section = [
   managingTheAttentionSpan,

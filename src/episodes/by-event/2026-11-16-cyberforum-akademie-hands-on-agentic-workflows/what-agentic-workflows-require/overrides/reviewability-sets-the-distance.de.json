@@ -1,0 +1,15 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-rule": {
+        "script": "Um entscheiden zu können, wie viel Aufsicht es braucht, muss ich Vertrauen in das System haben, in den Workflow und die Abläufe, die ich aufgesetzt habe. Nur dann weiß ich, dass ich aus dem System heraustreten kann, von in the Loop über on the Loop bis out of the Loop. Dieses Vertrauen baut darauf auf, wie gut ich die Ergebnisse und Zwischenergebnisse eines Schritts überprüfen kann und ob ich diese Prüfung nach und nach mit anderen Mitteln automatisieren und wegdelegieren kann. Das ist an sich auch schon eine Art Loop."
+      },
+      "review-builds-the-trust": {
+        "script": "Wenn ich mir anfangs einen Workflow aufbaue und noch gar keine Ergebnisse oder Erfahrungswerte habe, wie ich es vorher gemacht hätte, ist es wahrscheinlich sinnvoll, alle Schritte erst einmal in the Loop zu halten. Ich habe absolut zero Vertrauen und weiß selbst nicht genau, was herauskommen soll. Über mehrere Iterationen hinweg erfahre ich dann, für welche Aufgabe ich nicht so viel Vertrauen brauche, zum Beispiel für eine Webrecherche."
+      },
+      "the-activity-moves": {
+        "script": "Bei der Webrecherche habe ich ein Template mit den fünf Kriterien und sage: Suche mir die fünf besten Hotels heraus. Über die Zeit kann ich einem Agenten genug Kontext liefern. Ich habe das Ergebnis schon fünf, sechs, sieben, acht Mal gesehen, und es passt. Ich weiß, dass nie ein hundertprozentig perfektes Ergebnis herauskommt, denn ich arbeite im probabilistischen Bereich, genauso wie bei Menschen. Aber es ist gut genug: Diese Aufgabe habe ich oft genug gesehen und die Ergebnisse oft genug bewertet, um zu sagen: I'm stepping out. Ich gehe jetzt on the Loop oder out of the Loop. Das ist eines der Kernaspekte. Alle wünschen sich, dass Agenten komplett automatisiert das perfekte Ergebnis liefern, aber der Weg dahin ist das Aufwendige: Schritt für Schritt eigne ich mir an, welche Aufgaben ich zuerst angehen kann und welche Aufgaben sich am besten bewerten lassen, um sie die KI eigenständig abarbeiten zu lassen. Das Konzept Oversight, also in the Loop, on the Loop und out of the Loop, bewertet in einem agentischen Workflow, wie viel menschlicher Anteil nötig ist. Es ist ein sehr wichtiges Konzept, weil die Fähigkeit, das zu beurteilen, davon abhängt, dass der Mensch, der den Workflow definiert, in der Lage ist, das Ganze zu überblicken, zu warten und auch zu verbessern."
+      }
+    }
+  }
+}

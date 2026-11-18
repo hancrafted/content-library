@@ -53,7 +53,7 @@ function identifierOf(id: string): string {
 }
 
 export function exportedRecord(folder: EpisodeFolder): string {
-  const names = [...(folder.episodeSource ?? '').matchAll(/export const (\w+)\s*=\s*episode\(/g)].map(
+  const names = [...(folder.episodeSource ?? '').matchAll(/export const (\w+)\s*=\s*(?:episode|instanceOf)\(/g)].map(
     ([, name]) => name,
   );
   if (names.length !== 1)

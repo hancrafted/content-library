@@ -5,6 +5,7 @@ import type { ComposedPage } from './composed-page';
 import { composedPageChecks } from './composed-page-checks';
 import { exportsCarrying, readPage } from './composed-page-context';
 import { pageFolders } from './episode-folders';
+import { baseOf } from './episode-instance';
 
 // decision: ARCH-003 §4.7
 // decision: ARCH-003 §4.6
@@ -98,15 +99,66 @@ function pageChecks(dir: string, page: GlobEntries): NamedCheck[] {
   ];
 }
 
+// decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
+const INSTANCE_FOLDERS = [SLIDES_DIR, 'sections'];
+
+function instanceCheck(dir: string, page: GlobEntries): NamedCheck[] {
+  const load = Object.values(page)[0];
+  if (load === undefined) return [];
+  return [
+    {
+      name: `keeps no ${INSTANCE_FOLDERS.join(' or ')} folder when it is an Episode instance: it composes its Base Episode`,
+      findings: async () =>
+        exportsCarrying<ComposedSections>(await load(), ['sections']).some((record) => baseOf(record) !== undefined)
+          ? INSTANCE_FOLDERS.filter((folder) => existsSync(path.join(dir, folder)))
+          : [],
+    },
+  ];
+}
+
 export function episodeChecks(dir: string, entries: GlobEntries, page: GlobEntries): EpisodeChecks {
   const { slides, folder } = slideFolderChecks(path.join(dir, SLIDES_DIR), `${SLIDES_DIR}/`, entries);
   const codeFolders: NamedCheck = {
     name: 'keeps no Episode-level parts/ or client/ folder: Slide code lives only in its Slide folder',
     findings: async () => EPISODE_CODE_FOLDERS.filter((kind) => existsSync(path.join(dir, kind))),
   };
-  return { slides, folder: [...folder, codeFolders, ...pageChecks(dir, page)] };
+  return { slides, folder: [...folder, codeFolders, ...instanceCheck(dir, page), ...pageChecks(dir, page)] };
 }
 
-export function slidePoolChecks(dir: string, entries: GlobEntries): EpisodeChecks {
-  return slideFolderChecks(dir, '', entries);
+const MIN_BASE_EPISODES = 2;
+
+interface ComposedSections {
+  sections: readonly (readonly object[])[];
+}
+
+// decision: FE-004 §7
+function sharedCheck(entries: GlobEntries, bases: GlobEntries): NamedCheck {
+  return {
+    name: `composes every pool Slide in ${MIN_BASE_EPISODES} or more Base Episodes, so a Slide one Episode uses lives in it`,
+    findings: async () => {
+      const pooled = await Promise.all(
+        Object.entries(entries).map(async ([key, load]) => ({
+          folder: path.basename(path.dirname(key)),
+          slides: slidesOf(await load()),
+        })),
+      );
+      if (pooled.length === 0) return [];
+      const identitiesComposed = await Promise.all(
+        Object.values(bases).map(async (load) =>
+          exportsCarrying<ComposedSections>(await load(), ['sections']).flatMap(({ sections }) => sections.flat()),
+        ),
+      );
+      return pooled.flatMap(({ folder, slides }) => {
+        const count = identitiesComposed.filter((used) => slides.some((slide) => used.includes(slide))).length;
+        return count >= MIN_BASE_EPISODES
+          ? []
+          : [`${folder} is composed by ${count} Base Episode(s): move it into its Episode, or compose it twice`];
+      });
+    },
+  };
+}
+
+export function slidePoolChecks(dir: string, entries: GlobEntries, bases: GlobEntries): EpisodeChecks {
+  const { slides, folder } = slideFolderChecks(dir, '', entries);
+  return { slides, folder: [...folder, sharedCheck(entries, bases)] };
 }

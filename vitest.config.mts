@@ -13,8 +13,7 @@ const ROOT = import.meta.dirname;
  * more: an edit to any other doc, ADR or skill file leaves the quick loop alone. Found by tracing the disk reads
  * of every fast test, not by grep. A new fast test that reads another path adds it here.
  *
- * Not listed: the `.ts` and `.tsx` files that scanner tests walk (no-daisyui, source-tree, the codegen registry,
- * factory-model-seam). Listing `src/**` would turn every edit into a full rerun; the full suite at pre-push and in CI
+ * Not listed: the `.ts` and `.tsx` files that scanner tests walk (no-daisyui, source-tree, factory-model-seam). Listing `src/**` would turn every edit into a full rerun; the full suite at pre-push and in CI
  * covers them. The Episode-level and Run-level checks need no trigger: each page folder's `episode-checks.test.ts` and
  * each Run's `run-checks.test.ts` import their folder's files through `import.meta.glob`, which `--changed` follows
  * (ARCH-003 §4.7).
@@ -65,6 +64,17 @@ const TRIGGERS = [
   'src/explorables/**/*.yml',
   'src/episodes/components/slide-master/**',
   'src/episodes/templates/*/slides/**',
+  // What tools/codegen/registry.test.ts reads from disk: the page folders, each record's source, the content store's
+  // record folders, the Explorables and the generated files and routes it compares; and the override text each page's
+  // outline check reads.
+  'src/episodes/**/episode.ts',
+  'src/episodes/**/episode-metadata.ts',
+  'src/episodes/**/overrides/*.json',
+  'src/episodes/**/overrides.lock.json',
+  'src/content-store/**',
+  'src/explorables/*/',
+  'src/**/*.generated.*',
+  'src/app/**/page.tsx',
   // Fixtures.
   'tests/fixtures/**',
 ];

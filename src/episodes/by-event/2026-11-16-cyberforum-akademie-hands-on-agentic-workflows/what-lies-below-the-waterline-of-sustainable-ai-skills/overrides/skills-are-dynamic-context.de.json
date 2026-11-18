@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-standing-part": {
+        "script": "Das Lesen der Anweisung geschieht also in drei Schritten. Einmal als statischer Kontext, der immer geladen wird: Name und Description."
+      },
+      "filling-as-you-dive": {
+        "script": "Dann kommt der dynamische Kontext, je nachdem, ob der Skill aufgerufen wird, und Werkzeug-Calls in den Ordner, die bei Bedarf ausgeführt werden. Deshalb gehört auch der Gedanke dazu, zu überlegen, welche Aktionen ich zu welchem Zeitpunkt im Kontextfenster des Agenten bereitstellen möchte."
+      }
+    }
+  }
+}

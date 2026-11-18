@@ -1,0 +1,84 @@
+import {
+  STANDARD_OPENING_SECTION_LOOK,
+  STANDARD_SECTION_LOOK,
+  STANDARD_TITLE_LOOK,
+} from '@/episodes/components/slide-master/standard-looks';
+import { describe, expect, it } from 'vitest';
+import { standardTitleLook, withStandardSlideLooks } from './standard-looks.pure';
+
+const section = (id: string, extra: { presentation?: object; withoutSectionSlide?: true } = {}) => ({
+  id,
+  level: 'h2' as const,
+  ...extra,
+});
+const page = (id: string) => ({ id, level: 'h3' as const });
+
+describe('success cases', () => {
+  it('gives the first section slide the opening look and later ones the section look', () => {
+    // ARRANGE
+    const slides = [section('one'), page('one--a'), section('two'), section('three')];
+    const expected = [STANDARD_OPENING_SECTION_LOOK, undefined, STANDARD_SECTION_LOOK, STANDARD_SECTION_LOOK];
+    // ACT
+    const looks = withStandardSlideLooks(slides).map((slide) => (slide as { presentation?: unknown }).presentation);
+    // ASSERT
+    expect(looks).toEqual(expected);
+  });
+
+  it('gives an undeclared Title the standard Title look', () => {
+    // ARRANGE
+    const expected = STANDARD_TITLE_LOOK;
+    // ACT
+    const look = standardTitleLook(undefined, undefined);
+    // ASSERT
+    expect(look).toBe(expected);
+  });
+});
+
+describe('failure cases', () => {
+  it('keeps a declared presentation whole, never merged with the standard look', () => {
+    // ARRANGE
+    const declared = { enter: { effect: 'bubbles' as const } };
+    // ACT
+    const [slide] = withStandardSlideLooks([section('one', { presentation: declared })]);
+    // ASSERT
+    expect(slide.presentation).toBe(declared);
+  });
+
+  it('keeps an empty presentation as an opt-out', () => {
+    // ARRANGE
+    const optOut = {};
+    // ACT
+    const [slide] = withStandardSlideLooks([section('one', { presentation: optOut })]);
+    // ASSERT
+    expect(slide.presentation).toBe(optOut);
+  });
+});
+
+describe('edge cases', () => {
+  it('counts a declared first section as the opening, so the next one gets the section look', () => {
+    // ARRANGE
+    const slides = [section('one', { presentation: {} }), section('two')];
+    // ACT
+    const [, second] = withStandardSlideLooks(slides);
+    // ASSERT
+    expect(second.presentation).toBe(STANDARD_SECTION_LOOK);
+  });
+
+  it('skips a section that stands in without a section slide', () => {
+    // ARRANGE
+    const slides = [section('one', { withoutSectionSlide: true }), section('two')];
+    // ACT
+    const [first, second] = withStandardSlideLooks(slides);
+    // ASSERT
+    expect([first.presentation, second.presentation]).toEqual([undefined, STANDARD_OPENING_SECTION_LOOK]);
+  });
+
+  it('leaves a legacy toned Title to its own tone', () => {
+    // ARRANGE
+    const legacyTone = 'inverse' as const;
+    // ACT
+    const look = standardTitleLook(undefined, legacyTone);
+    // ASSERT
+    expect(look).toBeUndefined();
+  });
+});

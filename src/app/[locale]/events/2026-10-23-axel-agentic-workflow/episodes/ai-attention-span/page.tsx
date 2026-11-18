@@ -1,4 +1,4 @@
-import { axelAiAttentionSpan as episode } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/episode';
+import { axelAgenticWorkflowAiAttentionSpan as episode } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/episode';
 import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from '../../../../params';

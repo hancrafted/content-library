@@ -2,9 +2,11 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, wr
 import path from 'node:path';
 import { createVitest } from 'vitest/node';
 import type * as store from '../../src/content-store/store.ts';
+import type { compositionOutlines } from '../../src/episodes/lib/composition-outlines.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
 import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
 import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
+import { episodeOutlinesFile, type OutlineInput } from './episode-outline.pure.ts';
 import {
   episodeRegistryFiles,
   exportedRecord,
@@ -15,6 +17,7 @@ import { episodeRouteFiles, isGeneratedRoute, ROUTE_GROUPS, type EpisodeRoute } 
 import { eventRegistryFiles } from './event-registry.pure.ts';
 import { explorablePageRegistryFile } from './explorable-page-registry.pure.ts';
 import { guideRegistryFile } from './guide-registry.pure.ts';
+import { instanceSlidesFile } from './instance-slides.pure.ts';
 import { pageSummariesFile } from './page-summaries.pure.ts';
 import { templateRegistryFile } from './template-registry.pure.ts';
 
@@ -118,6 +121,23 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
+async function outlineInputs(root: string, load: SiteLoader): Promise<OutlineInput[]> {
+  const { compositionOutlines: outlines } = await load<{ compositionOutlines: typeof compositionOutlines }>(
+    'src/episodes/lib/composition-outlines.ts',
+  );
+  const folders = new Map(readEpisodeFolders(root).map((page) => [page.id, page.folder]));
+  return Object.entries(outlines()).map(([id, outline]) => {
+    const folder = folders.get(id);
+    if (folder === undefined) throw new Error(`The Episode registry holds "${id}" but no folder does`);
+    return { id, folder, ...outline };
+  });
+}
+
+async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
+  const inputs = await outlineInputs(root, load);
+  return [episodeOutlinesFile(inputs), instanceSlidesFile(inputs)];
+}
+
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
   return Promise.all(
     files.map(async (file) => {
@@ -136,10 +156,43 @@ function staleOf(root: string, files: readonly RegistryFile[]): RegistryFile[] {
   return files.filter((file) => onDisk(root, file) !== file.text);
 }
 
-export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
+async function staleRoutes(root: string, load: SiteLoader): Promise<string[]> {
   const routes = await formatted(root, episodeRouteFiles(await episodeRoutes(root, load)));
-  const stale = staleOf(root, [...(await formatted(root, sourceFiles(root))), ...routes]);
-  return [...stale.map((file) => file.path), ...obsoleteRoutes(root, routes)];
+  return [...staleOf(root, routes).map((file) => file.path), ...obsoleteRoutes(root, routes)];
+}
+
+export async function staleSourceFiles(root: string): Promise<string[]> {
+  return staleOf(root, await formatted(root, sourceFiles(root))).map((file) => file.path);
+}
+
+export async function staleEpisodeRoutes(root: string, load: SiteLoader): Promise<string[]> {
+  return staleRoutes(root, load);
+}
+
+export function episodePageIds(root: string): string[] {
+  return readEpisodeFolders(root)
+    .filter(
+      ({ folder, files }) =>
+        files.includes('episode.ts') &&
+        files.includes('episode-metadata.ts') &&
+        !/^(templates|explorable-pages|guides)\//.test(folder),
+    )
+    .map(({ id }) => id);
+}
+
+export async function staleInstanceSlides(root: string, outlines: Readonly<Record<string, object>>): Promise<string[]> {
+  const inputs = Object.entries(outlines).map(([id, entry]) => ({ id, ...entry }) as OutlineInput);
+  return staleOf(root, await formatted(root, [instanceSlidesFile(inputs)])).map((file) => file.path);
+}
+
+export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
+  const outlines = await formatted(root, await outlineFiles(root, load));
+  const summaries = await formatted(root, await summaryFiles(load));
+  return [
+    ...(await staleSourceFiles(root)),
+    ...(await staleRoutes(root, load)),
+    ...staleOf(root, [...summaries, ...outlines]).map((file) => file.path),
+  ];
 }
 
 function write(root: string, files: readonly RegistryFile[]): string[] {
@@ -162,6 +215,7 @@ if (import.meta.main) {
     obsolete.forEach((file) => removeRoute(root, file));
     written.push(...write(root, routes), ...obsolete.map((file) => `${file} (removed)`));
     written.push(...write(root, await formatted(root, await summaryFiles(load))));
+    written.push(...write(root, await formatted(root, await outlineFiles(root, load))));
   } finally {
     await vitest.close();
   }

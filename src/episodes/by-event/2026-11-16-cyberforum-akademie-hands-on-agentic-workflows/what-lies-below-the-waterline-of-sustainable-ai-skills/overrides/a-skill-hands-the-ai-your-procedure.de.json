@@ -1,0 +1,9 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-answer": {
+        "script": "Wie die Grafik schon andeutet, könnten wir die Anweisung, die wir jeden Tag übergeben, einfach aufschreiben. Dann müssen wir sie nicht mehr jeden Tag wiederholen, sondern geben dem Piloten jeden Tag dieselbe Anweisung, und er kann sie ausführen. So können wir uns einen Skill vorstellen: ein Prozess, eine Befähigung für einen bereits sehr befähigten Agenten. Er ist in seinem Fach gebildet, aber er kennt den genauen Kontext nicht: was im Projekt los ist, welche Rahmenbedingungen gelten und was die Aufgabe für diese Session ist. Prompts und Abläufe, die wir häufiger anwenden, schreiben wir einmal auf und übergeben sie über einen Coding-Agenten oder einen KI-Aufruf, zum Beispiel mit einem Slash-Command, bei Codex mit dem Dollarzeichen. Das ist ein Skill, nicht mehr und nicht weniger."
+      }
+    }
+  }
+}

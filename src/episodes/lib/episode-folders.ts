@@ -25,7 +25,7 @@ export const METADATA_FILE = 'episode-metadata.ts';
 // decision: ARCH-003 §4.7
 export const EPISODE_CHECKS_TEST = 'episode-checks.test.ts';
 
-export { episodeRef, EXPLORABLE_PAGES_FOLDER, GUIDES_FOLDER, TEMPLATES_FOLDER };
+export { episodeRef, EXPLORABLE_PAGES_FOLDER, GUIDES_FOLDER, SLIDE_POOL_FOLDER, TEMPLATES_FOLDER };
 
 export type PageFolder = (EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef) & {
   readonly folder: string;

@@ -1,71 +1,45 @@
 {
   "title": "Das Gedankenexperiment",
   "caption": "Vier hervorragende Freelancer liefern jeweils genau, was ihr Zettel verlangte, und <b>nichts davon geht auf</b>.",
-  "board": {
-    "label": "Gemeinsames Board",
-    "detail": "ihr einziger Kanal: Zettel, keine Meetings, keine Anrufe"
-  },
   "cardsLabel": "Vier abgehakte Karten",
-  "ownGoal": "Eigenes Ziel:",
-  "doneBy": {
-    "person": "Von einer Person erledigt",
-    "agent": "Von einem Agenten erledigt"
-  },
-  "done": "Erledigt",
   "fails": "Scheitert",
   "breaks": {
     "together": "verfehlt „zusammen“",
     "safely": "verfehlt „sicher“"
   },
-  "halves": {
-    "together": "zusammen",
-    "safely": "sicher"
-  },
   "cards": {
     "activities": {
       "label": "Programm",
-      "goal": "Teamevent für 200, gebucht",
       "fact": "Paintball × 200",
-      "seamCard": "Anreise",
-      "held": "Barrierefreier Bus, 10 Rollstuhlnutzende",
-      "result": "Die 10 sitzen am Rand"
+      "result": "Die 10 Rollstuhlnutzenden sitzen am Rand",
+      "cause": "<b>Anreise</b> hatte festgelegt: ein barrierefreier Bus, 10 Rollstuhlnutzende"
     },
     "travel": {
       "label": "Anreise",
-      "goal": "Alle vor Ort, ohne Mehrkosten",
       "fact": "Alle fahren in Fahrgemeinschaften",
-      "seamCard": "Essen & Getränke",
-      "held": "Offene Bar bis 01:00",
-      "result": "Die Fahrer haben getrunken"
+      "result": "Die Fahrer haben getrunken",
+      "cause": "<b>Essen & Getränke</b> hatte festgelegt: eine offene Bar bis 01:00"
     },
     "venue": {
       "label": "Location",
-      "goal": "Malerisch, im Budget",
       "fact": "Almhütte, 1.800 m",
-      "seamCard": "Anreise",
-      "held": "Gästeinfo: nur Route und Zeiten",
-      "result": "Sommerkleidung, nachts 6 °C"
+      "result": "Sommerkleidung, nachts 6 °C",
+      "cause": "<b>Anreise</b> hatte festgelegt: eine Gästeinfo mit nur Route und Zeiten"
     },
     "food": {
       "label": "Essen & Getränke",
-      "goal": "Abendessen für 200, bestellt",
       "fact": "31 vegetarisch",
-      "seamCard": "Location",
-      "held": "Hüttenküche liest es als: Eier erlaubt",
-      "result": "Die indischen Kolleginnen und Kollegen können nicht essen"
+      "result": "Indische Kolleginnen und Kollegen können nicht essen",
+      "cause": "<b>Location</b> hatte festgelegt: eine Hüttenküche, die es als „Eier erlaubt“ liest"
     }
   },
   "result": {
     "title": "Fest, 20. Juni",
     "goal": "Ziel: alle feiern zusammen und kommen sicher nach Hause",
-    "broken": {
-      "together": "Programm, Essen & Getränke",
-      "safely": "Anreise, Location"
+    "chips": {
+      "together": "✗ zusammen",
+      "safely": "✗ sicher"
     }
-  },
-  "question": {
-    "label": "Die Frage",
-    "text": "Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird?"
   },
   "notes": {
     "a-real-version-of-the-board": {
@@ -83,18 +57,14 @@
       "everyone-delivered": {
         "title": "Alle haben geliefert",
         "keywords": "",
-        "script": "Jetzt ist der Tag da, und jeder der vier hat genau das getan, worum er gebeten wurde. Programm hat ein Teambuilding-Event gebucht, Anreise hat organisiert, wie alle hinkommen, Location hat einen Ort gefunden, und Essen und Getränke hat das Abendessen bestellt. Jede Karte ist abgehakt, und jeder Freelancer hat sein eigenes Ziel perfekt erreicht."
+        "script": "Jetzt ist der Tag da, und jeder der vier hat genau das getan, worum er gebeten wurde. Programm hat Paintball für alle 200 gebucht, Anreise hat organisiert, wie alle hinkommen, Location hat einen Ort gefunden, und Essen und Getränke hat das Abendessen bestellt. Jede Karte ist abgehakt, und jeder Freelancer hat sein eigenes Ziel perfekt erreicht."
       },
       "none-of-it-adds-up": {
         "title": "Nichts davon geht auf",
         "keywords": "",
         "script": "Und trotzdem scheitert das Fest, denn die Fehler liegen zwischen den Karten. Programm hat Paintball gebucht, während Anreise einen barrierefreien Bus für zehn Kolleginnen und Kollegen im Rollstuhl gebucht hatte, die jetzt am Rand sitzen. Anreise hat alle in Fahrgemeinschaften geschickt, während Essen und Getränke eine offene Bar bis ein Uhr nachts gebucht hat, also haben die Fahrer getrunken. Location hat eine malerische Almhütte gefunden, während die Gästeinfo von Anreise nur Route und Zeiten nennt, also kommen die Leute in Sommerkleidung bei sechs Grad in der Nacht. Und das Abendessen wurde mit 31 vegetarisch bestellt, was die Küche der Hütte auf westliche Art liest, also landen Eiergerichte vor Kolleginnen und Kollegen, die sie nicht essen können. Jeder Schritt war perfekt, und perfekte Schritte ergeben von allein kein gutes Ganzes."
-      },
-      "your-question": {
-        "title": "Deine Frage",
-        "keywords": "",
-        "script": "Hier ist also die Frage, und ich möchte, dass Du sie die ganze Episode über im Kopf behältst. Was musst Du als Führungskraft tun, damit das Ergebnis trotzdem großartig wird? Eine verlockende Antwort ist, die vier miteinander reden zu lassen und mehr Meetings anzusetzen. Ich lasse die Frage vorerst offen, und wir beantworten sie Schritt für Schritt, aus verschiedenen Blickwinkeln, bis wir die Antworten am Ende sammeln."
       }
     }
-  }
+  },
+  "done": "Erledigt"
 }

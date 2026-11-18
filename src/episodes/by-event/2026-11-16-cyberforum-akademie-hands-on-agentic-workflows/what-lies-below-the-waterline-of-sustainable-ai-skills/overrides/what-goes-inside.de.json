@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "twilight": {
+        "script": "Als Nächstes gehen wir in die Twilight Zone, wo weniger Licht durchscheint. Es geht um Kontext, und zwar vor allem darum: Was gehört an Kontext in einen Skill, und was gehört neben einen Skill?"
+      },
+      "a-decision-not-a-law": {
+        "script": "Hier ist wichtig zu sagen: Es gibt kein Richtig und Falsch, es ist immer anwendungsspezifisch zu überlegen. Du hast mehrere Möglichkeiten. In diesem Kapitel geht es zunächst darum, was in einen Skill hineingehören könnte, und im nächsten besprechen wir kurz, was wir neben einen Skill legen können und wie der Agent trotzdem auf die relevanten Informationen zugreifen kann."
+      }
+    }
+  }
+}

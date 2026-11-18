@@ -1,3 +1,4 @@
+import { mergeOverride } from '@/shared/lib/override-merge.pure';
 import { parse } from 'yaml';
 import configDe from './ai-capability.config.de.yml';
 import configEn from './ai-capability.config.yml';
@@ -38,11 +39,5 @@ export function keyPaths(tree: unknown, prefix = ''): string[] {
 }
 
 export function mergeWords(base: AiCapabilityWords, override: WordsOverride = {}): AiCapabilityWords {
-  return deepMerge(base, override) as AiCapabilityWords;
-}
-
-function deepMerge(base: unknown, override: unknown): unknown {
-  if (!isRecord(base) || !isRecord(override)) return override === undefined ? base : override;
-  const keys = new Set([...Object.keys(base), ...Object.keys(override)]);
-  return Object.fromEntries([...keys].map((key) => [key, deepMerge(base[key], override[key])]));
+  return mergeOverride(base, override);
 }

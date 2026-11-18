@@ -3,24 +3,24 @@ import type { EpisodeId, ExplorablePageSlug, GuideSlug, TemplateSlug } from '@/c
 import { aiAttentionSpan } from '@/episodes/ai-attention-span/episode';
 import { aiGivesYouMoreWork } from '@/episodes/ai-gives-you-more-work/episode';
 import { aiTokenEconomy } from '@/episodes/ai-token-economy/episode';
-import { axelAiAttentionSpan as _20261023AxelAgenticWorkflow__aiAttentionSpan } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/episode';
-import { axelAiGivesYouMoreWork as _20261023AxelAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/episode';
-import { axelOnboardAiEveryTime as _20261023AxelAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/episode';
-import { cyberforumAiAttentionSpan as _20261028CyberforumAkademieIntroAgenticWorkflow__aiAttentionSpan } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/episode';
-import { cyberforumAiGivesYouMoreWork as _20261028CyberforumAkademieIntroAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/episode';
+import { axelAgenticWorkflowAiAttentionSpan as _20261023AxelAgenticWorkflow__aiAttentionSpan } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/episode';
+import { axelAgenticWorkflowAiGivesYouMoreWork as _20261023AxelAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/episode';
+import { axelAgenticWorkflowOnboardAiEveryTime as _20261023AxelAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/episode';
+import { cyberforumAkademieIntroAgenticWorkflowAiAttentionSpan as _20261028CyberforumAkademieIntroAgenticWorkflow__aiAttentionSpan } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/episode';
+import { cyberforumAkademieIntroAgenticWorkflowAiGivesYouMoreWork as _20261028CyberforumAkademieIntroAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/episode';
 import { cyberforumIntro as _20261028CyberforumAkademieIntroAgenticWorkflow__intro } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/episode';
-import { cyberforumOnboardAiEveryTime as _20261028CyberforumAkademieIntroAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/episode';
-import { introHitlAiAttentionSpan as _20261104IntroHitlWorkflows__aiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
-import { introHitlAiGivesYouMoreWork as _20261104IntroHitlWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
+import { cyberforumAkademieIntroAgenticWorkflowOnboardAiEveryTime as _20261028CyberforumAkademieIntroAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/episode';
+import { introHitlWorkflowsAiAttentionSpan as _20261104IntroHitlWorkflows__aiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
+import { introHitlWorkflowsAiGivesYouMoreWork as _20261104IntroHitlWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
 import { introHitlWorkflows as _20261104IntroHitlWorkflows__intro } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
-import { introHitlOnboardAiEveryTime as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
+import { introHitlWorkflowsOnboardAiEveryTime as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
 import { cyberforumIntro as _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/episode';
-import { whatAgenticWorkflowsRequire as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode';
-import { whatLiesBelowTheWaterlineOfSustainableAiSkills as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
-import { cyberforumAiAttentionSpan as _20261118CyberforumExiDigitalAgenticWorkflows__aiAttentionSpan } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/episode';
-import { cyberforumAiGivesYouMoreWork as _20261118CyberforumExiDigitalAgenticWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/episode';
+import { cyberforumAkademieHandsOnAgenticWorkflowsWhatAgenticWorkflowsRequire as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatAgenticWorkflowsRequire } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/episode';
+import { cyberforumAkademieHandsOnAgenticWorkflowsWhatLiesBelowTheWaterlineOfSustainableAiSkills as _20261116CyberforumAkademieHandsOnAgenticWorkflows__whatLiesBelowTheWaterlineOfSustainableAiSkills } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/episode';
+import { cyberforumExiDigitalAgenticWorkflowsAiAttentionSpan as _20261118CyberforumExiDigitalAgenticWorkflows__aiAttentionSpan } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/episode';
+import { cyberforumExiDigitalAgenticWorkflowsAiGivesYouMoreWork as _20261118CyberforumExiDigitalAgenticWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/episode';
 import { cyberforumIntro as _20261118CyberforumExiDigitalAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/episode';
-import { cyberforumOnboardAiEveryTime as _20261118CyberforumExiDigitalAgenticWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/episode';
+import { cyberforumExiDigitalAgenticWorkflowsOnboardAiEveryTime as _20261118CyberforumExiDigitalAgenticWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/episode';
 // The Episode registry, generated by `npm run registry` from the Episode folders: never edit by hand. A
 // folder `src/episodes/<slug>/` or `…/by-event/<event>/<slug>/` holding `episode-metadata.ts` is an
 // Episode, keyed by its id; with `episode.ts`, a page. A folder `src/episodes/templates/<slug>/` is a Template,

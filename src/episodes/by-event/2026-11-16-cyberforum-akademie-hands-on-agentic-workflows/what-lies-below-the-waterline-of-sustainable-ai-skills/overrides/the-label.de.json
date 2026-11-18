@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "the-label-decides": {
+        "script": "Ein zweites Thema, ein bisschen unter der Oberfläche: die Description eines Skills."
+      },
+      "name-description": {
+        "script": "Wie schon erwähnt, lädt die KI bei jeder Konversation einen Index, der sich aus allen Skills aufbaut, aus dem Namen und der Description."
+      }
+    }
+  }
+}

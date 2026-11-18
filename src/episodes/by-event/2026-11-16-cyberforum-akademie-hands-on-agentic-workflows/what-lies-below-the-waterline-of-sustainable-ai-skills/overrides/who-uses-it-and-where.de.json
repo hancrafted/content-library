@@ -1,0 +1,12 @@
+{
+  "voiceScript": {
+    "segments": {
+      "two-questions": {
+        "script": "Zum Schluss gibt es hier eine kleine Matrix, um zu entscheiden, wann ich welche Information wo platziere, denn es gibt, wie gesagt, keinen universell richtigen Ansatz. Es ist wirklich anwendungsfallspezifisch."
+      },
+      "four-squares": {
+        "script": "Arbeitest Du nur für Dich selbst in einem spezifischen Projekt, kannst Du die Information genauso gut im Skill lassen, denn das führt dazu, dass der Kontext präziser und genauer ist. Das möchten wir ja. Sobald Du aber sagst, diesen Skill möchte ich wiederverwenden, zum Beispiel im nächsten Projekt, kann es überlegenswert sein, die Technik anzuwenden und den Skill darauf hinzuweisen, wo die richtige Information zu finden ist, zum Beispiel in einer Projektdatei. Komplizierter wird es, wenn der Skill auch mit anderen Menschen oder in der Organisation geteilt wird. Dann reden wir davon, wie wir diese Information, diesen Kontext, auch außerhalb eines Projekts oder auf der kompletten Organisationsebene bereitstellen müssen, damit der Skill sauber arbeiten kann."
+      }
+    }
+  }
+}

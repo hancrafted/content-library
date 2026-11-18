@@ -1,12 +1,16 @@
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createVitest } from 'vitest/node';
 import type { missingPublishedSnapshot } from '../../../src/episodes/lib/composed-page-context.ts';
 import {
+  baseExportName,
   copyEntryId,
+  INSTANCE_CHECKS_TEST,
   insertPlaylistEntry,
-  unlistedCopyMetadata,
+  instanceEpisodeSource,
+  instanceExportName,
+  instanceMetadata,
 } from '../../../src/pipeline/lib/copy-to-event.pure.ts';
 
 const USAGE = '✖ usage: npm run episode:copy-to-event -- <slug> <event-slug> [--position <n>]';
@@ -26,7 +30,9 @@ const root = process.cwd();
 const source = path.join(root, 'src/episodes', slug);
 const target = path.join(root, 'src/episodes/by-event', eventSlug, slug);
 const eventFile = path.join(root, 'src/content-store/events', `${eventSlug}.ts`);
-if (!existsSync(path.join(source, 'episode-metadata.ts'))) fail(`src/episodes/${slug}/ is no Episode with a page`);
+const baseFile = path.join(source, 'episode.ts');
+if (!existsSync(path.join(source, 'episode-metadata.ts')) || !existsSync(baseFile))
+  fail(`src/episodes/${slug}/ is no Episode with a page`);
 if (!existsSync(eventFile)) fail(`no Event ${eventSlug}: src/content-store/events/${eventSlug}.ts`);
 if (existsSync(target)) fail(`${path.relative(root, target)} exists already`);
 
@@ -45,10 +51,17 @@ function rollBackSoScriptCanRunAgain(message: string): never {
   return fail(message);
 }
 
-cpSync(source, target, { recursive: true });
-rmSync(path.join(target, 'brief.md'), { force: true });
-const metadataFile = path.join(target, 'episode-metadata.ts');
-writeFileSync(metadataFile, unlistedCopyMetadata(readFileSync(metadataFile, 'utf8'), date));
+const baseExport = baseExportName(readFileSync(baseFile, 'utf8'));
+mkdirSync(target, { recursive: true });
+writeFileSync(
+  path.join(target, 'episode-metadata.ts'),
+  instanceMetadata(readFileSync(path.join(source, 'episode-metadata.ts'), 'utf8'), date),
+);
+writeFileSync(
+  path.join(target, 'episode.ts'),
+  instanceEpisodeSource({ slug, exportName: baseExport }, instanceExportName(eventSlug, slug)),
+);
+writeFileSync(path.join(target, 'episode-checks.test.ts'), INSTANCE_CHECKS_TEST);
 writeFileSync(playlistFile, playlistComputedBeforeAnyWrite);
 
 function run(command: string, commandArgs: string[]) {
@@ -83,5 +96,7 @@ try {
 }
 
 const entry = position === undefined ? 'last' : `place ${position}`;
-console.log(`✔ ${id} copied, published unlisted on ${date}, listed ${entry} in ${playlistId}`);
+console.log(
+  `✔ ${id} made an Episode instance of ${slug}, published unlisted on ${date}, listed ${entry} in ${playlistId}`,
+);
 console.log(`  page: /events/${eventSlug}/episodes/${slug}/ (and /de/...); next: npm run verify`);
