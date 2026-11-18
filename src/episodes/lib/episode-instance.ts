@@ -1,3 +1,4 @@
+import type { ExplorablePresetIds } from '@/shared/lib/explorable-presets';
 import type { Locale } from '@/shared/lib/locale.pure';
 import {
   resolveLayers,
@@ -6,7 +7,6 @@ import {
   type SectionOperation,
   type SlideOf,
 } from './episode-instance.pure';
-import type { ExplorablePresetIds } from './explorable-presets';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
 declare const NO_BASE_EPISODE: unique symbol;

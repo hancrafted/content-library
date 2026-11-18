@@ -1,7 +1,7 @@
-import { LOCALES } from '@/shared/lib/locale.pure';
+import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { createHash } from 'node:crypto';
 import type { InstanceTrail } from './episode-instance';
-import type { InstanceBase, SlideOverride } from './episode-instance.pure';
+import type { InstanceBase, SlideOverride, TitleOverride } from './episode-instance.pure';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
 export const PIN_LOCK_FILE = 'overrides.lock.json';
@@ -30,55 +30,100 @@ function baseSlideOf(base: InstanceBase, slug: string) {
   return [base.title, ...base.sections.flat()].find((slide) => slide?.slug === slug);
 }
 
+export const TITLE_PIN = '@title';
+
 interface Pinned {
-  readonly slide: string;
+  readonly owner: string;
   readonly path: string;
   readonly fingerprint: string;
 }
 
-function pinnedOf({ base, layers }: Pick<InstanceTrail<InstanceBase>, 'base' | 'layers'>): Pinned[] {
-  const seen = new Set<string>();
-  return layers.flatMap((layer) =>
-    Object.entries((layer.slides ?? {}) as Readonly<Record<string, SlideOverride>>).flatMap(([slide, override]) => {
-      const home = baseSlideOf(base, slide);
-      if (home === undefined) return [];
-      return LOCALES.flatMap((locale) =>
-        leafPaths(override.messages?.[locale]).flatMap((path) => {
-          const key = [slide, locale, ...path].join('.');
-          if (seen.has(key)) return [];
-          seen.add(key);
-          return [
-            {
-              slide,
-              path: [locale, ...path].join('.'),
-              fingerprint: fingerprintOf(valueAt(home.messages[locale], path)),
-            },
-          ];
-        }),
-      );
-    }),
+type Trail = Pick<InstanceTrail<InstanceBase>, 'base' | 'layers'>;
+
+const textPins = (
+  owner: string,
+  defaults: Readonly<Record<Locale, object>>,
+  override: Partial<Readonly<Record<Locale, object>>> | undefined,
+): Pinned[] =>
+  LOCALES.flatMap((locale) =>
+    leafPaths(override?.[locale]).map((path) => ({
+      owner,
+      path: [locale, ...path].join('.'),
+      fingerprint: fingerprintOf(valueAt(defaults[locale], path)),
+    })),
   );
+
+function titlePins(base: InstanceBase, title: TitleOverride | undefined): Pinned[] {
+  if (title === undefined) return [];
+  const notes =
+    title.notes === undefined ? [] : [{ owner: TITLE_PIN, path: 'notes', fingerprint: fingerprintOf(base.notes) }];
+  return [...notes, ...textPins(TITLE_PIN, base.messages, title.messages)];
 }
 
-export function pinsOf(trail: Pick<InstanceTrail<InstanceBase>, 'base' | 'layers'>): PinLock {
+function slidePins(base: InstanceBase, slug: string, override: SlideOverride): Pinned[] {
+  const home = baseSlideOf(base, slug);
+  if (home === undefined) return [];
+  const presentation =
+    override.presentation === undefined
+      ? []
+      : [{ owner: slug, path: 'presentation', fingerprint: fingerprintOf(home.presentation) }];
+  const presets = Object.keys(override.explorables ?? {}).map((name) => ({
+    owner: slug,
+    path: `explorables.${name}`,
+    fingerprint: fingerprintOf(home.explorables?.[name]),
+  }));
+  return [...textPins(slug, home.messages, override.messages), ...presentation, ...presets];
+}
+
+function pinnedOf({ base, layers }: Trail): Pinned[] {
+  const seen = new Set<string>();
+  return layers
+    .flatMap((layer) => [
+      ...titlePins(base, layer.title),
+      ...Object.entries((layer.slides ?? {}) as Readonly<Record<string, SlideOverride>>).flatMap(([slug, override]) =>
+        slidePins(base, slug, override),
+      ),
+    ])
+    .filter(({ owner, path }) => {
+      const key = JSON.stringify([owner, path]);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+export function pinsOf(trail: Trail): PinLock {
   const lock: Record<string, Record<string, string>> = {};
-  for (const { slide, path, fingerprint } of pinnedOf(trail)) (lock[slide] ??= {})[path] = fingerprint;
+  for (const { owner, path, fingerprint } of pinnedOf(trail)) (lock[owner] ??= {})[path] = fingerprint;
   return lock;
 }
 
-export function pinFindings(
-  instance: string,
-  trail: Pick<InstanceTrail<InstanceBase>, 'base' | 'layers'>,
-  lock: PinLock | undefined,
-): string[] {
+const whereOf = (instance: string, owner: string, path: string): string =>
+  `Episode instance "${instance}", ${owner === TITLE_PIN ? 'Title' : `Slide "${owner}"`}, path "${path}"`;
+
+export function pinFindings(instance: string, trail: Trail, lock: PinLock | undefined): string[] {
   const command = `npm run overrides:pin -- ${instance}`;
-  return pinnedOf(trail).flatMap(({ slide, path, fingerprint }) => {
-    const where = `Episode instance "${instance}", Slide "${slide}", path "${path}"`;
-    const pinned = lock?.[slide]?.[path];
-    if (pinned === undefined) return [`${where}: the override is not pinned: run \`${command}\``];
-    if (pinned === fingerprint) return [];
+  const pinned = pinnedOf(trail);
+  const stale = pinned.flatMap(({ owner, path, fingerprint }) => {
+    const where = whereOf(instance, owner, path);
+    const held = lock?.[owner]?.[path];
+    if (held === undefined) return [`${where}: the override is not pinned: run \`${command}\``];
+    if (held === fingerprint) return [];
+    if (fingerprint === ABSENT)
+      return [
+        `${where}: the Base Episode no longer has this path: delete the override, or run \`${command}\` to keep it as an addition`,
+      ];
     return [
       `${where}: the Base Episode's default changed under the override: run \`${command}\` to keep the override, or delete the override to show the new default`,
     ];
   });
+  const live = new Set(pinned.map(({ owner, path }) => JSON.stringify([owner, path])));
+  const orphans = Object.entries(lock ?? {}).flatMap(([owner, paths]) =>
+    Object.keys(paths)
+      .filter((path) => !live.has(JSON.stringify([owner, path])))
+      .map(
+        (path) => `${whereOf(instance, owner, path)}: the lock pins a path no override replaces: run \`${command}\``,
+      ),
+  );
+  return [...stale, ...orphans];
 }
