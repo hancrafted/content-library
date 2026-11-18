@@ -159,6 +159,15 @@ describe('updateProjectConfig', () => {
     expect(text).toContain('never writes harness settings');
   });
 
+  it('seeds beforeMerge empty', () => {
+    // ARRANGE
+    // ACT
+    const text = updateProjectConfig(null, FACTS);
+    // ASSERT
+    expect(text).toContain('beforeMerge: []');
+    expect(parseConfig(text, FACTS.driveEntry)).toMatchObject({ worktree: { beforeMerge: [] } });
+  });
+
   it('seeds the models each tier resolves to for the claude provider', () => {
     // ARRANGE
     // ACT

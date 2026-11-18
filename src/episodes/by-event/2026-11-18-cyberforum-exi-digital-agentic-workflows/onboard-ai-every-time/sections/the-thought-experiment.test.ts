@@ -23,18 +23,19 @@ function sceneOf(slug: string, locale: Locale) {
   return load(renderToStaticMarkup(localized.content));
 }
 
+const mounted = ($: ReturnType<typeof sceneOf>) => ({
+  explorable: $('[data-explorable]').attr('data-explorable'),
+  level: $('[data-explorable]').attr('data-level'),
+});
+
 describe('success cases', () => {
-  it('spells PRICE on the trait chips of "Pay the price" in German', () => {
+  it('mounts the Explorable on the PRICE definition in "Pay the price"', () => {
     // ARRANGE
-    const expected = 'PRICE';
+    const expected = { explorable: 'brief-or-pay-the-price', level: 'define' };
     // ACT
     const $ = sceneOf('pay-the-price', 'de');
-    const letters = $('[data-trait-initial]')
-      .map((_, chip) => $(chip).text())
-      .get()
-      .join('');
     // ASSERT
-    expect(letters).toBe(expected);
+    expect(mounted($)).toEqual(expected);
   });
 
   it('spells PRICE on the trait letters of "One prompt" in German', () => {
@@ -52,29 +53,23 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('sets no gloss under an English trait name, since the name already is the viewer’s word', () => {
+  it('sets no gloss under an English trait name of "One prompt", since the name already is the viewer’s word', () => {
     // ARRANGE
-    const expected = { 'pay-the-price': 0, 'one-prompt': 0 };
+    const expected = 0;
     // ACT
-    const glosses = {
-      'pay-the-price': sceneOf('pay-the-price', 'en')('[data-trait-gloss]').length,
-      'one-prompt': sceneOf('one-prompt', 'en')('[data-trait-gloss]').length,
-    };
+    const glosses = sceneOf('one-prompt', 'en')('[data-trait-gloss]').length;
     // ASSERT
-    expect(glosses).toEqual(expected);
+    expect(glosses).toBe(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('glosses every English trait name in German, so the acronym stays readable', () => {
+  it('mounts the same Explorable in English as in German', () => {
     // ARRANGE
-    const expected = ['probabilistisch', 'unermüdlich', 'informiert', 'selbstsicher', 'jedes Wort berechnet'];
+    const expected = mounted(sceneOf('pay-the-price', 'de'));
     // ACT
-    const $ = sceneOf('pay-the-price', 'de');
-    const glosses = $('[data-trait-gloss]')
-      .map((_, gloss) => $(gloss).text())
-      .get();
+    const found = mounted(sceneOf('pay-the-price', 'en'));
     // ASSERT
-    expect(glosses).toEqual(expected);
+    expect(found).toEqual(expected);
   });
 });

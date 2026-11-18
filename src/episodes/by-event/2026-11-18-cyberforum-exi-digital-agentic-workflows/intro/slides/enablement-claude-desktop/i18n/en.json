@@ -1,0 +1,83 @@
+{
+  "title": "Enablement with Claude Desktop",
+  "caption": "The foundation methods, inside an app everyone can install.",
+  "features": {
+    "projects": {
+      "name": "Projects",
+      "body": "A folder per topic: its chats, files and instructions together."
+    },
+    "meetings": {
+      "name": "Meetings",
+      "body": "Notes and action items from your calls, ready to ask about."
+    },
+    "artifacts": {
+      "name": "Artifacts",
+      "body": "Documents, slides and small apps it built, kept to reopen."
+    },
+    "scheduled": {
+      "name": "Scheduled",
+      "body": "Tasks that run on their own, like a Monday brief."
+    },
+    "instructions": {
+      "name": "Instructions",
+      "body": "How every chat in the project should answer."
+    },
+    "memory": {
+      "name": "Memory",
+      "body": "What it remembers from your chats; you can view and edit it."
+    },
+    "context": {
+      "name": "Context",
+      "body": "The project's files, read before every answer."
+    }
+  },
+  "app": {
+    "label": "Drawing of the Claude Desktop app with a sales proposals project open",
+    "window": "Projects / Sales proposals",
+    "new": "New",
+    "search": "Search",
+    "beta": "Beta",
+    "pinned": "Pinned",
+    "project": "Sales proposals",
+    "by": "Created by you · Private",
+    "prompt": "How can I help you today?",
+    "chat": "Chat",
+    "cowork": "Cowork",
+    "chats": "Chats and tasks",
+    "activity": "Activity",
+    "instructionsText": "Answer briefly, in our tone of voice. Always cite our price list.",
+    "onlyYou": "Only you",
+    "memoryText": "View and manage what Claude remembers from your chats.",
+    "capacity": "8% of project capacity used",
+    "files": {
+      "prices": "price-list.pdf",
+      "tone": "tone-guide.md",
+      "cases": "case-studies.md",
+      "offer": "offer-template.docx"
+    },
+    "rows": {
+      "proposal": {
+        "name": "Proposal for the Müller logistics lead",
+        "when": "2 days ago"
+      },
+      "report": {
+        "name": "Weekly pipeline report",
+        "when": "4 days ago"
+      },
+      "pricing": {
+        "name": "Pricing questions from the call",
+        "when": "Nov 10"
+      },
+      "case": {
+        "name": "Case study draft: route planning",
+        "when": "Nov 3"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "One example world",
+      "description": "A sales team in a logistics company, one project for its proposals. Left: where things live, projects, meetings, artifacts and scheduled tasks. Right: what every chat in the project starts with, instructions, memory and the context files; that is the freelancer's standing brief."
+    }
+  }
+}

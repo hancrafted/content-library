@@ -169,6 +169,22 @@ describe('drive setup', () => {
       expect(text(root, 'docs/drive/learnings.md')).toContain('- a correction');
     });
 
+    it('seeds notify once and keeps a notify the Operator changed', () => {
+      // ARRANGE
+      const root = repo({});
+      setup(root);
+      const seeded = binding(root).notify;
+      writeFileSync(
+        path.join(root, 'docs/drive/binding.yml'),
+        text(root, 'docs/drive/binding.yml').replace('adapter: push-notification', 'adapter: none'),
+      );
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(seeded).toEqual({ adapter: 'push-notification' });
+      expect(binding(root).notify).toEqual({ adapter: 'none' });
+    });
+
     it('keeps a review.md the Operator filled in', () => {
       // ARRANGE
       const root = repo({});

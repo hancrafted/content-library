@@ -47,9 +47,14 @@ export interface PhaseBinding {
   inline: boolean;
 }
 
+export const NOTIFY_ADAPTERS = ['push-notification', 'none'] as const;
+export type NotifyAdapter = (typeof NOTIFY_ADAPTERS)[number];
+export const DEFAULT_NOTIFY_ADAPTER: NotifyAdapter = 'push-notification';
+
 export interface Binding {
   agentType: string;
   phases: Record<Phase, PhaseBinding>;
+  notify: { adapter: NotifyAdapter };
 }
 
 export interface SeedOptions {
@@ -63,6 +68,8 @@ const HEADER = [
   ' `skills` and `model` (a tier, mid or top, mapped to models in project.yml) per phase are yours to change;',
   ' `seen` lists the skills setup has already offered, so one you',
   ' remove here is not added back.',
+  ' `notify.adapter` (push-notification | none) names how the Orchestrator reaches you at the Decision gate;',
+  ' the CLI sends nothing.',
 ].join('\n');
 
 export const INLINE_NOTE = ' none bound: the Orchestrator does this phase inline';
@@ -87,6 +94,8 @@ const names = (seq: YAMLSeq): string[] => seq.items.map((item) => String((item a
 
 function seedMissing(doc: Document, root: YAMLMap, seed: SeedOptions): void {
   if (!root.has('agentType')) root.set('agentType', seed.agentType ?? DEFAULT_AGENT_TYPE);
+  const notify = mapAt(root, 'notify', doc);
+  if (!notify.has('adapter')) notify.set('adapter', DEFAULT_NOTIFY_ADAPTER);
   const phases = mapAt(root, 'phases', doc);
   for (const phase of PHASES) {
     const node = mapAt(phases, phase, doc);
@@ -167,5 +176,18 @@ function readRoot(root: Record<string, unknown>): Binding | { error: string } {
   const { agentType } = root;
   if (!isText(agentType)) return { error: 'agentType must be a non-empty string' };
   const phases = readPhases(root);
-  return 'error' in phases ? phases : { agentType, phases };
+  if ('error' in phases) return phases;
+  const notify = readNotify(root.notify);
+  return 'error' in notify ? notify : { agentType, phases, notify };
+}
+
+const isNotifyAdapter = (value: unknown): value is NotifyAdapter =>
+  (NOTIFY_ADAPTERS as readonly unknown[]).includes(value);
+
+function readNotify(section: unknown): Binding['notify'] | { error: string } {
+  const adapter = isRecord(section) ? (section.adapter ?? DEFAULT_NOTIFY_ADAPTER) : DEFAULT_NOTIFY_ADAPTER;
+  if (section !== undefined && section !== null && !isRecord(section)) return { error: 'notify must be a mapping' };
+  return isNotifyAdapter(adapter)
+    ? { adapter }
+    : { error: `notify.adapter '${String(adapter)}' is unknown; expected ${NOTIFY_ADAPTERS.join(', ')}` };
 }
