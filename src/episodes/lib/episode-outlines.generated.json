@@ -36,7 +36,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
@@ -45,7 +46,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
             "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "study-note"]
         }
       ],
       [
@@ -69,7 +71,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
-          }
+          },
+          "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
@@ -78,7 +81,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
@@ -87,7 +91,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
             "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
-          }
+          },
+          "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
@@ -96,7 +101,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
-          }
+          },
+          "targets": ["same"]
         }
       ],
       [
@@ -120,7 +126,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
-          }
+          },
+          "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
@@ -129,7 +136,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
             "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
-          }
+          },
+          "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
@@ -138,7 +146,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "footer", "chat"]
         }
       ],
       [
@@ -162,7 +171,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
             "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
-          }
+          },
+          "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
@@ -171,7 +181,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
@@ -180,7 +191,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
@@ -228,7 +240,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
             "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
@@ -237,7 +250,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
-          }
+          },
+          "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
@@ -246,7 +260,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
             "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
-          }
+          },
+          "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
       ]
     ]
@@ -288,7 +303,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
-          }
+          },
+          "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
@@ -297,7 +313,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
-          }
+          },
+          "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
@@ -330,7 +347,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["requirements", "interview", "research", "caption", "page"]
         },
         {
           "slug": "manage-the-price",
@@ -339,7 +357,14 @@
           "text": {
             "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
-          }
+          },
+          "targets": [
+            "break-it-down",
+            "requirements-first",
+            "interview-yourself-with-ai",
+            "evaluate-each-step",
+            "fresh-start-for-each-piece"
+          ]
         }
       ]
     ]
@@ -389,7 +414,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
@@ -398,7 +424,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
             "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "study-note"]
         }
       ],
       [
@@ -422,7 +449,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
-          }
+          },
+          "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
@@ -431,7 +459,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
@@ -440,7 +469,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
             "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
-          }
+          },
+          "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
@@ -449,7 +479,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
-          }
+          },
+          "targets": ["same"]
         }
       ],
       [
@@ -473,7 +504,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
-          }
+          },
+          "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
@@ -482,7 +514,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
             "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
-          }
+          },
+          "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
@@ -491,7 +524,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "footer", "chat"]
         }
       ],
       [
@@ -515,7 +549,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
             "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
-          }
+          },
+          "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
@@ -524,7 +559,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
@@ -533,7 +569,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
@@ -587,7 +624,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
             "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
@@ -596,7 +634,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
-          }
+          },
+          "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
@@ -605,7 +644,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
             "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
-          }
+          },
+          "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
       ]
     ]
@@ -642,7 +682,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/grounding/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["prompting", "agents", "workflows", "factory"]
         }
       ],
       [
@@ -657,7 +698,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/agenda/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -672,7 +714,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/in-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         },
         {
           "slug": "out-of-scope",
@@ -685,7 +728,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/out-of-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -700,7 +744,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/poll/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -715,7 +760,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/about-me/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["chain"]
         }
       ],
       [
@@ -730,7 +776,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/orga/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items", "questions"]
         }
       ],
       [
@@ -745,7 +792,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-1/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -760,7 +808,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-2/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -775,7 +824,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-3/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         },
         {
           "slug": "disciplines-recap",
@@ -788,7 +838,8 @@
             "de": [
               "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/disciplines-recap/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["workflows"]
         }
       ]
     ]
@@ -838,7 +889,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
-          }
+          },
+          "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
@@ -847,7 +899,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
-          }
+          },
+          "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
@@ -880,7 +933,14 @@
           "text": {
             "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
-          }
+          },
+          "targets": [
+            "break-it-down",
+            "requirements-first",
+            "interview-yourself-with-ai",
+            "evaluate-each-step",
+            "fresh-start-for-each-piece"
+          ]
         },
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
@@ -889,7 +949,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["requirements", "interview", "research", "caption", "page"]
         }
       ]
     ]
@@ -931,7 +992,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
@@ -940,7 +1002,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
             "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "study-note"]
         }
       ],
       [
@@ -964,7 +1027,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
-          }
+          },
+          "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
@@ -973,7 +1037,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
@@ -982,7 +1047,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
             "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
-          }
+          },
+          "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
@@ -991,7 +1057,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
-          }
+          },
+          "targets": ["same"]
         }
       ],
       [
@@ -1015,7 +1082,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
-          }
+          },
+          "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
@@ -1024,7 +1092,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
             "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
-          }
+          },
+          "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
@@ -1033,7 +1102,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "footer", "chat"]
         }
       ],
       [
@@ -1057,7 +1127,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
             "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
-          }
+          },
+          "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
@@ -1066,7 +1137,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
@@ -1075,7 +1147,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
@@ -1129,7 +1202,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
             "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
@@ -1138,7 +1212,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
-          }
+          },
+          "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
@@ -1147,7 +1222,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
             "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
-          }
+          },
+          "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
       ]
     ]
@@ -1176,7 +1252,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/grounding/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/grounding/i18n/de.json"]
-          }
+          },
+          "targets": ["prompting", "agents", "workflows", "factory"]
         }
       ],
       [
@@ -1187,7 +1264,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/agenda/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/agenda/i18n/de.json"]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -1198,7 +1276,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/poll/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/poll/i18n/de.json"]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -1209,7 +1288,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-1/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-1/i18n/de.json"]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -1220,7 +1300,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-2/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-2/i18n/de.json"]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -1231,7 +1312,8 @@
           "text": {
             "en": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-3/i18n/en.json"],
             "de": ["src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-3/i18n/de.json"]
-          }
+          },
+          "targets": ["questions"]
         }
       ]
     ]
@@ -1273,7 +1355,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
-          }
+          },
+          "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
@@ -1282,7 +1365,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
-          }
+          },
+          "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
@@ -1315,7 +1399,14 @@
           "text": {
             "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
-          }
+          },
+          "targets": [
+            "break-it-down",
+            "requirements-first",
+            "interview-yourself-with-ai",
+            "evaluate-each-step",
+            "fresh-start-for-each-piece"
+          ]
         },
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
@@ -1324,7 +1415,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["requirements", "interview", "research", "caption", "page"]
         }
       ]
     ]
@@ -1361,7 +1453,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/orga/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items", "questions"]
         }
       ],
       [
@@ -1376,7 +1469,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/hook/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["statement"]
         }
       ],
       [
@@ -1391,7 +1485,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/agenda/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -1406,7 +1501,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/in-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         },
         {
           "slug": "out-of-scope",
@@ -1419,7 +1515,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/out-of-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -1434,7 +1531,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/grounding/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["prompting", "agents", "workflows", "factory"]
         }
       ],
       [
@@ -1449,7 +1547,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/about-me/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["chain"]
         }
       ],
       [
@@ -1464,7 +1563,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/todays-quiz/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["steps"]
         },
         {
           "slug": "ask-ai-for-help",
@@ -1477,7 +1577,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/ask-ai-for-help/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["flow"]
         },
         {
           "slug": "start-the-interview",
@@ -1490,7 +1591,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/start-the-interview/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["steps"]
         },
         {
           "slug": "spec-and-quiz-page",
@@ -1503,7 +1605,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/spec-and-quiz-page/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["steps"]
         },
         {
           "slug": "make-it-a-skill",
@@ -1516,7 +1619,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/make-it-a-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["steps"]
         }
       ],
       [
@@ -1531,7 +1635,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/close/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["board"]
         }
       ]
     ]
@@ -1585,7 +1690,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-thought-experiment/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["board"]
         },
         {
           "slug": "now-with-agents",
@@ -1598,7 +1704,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/now-with-agents/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["context"]
         }
       ],
       [
@@ -1626,7 +1733,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agent-is/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["agents"]
         },
         {
           "slug": "what-an-agentic-workflow-is-slide",
@@ -1639,7 +1747,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "minimal", "research"]
         }
       ],
       [
@@ -1667,7 +1776,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["origin", "on-level", "caption", "out-level", "forces"]
         },
         {
           "slug": "reviewability-sets-the-distance",
@@ -1680,7 +1790,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["hedge", "check-card", "board", "caption", "guest-list"]
         }
       ],
       [
@@ -1708,7 +1819,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "kitchen", "tree", "callout", "goal"]
         },
         {
           "slug": "contracts-at-the-seams",
@@ -1721,7 +1833,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "contract", "one-side"]
         },
         {
           "slug": "reviewing-the-result",
@@ -1734,7 +1847,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewing-the-result/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "verification", "validation"]
         }
       ],
       [
@@ -1762,7 +1876,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["quote", "org-chart", "hedges", "draft"]
         },
         {
           "slug": "designed-ai-first",
@@ -1775,7 +1890,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/designed-ai-first/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["board", "tips"]
         },
         {
           "slug": "what-to-look-for-in-your-team",
@@ -1788,7 +1904,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["person", "footnote"]
         },
         {
           "slug": "from-article-to-quiz",
@@ -1801,7 +1918,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["two-levels"]
         }
       ]
     ]
@@ -1855,7 +1973,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption"]
         },
         {
           "slug": "a-skill-hands-the-ai-your-procedure",
@@ -1868,7 +1987,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["skill-tile"]
         }
       ],
       [
@@ -1896,7 +2016,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["folder", "app-names", "routing", "caption"]
         },
         {
           "slug": "three-levels-of-loading",
@@ -1909,7 +2030,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "other-apps", "level-extras", "level-index", "concept-skills", "concept"]
         },
         {
           "slug": "skills-are-dynamic-context",
@@ -1922,7 +2044,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["static", "always-loaded", "rule-of-thumb"]
         },
         {
           "slug": "instructions-skills-and-connectors",
@@ -1935,7 +2058,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["thing-personal", "footer", "thing-connectors", "thing-project"]
         },
         {
           "slug": "two-ways-to-call-a-skill",
@@ -1948,7 +2072,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["by-name", "by-description", "stat", "stat-scope"]
         }
       ],
       [
@@ -1976,7 +2101,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["fowler", "comic", "skill-file"]
         },
         {
           "slug": "not-every-repeat-deserves-a-skill",
@@ -1989,7 +2115,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["callout", "price"]
         },
         {
           "slug": "write-it-from-a-good-run",
@@ -2002,7 +2129,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["run", "interview", "notes-lane"]
         }
       ],
       [
@@ -2030,7 +2158,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "scent"]
         },
         {
           "slug": "name-the-moment-not-the-content",
@@ -2043,7 +2172,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["moment", "caption", "not-for", "hedge"]
         },
         {
           "slug": "more-skills-harder-choice",
@@ -2056,7 +2186,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["hick", "vercel", "caption", "naming"]
         }
       ],
       [
@@ -2084,7 +2215,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["ia-callout", "homes"]
         },
         {
           "slug": "one-skill-one-job",
@@ -2097,7 +2229,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["pointer", "coupling-card"]
         },
         {
           "slug": "inside-the-skill",
@@ -2110,7 +2243,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["long-rule", "contents-rule", "files-head", "disclosure"]
         }
       ],
       [
@@ -2138,7 +2272,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption"]
         },
         {
           "slug": "who-uses-it-and-where",
@@ -2151,7 +2286,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["shared", "stamp", "evals"]
         },
         {
           "slug": "how-grill-me-and-grill-with-docs-work",
@@ -2164,7 +2300,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["run-2"]
         }
       ],
       [
@@ -2192,7 +2329,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["owner", "review", "format"]
         },
         {
           "slug": "who-owns-the-shared-skill-library",
@@ -2205,7 +2343,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["tier", "add", "cost", "caption"]
         },
         {
           "slug": "does-the-skill-make-things-better",
@@ -2218,7 +2357,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["callout", "harm", "description-test", "footnote", "vercel"]
         }
       ],
       [
@@ -2246,7 +2386,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["debt"]
         },
         {
           "slug": "the-model-changes-the-skill-doesn-t",
@@ -2259,7 +2400,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["lehman", "caption", "analogy-only", "switch"]
         },
         {
           "slug": "retire-skills",
@@ -2272,7 +2414,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["archive"]
         },
         {
           "slug": "the-whole-iceberg",
@@ -2285,7 +2428,8 @@
             "de": [
               "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["governance"]
         }
       ]
     ]
@@ -2333,7 +2477,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
@@ -2342,7 +2487,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
             "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "study-note"]
         }
       ],
       [
@@ -2366,7 +2512,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
-          }
+          },
+          "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
@@ -2375,7 +2522,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
@@ -2384,7 +2532,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
             "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
-          }
+          },
+          "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
@@ -2393,7 +2542,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
-          }
+          },
+          "targets": ["same"]
         }
       ],
       [
@@ -2417,7 +2567,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
-          }
+          },
+          "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
@@ -2426,7 +2577,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
             "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
-          }
+          },
+          "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
@@ -2435,7 +2587,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "footer", "chat"]
         }
       ],
       [
@@ -2459,7 +2612,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
             "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
-          }
+          },
+          "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
@@ -2468,7 +2622,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
@@ -2477,7 +2632,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
@@ -2531,7 +2687,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
             "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
@@ -2540,7 +2697,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
-          }
+          },
+          "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
@@ -2549,7 +2707,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
             "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
-          }
+          },
+          "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
       ]
     ]
@@ -2586,7 +2745,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/grounding/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["prompting", "agents", "workflows", "factory"]
         }
       ],
       [
@@ -2601,7 +2761,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/agenda/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -2616,7 +2777,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/in-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         },
         {
           "slug": "out-of-scope",
@@ -2629,7 +2791,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/out-of-scope/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items"]
         }
       ],
       [
@@ -2644,7 +2807,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/poll/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -2659,7 +2823,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/about-me/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["chain"]
         }
       ],
       [
@@ -2674,7 +2839,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/orga/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["items", "questions"]
         }
       ],
       [
@@ -2689,7 +2855,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-1/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -2704,7 +2871,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-2/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         }
       ],
       [
@@ -2719,7 +2887,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-3/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["questions"]
         },
         {
           "slug": "disciplines-recap",
@@ -2732,7 +2901,8 @@
             "de": [
               "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/disciplines-recap/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["workflows"]
         }
       ]
     ]
@@ -2782,7 +2952,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
-          }
+          },
+          "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
@@ -2791,7 +2962,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
-          }
+          },
+          "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
@@ -2824,7 +2996,14 @@
           "text": {
             "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
-          }
+          },
+          "targets": [
+            "break-it-down",
+            "requirements-first",
+            "interview-yourself-with-ai",
+            "evaluate-each-step",
+            "fresh-start-for-each-piece"
+          ]
         },
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
@@ -2833,7 +3012,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["requirements", "interview", "research", "caption", "page"]
         }
       ]
     ]
@@ -2871,7 +3051,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
@@ -2880,7 +3061,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
             "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
-          }
+          },
+          "targets": ["middle", "start", "end", "study-note"]
         }
       ],
       [
@@ -2900,7 +3082,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
-          }
+          },
+          "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
@@ -2909,7 +3092,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
@@ -2918,7 +3102,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
             "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
-          }
+          },
+          "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
@@ -2927,7 +3112,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
             "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
-          }
+          },
+          "targets": ["same"]
         }
       ],
       [
@@ -2947,7 +3133,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
             "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
-          }
+          },
+          "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
@@ -2956,7 +3143,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
             "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
-          }
+          },
+          "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
@@ -2965,7 +3153,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "footer", "chat"]
         }
       ],
       [
@@ -2985,7 +3174,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
             "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
-          }
+          },
+          "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
@@ -2994,7 +3184,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
             "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
-          }
+          },
+          "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
@@ -3003,7 +3194,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
@@ -3050,7 +3242,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
             "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
@@ -3059,7 +3252,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
-          }
+          },
+          "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
@@ -3068,7 +3262,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
             "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
-          }
+          },
+          "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
       ]
     ]
@@ -3088,7 +3283,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/motivation/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/motivation/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "freelancer-cards"]
         },
         {
           "slug": "lead-one-upskill-many",
@@ -3097,7 +3293,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/lead-one-upskill-many/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/lead-one-upskill-many/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "the-four-eras-of-ai",
@@ -3106,7 +3303,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/the-four-eras-of-ai/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/the-four-eras-of-ai/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "the-invisible-invoice",
@@ -3115,7 +3313,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/the-invisible-invoice/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/the-invisible-invoice/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "outcome-per-euro",
@@ -3124,7 +3323,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/outcome-per-euro/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/outcome-per-euro/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         }
       ],
       [
@@ -3135,7 +3335,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/what-is-a-token/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/what-is-a-token/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "live-context-breakdown",
@@ -3144,7 +3345,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/live-context-breakdown/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/live-context-breakdown/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "cli-vs-web-tool-obscurity",
@@ -3153,7 +3355,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/cli-vs-web-tool-obscurity/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/cli-vs-web-tool-obscurity/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         }
       ],
       [
@@ -3164,7 +3367,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/managing-context/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/managing-context/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "the-lost-middle",
@@ -3173,7 +3377,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/the-lost-middle/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/the-lost-middle/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "the-fullness-gauge-and-levers",
@@ -3182,7 +3387,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/the-fullness-gauge-and-levers/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/the-fullness-gauge-and-levers/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         }
       ],
       [
@@ -3193,7 +3399,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/cost-of-agentic-ai/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/cost-of-agentic-ai/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         },
         {
           "slug": "the-compounding-cost-curve",
@@ -3202,7 +3409,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/the-compounding-cost-curve/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/the-compounding-cost-curve/i18n/de.json"]
-          }
+          },
+          "targets": ["title"]
         }
       ],
       [
@@ -3213,7 +3421,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/model-tiers/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/model-tiers/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "routing-flow"]
         }
       ],
       [
@@ -3224,7 +3433,8 @@
           "text": {
             "en": ["src/episodes/ai-token-economy/slides/tools-and-tips/i18n/en.json"],
             "de": ["src/episodes/ai-token-economy/slides/tools-and-tips/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "tools-grid"]
         }
       ]
     ]
@@ -3266,7 +3476,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/what-the-customer-really-wanted/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["belts"]
         },
         {
           "slug": "what-happens-with-ai",
@@ -3275,7 +3486,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/what-happens-with-ai/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/what-happens-with-ai/i18n/de.json"]
-          }
+          },
+          "targets": ["review-queue", "scope"]
         },
         {
           "slug": "speed-the-whole-line-can-carry",
@@ -3288,7 +3500,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/speed-the-whole-line-can-carry/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["takeaway"]
         }
       ],
       [
@@ -3316,7 +3529,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/value-was-always-translation/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption"]
         },
         {
           "slug": "defining-and-building",
@@ -3327,7 +3541,8 @@
               "src/episodes/from-shared-understanding-to-shared-context/slides/defining-and-building/i18n/en.json"
             ],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/defining-and-building/i18n/de.json"]
-          }
+          },
+          "targets": ["upfront", "survey"]
         },
         {
           "slug": "precision-and-accuracy",
@@ -3340,7 +3555,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/precision-and-accuracy/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["precise-off", "limits"]
         }
       ],
       [
@@ -3368,7 +3584,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/what-the-ai-actually-sees/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["window"]
         },
         {
           "slug": "context-engineering-is-requirements-engineering-for-agents",
@@ -3381,7 +3598,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/context-engineering-is-requirements-engineering-for-agents/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "quote", "customer", "limits"]
         },
         {
           "slug": "static-and-dynamic-context",
@@ -3394,7 +3612,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/static-and-dynamic-context/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["during"]
         },
         {
           "slug": "you-run-the-bench",
@@ -3403,7 +3622,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/you-run-the-bench/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/you-run-the-bench/i18n/de.json"]
-          }
+          },
+          "targets": ["stat"]
         },
         {
           "slug": "context-rot",
@@ -3412,7 +3632,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/context-rot/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/context-rot/i18n/de.json"]
-          }
+          },
+          "targets": ["distraction", "credit", "dynamic-row"]
         },
         {
           "slug": "keeping-the-bench-clean",
@@ -3425,7 +3646,8 @@
             "de": [
               "src/episodes/from-shared-understanding-to-shared-context/slides/keeping-the-bench-clean/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["framing", "others", "compact"]
         }
       ],
       [
@@ -3449,7 +3671,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/meta-prompting/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/meta-prompting/i18n/de.json"]
-          }
+          },
+          "targets": ["answer-better", "written-from"]
         },
         {
           "slug": "grill-me",
@@ -3458,7 +3681,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/grill-me/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/grill-me/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "first-round", "rounds-note"]
         },
         {
           "slug": "brief",
@@ -3467,7 +3691,8 @@
           "text": {
             "en": ["src/episodes/from-shared-understanding-to-shared-context/slides/brief/i18n/en.json"],
             "de": ["src/episodes/from-shared-understanding-to-shared-context/slides/brief/i18n/de.json"]
-          }
+          },
+          "targets": ["fresh"]
         }
       ]
     ]
@@ -3487,7 +3712,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/markdown-in-ai-workflows/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/markdown-in-ai-workflows/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "knowledge"]
         }
       ],
       [
@@ -3498,7 +3724,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/volume-outruns-review/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/volume-outruns-review/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "corpus-chart"]
         }
       ],
       [
@@ -3509,7 +3736,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/where-the-effort-goes/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/where-the-effort-goes/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "venn"]
         },
         {
           "slug": "what-the-machine-verifies",
@@ -3518,7 +3746,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/what-the-machine-verifies/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/what-the-machine-verifies/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "check-result"]
         },
         {
           "slug": "what-ai-accelerates",
@@ -3527,7 +3756,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/what-ai-accelerates/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/what-ai-accelerates/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "discrepancy-card"]
         },
         {
           "slug": "what-remains-human",
@@ -3536,7 +3766,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/what-remains-human/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/what-remains-human/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "judgment-card"]
         }
       ],
       [
@@ -3547,7 +3778,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/google-okf/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/google-okf/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "schema-card"]
         }
       ],
       [
@@ -3558,7 +3790,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/steering-the-ai/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/steering-the-ai/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "venn"]
         },
         {
           "slug": "deterministic-core",
@@ -3567,7 +3800,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/deterministic-core/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/deterministic-core/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "flow-diagram"]
         },
         {
           "slug": "live-demo",
@@ -3576,7 +3810,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/live-demo/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/live-demo/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "terminal-panel"]
         },
         {
           "slug": "feature-roadmap",
@@ -3585,7 +3820,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/feature-roadmap/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/feature-roadmap/i18n/de.json"]
-          }
+          },
+          "targets": ["shipped-col", "planned-col"]
         }
       ],
       [
@@ -3596,7 +3832,8 @@
           "text": {
             "en": ["src/episodes/maintaining-markdown-for-ai/slides/the-verifying-half-is-yours/i18n/en.json"],
             "de": ["src/episodes/maintaining-markdown-for-ai/slides/the-verifying-half-is-yours/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "conclusion-card"]
         }
       ]
     ]
@@ -3634,7 +3871,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "zero-cash"]
         }
       ],
       [
@@ -3654,7 +3892,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/sales-is-more-than-selling/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/sales-is-more-than-selling/i18n/de.json"]
-          }
+          },
+          "targets": ["market", "trust", "internal"]
         }
       ],
       [
@@ -3674,7 +3913,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/stages-of-sale/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/stages-of-sale/i18n/de.json"]
-          }
+          },
+          "targets": ["after-sale", "title"]
         },
         {
           "slug": "pipeline-tools-in-practice",
@@ -3683,7 +3923,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/pipeline-tools-in-practice/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/pipeline-tools-in-practice/i18n/de.json"]
-          }
+          },
+          "targets": ["lanes"]
         },
         {
           "slug": "how-marketing-feeds-the-pipeline",
@@ -3692,7 +3933,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/how-marketing-feeds-the-pipeline/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/how-marketing-feeds-the-pipeline/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "lead-in"]
         },
         {
           "slug": "watch-your-cashflow-revenue-pulled-in",
@@ -3701,7 +3943,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow-revenue-pulled-in/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow-revenue-pulled-in/i18n/de.json"]
-          }
+          },
+          "targets": ["march"]
         }
       ],
       [
@@ -3725,7 +3968,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/what-is-a-sales-pipeline/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/what-is-a-sales-pipeline/i18n/de.json"]
-          }
+          },
+          "targets": ["conversion", "cycle"]
         },
         {
           "slug": "pipeline-by-the-numbers",
@@ -3734,7 +3978,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/pipeline-by-the-numbers/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/pipeline-by-the-numbers/i18n/de.json"]
-          }
+          },
+          "targets": ["title", "ratio-opp-deal", "opportunity"]
         },
         {
           "slug": "why-it-takes-time-to-ramp-up",
@@ -3743,7 +3988,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/why-it-takes-time-to-ramp-up/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/why-it-takes-time-to-ramp-up/i18n/de.json"]
-          }
+          },
+          "targets": ["market", "preparation", "metrics"]
         }
       ],
       [
@@ -3763,7 +4009,8 @@
           "text": {
             "en": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow-start-when/i18n/en.json"],
             "de": ["src/episodes/never-too-early-sales/slides/watch-your-cashflow-start-when/i18n/de.json"]
-          }
+          },
+          "targets": ["q2-cash-zero"]
         }
       ]
     ]
@@ -3801,7 +4048,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
             "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
-          }
+          },
+          "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
@@ -3810,7 +4058,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
-          }
+          },
+          "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
@@ -3839,7 +4088,8 @@
           "text": {
             "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
             "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
-          }
+          },
+          "targets": ["requirements", "interview", "research", "caption", "page"]
         },
         {
           "slug": "manage-the-price",
@@ -3848,7 +4098,14 @@
           "text": {
             "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
             "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
-          }
+          },
+          "targets": [
+            "break-it-down",
+            "requirements-first",
+            "interview-yourself-with-ai",
+            "evaluate-each-step",
+            "fresh-start-for-each-piece"
+          ]
         }
       ]
     ]
@@ -3886,7 +4143,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/the-thought-experiment/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/the-thought-experiment/i18n/de.json"]
-          }
+          },
+          "targets": ["board"]
         },
         {
           "slug": "now-with-agents",
@@ -3895,7 +4153,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/now-with-agents/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/now-with-agents/i18n/de.json"]
-          }
+          },
+          "targets": ["context"]
         }
       ],
       [
@@ -3915,7 +4174,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/what-an-agent-is/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/what-an-agent-is/i18n/de.json"]
-          }
+          },
+          "targets": ["agents"]
         },
         {
           "slug": "what-an-agentic-workflow-is-slide",
@@ -3924,7 +4184,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "minimal", "research"]
         }
       ],
       [
@@ -3944,7 +4205,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n/de.json"]
-          }
+          },
+          "targets": ["origin", "on-level", "caption", "out-level", "forces"]
         },
         {
           "slug": "reviewability-sets-the-distance",
@@ -3953,7 +4215,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n/de.json"]
-          }
+          },
+          "targets": ["hedge", "check-card", "board", "caption", "guest-list"]
         }
       ],
       [
@@ -3973,7 +4236,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "kitchen", "tree", "callout", "goal"]
         },
         {
           "slug": "contracts-at-the-seams",
@@ -3982,7 +4246,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "contract", "one-side"]
         },
         {
           "slug": "reviewing-the-result",
@@ -3991,7 +4256,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/reviewing-the-result/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/reviewing-the-result/i18n/de.json"]
-          }
+          },
+          "targets": ["caption", "verification", "validation"]
         }
       ],
       [
@@ -4015,7 +4281,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/the-org-chart-trap/i18n/de.json"]
-          }
+          },
+          "targets": ["quote", "org-chart", "hedges", "draft"]
         },
         {
           "slug": "designed-ai-first",
@@ -4024,7 +4291,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/designed-ai-first/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/designed-ai-first/i18n/de.json"]
-          }
+          },
+          "targets": ["board", "tips"]
         },
         {
           "slug": "what-to-look-for-in-your-team",
@@ -4033,7 +4301,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n/de.json"]
-          }
+          },
+          "targets": ["person", "footnote"]
         },
         {
           "slug": "from-article-to-quiz",
@@ -4042,7 +4311,8 @@
           "text": {
             "en": ["src/episodes/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/en.json"],
             "de": ["src/episodes/what-agentic-workflows-require/slides/from-article-to-quiz/i18n/de.json"]
-          }
+          },
+          "targets": ["two-levels"]
         }
       ]
     ]
@@ -4088,7 +4358,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption"]
         },
         {
           "slug": "a-skill-hands-the-ai-your-procedure",
@@ -4101,7 +4372,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["skill-tile"]
         }
       ],
       [
@@ -4129,7 +4401,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["folder", "app-names", "routing", "caption"]
         },
         {
           "slug": "three-levels-of-loading",
@@ -4142,7 +4415,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "other-apps", "level-extras", "level-index", "concept-skills", "concept"]
         },
         {
           "slug": "skills-are-dynamic-context",
@@ -4155,7 +4429,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["static", "always-loaded", "rule-of-thumb"]
         },
         {
           "slug": "instructions-skills-and-connectors",
@@ -4168,7 +4443,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["thing-personal", "footer", "thing-connectors", "thing-project"]
         },
         {
           "slug": "two-ways-to-call-a-skill",
@@ -4181,7 +4457,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["by-name", "by-description", "stat", "stat-scope"]
         }
       ],
       [
@@ -4209,7 +4486,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["fowler", "comic", "skill-file"]
         },
         {
           "slug": "not-every-repeat-deserves-a-skill",
@@ -4222,7 +4500,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["callout", "price"]
         },
         {
           "slug": "write-it-from-a-good-run",
@@ -4235,7 +4514,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["run", "interview", "notes-lane"]
         }
       ],
       [
@@ -4259,7 +4539,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption", "scent"]
         },
         {
           "slug": "name-the-moment-not-the-content",
@@ -4272,7 +4553,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["moment", "caption", "not-for", "hedge"]
         },
         {
           "slug": "more-skills-harder-choice",
@@ -4285,7 +4567,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["hick", "vercel", "caption", "naming"]
         }
       ],
       [
@@ -4313,7 +4596,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["ia-callout", "homes"]
         },
         {
           "slug": "one-skill-one-job",
@@ -4326,7 +4610,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["pointer", "coupling-card"]
         },
         {
           "slug": "inside-the-skill",
@@ -4339,7 +4624,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["long-rule", "contents-rule", "files-head", "disclosure"]
         }
       ],
       [
@@ -4367,7 +4653,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["caption"]
         },
         {
           "slug": "who-uses-it-and-where",
@@ -4380,7 +4667,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["shared", "stamp", "evals"]
         },
         {
           "slug": "how-grill-me-and-grill-with-docs-work",
@@ -4393,7 +4681,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["run-2"]
         }
       ],
       [
@@ -4419,7 +4708,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["owner", "review", "format"]
         },
         {
           "slug": "who-owns-the-shared-skill-library",
@@ -4432,7 +4722,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["tier", "add", "cost", "caption"]
         },
         {
           "slug": "does-the-skill-make-things-better",
@@ -4445,7 +4736,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["callout", "harm", "description-test", "footnote", "vercel"]
         }
       ],
       [
@@ -4473,7 +4765,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["debt"]
         },
         {
           "slug": "the-model-changes-the-skill-doesn-t",
@@ -4486,7 +4779,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["lehman", "caption", "analogy-only", "switch"]
         },
         {
           "slug": "retire-skills",
@@ -4499,7 +4793,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["archive"]
         },
         {
           "slug": "the-whole-iceberg",
@@ -4512,7 +4807,8 @@
             "de": [
               "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n/de.json"
             ]
-          }
+          },
+          "targets": ["governance"]
         }
       ]
     ]

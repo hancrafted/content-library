@@ -25,14 +25,17 @@ declare module './episode-instance' {
       readonly 'every-revolution-one-card': {
         readonly en: typeof aiGivesYouMoreWork__everyRevolutionOneCard__en;
         readonly de: typeof aiGivesYouMoreWork__everyRevolutionOneCard__de;
+        readonly targets: 'caption' | 'lifted-people' | 'farming' | 'steam-fork' | 'ai';
       };
       readonly 'you-were-promoted': {
         readonly en: typeof aiGivesYouMoreWork__youWerePromoted__en;
         readonly de: typeof aiGivesYouMoreWork__youWerePromoted__de;
+        readonly targets: 'gap' | 'caption' | 'first-stone' | 'stones';
       };
       readonly 'practise-it-today-at-work': {
         readonly en: typeof aiGivesYouMoreWork__practiseItTodayAtWork__en;
         readonly de: typeof aiGivesYouMoreWork__practiseItTodayAtWork__de;
+        readonly targets: 'exhibits' | 'onboard' | 'closing' | 'chunks';
       };
     };
   }

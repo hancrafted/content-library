@@ -12,6 +12,8 @@ export interface OutlineSlide {
   readonly anchor: string;
   readonly text: TextLayers;
   readonly pool: boolean;
+  readonly targets?: readonly string[];
+  readonly explorables?: readonly string[];
 }
 
 export interface EpisodeOutline {

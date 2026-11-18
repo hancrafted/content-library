@@ -30,6 +30,8 @@ export interface SlideKitInput {
   readonly notes: readonly string[];
   readonly slideId: string;
   readonly titleTaken?: string;
+  readonly hidden?: readonly string[];
+  readonly explorables?: Readonly<Record<string, string>>;
 }
 
 function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
@@ -103,11 +105,13 @@ export function slideKit(episode: EpisodeKitInput, slide: SlideKitInput): Runtim
   const { slideId } = slide;
   const Title = titleOf(slide);
   const t = withDefaultTags(slide.t);
+  const hidden = new Set(slide.hidden);
   return {
     t,
     locale: episode.locale,
     ...contextRefsOf(episode, slide),
-    target: (name) => ({ 'data-target': name }),
+    target: (name) => ({ 'data-target': name, ...(hidden.has(name) && { hidden: true as const }) }),
+    explorables: slide.explorables ?? {},
     Title,
     slideHref: slideHrefOf(episode, slideId),
     template: templateOf(slide.t, slideId),
