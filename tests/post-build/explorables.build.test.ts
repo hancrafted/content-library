@@ -89,7 +89,7 @@ describe('the Explorables overview', () => {
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));
     const expected = [
       ['ai-capability', 'cumulative-orchestration'],
-      ['brief-or-pay-the-price', 'intention-capacity'],
+      ['brief-or-pay-the-price', 'matrix-to-workflow'],
       ['context-window', 'intention-capacity'],
       ['human-in-the-loop', 'review-funnel'],
       ['software-ecology', 'review-funnel'],
