@@ -1,9 +1,9 @@
-import { DEFINITION_IDS, type DefinitionId } from './brief-or-pay-the-price.types';
+import { DEFINITION_IDS, type ViewId } from './brief-or-pay-the-price.types';
 
 export const SIDES = ['freelancer', 'ai'] as const;
 export type Side = (typeof SIDES)[number];
 
-export type View = DefinitionId;
+export type View = ViewId;
 export type Target = number | 'closing';
 
 export interface RowMemory {
@@ -19,11 +19,13 @@ export interface MirrorMemory {
 
 export interface ExplorableState {
   readonly view: View;
-  readonly mirrors: Readonly<Record<DefinitionId, MirrorMemory>>;
+  readonly scenario: string;
+  readonly mirrors: Readonly<Record<string, MirrorMemory>>;
 }
 
 export type ExplorableEvent =
   | { readonly type: 'view'; readonly view: View }
+  | { readonly type: 'scenario'; readonly scenario: string }
   | { readonly type: 'open'; readonly target: Target }
   | { readonly type: 'leave'; readonly target: Target }
   | { readonly type: 'dismiss' }
@@ -42,21 +44,23 @@ const emptyMirror = (rowCount: number): MirrorMemory => ({
   blank: false,
 });
 
-export function start(rowCounts: Readonly<Record<DefinitionId, number>>): ExplorableState {
+export const memoryKey = (state: Pick<ExplorableState, 'view' | 'scenario'>): string =>
+  state.view === 'stages' ? `stages:${state.scenario}` : state.view;
+
+export function start(rowCounts: Readonly<Record<string, number>>, scenario = ''): ExplorableState {
   return {
     view: DEFINITION_IDS[0],
-    mirrors: Object.fromEntries(DEFINITION_IDS.map((id) => [id, emptyMirror(rowCounts[id])])) as Record<
-      DefinitionId,
-      MirrorMemory
-    >,
+    scenario,
+    mirrors: Object.fromEntries(Object.entries(rowCounts).map(([key, count]) => [key, emptyMirror(count)])),
   };
 }
 
-export const currentMirror = (state: ExplorableState): MirrorMemory => state.mirrors[state.view];
+export const currentMirror = (state: ExplorableState): MirrorMemory =>
+  state.mirrors[memoryKey(state)] ?? emptyMirror(0);
 
 const withMirror = (state: ExplorableState, mirror: MirrorMemory): ExplorableState => ({
   ...state,
-  mirrors: { ...state.mirrors, [state.view]: mirror },
+  mirrors: { ...state.mirrors, [memoryKey(state)]: mirror },
 });
 
 const played = (row: RowMemory): RowMemory => ({ ...row, passes: Math.max(row.passes, 1) });
@@ -94,6 +98,7 @@ type Handlers = {
 
 const ON: Handlers = {
   view: (state, { view }) => (state.view === view ? state : { ...state, view }),
+  scenario: (state, { scenario }) => (state.scenario === scenario ? state : { ...state, scenario }),
   open: (state, { target }) => open(state, target),
   leave: (state, { target }) =>
     currentMirror(state).open === target
