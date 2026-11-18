@@ -114,7 +114,7 @@ flowchart TD
   SG --> CL
 ```
 
-**Magnetic ink:** draws in `shared/components/animations/`, attaches in `shared/hooks/`, computes in `shared/lib/`; `SiteShell` composes context.
+**Magnetic ink:** `shared/` draws, attaches and computes; `SiteShell` composes context.
 
 Rejected: visual schema (constrains Scenes), per-Episode containers (navigation drift), flat packages (lose tier direction).
 
@@ -130,9 +130,9 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ### 3. Each module owns one thing
 
-1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section.
+1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section. Event copy: instance (0028).
 2. A Slide folder owns its Scene, widgets, logic, CSS, text, notes, Voice script; imports no other.
-3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
+3. `episodes/slide-pool/<slide>/`: content Slides ≥2 Episodes compose, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
 5. `episode-page/` owns the one container, composition mechanics and page-scoped presentation adapters; it feeds plain inputs to domain-free shared measurement. Page chrome: reached only from page assembly or the container.
 6. `episodes/templates/<slug>/`: Template composition, including Themes (Decision record 0026), not an Episode.
@@ -163,6 +163,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 | Kind               | Home                   |
 | ------------------ | ---------------------- |
+| Episode at Event   | Episode instance       |
 | Slide, as-is       | Slide pool             |
 | Slide to adapt     | Slide library, `cp -r` |
 | part               | `slide-shared/`        |
@@ -175,7 +176,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 1. **DO** start from this map, then open the record that owns the concern. (Decision 1)
 2. **DO** run `npm run registry` after adding an Episode (copy `episode-template/`, add metadata) or editing a folder, Playlist, text or Voice script. (Decision 3, Decision 4)
 3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, Decision record 0008)
-4. **DO** promote a part a second Slide needs to `slide-shared/`, a Slide several Episodes show as-is to the Slide pool, imported via `@/`. (Decision 3, Decision 7)
+4. **DO** promote a part a second Slide needs to `slide-shared/`, a Slide ≥2 Episodes show as-is to the Slide pool, imported via `@/`. (Decision 3, Decision 7)
 5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
 6. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
 7. **DO** keep presentation types in the Slide master, page mechanics in the container, plain inputs to the clock. (Decision 3, Decision 6)
@@ -184,7 +185,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 ### Don'ts
 
 1. **DON'T** import upward, or from one Slide folder into another, a pool Slide included. (Decision 2, Decision 3)
-2. **DON'T** add an Episode-local `parts/` or `client/` folder, or put a Title or section slide in the Slide pool. (Decision 3)
+2. **DON'T** add an Episode-local `parts/` or `client/` folder, put a Title or section slide in the Slide pool. (Decision 3)
 3. **DON'T** render Slide anchors or headings outside the container, or reach page chrome from anywhere but page assembly or the container. (Decisions 3 and 4)
 4. **DON'T** put an Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
@@ -211,7 +212,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 **Risks:**
 
-1. **Map drifts from the tree.** **Mitigation:** `files:` globs fail when folders move; reviewers update this map with a new module.
+1. **Map drifts from the tree.** **Mitigation:** `files:` globs fail when folders move; review updates this map.
 2. **Summary contradicts its owner.** **Mitigation:** Decision 1 makes the owner win; review fixes the map.
 
 ## Compliance and Enforcement

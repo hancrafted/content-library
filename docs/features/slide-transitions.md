@@ -54,7 +54,7 @@ The retained rear host covers the wrapper independently of its children. Its bou
 
 The wrapper renders real, non-shrinking space before and after the primary mount through empty pseudo-elements, painted by its existing full-bleed surface. Both lengths extend the existing page/section minimum height; short content cannot absorb them into unused minimum-height space. Tall primary content still grows naturally. The space survives Scene unmounting without being counted again in the held primary height. It is internal presentation space, not inter-Slide margins, wrapper padding or an anchor-reachability spacer. Print omits the allowances.
 
-Each Slide owns its space independently of transition precedence. A trailing `320px` on A and leading `160px` on B add to `480px`; an incoming effect winning over A's leave does not replace A's layout settings. No shared nonzero spacing policy is imposed.
+Each Slide owns its space independently of transition precedence. A trailing `320px` on A and leading `160px` on B add to `480px`; an incoming effect winning over A's leave does not replace A's layout settings. Content Slides get no shared nonzero spacing; the Title and section slides get the [standard looks](#standard-looks).
 
 ```tsx
 presentation: {
@@ -64,7 +64,7 @@ presentation: {
 }
 ```
 
-The Intro Title uses `160px` trailing space. Agenda, Poll, check-in-1 and check-in-2 use `265px`; visual review halved the preceding `320px`/`530px` bottom allowances. Leading space remains `160px` where authored. Intro retains only its inverse Title's liquid leave, starting `160px` before the ordinary range; all its other Slides use normal tone without effects. The other Episodes of Event `2026-11-04-intro-hitl-workflows` use inverse Titles with default liquid leaves. Their first section Title uses the normal section-band surface without enter/leave effects, so the opening edge transitions dark to light; later section Titles retain inverse tone and liquid enters/leaves. All remaining inverse surfaces in this Event mix `--tone-paper` at `88%` with `--tone-ink` to soften the solid dark field, preserving theme inversion. Their Titles author `160px` trailing space and section Titles `265px`; fixed-colour cards use `data-tone-flip` for readable copy. The three Explorable Titles explicitly author their own trailing space and start offset after removal of the fixed second viewport. These are author choices, not renderer defaults.
+The Intro Title uses `160px` trailing space. Agenda, Poll, check-in-1 and check-in-2 use `265px`; visual review halved the preceding `320px`/`530px` bottom allowances. Leading space remains `160px` where authored. Intro retains only its inverse Title's liquid leave, starting `160px` before the ordinary range; all its other Slides use normal tone without effects. The other Episodes of Event `2026-11-04-intro-hitl-workflows` use inverse Titles with default liquid leaves. Their first section Title uses the normal section-band surface without enter/leave effects, so the opening edge transitions dark to light; later section Titles retain inverse tone and liquid enters/leaves. All remaining inverse surfaces in this Event mix `--tone-paper` at `88%` with `--tone-ink` to soften the solid dark field, preserving theme inversion. Their Titles author `160px` trailing space and section Titles `265px`; fixed-colour cards use `data-tone-flip` for readable copy. The three Explorable Titles explicitly author their own trailing space and start offset after removal of the fixed second viewport. These were author choices; since Decision record _Standard Title and section looks by position_ they are the [standard looks](#standard-looks).
 
 Reading space and range offsets solve different problems: space protects the last meaningful content, while a range offset coordinates the ink with the surface seam. Tune them together against the short Title and tall Poll, watching when ink reaches a conclusion or control, not merely when progress first becomes nonzero. The Content area omits its divider on a wrapper marked `data-surface-edge` by a selected outgoing effect; otherwise that straight rule would remain visible through the filtered edge. Non-effect boundaries retain their divider.
 
@@ -89,11 +89,25 @@ The DOM-independent public seam is `createSurfaceClock` in `src/shared/lib/surfa
 
 The adapter writes discrete `data-page-tone` on `<html>` and local `--surface-edge-progress` on each outgoing wrapper. Selected clock subscriptions drive each retained ink surface and its `data-transition-suppressed` attribute. It never writes global continuous progress or React frame state. Signal ownership prevents stale disposal from clearing a successor instance's values.
 
+## Standard looks
+
+**Accepted:** Decision record _Standard Title and section looks by position_, Han, 2026-11-18. The spacing values are tuned by visual check, and they need Han's acceptance on a preview before they are recorded here.
+
+Episode composition gives a Slide that declares no `presentation` a standard look, by its position. It does this in the same step that resolves Episode overrides, before adjacent edges are resolved and before the surface clock decides whether to run. The looks are named constants in the Slide master.
+
+| Position                      | Standard look                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Title slide                   | inverse, softened surface (`--tone-paper` 88% with `--tone-ink`), liquid leave, space after            |
+| First Section's section slide | `var(--section-band)` surface, no effect, space before and after; the Title's leave runs dark to light |
+| Later section slides          | inverse, softened surface, liquid enter and leave, space before and after                              |
+
+A declared `presentation` (the Slide's own, the Title's `title.presentation`, or an Episode instance Episode override) replaces the standard look in full; the two are never merged. The Waterline's bubbles and the Explorable heroes keep their declarations. A section slide that should have no look declares `presentation: {}`.
+
 ## Authoring
 
 - The Explorable Title examples live in `src/episodes/explorable-pages/{context-window,human-in-the-loop,ai-capability}/slides/hero/slide.tsx`. Each declares `tone: 'inverse'`, `leave: { effect: 'liquid' }`, `rear: <HeroDecoration story="…" />`, `rearMobile: true` and `Provider: HeroMotion`. Keep the page's story key to retain its intended artwork. `ExplorableHero` supplies only actions, share controls and preview through the passed `SlideFrame`; localized motion labels belong to its Scene. No front decoration is implied.
 - For a different Scene, declare only the capabilities it needs. Use `tocEntrance: 'visible-from-start'` on the Episode composition to bypass Title entrance without disabling transitions. A non-opted-in `tone` Title retains its Title-only presentation; the landing page's `LiquidInkTransition` remains independently driven.
-- A Slide independently opts into background inversion, an enter slide transition, a leave slide transition, rear decoration and front decoration. Omission enables none of the other capabilities. Title and non-Title Slides use the same presentation capabilities.
+- A Slide independently opts into background inversion, an enter slide transition, a leave slide transition, rear decoration and front decoration. Omission enables none of the other capabilities. Exception: a Title slide or section slide that declares nothing gets its [standard look](#standard-looks). Title and non-Title Slides use the same presentation capabilities.
 - The Slide master carries declarations; the existing wrapper renders mechanics. A Scene remains free JSX through its existing kit, without a creative template, Slide-type renderer, second container, new route or mandatory opt-in.
 - Inversion is dark in the light theme and light in the dark theme. Each surface carries authored `normal`/`inverse` semantics plus live surface/foreground token references. A surface-colour override must preserve those contrast semantics or declare its corresponding tone. Neither clock nor chrome discovers tone from computed colours.
 - Enter and leave declarations independently select `liquid`, `paper`, `glitch`, `goo`, `dither` or `wave`, the existing named family. There is no arbitrary renderer-registration API.
