@@ -9,6 +9,7 @@ import { checkIn3Section } from './sections/check-in-3';
 import { groundingSection } from './sections/grounding';
 import { inScopeSection } from './sections/in-scope';
 import { orgaSection } from './sections/orga';
+import { overviewSection } from './sections/overview';
 import { pollSection } from './sections/poll';
 import { hero } from './slides/hero/slide';
 
@@ -26,5 +27,6 @@ export const cyberforumIntro = episode({
     checkIn1Section,
     checkIn2Section,
     checkIn3Section,
+    overviewSection,
   ],
 });

@@ -1,0 +1,26 @@
+/* decision: FE-011 §2 */
+.scene {
+  --term-bg: oklch(0.18 0 0);
+  --term-bar: oklch(0.26 0 0);
+  --term-fg: oklch(0.92 0 0);
+  --term-dim: oklch(0.68 0 0);
+  --term-rule: oklch(0.35 0 0);
+  --term-green: oklch(0.8 0.14 150);
+  --term-orange: oklch(0.8 0.13 60);
+  --term-blue: oklch(0.75 0.12 245);
+  --term-pink: oklch(0.75 0.14 320);
+  --term-red: oklch(0.65 0.15 30);
+}
+
+:global(.dark) .scene {
+  --term-bg: oklch(0.12 0 0);
+  --term-bar: oklch(0.22 0 0);
+  --term-fg: oklch(0.92 0 0);
+  --term-dim: oklch(0.66 0 0);
+  --term-rule: oklch(0.33 0 0);
+  --term-green: oklch(0.8 0.14 150);
+  --term-orange: oklch(0.8 0.13 60);
+  --term-blue: oklch(0.75 0.12 245);
+  --term-pink: oklch(0.75 0.14 320);
+  --term-red: oklch(0.65 0.15 30);
+}
