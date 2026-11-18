@@ -16,6 +16,10 @@ function outlineOf(root: string, episodeDir: string) {
   return episodeOutline(path.relative(path.join(root, EPISODES_DIR), episodeDir));
 }
 
+export function baseEpisodeOf(root: string, episodeDir: string): string | undefined {
+  return outlineOf(root, episodeDir).base;
+}
+
 export function compositionOf(root: string, episodeDir: string): Composition {
   const outline = outlineOf(root, episodeDir);
   const titleOf = (language: SpokenLanguage) =>
