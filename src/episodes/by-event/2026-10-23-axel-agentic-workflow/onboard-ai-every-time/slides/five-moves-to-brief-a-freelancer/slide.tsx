@@ -10,15 +10,6 @@ const MOVES = ['break', 'requirements', 'interview', 'evaluate', 'fresh'] as con
 export const fiveMovesToBriefAFreelancer = slide({
   slug: 'five-moves-to-brief-a-freelancer',
   messages: { en, de },
-  presentation: {
-    tone: 'inverse',
-    style: {
-      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
-      '--slide-space-after': '265px',
-    },
-    enter: { effect: 'liquid' },
-    leave: { effect: 'liquid' },
-  },
   segments: [{ slug: 'answer-to-the-traits' }],
   content: ({ t }) => (
     <SlideFrame>
