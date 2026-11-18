@@ -51,7 +51,7 @@ export function slideRows(root: string, episodeDir: string, language: SpokenLang
     section,
     title: slideTitle(root, slide, language),
     text: layeredText(root, slide.text, language),
-    files: slide.text[language],
+    files: slide.text[language].filter((layer) => typeof layer === 'string'),
     pool: slide.pool,
   });
   return [

@@ -6,7 +6,8 @@ import type { Locale, TextLayers } from './episode-outline.ts';
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
 export function layeredText(root: string, layers: TextLayers, locale: Locale): Record<string, unknown> {
   return layers[locale].reduce<Record<string, unknown>>(
-    (text, file) => mergeOverride(text, JSON.parse(readFileSync(path.join(root, file), 'utf8'))),
+    (text, layer) =>
+      mergeOverride(text, typeof layer === 'string' ? JSON.parse(readFileSync(path.join(root, layer), 'utf8')) : layer),
     {},
   );
 }

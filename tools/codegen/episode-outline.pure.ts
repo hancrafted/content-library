@@ -5,7 +5,8 @@ import type { RegistryFile } from './episode-registry.pure.ts';
 const EPISODE_OUTLINES_PATH = 'src/episodes/lib/episode-outlines.generated.json';
 const POOL_PREFIX = `src/episodes/${SLIDE_POOL_FOLDER}/`;
 
-export type TextLayers = Readonly<Record<string, readonly string[]>>;
+export type TextLayer = string | object;
+export type TextLayers = Readonly<Record<string, readonly TextLayer[]>>;
 
 export interface TracedSlide {
   readonly slug: string;
@@ -36,7 +37,7 @@ export interface OutlineEntry {
 
 function pooled(id: string, slide: TracedSlide): OutlineSlide {
   const home = Object.values(slide.text)[0]?.[0];
-  if (home === undefined) throw new Error(`Slide "${slide.slug}" of ${id} has no text file`);
+  if (typeof home !== 'string') throw new Error(`Slide "${slide.slug}" of ${id} has no text file`);
   return { slug: slide.slug, anchor: slide.anchor, pool: home.startsWith(POOL_PREFIX), text: slide.text };
 }
 
