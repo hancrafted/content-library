@@ -57,6 +57,38 @@ i18n:
       braceSteps: 'BRACE steps'
       play: 'Play'
       pause: 'Pause'
+    layers:
+      thoughtExperiment: 'Thought experiment'
+      freelancer: 'Freelancer'
+      habits: 'Habits'
+      tryIt: 'Try it'
+    freelancerLayer:
+      title: 'A brilliant freelancer with amnesia, every time'
+      text: 'After each conversation they forget everything, so you onboard them again, and every job starts from zero.'
+    thoughtExperiment:
+      agent:
+        title: 'Thought experiment: your first day'
+        hire: 'New hire · You'
+        day: 'Day 1'
+        task: 'Your first task: plan the company summer party. 200 colleagues, five offices across Europe.'
+        questions:
+          budget: 'Budget?'
+          signOff: 'Who signs off?'
+          lastTime: 'What went wrong last time?'
+          date: 'Which date suits five offices?'
+          diet: 'Any dietary needs?'
+          lastYear: 'Who did it last year?'
+        caption: 'You would ask all of these before booking anything. AI asks none of them, unless you brief it.'
+      board:
+        title: 'Thought experiment: four freelancers, one board'
+        intro: 'Four excellent freelancers plan the party. They never meet; they share one board.'
+        teams:
+          activities: { name: 'Activities', note: "Boat trip\n14:00" }
+          travel: { name: 'Travel', note: "Buses from\nfive offices" }
+          venue: { name: 'Venue', note: "Kitchen:\negg dishes" }
+          food: { name: 'Food & drinks', note: "31\nvegetarian" }
+        seam: '"vegetarian" → served with eggs'
+        caption: 'Four perfect cards on one board, and the party still fails between them.'
     matrix:
       title: 'Five traits cost you. Five moves keep them in check.'
       corner: 'Moves against traits'
@@ -250,6 +282,38 @@ i18n:
       braceSteps: 'BRACE-Schritte'
       play: 'Abspielen'
       pause: 'Pause'
+    layers:
+      thoughtExperiment: 'Gedankenexperiment'
+      freelancer: 'Freelancer'
+      habits: 'Gewohnheiten'
+      tryIt: 'Ausprobieren'
+    freelancerLayer:
+      title: 'Ein brillanter Freelancer mit Amnesie, jedes Mal'
+      text: 'Nach jedem Gespräch vergessen sie alles, also arbeitest Du sie neu ein, und jeder Auftrag beginnt bei null.'
+    thoughtExperiment:
+      agent:
+        title: 'Gedankenexperiment: Dein erster Tag'
+        hire: 'Neu im Team · Du'
+        day: 'Tag 1'
+        task: 'Deine erste Aufgabe: Plane das Sommerfest der Firma. 200 Kolleginnen und Kollegen, fünf Standorte in Europa.'
+        questions:
+          budget: 'Budget?'
+          signOff: 'Wer gibt frei?'
+          lastTime: 'Was lief letztes Mal schief?'
+          date: 'Welcher Termin passt fünf Standorten?'
+          diet: 'Ernährungswünsche?'
+          lastYear: 'Wer hat es letztes Jahr gemacht?'
+        caption: 'Du würdest all das fragen, bevor Du irgendetwas buchst. Die KI fragt nichts davon, außer Du briefst sie.'
+      board:
+        title: 'Gedankenexperiment: vier Freelancer, ein Board'
+        intro: 'Vier hervorragende Freelancer planen das Fest. Sie treffen sich nie; sie teilen ein Board.'
+        teams:
+          activities: { name: 'Programm', note: "Bootsfahrt\n14:00" }
+          travel: { name: 'Anreise', note: "Busse von\nfünf Standorten" }
+          venue: { name: 'Location', note: "Küche:\nEiergerichte" }
+          food: { name: 'Essen & Getränke', note: "31\nvegetarisch" }
+        seam: '„vegetarisch“ → mit Eiern serviert'
+        caption: 'Vier perfekte Karten auf einem Board, und das Fest scheitert trotzdem dazwischen.'
     matrix:
       title: 'Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie in Schach.'
       corner: 'Schritte gegen Eigenschaften'

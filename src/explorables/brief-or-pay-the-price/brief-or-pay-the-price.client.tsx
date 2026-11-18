@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useReducer, useRef, type Dispatch, type RefObject } from 'react';
+import { useEffect, useMemo, useReducer, useRef, type Dispatch, type ReactNode, type RefObject } from 'react';
 import type { MatrixData } from './brief-or-pay-the-price-data';
 import type { Definition, DefinitionId, Words } from './brief-or-pay-the-price.types';
 import {
@@ -15,6 +15,7 @@ import {
   type Target,
 } from './explorable-state.pure';
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
+import type { Layer } from './layer-state.pure';
 import { LEVEL } from './levels.client';
 import { cellsIn } from './matrix-data.pure';
 import type { WorkflowScenario } from './scenario.types';
@@ -29,6 +30,8 @@ export interface BriefOrPayThePriceClientProps {
   readonly stages: Readonly<Record<string, Definition>>;
   readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly matrix: MatrixData;
+  readonly habits?: ReactNode;
+  readonly tryIt?: ReactNode;
 }
 
 function useDismiss(open: Target | null, dispatch: Dispatch<ExplorableEvent>) {
@@ -101,6 +104,11 @@ interface ToolbarInput {
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
+const unfilledOf = ({ habits, tryIt }: Pick<BriefOrPayThePriceClientProps, 'habits' | 'tryIt'>): Layer[] => [
+  ...(habits === undefined ? (['habits'] as const) : []),
+  ...(tryIt === undefined ? (['tryIt'] as const) : []),
+];
+
 function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
   const { scenarios, stages, definitions } = data;
   const picks = useMemo(
@@ -125,6 +133,8 @@ function useToolbar({ data, state, dispatch }: ToolbarInput): ToolbarProps {
     onView: (view) => dispatch({ type: 'view', view }),
     onScenario: (scenario) => dispatch({ type: 'scenario', scenario }),
     onZoom: (level) => dispatch({ type: 'zoom', level }),
+    onLayer: (layer) => dispatch({ type: 'layer', layer }),
+    unfilled: unfilledOf(data),
   };
 }
 

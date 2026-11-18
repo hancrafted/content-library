@@ -128,7 +128,50 @@ export interface WorkflowWords {
   readonly pause: string;
 }
 
+export const QUESTION_IDS = ['budget', 'signOff', 'lastTime', 'date', 'diet', 'lastYear'] as const;
+export type QuestionId = (typeof QUESTION_IDS)[number];
+
+export const BOARD_TEAM_IDS = ['activities', 'travel', 'venue', 'food'] as const;
+export type BoardTeamId = (typeof BOARD_TEAM_IDS)[number];
+
+export interface LayerWords {
+  readonly thoughtExperiment: string;
+  readonly freelancer: string;
+  readonly habits: string;
+  readonly tryIt: string;
+}
+
+export interface FreelancerLayerWords {
+  readonly title: string;
+  readonly text: string;
+}
+
+export interface AgentThoughtExperimentWords {
+  readonly title: string;
+  readonly hire: string;
+  readonly day: string;
+  readonly task: string;
+  readonly questions: Readonly<Record<QuestionId, string>>;
+  readonly caption: string;
+}
+
+export interface BoardThoughtExperimentWords {
+  readonly title: string;
+  readonly intro: string;
+  readonly teams: Readonly<Record<BoardTeamId, { readonly name: string; readonly note: string }>>;
+  readonly seam: string;
+  readonly caption: string;
+}
+
+export interface ThoughtExperimentWords {
+  readonly agent: AgentThoughtExperimentWords;
+  readonly board: BoardThoughtExperimentWords;
+}
+
 export interface Words {
+  readonly layers: LayerWords;
+  readonly freelancerLayer: FreelancerLayerWords;
+  readonly thoughtExperiment: ThoughtExperimentWords;
   readonly chrome: {
     readonly define: string;
     readonly views: string;
