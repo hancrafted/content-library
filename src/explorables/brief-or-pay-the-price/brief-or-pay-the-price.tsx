@@ -1,4 +1,5 @@
 import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
+import type { ReactNode } from 'react';
 import { explorableData } from './brief-or-pay-the-price-data';
 import { BriefOrPayThePriceClient } from './brief-or-pay-the-price.client';
 import type { WordsOverride } from './brief-or-pay-the-price.types';
@@ -7,9 +8,11 @@ import type { WordsOverride } from './brief-or-pay-the-price.types';
 export interface BriefOrPayThePriceProps {
   readonly locale: string;
   readonly words?: WordsOverride;
+  readonly habits?: ReactNode;
+  readonly tryIt?: ReactNode;
 }
 
-export function BriefOrPayThePrice({ locale, words }: BriefOrPayThePriceProps) {
+export function BriefOrPayThePrice({ locale, words, habits, tryIt }: BriefOrPayThePriceProps) {
   const data = explorableData(locale, words);
   return (
     <>
@@ -19,6 +22,8 @@ export function BriefOrPayThePrice({ locale, words }: BriefOrPayThePriceProps) {
         stages={data.stages}
         scenarios={data.scenarios}
         matrix={data.matrix}
+        habits={habits}
+        tryIt={tryIt}
       />
       <ExploreItLink slug="brief-or-pay-the-price" />
     </>

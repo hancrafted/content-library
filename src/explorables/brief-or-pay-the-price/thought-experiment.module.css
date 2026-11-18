@@ -1,0 +1,43 @@
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@keyframes fail {
+  from {
+    outline-color: transparent;
+  }
+}
+
+.fail {
+  outline: 2px solid var(--destructive);
+}
+.ok::after {
+  content: ' ✓';
+  color: var(--success);
+}
+.seam {
+  fill: none;
+  stroke: var(--destructive);
+  stroke-width: 3;
+  stroke-dasharray: 8 6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.5s ease-out var(--delay, 0s) both;
+  }
+  .pop {
+    animation: pop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0s) both;
+  }
+  .fail {
+    animation: fail 0.3s ease-out 2.4s both;
+  }
+}

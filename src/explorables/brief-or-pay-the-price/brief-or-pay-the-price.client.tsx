@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useReducer, useRef, type Dispatch, type RefObject } from 'react';
+import { useEffect, useMemo, useReducer, useRef, type Dispatch, type ReactNode, type RefObject } from 'react';
 import { useBraceFlight } from './brace-flight.client';
 import type { MatrixData } from './brief-or-pay-the-price-data';
 import type { Definition, DefinitionId, Words } from './brief-or-pay-the-price.types';
@@ -30,6 +30,8 @@ export interface BriefOrPayThePriceClientProps {
   readonly stages: Readonly<Record<string, Definition>>;
   readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly matrix: MatrixData;
+  readonly habits?: ReactNode;
+  readonly tryIt?: ReactNode;
 }
 
 function useDismiss(open: Target | null, dispatch: Dispatch<ExplorableEvent>) {
