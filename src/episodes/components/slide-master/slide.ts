@@ -1,5 +1,5 @@
 import { withoutSectionSlide as markWithoutSectionSlide, type SectionList } from '@/episodes/lib/episode.pure';
-import type { ExplorablePresetsOf, ExplorablesDeclaration } from '@/episodes/lib/explorable-presets';
+import type { ExplorablePresetsOf, ExplorablesDeclaration } from '@/shared/lib/explorable-presets';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';

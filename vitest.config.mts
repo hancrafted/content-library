@@ -70,6 +70,7 @@ const TRIGGERS = [
   'src/episodes/**/episode.ts',
   'src/episodes/**/episode-metadata.ts',
   'src/episodes/**/overrides/*.json',
+  'src/episodes/**/overrides.lock.json',
   'src/content-store/**',
   'src/explorables/*/',
   'src/**/*.generated.*',

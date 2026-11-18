@@ -1,4 +1,11 @@
 {
+  "@title": {
+    "notes": "absent",
+    "en.notes.check-in.header": "absent",
+    "en.notes.check-in.description": "absent",
+    "de.notes.check-in.header": "absent",
+    "de.notes.check-in.description": "absent"
+  },
   "the-ais-attention-span": { "de.voiceScript.segments.why-it-happens.script": "5b6d4fe43b77" },
   "what-fills-the-window": { "de.voiceScript.segments.more-in-there-than-you-typed.script": "13a7daa244e3" },
   "managing-the-attention-span": { "de.voiceScript.segments.you-manage-by-habit.script": "f3b5dabc4f3c" }

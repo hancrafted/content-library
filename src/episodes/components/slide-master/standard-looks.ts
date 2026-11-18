@@ -3,7 +3,7 @@ import type { SlidePresentation } from './slide-presentation';
 // decision: docs/decision-records/0029-standard-title-and-section-looks-by-position.md
 const SOFTENED_SURFACE = 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))';
 
-export const STANDARD_SPACE = { before: '0px', after: '265px', titleAfter: '160px' } as const;
+const STANDARD_SPACE = { before: '0px', after: '265px', titleAfter: '160px' } as const;
 
 export const STANDARD_TITLE_LOOK: SlidePresentation = {
   tone: 'inverse',
