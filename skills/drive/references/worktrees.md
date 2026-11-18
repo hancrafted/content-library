@@ -20,7 +20,7 @@ When the OS drops a metadata file (`.DS_Store`) into the folder mid-delete, `don
 
 ## sync
 
-`drive worktree sync`, inside a worktree, merges the remote base branch into the current branch; `--base <branch>` merges that local branch instead. It refuses a dirty tree, a detached HEAD and the base branch itself, and it holds the current branch's merge lock, so a `done --base` into this branch waits for it. In the Integration worktree it also fetches and merges the remote's commits of that branch, which is how a merged Decision PR reaches the local worktree. A sync stopped by a conflict leaves the merge in progress: resolve, commit, and the waiting merges continue. To catch up any branch, sync inside its worktree; a `git pull` in the main checkout advances whatever branch that checkout holds.
+`drive worktree sync`, inside a worktree, merges the remote base branch into the current branch; `--base <branch>` merges that local branch instead. It refuses a dirty tree, a detached HEAD and the base branch itself, and it holds the current branch's merge lock, so a `done --base` into this branch waits for it. `--base` naming the current branch merges that branch's remote commits instead: `drive worktree sync --base <Integration branch>` in the Integration worktree is how a merged Decision PR reaches it. A sync stopped by a conflict leaves the merge in progress: resolve, commit, and the waiting merges continue. To catch up any branch, sync inside its worktree; a `git pull` in the main checkout advances whatever branch that checkout holds.
 
 ## push
 

@@ -120,7 +120,7 @@ _Done when:_ every requirement is a line in `decisions.md`, the pre-flight list 
    - Interrupts: a conflict with the spec or a binding decision; CI red after two fix rounds; a Subagent blocked by something outside its brief.
    ```
 
-5. **Watch the gate.** Run `drive pr watch <number>` in the background and notify the Operator through the Binding's notify port that the gate waits. Merged (exit 0): run `drive worktree sync` in the Integration worktree (it takes the remote's commits) and go to Implement. A review comment (exit 3): grill input; revise on `decisions/<topic>`, `drive push`, answer on the PR starting the reply with `<!-- drive -->` (the watch skips such comments), and watch again. Closed unmerged (exit 2): the Workflow stops; tell the Operator.
+5. **Watch the gate.** Run `drive pr watch <number>` in the background and notify the Operator through the Binding's notify port that the gate waits. Merged (exit 0): run `drive worktree sync --base <Integration branch>` in the Integration worktree (it takes the remote's commits) and go to Implement. A review comment (exit 3): grill input; revise on `decisions/<topic>`, `drive push`, answer on the PR starting the reply with `<!-- drive -->` (the watch skips such comments), and watch again. Closed unmerged (exit 2): the Workflow stops; tell the Operator.
 
 _Done when:_ the Operator passed the Decision gate (the Decision PR merged, or the chat approval given), the Integration branch holds the Decision docs, and every ticket is on the tracker with its Skills and Review after lines.
 
