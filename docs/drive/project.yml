@@ -1,6 +1,7 @@
 # The `drive` CLI's project config (Decision record 0027): every value the CLI would otherwise hard-code.
-# Hooks are shell commands run from the main checkout with DRIVE_ROOT, DRIVE_BRANCH, DRIVE_BASE (empty without
-# --base), DRIVE_WORKTREE and, for afterMerge, DRIVE_FORKED_AT (when the branch forked, ISO) in the environment.
+# Hooks are shell commands run from the main checkout (beforeMerge: from the Task worktree) with DRIVE_ROOT,
+# DRIVE_BRANCH, DRIVE_BASE (empty without --base), DRIVE_WORKTREE and, for afterMerge, DRIVE_FORKED_AT (when the
+# branch forked, ISO) in the environment.
 worktree:
   dir: .worktrees
   baseBranch: main
@@ -13,6 +14,10 @@ worktree:
   preflight: npm run preflight
   # The repo's own lock module (exports withLock); the skill owns no locking.
   lock: tools/load/lock.ts
+  # Before the Task branch merges into its --base, run in the Task worktree; a failure stops the finish with
+  # nothing merged and nothing removed. Absent or empty: no hooks.
+  beforeMerge:
+    - node tools/load/drive-hooks.ts build-if-needed
   # Before removal; a failure stops the finish with the worktree intact.
   beforeRemove:
     - node tools/load/drive-hooks.ts stop-servers

@@ -63,9 +63,11 @@ export interface HookEnv {
   base: string | null;
   worktree: string;
   forkedAt: Date | null;
+  cwd?: string;
 }
 
 export function runHooks(project: Project, commands: readonly string[], hook: HookEnv): boolean {
+  const cwd = hook.cwd ?? project.root;
   const env = {
     ...process.env,
     DRIVE_ROOT: project.root,
@@ -77,7 +79,7 @@ export function runHooks(project: Project, commands: readonly string[], hook: Ho
   for (const command of commands) {
     const { status } = spawnSync(command, {
       shell: true,
-      cwd: project.root,
+      cwd,
       env,
       stdio: 'inherit',
     });

@@ -16,6 +16,7 @@ describe('parseConfig', () => {
         '  install: [setup]',
         '  preflight: check-health',
         '  lock: locks/mutex.ts',
+        '  beforeMerge: [build]',
         '  beforeRemove: [stop]',
         '  afterMerge: [report]',
         '  afterRemove: [tidy]',
@@ -34,6 +35,7 @@ describe('parseConfig', () => {
           install: ['setup'],
           preflight: 'check-health',
           lock: 'locks/mutex.ts',
+          beforeMerge: ['build'],
           beforeRemove: ['stop'],
           afterMerge: ['report'],
           afterRemove: ['tidy'],
@@ -42,6 +44,14 @@ describe('parseConfig', () => {
         models: {},
         decisionDocs: ['docs/words.md'],
       });
+    });
+
+    it('reads no hooks before the merge when beforeMerge is absent', () => {
+      // ARRANGE
+      // ACT
+      const config = parseConfig('worktree: {}', ENTRY);
+      // ASSERT
+      expect(config).toMatchObject({ worktree: { beforeMerge: [] } });
     });
 
     it('reads the models each provider gives the tiers', () => {
@@ -108,7 +118,7 @@ describe('parseConfig', () => {
       expect(errors.map((config) => ('error' in config ? config.error : ''))).toEqual([
         'worktree.install must be a list of shell commands',
         'worktree.dir must be a non-empty string',
-        "unknown worktree key 'instal'; expected dir, baseBranch, remote, invoke, install, preflight, lock, beforeRemove, afterMerge, afterRemove",
+        "unknown worktree key 'instal'; expected dir, baseBranch, remote, invoke, install, preflight, lock, beforeMerge, beforeRemove, afterMerge, afterRemove",
         'docs/drive/project.yml must be a mapping',
         expect.stringContaining('not valid YAML'),
         'parallel.default must be a whole number of at least 1',

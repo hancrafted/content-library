@@ -53,8 +53,20 @@ function forceDeleteMergedBranch(branch: string, base: string): void {
   console.log(`✔ deleted branch ${branch}, merged into ${base}`);
 }
 
+function alreadyMerged(branch: string, base: string, cwd: string): boolean {
+  return git(cwd, ['merge-base', '--is-ancestor', branch, base]).status === 0;
+}
+
+function refuseFailingHooksBeforeMerge(project: Project, { branch, base, target }: Finish & { base: string }): void {
+  if (project.config.beforeMerge.length === 0 || alreadyMerged(branch, base, project.root)) return;
+  const hook = { branch, base, worktree: target, forkedAt: null, cwd: target };
+  if (!runHooks(project, project.config.beforeMerge, hook))
+    fail(`a hook before the merge failed; ${branch} was not merged and nothing was removed`);
+}
+
 async function mergeBeforeRemoval(project: Project, finishing: Finish & { base: string }): Promise<void> {
   const { branch, base, target } = finishing;
+  refuseFailingHooksBeforeMerge(project, finishing);
   const forkedAt = forkDateBeforeMerge(branch, base, project.root);
   try {
     const result = await mergeIntoBase(branch, base, {
