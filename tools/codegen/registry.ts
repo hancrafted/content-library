@@ -5,8 +5,9 @@ import type * as store from '../../src/content-store/store.ts';
 import type { compositionOutlines } from '../../src/episodes/lib/composition-outlines.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
 import { EPISODES_DIR, pageFolders, SLIDE_POOL_FOLDER } from '../../src/episodes/lib/episode-folders.ts';
+import { LOCALES, type Locale } from '../../src/episodes/lib/episode-outline.ts';
 import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
-import { episodeOutlinesFile, type TextSource } from './episode-outline.pure.ts';
+import { episodeOutlinesFile, type TextLayers, type TextSource } from './episode-outline.pure.ts';
 import {
   episodeRegistryFiles,
   exportedRecord,
@@ -120,13 +121,33 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
+function existing(root: string, paths: readonly string[]): string[] {
+  return paths.filter((candidate) => existsSync(path.join(root, candidate)));
+}
+
+function layers(root: string, paths: (locale: Locale) => readonly string[]): TextLayers {
+  return Object.fromEntries(LOCALES.map((locale) => [locale, existing(root, paths(locale))])) as unknown as TextLayers;
+}
+
+function episodeTextOf(root: string, folders: readonly string[]): TextLayers {
+  return layers(root, (locale) => [...folders].reverse().map((f) => `${EPISODES_DIR}/${f}/i18n/${locale}.json`));
+}
+
 function textSourceOf(root: string, folders: readonly string[], slug: string): TextSource {
   const owned = folders.map((folder) => `${EPISODES_DIR}/${folder}/slides/${slug}/i18n`);
   const pooled = `${EPISODES_DIR}/${SLIDE_POOL_FOLDER}/${slug}/i18n`;
-  const own = owned.find((candidate) => existsSync(path.join(root, candidate)));
-  if (own !== undefined) return { textSource: own, pool: false };
-  if (existsSync(path.join(root, pooled))) return { textSource: pooled, pool: true };
-  throw new Error(`Slide "${slug}" of ${folders[0]} has no i18n folder in ${[...owned, pooled].join(' or ')}`);
+  const ownerAt = owned.findIndex((candidate) => existsSync(path.join(root, candidate)));
+  if (ownerAt === -1 && !existsSync(path.join(root, pooled)))
+    throw new Error(`Slide "${slug}" of ${folders[0]} has no i18n folder in ${[...owned, pooled].join(' or ')}`);
+  const home = ownerAt === -1 ? pooled : owned[ownerAt];
+  const nearer = folders.slice(0, ownerAt === -1 ? folders.length : ownerAt).reverse();
+  return {
+    pool: ownerAt === -1,
+    text: layers(root, (locale) => [
+      `${home}/${locale}.json`,
+      ...nearer.map((folder) => `${EPISODES_DIR}/${folder}/overrides/${slug}.${locale}.json`),
+    ]),
+  };
 }
 
 async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
@@ -139,7 +160,13 @@ async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFil
     if (folder === undefined) throw new Error(`The Episode registry holds "${id}" but no folder does`);
     return { id, folder, ...outline };
   });
-  return [episodeOutlinesFile(episodes, (folders, slug) => textSourceOf(root, folders, slug))];
+  return [
+    episodeOutlinesFile(
+      episodes,
+      (folders, slug) => textSourceOf(root, folders, slug),
+      (folders) => episodeTextOf(root, folders),
+    ),
+  ];
 }
 
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
