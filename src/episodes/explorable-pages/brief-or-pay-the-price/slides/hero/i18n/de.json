@@ -1,0 +1,24 @@
+{
+  "heading": "Deine KI ist ein brillanter Freelancer mit Amnesie. Brief sie, oder Du zahlst den Preis.",
+  "caption": "Fünf Eigenschaften machen die KI teuer für Dich. Zeig auf jede und sieh, wie ein Freelancer und eine KI ihr begegnen.",
+  "tryIt": "Ausprobieren",
+  "why": "So funktioniert es",
+  "share": {
+    "title": "Zeig es Deinem Team",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "text": "Kläre in einem Meeting, warum KI ein Briefing braucht: Zeig auf jeden Buchstaben von PRICE und lass die Karten sprechen."
+  },
+  "motion": {
+    "pause": "Hintergrundanimation pausieren",
+    "play": "Hintergrundanimation abspielen",
+    "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
+  },
+  "preview": {
+    "label": "Stilisierte Vorschau des Explorables Briefe es, oder Du zahlst den Preis: die fünf Buchstaben P, R, I, C und E, jeder mit einer Freelancer-Karte links und einer KI-Karte rechts.",
+    "title": "Briefe es, oder Du zahlst den Preis",
+    "tag": "PRICE",
+    "freelancer": "Freelancer",
+    "ai": "KI"
+  }
+}
