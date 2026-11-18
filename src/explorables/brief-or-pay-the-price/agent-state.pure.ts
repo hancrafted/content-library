@@ -61,7 +61,7 @@ export function zoomAgent<S extends AgentSlice<unknown>>(state: S, level: Level)
 export function openCell<Memory, S extends AgentSlice<Memory>>(state: S, cell: CellKey, played: Memory): S {
   if (sameCell(state.cell, cell) && state.level === 'agent') return state;
   const mirrors = { ...state.mirrors, [CELL_MEMORY]: played };
-  return { ...state, level: 'agent', cell, restore: null, lit: null, arrival: null, node: null, mirrors };
+  return { ...state, level: 'agent', cell, restore: null, lit: null, arrival: null, mirrors };
 }
 
 export function closeCell<Memory, S extends AgentSlice<Memory>>(state: S, played: Memory): S {
