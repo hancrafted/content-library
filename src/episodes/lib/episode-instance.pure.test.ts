@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveLayers, type InstanceRecord, type InstanceSlide, type OverrideLayer } from './episode-instance.pure';
+import { resolveLayers, type InstanceBase, type InstanceSlide, type OverrideLayer } from './episode-instance.pure';
 import { withoutSectionSlide, type SectionList } from './episode.pure';
 
 function fake(slug: string, en: object, de: object): InstanceSlide {
@@ -18,7 +18,7 @@ const HOW = fake('how', { title: 'How' }, { title: 'Wie' });
 const WATCH = fake('watch', { title: 'Watch' }, { title: 'Schauen' });
 const ADDED = fake('added', { title: 'Added' }, { title: 'Neu' });
 
-const BASE: InstanceRecord = {
+const BASE: InstanceBase = {
   slug: 'demo',
   messages: { en: { title: 'Demo' }, de: { title: 'Demo-de' } },
   title: HERO,
@@ -28,14 +28,14 @@ const BASE: InstanceRecord = {
   ],
 };
 
-const FLAGGED: InstanceRecord = {
+const FLAGGED: InstanceBase = {
   ...BASE,
   sections: [withoutSectionSlide([WHY, PRICE, LOOP]), [HOW, WATCH]],
 };
 
-const resolve = (base: InstanceRecord, ...layers: OverrideLayer[]) => resolveLayers(base, layers);
-const slugsOf = (record: InstanceRecord) => record.sections.map((section) => section.map(({ slug }) => slug));
-const flagsOf = (record: InstanceRecord) => record.sections.map((section: SectionList) => section.sectionSlide);
+const resolve = (base: InstanceBase, ...layers: OverrideLayer[]) => resolveLayers(base, layers);
+const slugsOf = (record: InstanceBase) => record.sections.map((section) => section.map(({ slug }) => slug));
+const flagsOf = (record: InstanceBase) => record.sections.map((section: SectionList) => section.sectionSlide);
 
 describe('success cases', () => {
   it('resolves no Episode override into a record equal to its Base Episode', () => {
@@ -231,7 +231,7 @@ describe('edge cases', () => {
 
   it('hides a whole Section without a section slide when the hidden Slide is its opener, so its hidden head never renders', () => {
     // ARRANGE
-    const lone: InstanceRecord = { ...BASE, sections: [withoutSectionSlide([WHY, PRICE]), [HOW, WATCH]] };
+    const lone: InstanceBase = { ...BASE, sections: [withoutSectionSlide([WHY, PRICE]), [HOW, WATCH]] };
     const expected = [['how', 'watch']];
     // ACT
     const instance = resolve(lone, { sections: [{ hide: 'price' }] });

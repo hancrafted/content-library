@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { instanceOf } from './episode-instance';
-import type { InstanceRecord, InstanceSlide } from './episode-instance.pure';
+import type { InstanceBase, InstanceSlide } from './episode-instance.pure';
 import { recordOutline, withTextAs } from './episode-outline-of-record';
 import type { SectionList } from './episode.pure';
 
@@ -18,7 +18,7 @@ declare module './episode-instance' {
 const text = (title: string) => ({ en: { title }, de: { title: `${title}-de` } });
 const slideOf = (slug: string, title: string): InstanceSlide => ({ slug, messages: text(title) });
 
-interface Demo extends InstanceRecord {
+interface Demo extends InstanceBase {
   readonly slug: 'outline-of-record-demo';
   readonly messages: typeof EPISODE_TEXT;
   readonly sections: readonly SectionList<InstanceSlide>[];
@@ -40,7 +40,7 @@ const ADDED = slideOf('added', 'Added');
 
 const BASE = demo({ title: HERO, sections: [[WHY, WATCH]] });
 
-const slugAndAnchor = (record: InstanceRecord) =>
+const slugAndAnchor = (record: InstanceBase) =>
   recordOutline(record)
     .sections.flat()
     .map(({ slug, anchor }) => `${slug}@${anchor}`);

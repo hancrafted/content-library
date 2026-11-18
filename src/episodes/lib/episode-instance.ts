@@ -1,7 +1,7 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 import {
   resolveLayers,
-  type InstanceRecord,
+  type InstanceBase,
   type OverrideLayer,
   type SectionOperation,
   type SlideOf,
@@ -40,7 +40,7 @@ type LocalePartials<M> = { readonly [L in Locale]?: L extends keyof M ? DeepPart
 
 type PresentationOf<B> = SlideOf<B> extends { readonly presentation?: infer P } ? P : object;
 
-export interface EpisodeOverride<B extends InstanceRecord> {
+export interface EpisodeOverride<B extends InstanceBase> {
   readonly title?: { readonly notes?: B['notes']; readonly messages?: LocalePartials<B['messages']> };
   readonly slides?: {
     readonly [S in SlugOf<B>]?: {
@@ -57,7 +57,7 @@ type ExactSlide<O, M> = {
   readonly [K in keyof O]: K extends 'messages' ? ExactLocales<O[K], M> : K extends 'presentation' ? O[K] : never;
 };
 
-type ExactLayer<O, B extends InstanceRecord> = {
+type ExactLayer<O, B extends InstanceBase> = {
   readonly [K in keyof O]: K extends 'title'
     ? { readonly [T in keyof O[K]]: T extends 'messages' ? ExactLocales<O[K][T], B['messages']> : O[K][T] }
     : K extends 'slides'
@@ -82,7 +82,7 @@ export function baseOf<B extends object>(record: B): B | undefined {
   return instanceTrailOf(record)?.base;
 }
 
-export function instanceOf<B extends InstanceRecord, L extends readonly EpisodeOverride<B>[]>(
+export function instanceOf<B extends InstanceBase, L extends readonly EpisodeOverride<B>[]>(
   base: B,
   ...layers: L & { readonly [I in keyof L]: ExactLayer<L[I], B> }
 ): B {

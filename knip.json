@@ -4,6 +4,7 @@
     ".archgate/adrs/*.rules.ts",
     "src/page-assembly/i18n-request.ts",
     "src/episodes/components/art-build/art-pages.tsx",
+    "src/episodes/lib/episode-instance-slides.generated.ts",
     "skills/*/scripts/*.pure.ts",
     "tools/load/drive-hooks.ts",
     "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts"

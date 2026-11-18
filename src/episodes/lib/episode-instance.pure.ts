@@ -9,7 +9,7 @@ export interface InstanceSlide {
   readonly presentation?: object;
 }
 
-export interface InstanceRecord<S extends InstanceSlide = InstanceSlide> {
+export interface InstanceBase<S extends InstanceSlide = InstanceSlide> {
   readonly slug: string;
   readonly messages: Readonly<Record<Locale, object>>;
   readonly notes?: readonly object[];
@@ -45,7 +45,7 @@ interface WorkingSection<S> {
   readonly sectionSlide: boolean;
 }
 
-function notInBase(slug: string, base: InstanceRecord): Error {
+function notInBase(slug: string, base: InstanceBase): Error {
   return new Error(`Slide "${slug}" is not in the Base Episode "${base.slug}"`);
 }
 
@@ -72,7 +72,7 @@ const openerIndexOf = (section: WorkingSection<unknown>): number => (section.sec
 
 interface Arrangement<S> {
   readonly sections: WorkingSection<S>[];
-  readonly base: InstanceRecord;
+  readonly base: InstanceBase;
 }
 
 function placeOf<S extends InstanceSlide>(
@@ -127,10 +127,10 @@ function sectionListOf<S extends InstanceSlide>({ slides, sectionSlide }: Workin
   return sectionSlide ? list : (withoutSectionSlide(list) as SectionList<S>);
 }
 
-function withSectionOperations<R extends InstanceRecord>(
+function withSectionOperations<R extends InstanceBase>(
   record: R,
   operations: readonly SectionOperation<SlideOf<R>>[],
-  base: InstanceRecord,
+  base: InstanceBase,
 ): R {
   if (operations.length === 0) return record;
   const start = (record.sections as readonly SectionList<SlideOf<R>>[]).map((section) => ({
@@ -141,13 +141,13 @@ function withSectionOperations<R extends InstanceRecord>(
   return { ...record, sections: resolved.sections.map(sectionListOf) };
 }
 
-const composedSlugs = (record: InstanceRecord): Set<string> =>
+const composedSlugs = (record: InstanceBase): Set<string> =>
   new Set([record.title?.slug, ...record.sections.flat().map(({ slug }) => slug)].filter((slug) => slug !== undefined));
 
-function withSlideOverrides<R extends InstanceRecord>(
+function withSlideOverrides<R extends InstanceBase>(
   record: R,
   overrides: Readonly<Record<string, SlideOverride>>,
-  { known, base }: { readonly known: ReadonlySet<string>; readonly base: InstanceRecord },
+  { known, base }: { readonly known: ReadonlySet<string>; readonly base: InstanceBase },
 ): R {
   const stray = Object.keys(overrides).find((slug) => !known.has(slug));
   if (stray !== undefined) throw notInBase(stray, base);
@@ -167,7 +167,7 @@ function withSlideOverrides<R extends InstanceRecord>(
   };
 }
 
-function withTitle<R extends InstanceRecord>(record: R, title: TitleOverride | undefined): R {
+function withTitle<R extends InstanceBase>(record: R, title: TitleOverride | undefined): R {
   if (title === undefined) return record;
   return {
     ...record,
@@ -176,7 +176,7 @@ function withTitle<R extends InstanceRecord>(record: R, title: TitleOverride | u
   };
 }
 
-function applyLayer<R extends InstanceRecord>(record: R, layer: OverrideLayer<SlideOf<R>>, base: R): R {
+function applyLayer<R extends InstanceBase>(record: R, layer: OverrideLayer<SlideOf<R>>, base: R): R {
   const titled = withTitle(record, layer.title);
   const known = composedSlugs(titled);
   const arranged = withSectionOperations(titled, layer.sections ?? [], base);
@@ -184,6 +184,6 @@ function applyLayer<R extends InstanceRecord>(record: R, layer: OverrideLayer<Sl
   return withSlideOverrides(arranged, layer.slides ?? {}, { known, base });
 }
 
-export function resolveLayers<R extends InstanceRecord>(base: R, layers: readonly OverrideLayer<SlideOf<R>>[]): R {
+export function resolveLayers<R extends InstanceBase>(base: R, layers: readonly OverrideLayer<SlideOf<R>>[]): R {
   return layers.reduce<R>((record, layer) => applyLayer(record, layer, base), { ...base });
 }

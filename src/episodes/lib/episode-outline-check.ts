@@ -2,7 +2,7 @@ import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { isDeepStrictEqual } from 'node:util';
 import { baseOf } from './episode-instance';
-import type { InstanceRecord } from './episode-instance.pure';
+import type { InstanceBase } from './episode-instance.pure';
 import { episodeOutline, type TextLayers } from './episode-outline';
 import { layeredText } from './episode-outline-text';
 import { placeSections } from './episode.pure';
@@ -25,7 +25,7 @@ export interface ResolvedOutline {
 
 const REGISTRY = 'run `npm run registry`';
 
-function recordSlides(composition: InstanceRecord): ResolvedSlide[] {
+function recordSlides(composition: InstanceBase): ResolvedSlide[] {
   return [
     ...(composition.title === undefined
       ? []
@@ -50,7 +50,7 @@ function textFindings(what: string, expected: LocaleText, traced: LocaleText): s
   );
 }
 
-export function staleOutline(composition: InstanceRecord, resolved: ResolvedOutline | undefined): string[] {
+export function staleOutline(composition: InstanceBase, resolved: ResolvedOutline | undefined): string[] {
   if (resolved === undefined) return [`No outline is registered for the page: ${REGISTRY}`];
   const expected = recordSlides(composition);
   const traced = outlineSlides(resolved);

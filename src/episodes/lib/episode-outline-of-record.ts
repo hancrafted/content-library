@@ -1,7 +1,7 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { instanceTrailOf } from './episode-instance';
-import type { InstanceRecord, InstanceSlide, OverrideLayer } from './episode-instance.pure';
+import type { InstanceBase, InstanceSlide, OverrideLayer } from './episode-instance.pure';
 import { placeSections } from './episode.pure';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
@@ -31,7 +31,7 @@ function perLocale(first: Messages, layers: readonly (Partial<Messages> | undefi
   ) as unknown as TextOf<object>;
 }
 
-function originOf(slug: string, base: InstanceRecord, layers: readonly OverrideLayer[]): Messages {
+function originOf(slug: string, base: InstanceBase, layers: readonly OverrideLayer[]): Messages {
   const composed = [base.title, ...base.sections.flat()].find((slide) => slide?.slug === slug);
   if (composed !== undefined) return composed.messages;
   const inserted = layers
@@ -41,7 +41,7 @@ function originOf(slug: string, base: InstanceRecord, layers: readonly OverrideL
   return inserted[0].messages;
 }
 
-export function recordOutline(record: InstanceRecord): RecordOutline<object> {
+export function recordOutline(record: InstanceBase): RecordOutline<object> {
   const trail = instanceTrailOf(record);
   const base = trail?.base ?? record;
   const layers = trail?.layers ?? [];
