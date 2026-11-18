@@ -141,9 +141,32 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed
 - **Evidence:** ai-gives-you-more-work-pool: #729 added two tests that can never fail, only to satisfy the three-describe rule (its own Trade-offs line said so); the review caught them
 
+### A grill round's questions are pointed to, not stated where the Operator reads
+
+- **Count:** 1 (last: 2026-11-18, event-copy-derivation)
+- **Enforcer:** none deterministic yet: a Define rule in the drive skill that each round's questions appear in full in the message that asks for answers, architectural
+- **Status:** proposed
+- **Evidence:** event-copy-derivation: the Orchestrator's setup message sent the Operator to "round 1, Q1 to Q4 from my last message" and offered a `/drive resume` line; the Operator had to ask "list round 1 questions"
+
+### Issues stay open after the PR that closes them has merged
+
+- **Count:** 1 (last: 2026-11-18, event-copy-derivation)
+- **Enforcer:** hook: `drive worktree done` closes or lists the issues its Integration branch's PR references, quick win
+- **Status:** proposed
+- **Evidence:** event-copy-derivation: the Orchestrator found #710, #728 and #735 still open after #714, #733 and #737 had merged, and asked the Operator whether to close them
+
+### The Operator skips Fortify, so corrections and options never reach a decision
+
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Enforcer:** none deterministic yet: Fortify runs from the base branch after the merge and its picks are optional (Decision record 0028), architectural
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool, ai-gives-you-more-work-pool, onboard-ai-every-time-event-look: the Operator skipped the Fortify picks on all three Workflows ("skip fortify and repeat the same for the \"ai-gives-you-more-work\" episode"); the entries above stay unpicked at count 1
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked "can this session run until end or does it require a human?" and asked for a guide to reviewing the PR. The Orchestrator had not stated the Operator's decision points, or how to review, up front. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked to resume automatically after a quota reset. There is no built-in recovery, so the Orchestrator added a session-only watchdog (a cron job that dies with the session). → Workflow progress lives only in the session, so a quota reset ends it
 - 2026-11-18 onboard-ai-every-time-event-look: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
+- 2026-11-17 ai-attention-span-pool: skip fortify and repeat the same for the "ai-gives-you-more-work" episode. also apply the same transition as with the attention episode → The Operator skips Fortify, so corrections and options never reach a decision
+- 2026-11-18 event-copy-derivation: list round 1 questions → A grill round's questions are pointed to, not stated where the Operator reads
