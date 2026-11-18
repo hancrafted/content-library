@@ -2,21 +2,23 @@ import { ExploreItLink } from '@/shared/components/core-components/explorable-ho
 import type { ReactNode } from 'react';
 import { explorableData } from './brief-or-pay-the-price-data';
 import { BriefOrPayThePriceClient } from './brief-or-pay-the-price.client';
-import type { WordsOverride } from './brief-or-pay-the-price.types';
+import type { PresetId, WordsOverride } from './brief-or-pay-the-price.types';
 
 // decision: FE-012 §2
 export interface BriefOrPayThePriceProps {
+  readonly preset: PresetId;
   readonly locale: string;
   readonly words?: WordsOverride;
   readonly habits?: ReactNode;
   readonly tryIt?: ReactNode;
 }
 
-export function BriefOrPayThePrice({ locale, words, habits, tryIt }: BriefOrPayThePriceProps) {
+export function BriefOrPayThePrice({ preset, locale, words, habits, tryIt }: BriefOrPayThePriceProps) {
   const data = explorableData(locale, words);
   return (
     <>
       <BriefOrPayThePriceClient
+        preset={data.presets[preset]}
         words={data.words}
         definitions={data.definitions}
         stages={data.stages}

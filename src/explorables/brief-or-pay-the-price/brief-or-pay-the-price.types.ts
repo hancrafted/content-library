@@ -202,7 +202,24 @@ export interface MoveCounters {
   readonly source: string;
 }
 
+const LAYERS = ['thoughtExperiment', 'freelancer', 'habits', 'tryIt'] as const;
+export type Layer = (typeof LAYERS)[number];
+
+export const PRESET_IDS = ['play', 'drive'] as const;
+export type PresetId = (typeof PRESET_IDS)[number];
+
+export const LEVEL_IDS = ['define', 'agent', 'workflow'] as const;
+
+export interface Preset {
+  readonly view: ViewId;
+  readonly level: (typeof LEVEL_IDS)[number];
+  readonly scenario: string;
+  readonly picker: boolean;
+  readonly layers: readonly Layer[];
+}
+
 export interface Config {
+  readonly presets: Readonly<Record<PresetId, Preset>>;
   readonly definitions: Readonly<Record<DefinitionId, DefinitionStructure>>;
   readonly matrix: Readonly<Record<MoveId, MoveCounters>>;
   readonly i18n: Readonly<Record<Locale, Words>>;

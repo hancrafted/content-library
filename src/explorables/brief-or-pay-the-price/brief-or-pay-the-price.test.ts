@@ -8,7 +8,7 @@ import { TRAIT_IDS } from './brief-or-pay-the-price.types';
 import { keyPaths, loadConfig, mergeWords } from './config.pure';
 
 const render = (locale: string, words?: Parameters<typeof BriefOrPayThePrice>[0]['words']): string =>
-  renderToStaticMarkup(createElement(BriefOrPayThePrice, { locale, words }));
+  renderToStaticMarkup(createElement(BriefOrPayThePrice, { preset: 'play', locale, words }));
 
 const english = explorableData('en');
 const german = explorableData('de');

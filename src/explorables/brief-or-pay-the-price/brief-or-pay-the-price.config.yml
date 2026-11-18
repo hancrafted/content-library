@@ -2,6 +2,12 @@
 # Every string sits under `i18n`, keyed by id, in both locales; the loader refuses a file whose locales differ.
 # German keeps each trait's English name and adds a gloss (`gloss`); English leaves the gloss empty.
 # Authoring guide: docs/features/explorables/brief-or-pay-the-price-scenarios.md.
+# Presets: how a Slide opens the Explorable. `view` is the Definition tab (price, brief, stages, brace), `level` the zoom
+# (define, agent, workflow), `scenario` a file in scenarios/, `picker: false` hides the Scenario picker, and `layers`
+# are the toggles that start on at that level (a toggle whose slot the Slide leaves empty stays off).
+presets:
+  play: { view: price, level: define, scenario: drive, picker: true, layers: [] }
+  drive: { view: stages, level: workflow, scenario: drive, picker: false, layers: [] }
 definitions:
   price:
     acronym: PRICE

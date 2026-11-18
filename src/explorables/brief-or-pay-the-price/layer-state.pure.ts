@@ -1,7 +1,7 @@
 import type { CellKey, Level, ZoomLevel } from './agent-state.pure';
+import type { Layer } from './brief-or-pay-the-price.types';
 
-export const LAYERS = ['thoughtExperiment', 'freelancer', 'habits', 'tryIt'] as const;
-export type Layer = (typeof LAYERS)[number];
+export type { Layer } from './brief-or-pay-the-price.types';
 
 export const LAYERS_OF: Readonly<Record<ZoomLevel, readonly Layer[]>> = {
   agent: ['thoughtExperiment', 'freelancer', 'habits'],

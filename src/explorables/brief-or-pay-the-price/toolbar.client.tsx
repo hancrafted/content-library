@@ -32,6 +32,7 @@ export interface ToolbarProps {
   readonly tabs: Readonly<Record<ViewId, Definition>>;
   readonly state: Pick<ExplorableState, 'view' | 'level' | 'scenario' | 'cell' | 'layers'>;
   readonly scenarios: readonly { readonly id: string; readonly name: string }[];
+  readonly picker: boolean;
   readonly title: string;
   readonly onView: (view: ViewId) => void;
   readonly onScenario: (scenario: string) => void;
@@ -74,8 +75,9 @@ function ZoomTabs({ words, state, onZoom }: ToolbarProps) {
   );
 }
 
-function ScenarioPicker({ words, state, scenarios, onScenario }: ToolbarProps) {
-  if (state.level !== 'workflow' || scenarios.length < 2 || hasLayer(state, 'thoughtExperiment')) return null;
+function ScenarioPicker({ words, state, scenarios, picker, onScenario }: ToolbarProps) {
+  if (!picker || state.level !== 'workflow' || scenarios.length < 2 || hasLayer(state, 'thoughtExperiment'))
+    return null;
   return (
     <div
       role="group"

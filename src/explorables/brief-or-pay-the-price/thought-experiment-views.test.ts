@@ -70,7 +70,7 @@ describe('success cases', () => {
     const habits = createElement('p', { id: 'habits-child' }, 'h');
     const tryIt = createElement('p', { id: 'try-child' }, 't');
     // ACT
-    const element = createElement(BriefOrPayThePrice, { locale: 'en', habits, tryIt });
+    const element = createElement(BriefOrPayThePrice, { preset: 'play', locale: 'en', habits, tryIt });
     // ASSERT
     expect(() => renderToStaticMarkup(element)).not.toThrow();
   });
