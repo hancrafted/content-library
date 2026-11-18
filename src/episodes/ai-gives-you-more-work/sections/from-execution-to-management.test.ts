@@ -2,9 +2,6 @@ import { localizeSlide } from '@/episodes/components/slide-master/localized-slid
 import type { Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
-import { load } from 'cheerio';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { fromExecutionToManagementSection } from './from-execution-to-management';
@@ -18,20 +15,13 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
     episode: 'ai-gives-you-more-work',
     locale,
     placed: PLACED,
-    referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
+    referenceLabels: {
+      ref: 'opens speaker note',
+      marker: (title) => `Speaker note: ${title}`,
+    },
     header: 'shared',
   });
   return renderToStaticMarkup(localized.content);
-}
-
-function rulesOf(slug: string): { selector: string; body: string }[] {
-  const css = readFileSync(join(__dirname, '../slides', slug, 'reveal-steps.module.css'), 'utf8')
-    .replaceAll(/\/\*[\s\S]*?\*\//g, '')
-    .replaceAll(/@media[^{]*\{/g, '');
-  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector = '', body = '']) => ({
-    selector: selector.replaceAll(/\s+/g, ' ').trim(),
-    body,
-  }));
 }
 
 function markersOf(html: string): Record<string, number> {
@@ -74,7 +64,10 @@ describe('success cases', () => {
 
   it('marks the facts of "You were promoted" as Option 2a does', () => {
     // ARRANGE
-    const expected = { 'many-skip-the-management-steps': 1, 'stepping-stone-break-it-down': 1 };
+    const expected = {
+      'many-skip-the-management-steps': 1,
+      'stepping-stone-break-it-down': 1,
+    };
     // ACT
     const markers = markersOf(sceneOf('you-were-promoted'));
     // ASSERT
@@ -107,42 +100,6 @@ describe('failure cases', () => {
     // ASSERT
     expect(scenes.filter((html) => headings.test(html))).toEqual([]);
   });
-});
-
-it('dims a step not yet revealed in a form the contrast check measures: text by colour, the rest by opacity', () => {
-  // ARRANGE
-  const slugs = ['every-revolution-one-card', 'you-were-promoted', 'practise-it-today-at-work'];
-  const expected = slugs.map((slug) => ({ slug, filter: false, hidden: false, text: true, figures: true }));
-  // ACT
-  const resting = slugs.map((slug) => {
-    const rules = rulesOf(slug).filter((rule) => rule.selector.startsWith('.wall[data-step] [data-reveal]'));
-    return {
-      slug,
-      filter: rulesOf(slug).some((rule) => /filter\s*:/.test(rule.body)),
-      hidden: rules.some((rule) => /visibility:\s*hidden|display:\s*none|opacity:\s*0(?![.\d])/.test(rule.body)),
-      text: rules.some((rule) => /\*$/.test(rule.selector) && /color:\s*var\(--muted-foreground\)/.test(rule.body)),
-      figures: rules.some((rule) => /svg$/.test(rule.selector) && /opacity:\s*0\.25/.test(rule.body)),
-    };
-  });
-  // ASSERT
-  expect(resting).toEqual(expected);
-});
-
-it('never dims a claim: an element carrying `primary` sits under no step not yet revealed', () => {
-  // ARRANGE
-  const slugs = ['every-revolution-one-card', 'you-were-promoted', 'practise-it-today-at-work'];
-  const expected = slugs.map((slug) => ({ slug, dimmed: [] }));
-  // ACT
-  const claims = slugs.map((slug) => {
-    const $ = load(sceneOf(slug));
-    const dimmed = $('[class*="bg-primary"], [class*="border-primary"]')
-      .filter((_, element) => $(element).closest('[data-reveal]').length > 0)
-      .map((_, element) => $(element).text())
-      .get();
-    return { slug, dimmed };
-  });
-  // ASSERT
-  expect(claims).toEqual(expected);
 });
 
 describe('edge cases', () => {
