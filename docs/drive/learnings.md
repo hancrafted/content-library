@@ -161,6 +161,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** none deterministic yet: Architect profile line, quick win
 - **Status:** proposed
 - **Evidence:** brief-or-pay-the-price: three grill corrections (PRICE/BRIEF vs stages/BRACE symmetry, stages not agnostic, the summer party as the frame)
+
 ### A /drive grill round is written without reading `docs/agents/grilling-format.md`
 
 - **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
@@ -293,6 +294,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** test-runner: new `drive notify` command whose test fails when the adapter reports no delivery, architectural
 - **Status:** ticket https://github.com/hancrafted/content-library/issues/772
 - **Evidence:** drive-handoff: #768 was ready and the Operator was notified, but Remote Control was off, so no phone push; the Binding's `notify` port (`docs/drive/binding.yml`) names an adapter and checks nothing
+
 ### A grill round's questions are pointed to, not stated where the Operator reads
 
 - **Count:** 1 (last: 2026-11-18, event-copy-derivation)
