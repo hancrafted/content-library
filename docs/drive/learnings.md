@@ -161,6 +161,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** none deterministic: a short section in the drive skill, `references/watch.md`, naming the transcript path `~/.claude/projects/<project>/<session-id>.jsonl`, that its timestamps are UTC, and that Subagent transcripts sit under `<session-id>/subagents/`
 - **Status:** proposed
 - **Evidence:** enablement-vs-agentic-engineering: the monitor found the file by listing the project folder, and misjudged the Subagent's elapsed time by an hour because the transcript's 10:30 was 11:30 local
+
 ### A push is not checked against the remote
 
 - **Count:** 2 (last: 2026-11-18, ai-gives-you-more-work-pool)
