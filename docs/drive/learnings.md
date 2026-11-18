@@ -13,7 +13,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 2 (last: 2026-11-18, enablement-vs-agentic-engineering)
 - **Enforcer:** none deterministic: the tier rule in dispatch.md "Model", read from the page's calibration; the screenshot check in dispatch.md "A decision page"
 - **Status:** proposed
-- **Evidence:** drive: haiku failed layout; sonnet gave the best layout (the baseline); opus wrote better descriptions but broke rendering (mid-word wraps); enablement-vs-agentic-engineering: Han had to ask twice for an Opus Subagent for /to-review; the fidelity rule gave mid because every item sat at diagram
+- **Evidence:** drive: haiku failed layout; sonnet gave the best layout (the baseline); opus wrote better descriptions but broke rendering (mid-word wraps); enablement-vs-agentic-engineering: Han had to ask twice for an Opus Subagent for /to-review; the fidelity rule gave mid because every item sat at diagram; monitor: the second ask was redundant, the Orchestrator's reply said the page agent already ran on Opus, so the Operator could not see the tier; Fortify offered an architectural option (a computed tier command); the Operator skipped picks on 2026-11-18 ("skipp fortify"), so it stays proposed, no count raise (same Workflow)
 
 ### Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)
 
@@ -118,7 +118,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
 - **Enforcer:** prose: AGENTS.md line, quick win; or test-runner: test for a `grill.format` key in project.yml, architectural
 - **Status:** proposed
-- **Evidence:** enablement-vs-agentic-engineering: round 1 had no opening, buckets, wh-headlines, examples or numbering; AGENTS.md:19 names the format only for /grill-with-docs and /wayfinder
+- **Evidence:** enablement-vs-agentic-engineering: round 1 had no opening, buckets, wh-headlines, examples or numbering; AGENTS.md:19 names the format only for /grill-with-docs and /wayfinder; Fortify offered a quick win (widen the AGENTS.md line) and an architectural option (`grill.format` key in project.yml); the Operator skipped picks on 2026-11-18 ("skipp fortify"), so it stays proposed
 
 ### The grilling-format buckets have no home for knowledge-work questions such as information architecture
 
@@ -132,14 +132,14 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
 - **Enforcer:** test-runner: test that fails on a `slide` item at `data-fidelity=diagram`, architectural; or a review.md Fidelity line, quick win
 - **Status:** proposed
-- **Evidence:** enablement-vs-agentic-engineering: review page round 1 was too low fidelity; Han asked for the Claude Desktop image and the repo diagram, one extra round
+- **Evidence:** enablement-vs-agentic-engineering: review page round 1 was too low fidelity; Han asked for the Claude Desktop image and the repo diagram, one extra round; Fortify offered a quick win (review.md Fidelity line) and an architectural option (dispatch check on `slide` items); the Operator skipped picks on 2026-11-18 ("skipp fortify"), so it stays proposed
 
 ### The Integration PR can be merged before `/code-review` has run on it
 
 - **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
 - **Enforcer:** check: new required GitHub status `drive/review`, architectural; or draft PR until the review report exists, quick win
 - **Status:** proposed
-- **Evidence:** enablement-vs-agentic-engineering: PR #761 merged 2026-11-18 with 0 reviews; Verify review skipped
+- **Evidence:** enablement-vs-agentic-engineering: PR #761 merged 2026-11-18 with 0 reviews; Verify review skipped; Fortify offered a quick win (draft PR until the review report) and an architectural option (required status `drive/review`); the Operator skipped picks on 2026-11-18 ("skipp fortify"), so it stays proposed
 
 ### A detached dev server start exits without a message
 
@@ -147,6 +147,20 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Enforcer:** test-runner: test:slow for a `dev:bg` launcher that waits for Ready or prints its log, quick win
 - **Status:** proposed
 - **Evidence:** enablement-vs-agentic-engineering: `npx next dev` in background exited 1 with 'Errors: 1' and no reason; foreground worked
+
+### A Subagent draws a real product from imagination, and the Operator supplies screenshots a round later
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** none deterministic: a line in review.md Fidelity that a brief names a reference screenshot for any real product shown, folded into the fidelity quick win
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: round 2 drew a Claude Desktop window and three terminals unseen; the Operator then sent four screenshots of the real app and tools, and round 3 redrew Slides 3 and 5
+
+### Watching a drive session by hand costs time on the transcript path and its UTC timestamps
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** none deterministic: a short section in the drive skill, `references/watch.md`, naming the transcript path `~/.claude/projects/<project>/<session-id>.jsonl`, that its timestamps are UTC, and that Subagent transcripts sit under `<session-id>/subagents/`
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: the monitor found the file by listing the project folder, and misjudged the Subagent's elapsed time by an hour because the transcript's 10:30 was 11:30 local
 
 ## Corrections
 
@@ -159,3 +173,4 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 enablement-vs-agentic-engineering: Han had to ask twice for an Opus subagent for /to-review ("use an opus subagent to do the /to-review"; "use opus subagent for it"). → A decision page of the wrong model tier fails layout or rendering
 - 2026-11-18 enablement-vs-agentic-engineering: PR #761 merged by Han before /code-review ran (Verify review skipped). → The Integration PR can be merged before `/code-review` has run on it
 - 2026-11-18 enablement-vs-agentic-engineering: The detached dev server start (`npx next dev` in background) exited 1 with "Errors: 1" and no message; a foreground start worked. → A detached dev server start exits without a message
+- 2026-11-18 enablement-vs-agentic-engineering: slide 3 [Image #4] this si the curernt desktop showing my project. on top left we have projects, meetings, artifacts, schedule. on right we have instrcutions, memory and context. create the graphic in the center and show the content it left and right → A Subagent draws a real product from imagination, and the Operator supplies screenshots a round later
