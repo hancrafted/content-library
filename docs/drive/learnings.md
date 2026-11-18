@@ -90,14 +90,14 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 2 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** test-runner: test:build, quick win (Implementer profile line) or architectural (`drive worktree done` runs the build lane)
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: #711 merged on `npm run verify` alone; pre-push failed on `tests/post-build/episode-text/ai-attention-span.de.json` and cost one fix task; brief-or-pay-the-price: #719 and #720 merged on `verify` alone, the Integration push failed twice on `tests/post-build/episode-text.build.test.ts` and #720 hand-edited the snapshots (fix-episode-text ab251ac2e); the shared brief's rule 3 was changed mid-run
+- **Evidence:** ai-attention-span-pool: #711 merged on `npm run verify` alone; pre-push failed on `tests/post-build/episode-text/ai-attention-span.de.json` and cost one fix task; brief-or-pay-the-price: #719 and #720 merged on `verify` alone, the Integration push failed twice on `tests/post-build/episode-text.build.test.ts` and #720 hand-edited the snapshots (fix-episode-text ab251ac2e); the shared brief's rule 3 was changed mid-run; brief-or-pay-the-price: offered as QW-1 and AR-1 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### A Subagent skips an acceptance criterion and the report passes the shape check
 
 - **Count:** 2 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** none deterministic yet: Implementer profile line, quick win; new test for a report parser called by `worktree done`, architectural
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; brief-or-pay-the-price: #718 dropped the morph fade-out and the BRIEF F "new" label, #720 the matrix FLIP from chip letters, #721 the BRACE→Workflow flight and the picker placement, each reported under Trade-offs and merged; the Operator or a review checkpoint found them (718-fix, #723, 721-review-fix)
+- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; brief-or-pay-the-price: #718 dropped the morph fade-out and the BRIEF F "new" label, #720 the matrix FLIP from chip letters, #721 the BRACE→Workflow flight and the picker placement, each reported under Trade-offs and merged; the Operator or a review checkpoint found them (718-fix, #723, 721-review-fix); brief-or-pay-the-price: offered as AR-2 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### A pool Slide's test references a by-event Episode, and nothing checks it
 
@@ -118,42 +118,42 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** adr-checker: archgate, new rules in FE-012 generalising the per-Explorable `client-boundary.test.ts` and `parts-boundary.test.ts`, architectural
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: review fixes for #716 (memoised parts §4.2, locale and words duplication) and #721 (client received both locales §1.2, dispatch into parts §4.1, controls registry §4.4); #720 and #723 built on the pattern first
+- **Evidence:** brief-or-pay-the-price: review fixes for #716 (memoised parts §4.2, locale and words duplication) and #721 (client received both locales §1.2, dispatch into parts §4.1, controls registry §4.4); #720 and #723 built on the pattern first; brief-or-pay-the-price: offered as AR-4 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### A new Explorable's toolbar is hand-built instead of the shared toggle bar the sibling Explorables use
 
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** adr-checker: archgate, new FE-012 rule that a `*toolbar*.client.tsx` imports `shared/components/ui/toggle-group`, quick win
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: UI feedback round 1, Han: "toolbar should be a toogle bar like the other explorables"; rebuilt on `ToggleGroup` in ui-feedback-1 (a2d9f0a56)
+- **Evidence:** brief-or-pay-the-price: UI feedback round 1, Han: "toolbar should be a toogle bar like the other explorables"; rebuilt on `ToggleGroup` in ui-feedback-1 (a2d9f0a56); brief-or-pay-the-price: offered as QW-3 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### An Explorable's rows change height between tabs and no check measures layout
 
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** test-runner: test:slow with a Playwright case asserting equal row tops across tabs and locales, architectural (needs Han to accept a browser lane, AGENTS.md says none exists)
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: UI feedback round 1, Han saw the jump; fixed with a fixed chip box in ui-feedback-1 and checked by hand in Chrome at 1512×804 (Q77, "No test now")
+- **Evidence:** brief-or-pay-the-price: UI feedback round 1, Han saw the jump; fixed with a fixed chip box in ui-feedback-1 and checked by hand in Chrome at 1512×804 (Q77, "No test now"); brief-or-pay-the-price: offered as AR-3 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### The site has no cursor pointer rule after Tailwind v4 and nothing guards the one added
 
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** test-runner: test, a case in `tests/boundaries/global-stylesheet.test.ts`, quick win
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: Han asked for `cursor: pointer` on all clickable elements; `src/app/globals.css` got the rule in a2d9f0a56, no test pins it
+- **Evidence:** brief-or-pay-the-price: Han asked for `cursor: pointer` on all clickable elements; `src/app/globals.css` got the rule in a2d9f0a56, no test pins it; brief-or-pay-the-price: offered as QW-2 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### A glossary entry masks a word too general to own
 
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** test-runner: test over `GLOSSARY.md` headings against a denylist of general words, quick win; Architect profile line
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: PR #732 review, Han: "some of glosssary entry are masking very general terms. remove them."; Mirror, Cell and Annotation removed
+- **Evidence:** brief-or-pay-the-price: PR #732 review, Han: "some of glosssary entry are masking very general terms. remove them."; Mirror, Cell and Annotation removed; brief-or-pay-the-price: offered as QW-4 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### A ticket conflicts with a binding ADR and the conflict surfaces only in the Subagent's report
 
 - **Count:** 1 (last: 2026-11-18, brief-or-pay-the-price)
 - **Enforcer:** check: new `check:tickets` that fails a ticket body with no ADRs line, quick win (the content check stays review)
 - **Status:** proposed
-- **Evidence:** brief-or-pay-the-price: #716 asked for one `i18n: { en, de }` file while FE-012 §1 required a pair per locale; found in the tracer's report, Han chose to amend FE-012 (fe012-amend 936123831)
+- **Evidence:** brief-or-pay-the-price: #716 asked for one `i18n: { en, de }` file while FE-012 §1 required a pair per locale; found in the tracer's report, Han chose to amend FE-012 (fe012-amend 936123831); brief-or-pay-the-price: offered as QW-5 on the Fortify page, Operator skipped the picks (2026-11-18)
 
 ### The grill frames the domain by a symmetry, a single example or a hard-coded instance
 
@@ -174,3 +174,4 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 brief-or-pay-the-price (UI feedback round 1): "toolbar should be a toogle bar like the other explorables and in one line on laptop" — the implementation built its own toolbar instead of the sibling Explorables' pill toggle bar. → A new Explorable's toolbar is hand-built instead of the shared toggle bar the sibling Explorables use
 - 2026-11-18 brief-or-pay-the-price (UI feedback round 1): "make sure that there is 0 ui jumping when switching between the 5 acronyms, which is the case right now" — row heights changed between definition tabs; no check caught it. → An Explorable's rows change height between tabs and no check measures layout
 - 2026-11-18 brief-or-pay-the-price (UI feedback round 1): "in gernal all clickable elements should have cusror:pointer" — the site had no pointer rule after Tailwind v4. → The site has no cursor pointer rule after Tailwind v4 and nothing guards the one added
+- 2026-11-18 brief-or-pay-the-price: The Operator skipped the Fortify picks: "skip fority and record qw and ar to learndings.md". → (no failure mode; Fortify outcome)
