@@ -15,8 +15,6 @@ export const TOOLS = [
   { key: 'next', pkg: 'next', url: 'https://github.com/vercel/next.js' },
 ] as const;
 
-export type ToolKey = (typeof TOOLS)[number]['key'];
-
 export function githubUrlOf(repository: unknown): string {
   const raw =
     typeof repository === 'string'

@@ -14,7 +14,6 @@ const MatrixSchema = z.object({
 });
 
 export type Matrix = z.infer<typeof MatrixSchema>;
-export type MatrixRow = z.infer<typeof RowSchema>;
 
 export function parseMatrix(text: string): Matrix {
   return MatrixSchema.parse(parse(text));
