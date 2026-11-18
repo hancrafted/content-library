@@ -1,10 +1,17 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
+import type { SlidePresentation } from '../slide-master/slide-presentation';
 import type { EpisodeContent } from './record-content';
 import { SurfaceClockAttachment } from './surface-clock.client';
 
+function declaresALook(presentation: SlidePresentation | undefined): boolean {
+  return Object.values(presentation ?? {}).some((value) => value !== undefined);
+}
+
 export function usesSurfaceClock(content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance'>) {
   return Boolean(
-    content.tocEntrance || content.titleAppearance.presentation || content.slides.some((slide) => slide.presentation),
+    content.tocEntrance ||
+    declaresALook(content.titleAppearance.presentation) ||
+    content.slides.some((slide) => declaresALook(slide.presentation)),
   );
 }
 

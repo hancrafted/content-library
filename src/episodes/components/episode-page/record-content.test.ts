@@ -275,7 +275,7 @@ describe('success cases', () => {
     // ARRANGE
     const record = episode({ ...RECORD, tone: 'inverse' });
     const expected = { tone: 'inverse', legacyTone: 'inverse', inkTarget: 'foundations' };
-    const clockEntrance = 'title-departure';
+    const clockEntrance = 'legacy';
     const inverse = 'inverse';
     // ACT
     const content = await recordContent(record, 'en', {
@@ -874,11 +874,12 @@ describe('edge cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
-  it('keeps a Title that declares an empty presentation untoned, without ink', async () => {
+  it('keeps a Title and section slides that declare an empty presentation untoned, without ink or the surface clock', async () => {
     // ARRANGE
     const optedOut = slide({ slug: 'hero', messages: EPISODE, presentation: {}, content: () => null });
     const record = episode({ ...RECORD, title: optedOut });
-    const expectedAppearance = { tone: 'normal', presentation: { tone: 'normal' } };
+    const expectedAppearance = { tone: 'normal', presentation: {} };
+    const legacy = 'legacy';
     // ACT
     const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     const $ = load(
@@ -896,6 +897,8 @@ describe('edge cases', () => {
     expect($('#top').attr('data-tone')).toBeUndefined();
     expect($('#top').attr('data-surface-tone')).toBe('normal');
     expect(content.transitions.has('top')).toBe(false);
+    expect(PageSurfaceClock({ content })).toBeNull();
+    expect(tocEntranceOf(content)).toBe(legacy);
   });
   it('keeps enter-only and leave-only choices independent from tone and decoration and omits undeclared edges', async () => {
     // ARRANGE

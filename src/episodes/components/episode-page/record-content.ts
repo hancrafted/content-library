@@ -93,13 +93,21 @@ function composedLooks(record: EpisodeComposition, slides: readonly LocalizedSli
   return { transitions, titleAppearance };
 }
 
+function titlePresentationOf(
+  presentation: SlidePresentation,
+  tone: TitleAppearance['tone'],
+  legacyTone: PageTone | undefined,
+): SlidePresentation {
+  return presentation.tone === undefined && legacyTone === undefined ? presentation : { ...presentation, tone };
+}
+
 function titleAppearanceOf(
   record: EpisodeComposition,
   slides: readonly LocalizedSlide[],
   { presentation, outgoingEdge }: { presentation: SlidePresentation | undefined; outgoingEdge: boolean },
 ): TitleAppearance {
   const tone = presentation?.tone ?? record.tone ?? 'normal';
-  if (presentation) return { tone, presentation: { ...presentation, tone } };
+  if (presentation) return { tone, presentation: titlePresentationOf(presentation, tone, record.tone) };
   return { tone, legacyTone: record.tone, inkTarget: legacyInkTarget(record.tone, slides[0]?.id, outgoingEdge) };
 }
 
