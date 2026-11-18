@@ -47,6 +47,7 @@ export function titleOf(
 ): string {
   const { cell } = state;
   if (state.level === 'define') return tabs[state.view].words.title;
+  if (state.level === 'workflow') return tabs.stages.words.title;
   if (cell === null) return words.matrix.title;
   const names = {
     move: rowOf(definitions.brief, cell.move).words.name,

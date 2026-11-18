@@ -8,6 +8,7 @@ export const TAB_ORDER = ['price', 'brief', 'stages', 'brace'] as const satisfie
 
 const ZOOM_LABEL: Readonly<Record<ZoomLevel, (chrome: Words['chrome']) => string>> = {
   agent: (chrome) => chrome.agent,
+  workflow: (chrome) => chrome.workflow,
 };
 
 const GROUP_LABEL = 'text-caption font-semibold tracking-wide text-muted-foreground uppercase';
