@@ -10,10 +10,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A decision page of the wrong model tier fails layout or rendering
 
-- **Count:** 1 (last: 2026-11-17, drive)
+- **Count:** 2 (last: 2026-11-18, enablement-vs-agentic-engineering)
 - **Enforcer:** none deterministic: the tier rule in dispatch.md "Model", read from the page's calibration; the screenshot check in dispatch.md "A decision page"
 - **Status:** proposed
-- **Evidence:** drive: haiku failed layout; sonnet gave the best layout (the baseline); opus wrote better descriptions but broke rendering (mid-word wraps)
+- **Evidence:** drive: haiku failed layout; sonnet gave the best layout (the baseline); opus wrote better descriptions but broke rendering (mid-word wraps); enablement-vs-agentic-engineering: Han had to ask twice for an Opus Subagent for /to-review; the fidelity rule gave mid because every item sat at diagram
 
 ### Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)
 
@@ -113,8 +113,49 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed
 - **Evidence:** ai-attention-span-pool: both implementation Subagents noted `/commit` strips the Co-Authored-By the harness asks for; the project rule won
 
+### A /drive grill round is written without reading `docs/agents/grilling-format.md`
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** prose: AGENTS.md line, quick win; or test-runner: test for a `grill.format` key in project.yml, architectural
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: round 1 had no opening, buckets, wh-headlines, examples or numbering; AGENTS.md:19 names the format only for /grill-with-docs and /wayfinder
+
+### The grilling-format buckets have no home for knowledge-work questions such as information architecture
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** check: check:docs over per-domain bucket tables, architectural; or a new bucket row, quick win
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: Slide-structure and matrix questions fit none of contract, architecture, workflow
+
+### A Reason page whose items are visual Slides starts at the `diagram` rung
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** test-runner: test that fails on a `slide` item at `data-fidelity=diagram`, architectural; or a review.md Fidelity line, quick win
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: review page round 1 was too low fidelity; Han asked for the Claude Desktop image and the repo diagram, one extra round
+
+### The Integration PR can be merged before `/code-review` has run on it
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** check: new required GitHub status `drive/review`, architectural; or draft PR until the review report exists, quick win
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: PR #761 merged 2026-11-18 with 0 reviews; Verify review skipped
+
+### A detached dev server start exits without a message
+
+- **Count:** 1 (last: 2026-11-18, enablement-vs-agentic-engineering)
+- **Enforcer:** test-runner: test:slow for a `dev:bg` launcher that waits for Ready or prints its log, quick win
+- **Status:** proposed
+- **Evidence:** enablement-vs-agentic-engineering: `npx next dev` in background exited 1 with 'Errors: 1' and no reason; foreground worked
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked "can this session run until end or does it require a human?" and asked for a guide to reviewing the PR. The Orchestrator had not stated the Operator's decision points, or how to review, up front. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked to resume automatically after a quota reset. There is no built-in recovery, so the Orchestrator added a session-only watchdog (a cron job that dies with the session). → Workflow progress lives only in the session, so a quota reset ends it
+- 2026-11-18 enablement-vs-agentic-engineering: Grill round 1 ignored docs/agents/grilling-format.md (opening, buckets, wh-headlines, examples, numbering). → A /drive grill round is written without reading `docs/agents/grilling-format.md`
+- 2026-11-18 enablement-vs-agentic-engineering: Fortify: grilling-format buckets are software-only (contract/architecture/workflow); knowledge-work grills need their own buckets, e.g. information architecture. → The grilling-format buckets have no home for knowledge-work questions such as information architecture
+- 2026-11-18 enablement-vs-agentic-engineering: Review page round 1 was too low fidelity for visual Slides; Han asked for high-fidelity visualizations (Claude Desktop image, repo diagram). → A Reason page whose items are visual Slides starts at the `diagram` rung
+- 2026-11-18 enablement-vs-agentic-engineering: Han had to ask twice for an Opus subagent for /to-review ("use an opus subagent to do the /to-review"; "use opus subagent for it"). → A decision page of the wrong model tier fails layout or rendering
+- 2026-11-18 enablement-vs-agentic-engineering: PR #761 merged by Han before /code-review ran (Verify review skipped). → The Integration PR can be merged before `/code-review` has run on it
+- 2026-11-18 enablement-vs-agentic-engineering: The detached dev server start (`npx next dev` in background) exited 1 with "Errors: 1" and no message; a foreground start worked. → A detached dev server start exits without a message
