@@ -2,9 +2,11 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, wr
 import path from 'node:path';
 import { createVitest } from 'vitest/node';
 import type * as store from '../../src/content-store/store.ts';
+import type { compositionOutlines } from '../../src/episodes/lib/composition-outlines.ts';
 import type { compositionSummaries } from '../../src/episodes/lib/composition-summaries.ts';
-import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
+import { EPISODES_DIR, pageFolders, SLIDE_POOL_FOLDER } from '../../src/episodes/lib/episode-folders.ts';
 import { formatAsRepo } from '../../src/episodes/lib/oxfmt-format.ts';
+import { episodeOutlinesFile, type TextSource } from './episode-outline.pure.ts';
 import {
   episodeRegistryFiles,
   exportedRecord,
@@ -118,6 +120,27 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
+function textSourceOf(root: string, folder: string, slug: string): TextSource {
+  const own = `${EPISODES_DIR}/${folder}/slides/${slug}/i18n`;
+  const pooled = `${EPISODES_DIR}/${SLIDE_POOL_FOLDER}/${slug}/i18n`;
+  if (existsSync(path.join(root, own))) return { textSource: own, pool: false };
+  if (existsSync(path.join(root, pooled))) return { textSource: pooled, pool: true };
+  throw new Error(`Slide "${slug}" of ${folder} has no i18n folder in ${own} or ${pooled}`);
+}
+
+async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
+  const { compositionOutlines: outlines } = await load<{ compositionOutlines: typeof compositionOutlines }>(
+    'src/episodes/lib/composition-outlines.ts',
+  );
+  const folders = new Map(readEpisodeFolders(root).map((page) => [page.id, page.folder]));
+  const episodes = Object.entries(outlines()).map(([id, outline]) => {
+    const folder = folders.get(id);
+    if (folder === undefined) throw new Error(`The Episode registry holds "${id}" but no folder does`);
+    return { id, folder, ...outline };
+  });
+  return [episodeOutlinesFile(episodes, (folder, slug) => textSourceOf(root, folder, slug))];
+}
+
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {
   return Promise.all(
     files.map(async (file) => {
@@ -138,7 +161,8 @@ function staleOf(root: string, files: readonly RegistryFile[]): RegistryFile[] {
 
 export async function staleRegistryFiles(root: string, load: SiteLoader): Promise<string[]> {
   const routes = await formatted(root, episodeRouteFiles(await episodeRoutes(root, load)));
-  const stale = staleOf(root, [...(await formatted(root, sourceFiles(root))), ...routes]);
+  const outlines = await formatted(root, await outlineFiles(root, load));
+  const stale = staleOf(root, [...(await formatted(root, sourceFiles(root))), ...routes, ...outlines]);
   return [...stale.map((file) => file.path), ...obsoleteRoutes(root, routes)];
 }
 
@@ -162,6 +186,7 @@ if (import.meta.main) {
     obsolete.forEach((file) => removeRoute(root, file));
     written.push(...write(root, routes), ...obsolete.map((file) => `${file} (removed)`));
     written.push(...write(root, await formatted(root, await summaryFiles(load))));
+    written.push(...write(root, await formatted(root, await outlineFiles(root, load))));
   } finally {
     await vitest.close();
   }

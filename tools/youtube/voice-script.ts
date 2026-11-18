@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
-import { readRecordingFolder, slideI18nFile, slideRows } from './recording-disk.ts';
+import { readRecordingFolder, slideRows } from './recording-disk.ts';
 import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
 
 interface Messages {
@@ -34,8 +34,7 @@ const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
 console.log(`# ${episode.id} (${language})`);
-for (const { slug, section, title } of rows) {
-  const found = slideI18nFile({ root: ROOT, episodeDir: dir }, slug, language);
+for (const { slug, section, title, i18n: found } of rows) {
   const messages = found === undefined ? {} : (JSON.parse(readFileSync(found.file, 'utf8')) as Messages);
   const segments = Object.entries(messages.voiceScript?.segments ?? {});
   const texts = segments.flatMap(([, { script = '', bridge = '' }]) => [script, bridge]);
