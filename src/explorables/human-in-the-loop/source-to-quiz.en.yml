@@ -6,10 +6,10 @@ title: Turn a source into a quiz
 description: Decide what a good quiz needs, apply it to one source, then turn it into a skill that makes the next quiz.
 
 scenario:
-  summary: Build a quiz maker, then turn the Episode "What agentic workflows require" into its first quiz.
+  summary: Build a quiz maker, then turn Google's paper on vibe coding into its first quiz.
   facts:
     - 'The goal: a quiz maker prompt that lets AI turn any web page or PDF into a fun quiz: one standalone HTML file with modern visuals and gamified animations.'
-    - 'The first source: https://hancrafted.net/episodes/what-agentic-workflows-require/'
+    - 'The first source: https://drive.google.com/file/d/1IR7CddF_2FyQo_PdfBNTaEA50EGiVt2r/view'
 
 purposes:
   role: Giving the AI a role sets the tone and depth of its answer.
@@ -777,7 +777,7 @@ stages:
             mode: single
             free: true
             label: The source (a URL, or the name of the PDF you attach)
-            sample: https://hancrafted.net/episodes/what-agentic-workflows-require/
+            sample: https://drive.google.com/file/d/1IR7CddF_2FyQo_PdfBNTaEA50EGiVt2r/view
         details:
           why: The spec was written before anyone saw this source, so the quiz shows whether your requirements hold. A quiz you can play shows in a minute what a list of requirements hides.
           techniques: [cite-sources, allow-unknown, delimiters]
@@ -786,7 +786,7 @@ stages:
             - The learning goals and questions follow the spec's rules.
             - The quiz opens by double-click and works on a phone.
             - Points, instant feedback with a quote and an end screen work.
-        instructions: 'Log in to Gemini, open a new chat, put the source in the box and paste the prompt. Save the HTML block as quiz.html, open it in your browser and play it through once, noting what you notice.'
+        instructions: 'Log in to Gemini, open a new chat, put the source in the box and paste the prompt. Download quiz.html, open it in your browser and play it through once, noting what you notice.'
         do:
           simple:
             - heading: Your role
@@ -839,7 +839,7 @@ stages:
             - heading: Format
               purpose: template
               text: |
-                Answer with the whole page in one code block that starts with ```html. Below the block, write exactly: "Save this as quiz.html, open it in your browser and play it through." If your answer breaks off, I will start a new chat and paste this prompt again.
+                Deliver the whole page as a file named quiz.html I can download, never as text in the chat. Below the file, write exactly: "Download quiz.html, open it in your browser and play it through." Only if you cannot create files, answer with the whole page in one code block that starts with ```html and write "Save this as quiz.html" instead. If your answer breaks off, I will start a new chat and paste this prompt again.
           technical:
             - heading: Task
               purpose: task
