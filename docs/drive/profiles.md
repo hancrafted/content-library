@@ -17,3 +17,10 @@ and the implementer's, which every Subagent brief points at. Write only what is 
   report.
 - `drive worktree done --base` prints the fast-suite tests that ran past 750 ms on your branch, with the load factor:
   tests creeping towards CI's 3 s limit. Name any of yours under **Trade-offs**.
+
+## Define pre-flight
+
+The Define pre-flight names what is live or scheduled that the change touches. The kinds for this project:
+
+- Events composing a changed Episode, each with its date: past, today or upcoming. An upcoming or same-day Event
+  makes the change time-boxed: say so in the Decision PR body.
