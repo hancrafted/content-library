@@ -1,0 +1,130 @@
+# The brief-or-pay-the-price Explorable. The top level is structure: which definitions exist and the rows of each.
+# Every string sits under `i18n`, keyed by id, in both locales; the loader refuses a file whose locales differ.
+# German keeps each trait's English name and adds a gloss (`gloss`); English leaves the gloss empty.
+# Authoring guide: docs/features/explorables/brief-or-pay-the-price-scenarios.md.
+definitions:
+  price:
+    acronym: PRICE
+    rows:
+      - { id: probabilistic, letter: P, beatMilliseconds: 2600 }
+      - { id: relentless, letter: R, beatMilliseconds: 3600 }
+      - { id: informed, letter: I, beatMilliseconds: 3600 }
+      - { id: confident, letter: C, beatMilliseconds: 2900 }
+      - { id: every-word-billed, letter: E, beatMilliseconds: 9900 }
+i18n:
+  en:
+    chrome:
+      define: 'Define'
+      views: 'Views'
+      showAll: 'Show all and play'
+      dayOne: 'Reset to day one'
+      caption: 'Hover a letter to reveal it; click a card to turn it.'
+      turn: 'Turn the card to its text'
+    backs:
+      prompt: 'prompt'
+      handbook: 'How we work here'
+      bill: 'bill'
+      tokens: 'tokens'
+      handbookWords:
+        first: 'We'
+        second: 'always'
+        last: 'never'
+    definitions:
+      price:
+        title: 'PRICE · five traits of a brilliant freelancer with amnesia'
+        heads:
+          freelancer: 'The freelancer'
+          traits: 'Five traits'
+          ai: 'AI'
+        close:
+          lead: 'Amnesia:'
+          text: 'after each conversation, they forget everything, so you have to onboard them again, and every job starts from zero.'
+        rows:
+          probabilistic:
+            name: 'Probabilistic'
+            gloss: ''
+            short: 'Outcome changes every time'
+            freelancer: 'Give the same brief to a new freelancer, and get a different plan.'
+            ai: 'Give the same prompt in a new chat, and get a different answer.'
+          relentless:
+            name: 'Relentless'
+            gloss: ''
+            short: 'High output, unknown quality'
+            freelancer: 'Hand over the job, and they work day and night, producing stacks of polished pages, whether they’re right or not.'
+            ai: 'Send the prompt, and it produces pages in seconds, as many as you ask for, whether they’re right or not.'
+          informed:
+            name: 'Informed'
+            gloss: ''
+            short: 'Knowledgeable, but not about you'
+            freelancer: 'Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture.'
+            ai: 'Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture.'
+          confident:
+            name: 'Confident'
+            gloss: ''
+            short: 'Fills the gap without question'
+            freelancer: 'Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right.'
+            ai: 'Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence.'
+          every-word-billed:
+            name: 'Every word billed'
+            gloss: ''
+            short: 'The bill grows every turn'
+            freelancer: 'They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included.'
+            ai: 'It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included.'
+  de:
+    chrome:
+      define: 'Begriffe'
+      views: 'Ansichten'
+      showAll: 'Alle zeigen und abspielen'
+      dayOne: 'Zurück auf Tag eins'
+      caption: 'Fahr über einen Buchstaben, um ihn aufzudecken; klick eine Karte, um sie zu drehen.'
+      turn: 'Karte auf ihren Text drehen'
+    backs:
+      prompt: 'Prompt'
+      handbook: 'Wie wir arbeiten'
+      bill: 'Rechnung'
+      tokens: 'Tokens'
+      handbookWords:
+        first: 'Wir'
+        second: 'immer'
+        last: 'nie'
+    definitions:
+      price:
+        title: 'PRICE · fünf Eigenschaften eines brillanten Freelancers mit Amnesie'
+        heads:
+          freelancer: 'Der Freelancer'
+          traits: 'Fünf Eigenschaften'
+          ai: 'KI'
+        close:
+          lead: 'Amnesie:'
+          text: 'Nach jedem Gespräch vergessen sie alles, also musst Du sie neu einarbeiten, und jeder Auftrag beginnt bei null.'
+        rows:
+          probabilistic:
+            name: 'Probabilistic'
+            gloss: 'probabilistisch'
+            short: 'Jedes Mal ein anderes Ergebnis'
+            freelancer: 'Gib einem neuen Freelancer dasselbe Briefing, und Du bekommst einen anderen Plan.'
+            ai: 'Gib denselben Prompt in einem neuen Chat ein, und Du bekommst eine andere Antwort.'
+          relentless:
+            name: 'Relentless'
+            gloss: 'unermüdlich'
+            short: 'Viel Output, unklare Qualität'
+            freelancer: 'Gib den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob sie stimmen oder nicht.'
+            ai: 'Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele Du willst, ob sie stimmen oder nicht.'
+          informed:
+            name: 'Informed'
+            gloss: 'informiert'
+            short: 'Weiß viel, nur nicht über Dich'
+            freelancer: 'Frag einen Freelancer, der jedes Fach kennt, und Du bekommst Expertenantworten, blind für Dein Unternehmen und eure Kultur.'
+            ai: 'Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und Du bekommst die wahrscheinlichste Antwort, blind für Dein Unternehmen und eure Kultur.'
+          confident:
+            name: 'Confident'
+            gloss: 'selbstsicher'
+            short: 'Füllt die Lücke, ohne zu fragen'
+            freelancer: 'Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es Dir als richtig.'
+            ai: 'Gib einen vagen Prompt, und sie legt los, ohne zu fragen, füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung.'
+          every-word-billed:
+            name: 'Every word billed'
+            gloss: 'jedes Wort berechnet'
+            short: 'Die Rechnung wächst mit jeder Runde'
+            freelancer: 'Er rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr, das ganze Dossier neu lesen zu lassen, seine eigenen Seiten inklusive.'
+            ai: 'Sie berechnet jedes Wort, das sie liest und schreibt, also heißt eine Nachricht mehr, den ganzen Chat noch einmal zu bezahlen, ihre eigenen Antworten inklusive.'

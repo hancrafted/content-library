@@ -27,6 +27,7 @@ import { cyberforumOnboardAiEveryTime as _20261118CyberforumExiDigitalAgenticWor
 // `src/episodes/explorable-pages/<slug>/` an Explorable page, `src/episodes/guides/<slug>/` a Guide.
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
+import { briefOrPayThePrice } from '@/episodes/explorable-pages/brief-or-pay-the-price/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { humanInTheLoop } from '@/episodes/explorable-pages/human-in-the-loop/episode';
 import { softwareEcology } from '@/episodes/explorable-pages/software-ecology/episode';
@@ -98,6 +99,7 @@ export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition 
 /** Every Explorable page's Slides by slug: composed like an Episode, rendered by the same container. */
 export const EXPLORABLE_PAGES: { readonly [S in ExplorablePageSlug]: EpisodeComposition & { readonly slug: S } } = {
   'ai-capability': aiCapability,
+  'brief-or-pay-the-price': briefOrPayThePrice,
   'context-window': contextWindow,
   'human-in-the-loop': humanInTheLoop,
   'software-ecology': softwareEcology,
