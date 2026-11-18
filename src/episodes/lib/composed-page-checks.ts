@@ -7,8 +7,10 @@ import type { NamedCheck } from '@/shared/lib/folder-check';
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import type { ComposedPage } from './composed-page';
 import { containerLosses, repeatedIds } from './composed-page-render';
+import { instanceTrailOf } from './episode-instance';
 import { staleOutline, type ResolvedOutline } from './episode-outline-check';
 import { placeSections, sectionOf } from './episode.pure';
+import { pinFindings, type PinLock } from './override-pins.pure';
 import { anchorTitleAt, type PageSummary } from './page-summary.pure';
 import { publishedAnchorFindings, type PublishedSnapshot } from './published-anchors';
 
@@ -30,6 +32,7 @@ export interface PageContext {
   readonly published: PublishedSnapshot;
   readonly markers: readonly SectionMarker[] | undefined;
   readonly outline?: ResolvedOutline;
+  readonly pins?: PinLock;
 }
 
 export interface CheckedPage {
@@ -154,6 +157,14 @@ function episodeOnlyChecks(page: ComposedPage, read: Read): NamedCheck[] {
     check(
       'says in its Episode outline what its composition says: Slides, anchors, Base Episode and the text its files hold',
       (composition, { outline }) => staleOutline(composition, outline),
+      read,
+    ),
+    check(
+      'keeps the Base Episode default under each Episode override as it was when pinned',
+      (composition, { pins }) => {
+        const trail = instanceTrailOf(composition);
+        return trail === undefined ? [] : pinFindings(page.id, trail, pins);
+      },
       read,
     ),
     check(

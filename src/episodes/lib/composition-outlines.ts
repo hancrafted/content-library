@@ -11,17 +11,10 @@ function textFiles(): ReadonlyMap<object, string> {
   return new Map(Object.entries(TEXT_FILES).map(([file, text]) => [text, file.replace(/^\//, '')]));
 }
 
-export function compositionOutlines(): Record<string, RecordOutline<string>> {
+export function compositionOutlines(): Record<string, RecordOutline<string | object>> {
   const files = textFiles();
-  const fileOf = (id: string) => (text: object) => {
-    const file = files.get(text);
-    if (file === undefined)
-      throw new Error(
-        `Text of the Episode "${id}" comes from no JSON file under src/episodes: an Episode override's text lives in overrides/<slide-slug>.<locale>.json, imported by episode.ts (Decision record 0028 §5)`,
-      );
-    return file;
-  };
+  const fileOrInline = (text: object): string | object => files.get(text) ?? text;
   return Object.fromEntries(
-    Object.entries(EPISODES).map(([id, record]) => [id, withTextAs(recordOutline(record), fileOf(id))]),
+    Object.entries(EPISODES).map(([id, record]) => [id, withTextAs(recordOutline(record), fileOrInline)]),
   );
 }

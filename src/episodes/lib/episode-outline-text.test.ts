@@ -25,6 +25,15 @@ describe('success cases', () => {
       // ASSERT
       expect(text).toEqual(expected);
     });
+
+    it('merges a layer written inline in episode.ts after the file it overrides', () => {
+      // ARRANGE
+      const layers = { en: ['base.json', { title: 'Inline' }], de: [] };
+      // ACT
+      const text = layeredText(rootWith({ 'base.json': { title: 'Base', caption: 'Kept' } }), layers, 'en');
+      // ASSERT
+      expect(text).toEqual({ title: 'Inline', caption: 'Kept' });
+    });
   });
 });
 

@@ -2,7 +2,8 @@ import { LOCALES, type Locale } from '../../shared/lib/locale.pure.ts';
 import outlines from './episode-outlines.generated.json' with { type: 'json' };
 
 // decision: FE-004 §4
-export type TextLayers = Readonly<Record<Locale, readonly string[]>>;
+export type TextLayer = string | object;
+export type TextLayers = Readonly<Record<Locale, readonly TextLayer[]>>;
 
 export { LOCALES, type Locale };
 

@@ -39,10 +39,11 @@ function basesOf(episodes: readonly OutlineInput[]): OutlineInput[] {
 
 function importsOf(base: OutlineInput): string[] {
   return baseSlides(base).flatMap((slide) =>
-    LOCALES.map(
-      (locale) =>
-        `import type ${identifierOf(base.id, slide.slug, locale)} from '${aliasOf(slide.text[locale]?.[0] ?? '')}';`,
-    ),
+    LOCALES.map((locale) => {
+      const file = slide.text[locale]?.[0];
+      if (typeof file !== 'string') throw new Error(`Slide "${slide.slug}" of ${base.id} has no ${locale} text file`);
+      return `import type ${identifierOf(base.id, slide.slug, locale)} from '${aliasOf(file)}';`;
+    }),
   );
 }
 
