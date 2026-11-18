@@ -33,6 +33,30 @@ describe('success cases', () => {
     expect(text.split('\n')).toEqual(expect.arrayContaining(expected));
   });
 
+  it('types the targets a Slide exposes and the Explorables it declares, so an override can only name those', () => {
+    // ARRANGE
+    const rich: OutlineInput = {
+      ...CASH,
+      sections: [
+        [
+          {
+            slug: 'why',
+            anchor: 'why',
+            text: layerOf('slide-pool/why'),
+            targets: ['team', 'quote'],
+            explorables: ['context'],
+          },
+        ],
+      ],
+    };
+    const expected =
+      '      readonly "why": { readonly en: typeof cash__why__en; readonly de: typeof cash__why__de; readonly targets: "team" | "quote"; readonly explorables: "context" };';
+    // ACT
+    const { text } = instanceSlidesFile([rich, { ...AXEL, sections: rich.sections }]);
+    // ASSERT
+    expect(text.split('\n')).toContain(expected);
+  });
+
   it('writes to the checked-in path the stale-file check compares, which episode-instance.ts declares the map for', () => {
     // ARRANGE
     const expected = 'src/episodes/lib/episode-instance-slides.generated.ts';

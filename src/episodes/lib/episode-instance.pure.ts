@@ -7,6 +7,9 @@ export interface InstanceSlide {
   readonly slug: string;
   readonly messages: Readonly<Record<Locale, object>>;
   readonly presentation?: object;
+  readonly notes?: readonly { readonly target: string }[];
+  readonly explorables?: Readonly<Record<string, string>>;
+  readonly hidden?: readonly string[];
 }
 
 export interface InstanceBase<S extends InstanceSlide = InstanceSlide> {
@@ -22,6 +25,8 @@ export type SlideOf<R> = R extends { readonly sections: readonly (readonly (infe
 export interface SlideOverride {
   readonly messages?: Partial<Readonly<Record<Locale, object>>>;
   readonly presentation?: object;
+  readonly hide?: readonly string[];
+  readonly explorables?: Readonly<Record<string, string>>;
 }
 
 export type SectionOperation<S, Slug extends string = string> =
@@ -59,12 +64,29 @@ function mergedMessages<M extends Readonly<Record<Locale, object>>>(
   ) as M;
 }
 
+function hiddenOf(slide: InstanceSlide, hide: readonly string[]): readonly string[] {
+  const known = new Set(slide.notes?.map(({ target }) => target));
+  const stray = hide.find((name) => !known.has(name));
+  if (stray !== undefined) throw new Error(`Slide "${slide.slug}" exposes no target "${stray}" to hide`);
+  return [...new Set([...(slide.hidden ?? []), ...hide])];
+}
+
+function presetsOf(slide: InstanceSlide, swapped: Readonly<Record<string, string>>): Readonly<Record<string, string>> {
+  const declared = slide.explorables ?? {};
+  const stray = Object.keys(swapped).find((name) => !(name in declared));
+  if (stray !== undefined)
+    throw new Error(`Slide "${slide.slug}" declares no Explorable "${stray}" to swap a Preset of`);
+  return { ...declared, ...swapped };
+}
+
 function overriddenSlide<S extends InstanceSlide>(slide: S, override: SlideOverride | undefined): S {
   if (override === undefined) return slide;
   return {
     ...slide,
     messages: mergedMessages(slide.messages, override.messages),
     ...(override.presentation !== undefined && { presentation: override.presentation }),
+    ...(override.hide !== undefined && { hidden: hiddenOf(slide, override.hide) }),
+    ...(override.explorables !== undefined && { explorables: presetsOf(slide, override.explorables) }),
   };
 }
 

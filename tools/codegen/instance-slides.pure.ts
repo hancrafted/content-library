@@ -47,10 +47,17 @@ function importsOf(base: OutlineInput): string[] {
   );
 }
 
+function addressOf(key: string, names: readonly string[] | undefined): string {
+  return names === undefined || names.length === 0
+    ? ''
+    : `; readonly ${key}: ${names.map((name) => JSON.stringify(name)).join(' | ')}`;
+}
+
 function entryOf(base: OutlineInput): string {
   const slides = baseSlides(base).map((slide) => {
     const [en, de] = LOCALES.map((locale) => `typeof ${identifierOf(base.id, slide.slug, locale)}`);
-    return `      readonly ${JSON.stringify(slide.slug)}: { readonly en: ${en}; readonly de: ${de} };`;
+    const addresses = [addressOf('targets', slide.targets), addressOf('explorables', slide.explorables)].join('');
+    return `      readonly ${JSON.stringify(slide.slug)}: { readonly en: ${en}; readonly de: ${de}${addresses} };`;
   });
   return [`    readonly ${JSON.stringify(base.id)}: {`, ...slides, '    };'].join('\n');
 }

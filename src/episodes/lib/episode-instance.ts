@@ -6,6 +6,7 @@ import {
   type SectionOperation,
   type SlideOf,
 } from './episode-instance.pure';
+import type { ExplorablePresetIds } from './explorable-presets';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
 declare const NO_BASE_EPISODE: unique symbol;
@@ -38,6 +39,12 @@ type OnlyKeysOf<O, M> = O extends readonly unknown[]
 
 type LocalePartials<M> = { readonly [L in Locale]?: L extends keyof M ? DeepPartial<M[L]> : never };
 
+type TargetsOf<M> = M extends { readonly targets: infer T } ? T & string : never;
+type ExplorablesOf<M> = M extends { readonly explorables: infer E } ? E & string : never;
+type PresetsOf<M> = {
+  readonly [K in ExplorablesOf<M>]?: K extends keyof ExplorablePresetIds ? ExplorablePresetIds[K] : never;
+};
+
 type PresentationOf<B> = SlideOf<B> extends { readonly presentation?: infer P } ? P : object;
 
 export interface EpisodeOverride<B extends InstanceBase> {
@@ -46,6 +53,8 @@ export interface EpisodeOverride<B extends InstanceBase> {
     readonly [S in SlugOf<B>]?: {
       readonly messages?: LocalePartials<SlidesOf<B>[S]>;
       readonly presentation?: PresentationOf<B>;
+      readonly hide?: readonly TargetsOf<SlidesOf<B>[S]>[];
+      readonly explorables?: PresetsOf<SlidesOf<B>[S]>;
     };
   };
   readonly sections?: readonly SectionOperation<SlideOf<B>, SlugOf<B>>[];
@@ -54,7 +63,11 @@ export interface EpisodeOverride<B extends InstanceBase> {
 type ExactLocales<O, M> = { readonly [L in keyof O]: L extends keyof M ? OnlyKeysOf<O[L], M[L]> : never };
 
 type ExactSlide<O, M> = {
-  readonly [K in keyof O]: K extends 'messages' ? ExactLocales<O[K], M> : K extends 'presentation' ? O[K] : never;
+  readonly [K in keyof O]: K extends 'messages'
+    ? ExactLocales<O[K], M>
+    : K extends 'presentation' | 'hide' | 'explorables'
+      ? O[K]
+      : never;
 };
 
 type ExactLayer<O, B extends InstanceBase> = {

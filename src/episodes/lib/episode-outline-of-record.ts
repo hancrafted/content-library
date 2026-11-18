@@ -11,6 +11,8 @@ export interface OutlinedSlide<T> {
   readonly slug: string;
   readonly anchor: string;
   readonly text: TextOf<T>;
+  readonly targets?: readonly string[];
+  readonly explorables?: readonly string[];
 }
 
 export interface RecordOutline<T> {
@@ -41,6 +43,12 @@ function originOf(slug: string, base: InstanceBase, layers: readonly OverrideLay
   return inserted[0].messages;
 }
 
+function addressesOf({ notes, explorables }: InstanceSlide): Pick<OutlinedSlide<never>, 'targets' | 'explorables'> {
+  const targets = [...new Set(notes?.map(({ target }) => target))];
+  const names = Object.keys(explorables ?? {});
+  return { ...(targets.length > 0 && { targets }), ...(names.length > 0 && { explorables: names }) };
+}
+
 export function recordOutline(record: InstanceBase): RecordOutline<object> {
   const trail = instanceTrailOf(record);
   const base = trail?.base ?? record;
@@ -50,7 +58,12 @@ export function recordOutline(record: InstanceBase): RecordOutline<object> {
       originOf(slug, base, layers),
       layers.map((layer) => layer.slides?.[slug]?.messages),
     );
-  const outlined = (slide: InstanceSlide, anchor: string) => ({ slug: slide.slug, anchor, text: textOf(slide.slug) });
+  const outlined = (slide: InstanceSlide, anchor: string) => ({
+    slug: slide.slug,
+    anchor,
+    text: textOf(slide.slug),
+    ...addressesOf(slide),
+  });
   return {
     ...(trail === undefined ? {} : { base: base.slug }),
     text: perLocale(
@@ -65,11 +78,7 @@ export function recordOutline(record: InstanceBase): RecordOutline<object> {
 export function withTextAs<T, U>(outline: RecordOutline<T>, convert: (text: T) => U): RecordOutline<U> {
   const text = (layers: TextOf<T>) =>
     Object.fromEntries(LOCALES.map((locale) => [locale, layers[locale].map(convert)])) as unknown as TextOf<U>;
-  const slide = ({ slug, anchor, text: layers }: OutlinedSlide<T>): OutlinedSlide<U> => ({
-    slug,
-    anchor,
-    text: text(layers),
-  });
+  const slide = ({ text: layers, ...rest }: OutlinedSlide<T>): OutlinedSlide<U> => ({ ...rest, text: text(layers) });
   return {
     ...(outline.base === undefined ? {} : { base: outline.base }),
     text: text(outline.text),
