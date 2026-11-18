@@ -1,24 +1,14 @@
 // decision: FE-004 §4
 import { SLIDE_POOL_FOLDER } from '../../src/episodes/lib/episode-folders.ts';
+import type { OutlineSlide, TextLayers } from '../../src/episodes/lib/episode-outline.ts';
 import type { RegistryFile } from './episode-registry.pure.ts';
 
 const EPISODE_OUTLINES_PATH = 'src/episodes/lib/episode-outlines.generated.json';
 const POOL_PREFIX = `src/episodes/${SLIDE_POOL_FOLDER}/`;
 
-export type TextLayer = string | object;
-export type TextLayers = Readonly<Record<string, readonly TextLayer[]>>;
+export type { OutlineSlide, TextLayers };
 
-export interface TracedSlide {
-  readonly slug: string;
-  readonly anchor: string;
-  readonly text: TextLayers;
-  readonly targets?: readonly string[];
-  readonly explorables?: readonly string[];
-}
-
-export interface OutlineSlide extends TracedSlide {
-  readonly pool: boolean;
-}
+export type TracedSlide = Omit<OutlineSlide, 'pool'>;
 
 export interface OutlineInput {
   readonly id: string;

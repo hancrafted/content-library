@@ -33,12 +33,12 @@ const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
 console.log(`# ${episode.id} (${language})${base === undefined ? '' : `, an Episode instance of ${base}`}`);
-for (const { slug, section, title, text, files, pool } of rows) {
+for (const { slug, section, title, text, files, inline, pool } of rows) {
   const messages = text as Messages;
   const segments = Object.entries(messages.voiceScript?.segments ?? {});
   const texts = segments.flatMap(([, { script = '', bridge = '' }]) => [script, bridge]);
   scripts.push(...texts);
-  const where = writeSurface({ slug, files, pool }, language, base !== undefined);
+  const where = writeSurface({ slug, files, inline, pool }, language, base !== undefined);
   const start = starts[slug];
   console.log(`\n## ${title} {#${slug}} section ${section}, start ${start === undefined ? 'unmatched' : clock(start)}`);
   console.log(`file: ${where}`);

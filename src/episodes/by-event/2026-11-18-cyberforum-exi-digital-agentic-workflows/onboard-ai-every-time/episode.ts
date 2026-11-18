@@ -4,7 +4,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 // decision: docs/decision-records/0028-an-event-copy-is-an-instance-of-its-episode.md
-export const cyberforumOnboardAiEveryTime = instanceOf(onboardAiEveryTime, {
+export const cyberforumExiDigitalAgenticWorkflowsOnboardAiEveryTime = instanceOf(onboardAiEveryTime, {
   title: {
     notes: [
       { slug: 'junior-to-freelancer', target: 'title' },

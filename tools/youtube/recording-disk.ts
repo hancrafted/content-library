@@ -45,6 +45,7 @@ export interface SlideRow {
   readonly title: string;
   readonly text: Record<string, unknown>;
   readonly files: readonly string[];
+  readonly inline: number;
   readonly pool: boolean;
 }
 
@@ -56,6 +57,7 @@ export function slideRows(root: string, episodeDir: string, language: SpokenLang
     title: slideTitle(root, slide, language),
     text: layeredText(root, slide.text, language),
     files: slide.text[language].filter((layer) => typeof layer === 'string'),
+    inline: slide.text[language].filter((layer) => typeof layer !== 'string').length,
     pool: slide.pool,
   });
   return [

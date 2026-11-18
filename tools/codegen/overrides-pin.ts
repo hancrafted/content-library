@@ -28,8 +28,9 @@ export async function pinOverrides(root: string, id: string, load: SiteLoader): 
   const at = path.join(folder.dir, file);
   const rel = path.relative(root, at);
   if (Object.keys(lock).length === 0) {
-    if (existsSync(at)) rmSync(at);
-    return `${id} overrides no Slide text: no ${rel}`;
+    const stale = existsSync(at);
+    if (stale) rmSync(at);
+    return `${id} overrides no Slide text: nothing to pin${stale ? `, removed the stale ${rel}` : ''}`;
   }
   writeFileSync(at, await formatAsRepo(at, `${JSON.stringify(lock)}\n`));
   return `pinned ${Object.values(lock).reduce((sum, paths) => sum + Object.keys(paths).length, 0)} overridden path(s) of ${id} in ${rel}`;

@@ -61,9 +61,8 @@ export function instanceMetadata(source: string, eventDate: string): string {
 const camel = (slug: string): string => slug.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
 
 export function instanceExportName(eventSlug: string, slug: string): string {
-  const [event = ''] = eventSlug.replace(/^\d{4}-\d{2}-\d{2}-/, '').split('-');
   const own = camel(slug);
-  return `${camel(event)}${own.charAt(0).toUpperCase()}${own.slice(1)}`;
+  return `${camel(eventSlug.replace(/^\d{4}-\d{2}-\d{2}-/, ''))}${own.charAt(0).toUpperCase()}${own.slice(1)}`;
 }
 
 export function baseExportName(episodeSource: string): string {
@@ -87,8 +86,6 @@ export function instanceEpisodeSource(base: { slug: string; exportName: string }
 }
 
 export const INSTANCE_CHECKS_TEST = `import { episodeChecks } from '@/episodes/lib/episode-checks';
-import { existsSync } from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 // decision: ARCH-003 §4.7
@@ -118,13 +115,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps no Slide or Section folder: an Episode instance composes its Base Episode', () => {
+  it('runs folder checks, so an empty list cannot pass', () => {
     // ARRANGE
-    const expected: string[] = [];
+    const none = 0;
     // ACT
-    const own = ['slides', 'sections'].filter((folder) => existsSync(path.join(import.meta.dirname, folder)));
+    const checked = CHECKS.folder.length;
     // ASSERT
-    expect(own).toEqual(expected);
+    expect(checked).toBeGreaterThan(none);
   });
 });
 `;

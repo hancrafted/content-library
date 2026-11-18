@@ -17,6 +17,7 @@ import {
   type SlideEntrance,
 } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
+import type { PageIdentity } from '@/episodes/components/slide-master/slide-kit';
 import { titleLinesOf } from '@/episodes/components/slide-master/title-lines';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -117,7 +118,7 @@ function legacyInkTarget(tone: PageTone | undefined, firstSlide: string | undefi
 
 function contextOf(
   record: EpisodeComposition,
-  page: Pick<EpisodeContext, 'episode' | 'route' | 'locale'>,
+  page: PageIdentity & Pick<EpisodeContext, 'locale'>,
   drawer: RuntimeTranslator,
 ): EpisodeContext {
   return {

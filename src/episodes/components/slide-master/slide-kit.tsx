@@ -15,13 +15,15 @@ export interface ReferenceLabels {
   readonly marker: (title: string) => string;
 }
 
-export interface EpisodeKitInput {
-  readonly episode: ComposedId;
-  readonly route?: string;
+export type PageIdentity =
+  | { readonly episode: ComposedId; readonly route?: string }
+  | { readonly episode?: undefined; readonly route: string };
+
+export type EpisodeKitInput = PageIdentity & {
   readonly locale: Locale;
   readonly anchors: ReadonlyMap<string, string>;
   readonly referenceLabels: ReferenceLabels;
-}
+};
 
 export interface SlideKitInput {
   readonly t: RuntimeTranslator;
@@ -40,11 +42,16 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
 }
 
+function routeOf(page: PageIdentity): string {
+  return page.episode === undefined ? page.route : (page.route ?? ownRouteOf(page.episode));
+}
+
 function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['slideHref'] {
   return (slug) => {
     const anchor = episode.anchors.get(slug);
-    if (anchor === undefined) throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
-    return localizePath(episode.route ?? ownRouteOf(episode.episode), episode.locale, anchor);
+    if (anchor === undefined)
+      throw new Error(`No Slide "${slug}" in "${episode.episode ?? episode.route}" to link from "${slideId}".`);
+    return localizePath(routeOf(episode), episode.locale, anchor);
   };
 }
 
