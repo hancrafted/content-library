@@ -130,7 +130,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ### 3. Each module owns one thing
 
-1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section. Event copy: instance (0028).
+1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section. Event copy: [instance](../../docs/features/episode-instances.md).
 2. A Slide folder owns its Scene, widgets, logic, CSS, text, notes, Voice script; imports no other.
 3. `episodes/slide-pool/<slide>/`: content Slides ≥2 Episodes compose, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
@@ -217,10 +217,10 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and shared reach, the Section → pool Slide edge and its alias, no pool section slide, page chrome reached only from page assembly or the container, no Episode or listing route reaching the registry.
-2. **Lint** holds the `'use client'` classifier; **types** hold the record, registry and per-Slide text; **unit and post-build tests** hold anchors, folder names, every pool Slide's folder checks, slot order, current routes and summaries.
+1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and shared reach, the Section → pool Slide edge and its alias, no pool section slide, page chrome reached only from assembly or the container, no Episode or listing route reaching the registry.
+2. **Lint** holds the `'use client'` classifier; **types** hold the record, registry and per-Slide text; **unit and post-build tests** hold anchors, folder names, pool Slide checks, slot order, routes and summaries.
 
-**Manual review:** approved module/tier/text/style homes; per-Episode bundles (route bundle stats); presentation config governs mechanics, never Scene layout; domain-free measurement; one geometry-driven tone adapter; server defaults and leaf clients.
+**Manual review:** approved module/tier/text/style homes; per-Episode bundles; presentation config governs mechanics, never Scene layout; domain-free measurement; one geometry-driven tone adapter; server defaults and leaf clients.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

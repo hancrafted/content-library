@@ -6,7 +6,7 @@ status: accepted
 
 # An Event copy is an instance of its Episode
 
-An Event copy stops being a `cp -r` of its Episode. It becomes an **Episode instance**: its **Base Episode** plus sparse **Episode overrides**, resolved into a plain Episode record before the container runs. This is the Prototype pattern with sparse overrides (differential inheritance), as in Figma's main component and instance. A value the instance overrides stays pinned. A value it does not override shows the base's current default.
+An Event copy stops being a `cp -r` of its Episode. It becomes an **Episode instance**: its **Base Episode** plus sparse **Episode overrides**, resolved into a plain Episode record before the container runs. How to author one: [Episode instances](../features/episode-instances.md). This is the Prototype pattern with sparse overrides (differential inheritance), as in Figma's main component and instance. A value the instance overrides stays pinned. A value it does not override shows the base's current default.
 
 ## Human acceptance
 
