@@ -14,6 +14,18 @@ const english = explorableData('en');
 const german = explorableData('de');
 
 describe('success cases', () => {
+  it.each([
+    ['en', 'new'],
+    ['de', 'neu'],
+  ])('Seam 3: the fresh-start scene carries the label word for %s', (locale, word) => {
+    // ARRANGE
+    const data = explorableData(locale);
+    // ACT
+    const label = data.words.backs.fresh;
+    // ASSERT
+    expect(label).toBe(word);
+  });
+
   it('renders the PRICE heads, the five chips with their letters, and the closing line in English', () => {
     // ARRANGE
     const expected = ['The freelancer', 'Five traits', 'AI', 'Amnesia:', 'P', 'R', 'I', 'C', 'E'];

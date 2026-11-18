@@ -82,6 +82,7 @@ i18n:
       handbook: 'How we work here'
       bill: 'bill'
       tokens: 'tokens'
+      fresh: 'new'
       handbookWords:
         first: 'We'
         second: 'always'
@@ -251,6 +252,7 @@ i18n:
       handbook: 'Wie wir arbeiten'
       bill: 'Rechnung'
       tokens: 'Tokens'
+      fresh: 'neu'
       handbookWords:
         first: 'Wir'
         second: 'immer'

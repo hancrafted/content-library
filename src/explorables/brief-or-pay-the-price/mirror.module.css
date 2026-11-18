@@ -682,6 +682,25 @@
   animation: v15 9.9s step-end both;
 }
 
+.root.fadeA :is(.card, .arrow) {
+  animation: cardsInA 0.7s both;
+}
+.root.fadeB :is(.card, .arrow) {
+  animation: cardsInB 0.7s both;
+}
+@keyframes cardsInA {
+  0%,
+  55% {
+    opacity: 0;
+  }
+}
+@keyframes cardsInB {
+  0%,
+  55% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card.isShown {
     animation: none;

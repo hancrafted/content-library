@@ -121,6 +121,7 @@ export interface Words {
     readonly handbook: string;
     readonly bill: string;
     readonly tokens: string;
+    readonly fresh: string;
     readonly handbookWords: HandbookWords;
   };
   readonly stages: StagesWords;
