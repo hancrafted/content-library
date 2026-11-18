@@ -16,7 +16,7 @@ Stages are agnostic: DRIVE is the first Scenario, not a built-in. A Scenario nam
 
 ## Top level
 
-All fields are required unless marked. Unknown fields are rejected.
+All fields are required unless marked. Unknown fields are rejected at the top level and on Stages, nodes, Cells, edges and Annotations; the loader does not check `i18n` for extra locales or extra word keys.
 
 | Field         | Holds                                                                                                         |
 | ------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -124,15 +124,17 @@ i18n:
 
 Every problem names the file and the path to the field, and the loader reports all of them at once.
 
-| Mistake                                                                                       | Problem names                           |
-| --------------------------------------------------------------------------------------------- | --------------------------------------- |
-| A field missing, of the wrong type, or unknown                                                | the field                               |
-| `acronym` not one letter per Stage                                                            | `acronym`                               |
-| An id used twice (Stage, node, Cell within its node)                                          | the id                                  |
-| A node named `goal`                                                                           | the node                                |
-| A `scene` outside the catalogue                                                               | the Stage's `scene`, with the catalogue |
-| A node's `stage`, an edge end or an Annotation target that does not resolve                   | the reference                           |
-| A Cell's `move` or `trait` that is not a BRIEF move or PRICE trait                            | the Cell                                |
-| No edge reaching the goal                                                                     | `edges`                                 |
-| An `annotations` key that is not a BRACE letter, an unknown `type`, a wrong `route` or `kind` | the Annotation                          |
-| A string missing in one locale                                                                | `i18n.<locale>.<key>.<id>.<field>`      |
+| Mistake                                                                                       | Problem names                                                                                                                               |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| A field missing, of the wrong type, or unknown                                                | the field; a missing `i18n.<locale>` names `i18n.<locale>`                                                                                  |
+| `acronym` not one letter per Stage                                                            | `acronym`                                                                                                                                   |
+| An id used twice (Stage, node, Cell within its node)                                          | the id                                                                                                                                      |
+| A node named `goal`                                                                           | the node                                                                                                                                    |
+| A `scene` outside the catalogue                                                               | the Stage's `scene`, with the catalogue                                                                                                     |
+| A node's `stage`, an edge end or an Annotation target that does not resolve                   | the reference; an arrow end names the Annotation (`annotations.B[0]`), other targets name the field (`.nodes`, `.node`, `.edge`, `.stages`) |
+| A Cell's `move` or `trait` that is not a BRIEF move or PRICE trait                            | the Cell                                                                                                                                    |
+| No edge reaching the goal                                                                     | `edges`                                                                                                                                     |
+| An `annotations` key that is not a BRACE letter, an unknown `type`, a wrong `route` or `kind` | the Annotation                                                                                                                              |
+| A string missing in one locale                                                                | `i18n.<locale>.title`, `i18n.<locale>.<key>.<id>.<field>` or `i18n.<locale>.annotations.<id>`                                               |
+
+The Scenario registry adds one problem of its own: a shipped Scenario whose `id` is not its registered file name, naming `id`.
