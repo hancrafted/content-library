@@ -12,6 +12,7 @@ export interface WorktreeConfig {
   install: string[];
   preflight: string | null;
   lock: string | null;
+  beforeMerge: string[];
   beforeRemove: string[];
   afterMerge: string[];
   afterRemove: string[];
@@ -44,6 +45,7 @@ export const defaultsFor = (entry: string): WorktreeConfig => ({
   install: [],
   preflight: null,
   lock: null,
+  beforeMerge: [],
   beforeRemove: [],
   afterMerge: [],
   afterRemove: [],
