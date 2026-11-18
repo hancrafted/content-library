@@ -31,10 +31,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 
-- **Count:** 1 (last: 2026-11-17, drive)
+- **Count:** 2 (last: 2026-11-18, drive-handoff)
 - **Enforcer:** hook: new PreToolUse hook on `wt:new` that requires a fresh phase marker written by a new `drive status`, architectural
 - **Status:** proposed
-- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide; fortify-decision AR-1 proposes this hook (picks skipped 2026-11-17, count kept at 1: same Workflow)
+- **Evidence:** drive: the Operator stopped `wt:new -- decisions/drive` ("are we starting to implement?"); the Operator asked whether the session needs a human and for a review guide; fortify-decision AR-1 proposes this hook (picks skipped 2026-11-17, count kept at 1: same Workflow); drive-handoff: the Operator wants the Workflow to run to the end with no question or PR mid-run (Decision record 0028 closes the mid-run questions, the phase naming stays unenforced)
 
 ### Workflow progress lives only in the session, so a quota reset ends it
 
@@ -94,10 +94,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A Subagent skips an acceptance criterion and the report passes the shape check
 
-- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Count:** 2 (last: 2026-11-18, drive-handoff)
 - **Enforcer:** none deterministic yet: Implementer profile line, quick win; new test for a report parser called by `worktree done`, architectural
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately
+- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; drive-handoff: a Subagent's report left an acceptance criterion undone and it surfaced in the fix-review brief (W2)
 
 ### A pool Slide's test references a by-event Episode, and nothing checks it
 
@@ -113,8 +113,37 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed
 - **Evidence:** ai-attention-span-pool: both implementation Subagents noted `/commit` strips the Co-Authored-By the harness asks for; the project rule won
 
+### A push is not checked against the remote
+
+- **Count:** 2 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: test:slow test for `drive push` that fails when the remote does not hold the pushed commit, architectural
+- **Status:** fixed by #740
+- **Evidence:** drive: pushes piped through `grep` and `tail` three times, masking the push exit code (#695); drive-handoff: the 2026-11-18 runs repeated it
+
+### What is live or scheduled that a change touches is raised only at the PR
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** none deterministic yet: the Decision PR body's required section (Decision record 0028), architectural
+- **Status:** fixed by #740
+- **Evidence:** drive-handoff: an Event-date risk surfaced only at the PR, after Implement had started
+
+### Fortify evidence is merged into an Integration branch whose PR had already merged
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** none deterministic yet: Fortify takes its evidence from the base branch after the merge (Decision record 0028), architectural
+- **Status:** fixed by #740
+- **Evidence:** drive-handoff: Fortify evidence landed on an Integration branch after its PR merged, so it never reached `main`
+
+### ARCH-003's three-describe rule forces filler tests in composition-only section tests
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** adr-checker: archgate, narrow the ARCH-003-testing rule for composition-only section tests, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: composition-only section tests carried filler `describe` blocks to satisfy the three-describe rule
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked "can this session run until end or does it require a human?" and asked for a guide to reviewing the PR. The Orchestrator had not stated the Operator's decision points, or how to review, up front. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-17 drive: The Operator asked to resume automatically after a quota reset. There is no built-in recovery, so the Orchestrator added a session-only watchdog (a cron job that dies with the session). → Workflow progress lives only in the session, so a quota reset ends it
+- 2026-11-18 drive-handoff: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
