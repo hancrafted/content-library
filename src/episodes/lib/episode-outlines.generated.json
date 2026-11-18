@@ -29,20 +29,20 @@
         {
           "slug": "the-long-phone-call-story",
           "anchor": "thought-experiment--the-long-phone-call-story",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
           "anchor": "thought-experiment--ai-forgets-the-middle-too",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "study-note"]
         }
@@ -60,40 +60,40 @@
         {
           "slug": "the-context-window",
           "anchor": "the-ais-attention-span--the-context-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/de.json"]
           },
           "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
           "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/de.json"]
           },
           "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
           "anchor": "the-ais-attention-span--attention-is-a-budget",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/de.json"]
           },
           "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
           "anchor": "the-ais-attention-span--what-we-learned-so-far",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/de.json"]
           },
           "targets": ["same"]
         }
@@ -111,30 +111,30 @@
         {
           "slug": "whats-really-in-the-window",
           "anchor": "what-fills-the-window--whats-really-in-the-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/de.json"]
           },
           "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
           "anchor": "what-fills-the-window--one-innocent-question",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/de.json"]
           },
           "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
           "anchor": "what-fills-the-window--you-cant-watch-the-meter",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/de.json"]
           },
           "targets": ["after", "footer", "chat"]
         }
@@ -152,40 +152,40 @@
         {
           "slug": "everyday-habits",
           "anchor": "managing-the-attention-span--everyday-habits",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/de.json"]
           },
           "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
           "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/de.json"]
           },
           "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
           "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/de.json"]
           },
           "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
           "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/de.json"]
           }
         }
       ]
@@ -221,30 +221,30 @@
         {
           "slug": "every-revolution-one-card",
           "anchor": "from-execution-to-management--every-revolution-one-card",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/de.json"]
           },
           "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
           "anchor": "from-execution-to-management--you-were-promoted",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/de.json"]
           },
           "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
           "anchor": "from-execution-to-management--practise-it-today-at-work",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/de.json"]
           },
           "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
@@ -281,30 +281,30 @@
         {
           "slug": "you-are-the-new-hire",
           "anchor": "the-thought-experiment--you-are-the-new-hire",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/de.json"]
           },
           "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
           "anchor": "the-thought-experiment--pay-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/de.json"]
           },
           "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
           "anchor": "the-thought-experiment--one-prompt",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-prompt/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-prompt/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/de.json"]
           }
         }
       ],
@@ -321,20 +321,20 @@
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
           "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
           },
           "targets": ["requirements", "interview", "research", "caption", "page"]
         },
         {
           "slug": "manage-the-price",
           "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/de.json"]
           },
           "targets": [
             "break-it-down",
@@ -383,20 +383,20 @@
         {
           "slug": "the-long-phone-call-story",
           "anchor": "thought-experiment--the-long-phone-call-story",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
           "anchor": "thought-experiment--ai-forgets-the-middle-too",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "study-note"]
         }
@@ -417,40 +417,40 @@
         {
           "slug": "the-context-window",
           "anchor": "the-ais-attention-span--the-context-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/de.json"]
           },
           "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
           "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/de.json"]
           },
           "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
           "anchor": "the-ais-attention-span--attention-is-a-budget",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/de.json"]
           },
           "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
           "anchor": "the-ais-attention-span--what-we-learned-so-far",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/de.json"]
           },
           "targets": ["same"]
         }
@@ -471,30 +471,30 @@
         {
           "slug": "whats-really-in-the-window",
           "anchor": "what-fills-the-window--whats-really-in-the-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/de.json"]
           },
           "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
           "anchor": "what-fills-the-window--one-innocent-question",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/de.json"]
           },
           "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
           "anchor": "what-fills-the-window--you-cant-watch-the-meter",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/de.json"]
           },
           "targets": ["after", "footer", "chat"]
         }
@@ -515,40 +515,40 @@
         {
           "slug": "everyday-habits",
           "anchor": "managing-the-attention-span--everyday-habits",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/de.json"]
           },
           "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
           "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/de.json"]
           },
           "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
           "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/de.json"]
           },
           "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
           "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/de.json"]
           }
         }
       ]
@@ -590,30 +590,30 @@
         {
           "slug": "every-revolution-one-card",
           "anchor": "from-execution-to-management--every-revolution-one-card",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/de.json"]
           },
           "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
           "anchor": "from-execution-to-management--you-were-promoted",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/de.json"]
           },
           "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
           "anchor": "from-execution-to-management--practise-it-today-at-work",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/de.json"]
           },
           "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
@@ -850,30 +850,30 @@
         {
           "slug": "you-are-the-new-hire",
           "anchor": "the-thought-experiment--you-are-the-new-hire",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/de.json"]
           },
           "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
           "anchor": "the-thought-experiment--pay-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/de.json"]
           },
           "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
           "anchor": "the-thought-experiment--one-prompt",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-prompt/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-prompt/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/de.json"]
           }
         }
       ],
@@ -890,10 +890,10 @@
         {
           "slug": "manage-the-price",
           "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/de.json"]
           },
           "targets": [
             "break-it-down",
@@ -906,10 +906,10 @@
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
           "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
           },
           "targets": ["requirements", "interview", "research", "caption", "page"]
         }
@@ -952,20 +952,20 @@
         {
           "slug": "the-long-phone-call-story",
           "anchor": "thought-experiment--the-long-phone-call-story",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
           "anchor": "thought-experiment--ai-forgets-the-middle-too",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "study-note"]
         }
@@ -986,40 +986,40 @@
         {
           "slug": "the-context-window",
           "anchor": "the-ais-attention-span--the-context-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/de.json"]
           },
           "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
           "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/de.json"]
           },
           "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
           "anchor": "the-ais-attention-span--attention-is-a-budget",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/de.json"]
           },
           "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
           "anchor": "the-ais-attention-span--what-we-learned-so-far",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/de.json"]
           },
           "targets": ["same"]
         }
@@ -1040,30 +1040,30 @@
         {
           "slug": "whats-really-in-the-window",
           "anchor": "what-fills-the-window--whats-really-in-the-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/de.json"]
           },
           "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
           "anchor": "what-fills-the-window--one-innocent-question",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/de.json"]
           },
           "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
           "anchor": "what-fills-the-window--you-cant-watch-the-meter",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/de.json"]
           },
           "targets": ["after", "footer", "chat"]
         }
@@ -1084,40 +1084,40 @@
         {
           "slug": "everyday-habits",
           "anchor": "managing-the-attention-span--everyday-habits",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/de.json"]
           },
           "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
           "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/de.json"]
           },
           "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
           "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/de.json"]
           },
           "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
           "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/de.json"]
           }
         }
       ]
@@ -1159,30 +1159,30 @@
         {
           "slug": "every-revolution-one-card",
           "anchor": "from-execution-to-management--every-revolution-one-card",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/de.json"]
           },
           "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
           "anchor": "from-execution-to-management--you-were-promoted",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/de.json"]
           },
           "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
           "anchor": "from-execution-to-management--practise-it-today-at-work",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/de.json"]
           },
           "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
@@ -1315,30 +1315,30 @@
         {
           "slug": "you-are-the-new-hire",
           "anchor": "the-thought-experiment--you-are-the-new-hire",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/de.json"]
           },
           "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
           "anchor": "the-thought-experiment--pay-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/de.json"]
           },
           "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
           "anchor": "the-thought-experiment--one-prompt",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-prompt/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-prompt/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/de.json"]
           }
         }
       ],
@@ -1355,10 +1355,10 @@
         {
           "slug": "manage-the-price",
           "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/de.json"]
           },
           "targets": [
             "break-it-down",
@@ -1371,10 +1371,10 @@
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
           "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
           },
           "targets": ["requirements", "interview", "research", "caption", "page"]
         }
@@ -2428,20 +2428,20 @@
         {
           "slug": "the-long-phone-call-story",
           "anchor": "thought-experiment--the-long-phone-call-story",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
           "anchor": "thought-experiment--ai-forgets-the-middle-too",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "study-note"]
         }
@@ -2462,40 +2462,40 @@
         {
           "slug": "the-context-window",
           "anchor": "the-ais-attention-span--the-context-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/de.json"]
           },
           "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
           "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/de.json"]
           },
           "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
           "anchor": "the-ais-attention-span--attention-is-a-budget",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/de.json"]
           },
           "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
           "anchor": "the-ais-attention-span--what-we-learned-so-far",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/de.json"]
           },
           "targets": ["same"]
         }
@@ -2516,30 +2516,30 @@
         {
           "slug": "whats-really-in-the-window",
           "anchor": "what-fills-the-window--whats-really-in-the-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/de.json"]
           },
           "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
           "anchor": "what-fills-the-window--one-innocent-question",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/de.json"]
           },
           "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
           "anchor": "what-fills-the-window--you-cant-watch-the-meter",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/de.json"]
           },
           "targets": ["after", "footer", "chat"]
         }
@@ -2560,40 +2560,40 @@
         {
           "slug": "everyday-habits",
           "anchor": "managing-the-attention-span--everyday-habits",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/de.json"]
           },
           "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
           "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/de.json"]
           },
           "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
           "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/de.json"]
           },
           "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
           "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/de.json"]
           }
         }
       ]
@@ -2635,30 +2635,30 @@
         {
           "slug": "every-revolution-one-card",
           "anchor": "from-execution-to-management--every-revolution-one-card",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/de.json"]
           },
           "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
           "anchor": "from-execution-to-management--you-were-promoted",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/de.json"]
           },
           "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
           "anchor": "from-execution-to-management--practise-it-today-at-work",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/de.json"]
           },
           "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
@@ -2895,30 +2895,30 @@
         {
           "slug": "you-are-the-new-hire",
           "anchor": "the-thought-experiment--you-are-the-new-hire",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/de.json"]
           },
           "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
           "anchor": "the-thought-experiment--pay-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/de.json"]
           },
           "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
           "anchor": "the-thought-experiment--one-prompt",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-prompt/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-prompt/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/de.json"]
           }
         }
       ],
@@ -2935,10 +2935,10 @@
         {
           "slug": "manage-the-price",
           "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/de.json"]
           },
           "targets": [
             "break-it-down",
@@ -2951,10 +2951,10 @@
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
           "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
           },
           "targets": ["requirements", "interview", "research", "caption", "page"]
         }
@@ -2990,20 +2990,20 @@
         {
           "slug": "the-long-phone-call-story",
           "anchor": "thought-experiment--the-long-phone-call-story",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-long-phone-call-story/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-long-phone-call-story/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "standout", "lab-note"]
         },
         {
           "slug": "ai-forgets-the-middle-too",
           "anchor": "thought-experiment--ai-forgets-the-middle-too",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/ai-forgets-the-middle-too/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/ai-forgets-the-middle-too/i18n/de.json"]
           },
           "targets": ["middle", "start", "end", "study-note"]
         }
@@ -3021,40 +3021,40 @@
         {
           "slug": "the-context-window",
           "anchor": "the-ais-attention-span--the-context-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-context-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-context-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-context-window/i18n/de.json"]
           },
           "targets": ["resend", "limit", "apps"]
         },
         {
           "slug": "what-happens-when-the-bar-fills-up",
           "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-happens-when-the-bar-fills-up/i18n/de.json"]
           },
           "targets": ["caption", "reason", "first"]
         },
         {
           "slug": "attention-is-a-budget",
           "anchor": "the-ais-attention-span--attention-is-a-budget",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/attention-is-a-budget/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/attention-is-a-budget/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/attention-is-a-budget/i18n/de.json"]
           },
           "targets": ["attention", "lost", "zones"]
         },
         {
           "slug": "what-we-learned-so-far",
           "anchor": "the-ais-attention-span--what-we-learned-so-far",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/what-we-learned-so-far/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/what-we-learned-so-far/i18n/de.json"]
           },
           "targets": ["same"]
         }
@@ -3072,30 +3072,30 @@
         {
           "slug": "whats-really-in-the-window",
           "anchor": "what-fills-the-window--whats-really-in-the-window",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/whats-really-in-the-window/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/whats-really-in-the-window/i18n/de.json"]
           },
           "targets": ["memory", "start", "named"]
         },
         {
           "slug": "one-innocent-question",
           "anchor": "what-fills-the-window--one-innocent-question",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-innocent-question/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-innocent-question/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/one-innocent-question/i18n/de.json"]
           },
           "targets": ["card", "sizes", "illustrative"]
         },
         {
           "slug": "you-cant-watch-the-meter",
           "anchor": "what-fills-the-window--you-cant-watch-the-meter",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-cant-watch-the-meter/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/you-cant-watch-the-meter/i18n/de.json"]
           },
           "targets": ["after", "footer", "chat"]
         }
@@ -3113,40 +3113,40 @@
         {
           "slug": "everyday-habits",
           "anchor": "managing-the-attention-span--everyday-habits",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/everyday-habits/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/everyday-habits/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/everyday-habits/i18n/de.json"]
           },
           "targets": ["habit-next-chat", "habit-one-chat", "habit-handoff"]
         },
         {
           "slug": "the-workflow-for-bigger-projects",
           "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/the-workflow-for-bigger-projects/i18n/de.json"]
           },
           "targets": ["after", "after-note"]
         },
         {
           "slug": "human-in-the-loop-workflow",
           "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/human-in-the-loop-workflow/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/human-in-the-loop-workflow/i18n/de.json"]
           },
           "targets": ["workers", "loop-note"]
         },
         {
           "slug": "now-you-know-how-it-feels",
           "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/now-you-know-how-it-feels/i18n/de.json"]
+            "en": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/en.json"],
+            "de": ["src/episodes/ai-attention-span/slides/now-you-know-how-it-feels/i18n/de.json"]
           }
         }
       ]
@@ -3181,30 +3181,30 @@
         {
           "slug": "every-revolution-one-card",
           "anchor": "from-execution-to-management--every-revolution-one-card",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/every-revolution-one-card/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/every-revolution-one-card/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/i18n/de.json"]
           },
           "targets": ["caption", "lifted-people", "farming", "steam-fork", "ai"]
         },
         {
           "slug": "you-were-promoted",
           "anchor": "from-execution-to-management--you-were-promoted",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-were-promoted/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-were-promoted/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/you-were-promoted/i18n/de.json"]
           },
           "targets": ["gap", "caption", "first-stone", "stones"]
         },
         {
           "slug": "practise-it-today-at-work",
           "anchor": "from-execution-to-management--practise-it-today-at-work",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/practise-it-today-at-work/i18n/de.json"]
+            "en": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/en.json"],
+            "de": ["src/episodes/ai-gives-you-more-work/slides/practise-it-today-at-work/i18n/de.json"]
           },
           "targets": ["exhibits", "onboard", "closing", "chunks"]
         }
@@ -3987,30 +3987,30 @@
         {
           "slug": "you-are-the-new-hire",
           "anchor": "the-thought-experiment--you-are-the-new-hire",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/you-are-the-new-hire/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/you-are-the-new-hire/i18n/de.json"]
           },
           "targets": ["hidden", "handover"]
         },
         {
           "slug": "pay-the-price",
           "anchor": "the-thought-experiment--pay-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/pay-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/pay-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/pay-the-price/i18n/de.json"]
           },
           "targets": ["relentless", "probabilistic", "every-word-billed", "confident", "informed", "closing"]
         },
         {
           "slug": "one-prompt",
           "anchor": "the-thought-experiment--one-prompt",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/one-prompt/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/one-prompt/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/de.json"]
           }
         }
       ],
@@ -4027,20 +4027,20 @@
         {
           "slug": "first-human-in-the-loop-agentic-workflow",
           "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/first-human-in-the-loop-agentic-workflow/i18n/de.json"]
           },
           "targets": ["requirements", "interview", "research", "caption", "page"]
         },
         {
           "slug": "manage-the-price",
           "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
-          "pool": true,
+          "pool": false,
           "text": {
-            "en": ["src/episodes/slide-pool/manage-the-price/i18n/en.json"],
-            "de": ["src/episodes/slide-pool/manage-the-price/i18n/de.json"]
+            "en": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/en.json"],
+            "de": ["src/episodes/onboard-ai-every-time/slides/manage-the-price/i18n/de.json"]
           },
           "targets": [
             "break-it-down",

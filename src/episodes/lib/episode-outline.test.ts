@@ -3,9 +3,12 @@ import { episodeOutline } from './episode-outline.ts';
 
 describe('success cases', () => {
   describe('episodeOutline', () => {
-    it('names a pool Slide with its pool text layers, among the Episode own Slides in Section order', () => {
+    it('names a Slide with its own text layer, among the Episode own Slides in Section order', () => {
       // ARRANGE
-      const expected = { pool: true, layers: ['src/episodes/slide-pool/one-prompt/i18n/en.json'] };
+      const expected = {
+        pool: false,
+        layers: ['src/episodes/onboard-ai-every-time/slides/one-prompt/i18n/en.json'],
+      };
       // ACT
       const slide = episodeOutline('onboard-ai-every-time')
         .sections.flat()
