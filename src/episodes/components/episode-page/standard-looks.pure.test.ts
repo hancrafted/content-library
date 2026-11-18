@@ -1,8 +1,4 @@
-import {
-  STANDARD_OPENING_SECTION_LOOK,
-  STANDARD_SECTION_LOOK,
-  STANDARD_TITLE_LOOK,
-} from '@/episodes/components/slide-master/standard-looks';
+import { STANDARD_SECTION_LOOK, STANDARD_TITLE_LOOK } from '@/episodes/components/slide-master/standard-looks';
 import { describe, expect, it } from 'vitest';
 import { standardTitleLook, withStandardSlideLooks } from './standard-looks.pure';
 
@@ -14,10 +10,10 @@ const section = (id: string, extra: { presentation?: object; withoutSectionSlide
 const page = (id: string) => ({ id, level: 'h3' as const });
 
 describe('success cases', () => {
-  it('gives the first section slide the opening look and later ones the section look', () => {
+  it('gives every section slide, the first included, the one section look', () => {
     // ARRANGE
     const slides = [section('one'), page('one--a'), section('two'), section('three')];
-    const expected = [STANDARD_OPENING_SECTION_LOOK, undefined, STANDARD_SECTION_LOOK, STANDARD_SECTION_LOOK];
+    const expected = [STANDARD_SECTION_LOOK, undefined, STANDARD_SECTION_LOOK, STANDARD_SECTION_LOOK];
     // ACT
     const looks = withStandardSlideLooks(slides).map((slide) => (slide as { presentation?: unknown }).presentation);
     // ASSERT
@@ -31,6 +27,33 @@ describe('success cases', () => {
     const look = standardTitleLook(undefined, undefined);
     // ASSERT
     expect(look).toBe(expected);
+  });
+
+  it('gives the Title normal tone and surface, no effect and 160px after', () => {
+    // ARRANGE
+    const expected = { style: { '--slide-space-after': '160px' } };
+    // ACT
+    const look = STANDARD_TITLE_LOOK;
+    // ASSERT
+    expect(look).toEqual(expected);
+  });
+
+  it('gives the section inverse tone, softened surface, liquid enter and leave and 200px around', () => {
+    // ARRANGE
+    const expected = {
+      tone: 'inverse',
+      style: {
+        '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        '--slide-space-before': '200px',
+        '--slide-space-after': '200px',
+      },
+      enter: { effect: 'liquid' },
+      leave: { effect: 'liquid' },
+    };
+    // ACT
+    const look = STANDARD_SECTION_LOOK;
+    // ASSERT
+    expect(look).toEqual(expected);
   });
 });
 
@@ -55,7 +78,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('counts a declared first section as the opening, so the next one gets the section look', () => {
+  it('gives the section after a declared first section the section look', () => {
     // ARRANGE
     const slides = [section('one', { presentation: {} }), section('two')];
     // ACT
@@ -70,7 +93,7 @@ describe('edge cases', () => {
     // ACT
     const [first, second] = withStandardSlideLooks(slides);
     // ASSERT
-    expect([first.presentation, second.presentation]).toEqual([undefined, STANDARD_OPENING_SECTION_LOOK]);
+    expect([first.presentation, second.presentation]).toEqual([undefined, STANDARD_SECTION_LOOK]);
   });
 
   it('leaves a legacy toned Title to its own tone', () => {

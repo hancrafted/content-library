@@ -114,14 +114,13 @@ describe('success cases', () => {
     [introHitlWorkflowsAiGivesYouMoreWork, 'from-execution-to-management'],
     [introHitlWorkflowsOnboardAiEveryTime, 'the-thought-experiment'],
   ] as const)(
-    'renders inverse Event Titles with trailing reading space and independent ink departure',
+    'renders normal Event Titles with trailing reading space that enter the first section by liquid',
     async (record, firstSection) => {
       // ARRANGE
       const expectedEdge = `top→${firstSection}`;
       const expectedEffect = 'liquid';
-      const expectedTone = 'inverse';
+      const expectedTone = 'normal';
       const expectedSpace = '--slide-space-after:160px';
-      const expectedSurface = '--slide-surface:color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))';
       const titleOnly = episode({
         ...record,
         sections: record.sections.map((section) => [{ ...section[0], presentation: undefined }, ...section.slice(1)]),
@@ -144,14 +143,15 @@ describe('success cases', () => {
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
       expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
       expect($('#top').attr('style')).toContain(expectedSpace);
-      expect($('#top').attr('style')).toContain(expectedSurface);
+      expect($('#top').attr('style')).not.toContain('--slide-surface');
     },
   );
   it.each([
     [
       introHitlWorkflowsAiAttentionSpan,
       [
-        ['top→thought-experiment', 'var(--section-band)'],
+        ['top→thought-experiment', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['thought-experiment→thought-experiment--the-long-phone-call-story', 'var(--background)'],
         [
           'thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span',
           'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
@@ -169,11 +169,18 @@ describe('success cases', () => {
         ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
       ],
     ],
-    [introHitlWorkflowsAiGivesYouMoreWork, [['top→from-execution-to-management', 'var(--section-band)']]],
+    [
+      introHitlWorkflowsAiGivesYouMoreWork,
+      [
+        ['top→from-execution-to-management', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['from-execution-to-management→from-execution-to-management--every-revolution-one-card', 'var(--background)'],
+      ],
+    ],
     [
       introHitlWorkflowsOnboardAiEveryTime,
       [
-        ['top→the-thought-experiment', 'var(--section-band)'],
+        ['top→the-thought-experiment', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['the-thought-experiment→the-thought-experiment--you-are-the-new-hire', 'var(--background)'],
         [
           'the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer',
           'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
@@ -182,14 +189,12 @@ describe('success cases', () => {
       ],
     ],
   ] as const)(
-    'transitions the Event Title into a normal effect-free first section and retains later inverse section edges',
+    'transitions the normal Event Title into an inverse first section and every later section by liquid',
     async (record, expected) => {
       // ARRANGE
       const expectedEffect = 'liquid';
       const expectedTone = 'inverse';
-      const expectedFirstTone = 'normal';
-      const expectedTitleLeave = STANDARD_TITLE_LOOK.leave;
-      const expectedSpace = '--slide-space-after:265px';
+      const expectedSpace = '--slide-space-after:200px';
       const expectedSectionCount = record.sections.length;
       // ACT
       const content = await recordContent(record, 'en', {
@@ -221,11 +226,11 @@ describe('success cases', () => {
       const sections = $('[data-size="section"]').toArray();
       // ASSERT
       expect(targets).toEqual(expected);
-      expect(content.transitions.get('top')?.declaration).toBe(expectedTitleLeave);
+      expect(STANDARD_TITLE_LOOK.leave).toBeUndefined();
       effects.forEach((effect) => expect(effect).toBe(expectedEffect));
       expect(sections).toHaveLength(expectedSectionCount);
-      sections.forEach((section, index) => {
-        expect($(section).attr('data-surface-tone')).toBe(index === 0 ? expectedFirstTone : expectedTone);
+      sections.forEach((section) => {
+        expect($(section).attr('data-surface-tone')).toBe(expectedTone);
         expect($(section).attr('style')).toContain(expectedSpace);
       });
     },
@@ -300,12 +305,12 @@ describe('success cases', () => {
     expect(tocEntranceOf(content)).toBe(clockEntrance);
   });
   it.each(['en', 'de'] as const)(
-    'keeps Intro non-Title Slides normal and effect-free without removing reading space in %s',
+    'keeps Intro pages normal behind the inverse grounding section without removing reading space in %s',
     async (locale) => {
       // ARRANGE
-      const expectedEdges: string[][] = [];
+      const expectedEdges = [['grounding→agenda', 'liquid']];
       const expectedSurfaces = [
-        ['grounding', 'normal'],
+        ['grounding', 'inverse'],
         ['agenda', 'normal'],
         ['poll', 'normal'],
         ['check-in-1', 'normal'],
@@ -355,13 +360,13 @@ describe('success cases', () => {
     },
   );
   it.each(['en', 'de'] as const)(
-    'renders the workshop Intro Title inverse with liquid departure in %s',
+    'renders the workshop Intro Title inverse with liquid departure into the inverse grounding section in %s',
     async (locale) => {
       // ARRANGE
       const expectedTone = 'inverse';
       const expectedEdge = 'top→grounding';
       const expectedEffect = 'liquid';
-      const expectedDestination = 'var(--section-band)';
+      const expectedDestination = 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))';
       const expectedTrailingSpace = '--slide-space-after:160px';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
@@ -790,9 +795,9 @@ describe('edge cases', () => {
     'keeps explicit %s geometry independent of the standard Title look',
     async (policy) => {
       // ARRANGE
-      const expectedAppearance = { tone: 'inverse', presentation: { ...STANDARD_TITLE_LOOK, tone: 'inverse' } };
+      const expectedAppearance = { tone: 'normal', presentation: STANDARD_TITLE_LOOK };
       const expectedSurfaces = [
-        { id: 'top', tone: 'inverse', effect: 'liquid' },
+        { id: 'top', tone: 'normal', effect: undefined },
         { id: 'foundations', tone: 'normal', effect: undefined },
         { id: 'foundations--why-a-template', tone: 'normal', effect: undefined },
         { id: 'foundations--visual', tone: 'normal', effect: undefined },
@@ -815,7 +820,7 @@ describe('edge cases', () => {
       // ASSERT
       expect(content.titleAppearance).toEqual(expectedAppearance);
       expect($('#top').attr('data-tone')).toBeUndefined();
-      expect($('#top').attr('data-surface-tone')).toBe('inverse');
+      expect($('#top').attr('data-surface-tone')).toBe('normal');
       expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
       expect(tocEntranceOf(content)).toBe(policy);
     },
