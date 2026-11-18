@@ -238,6 +238,62 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed
 - **Evidence:** ai-gives-you-more-work-pool: #729 added two tests that can never fail, only to satisfy the three-describe rule (its own Trade-offs line said so); the review caught them
 
+### A glossary term is coined for what plain words already say
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** none deterministic yet: a line in the Define step of the drive skill that a new term needs a sentence the plain words cannot carry, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: the Operator removed the glossary terms Run terms, Interrupt and Notify adapter from #746; Decision record 0028 uses plain words
+
+### A learnings ticket's brief names no evidence source, so its Subagent credits every line to the current Workflow
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: test that the brief template in `dispatch.md` carries an "Evidence from" line, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: #745's brief gave no Workflow records, every Evidence line went to drive-handoff, and the Orchestrator corrected `learnings.md` itself (d81199f95), which fortify.md reserves for a Subagent
+
+### A ticket that documents code is dispatched before that code merges
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** check: new dispatch check that refuses a ticket declaring `Describes: <ticket>` while that ticket is unmerged, architectural; or a dispatch.md rule, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: #744 ran in parallel with #741 and wrote `drive worktree sync` from the ticket, not the CLI; the Orchestrator fixed it inline (76f36928f); `dispatch.md` dispatches "the moment its last blocker is merged" but nothing makes a doc ticket blocked by the code it describes
+
+### The PR watch counts the Orchestrator's own reply as a new comment
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: test, `skills/drive/scripts/pr-watch.pure.test.ts`
+- **Status:** fixed 64b272bda
+- **Evidence:** drive-handoff: the watch woke on the Orchestrator's reply (same GitHub account as the Operator); #741 skips comments that start with `<!-- drive -->`
+
+### A CLI change is dogfooded from a checkout older than the change
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** none deterministic yet: a line in SKILL.md to run the CLI from the Integration worktree, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: the first `drive pr watch 768` ran from the main checkout, whose CLI predates #741, and failed with "unknown group 'pr'"
+
+### `drive worktree done` refuses over pids that belong to other sessions or have exited
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: test, a case in `skills/drive/scripts/worktree-process.pure.test.ts` for stale and foreign pids, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: #744 and the review fix were refused over pids that were another session's or already gone; the first left its worktree on disk until cleanup; `--kill` exists since 2026-11-17 and covers only live pids this shell may stop
+
+### A commit hook times out two unrelated tests while a Subagent runs in parallel
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: test, the load-scaled timeout in `vitest.config.mts`, quick win
+- **Status:** proposed
+- **Evidence:** drive-handoff: the test stage took 221 s under parallel load and failed two unrelated tests; the retry passed; `vitest.config.mts` already scales the timeout to the measured load, so it is a gap in that measure, not a missing one
+
+### The notify port's push notification reaches only the terminal
+
+- **Count:** 1 (last: 2026-11-18, drive-handoff)
+- **Enforcer:** test-runner: new `drive notify` command whose test fails when the adapter reports no delivery, architectural
+- **Status:** ticket https://github.com/hancrafted/content-library/issues/772
+- **Evidence:** drive-handoff: #768 was ready and the Operator was notified, but Remote Control was off, so no phone push; the Binding's `notify` port (`docs/drive/binding.yml`) names an adapter and checks nothing
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
@@ -259,3 +315,11 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 enablement-vs-agentic-engineering: slide 3 [Image #4] this si the curernt desktop showing my project. on top left we have projects, meetings, artifacts, schedule. on right we have instrcutions, memory and context. create the graphic in the center and show the content it left and right → A Subagent draws a real product from imagination, and the Operator supplies screenshots a round later
 - 2026-11-18 onboard-ai-every-time-event-look: i can be sure that the workflow can run until end so that not mid run the agent ask me to resolve a question or pr → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
 - 2026-11-18 brief-or-pay-the-price: The Operator skipped the Fortify picks: "skip fority and record qw and ar to learndings.md". → (no failure mode; Fortify outcome)
+- 2026-11-18 drive-handoff: "remove" on the glossary entries Run terms, Interrupt and Notify adapter (Operator, #746 review) → A glossary term is coined for what plain words already say
+- 2026-11-18 drive-handoff: the #745 brief named no evidence source, so its Subagent credited every Evidence line to this Workflow; the Orchestrator then edited learnings.md itself (d81199f95), which fortify.md reserves for a Subagent (Orchestrator's own) → A learnings ticket's brief names no evidence source, so its Subagent credits every line to the current Workflow
+- 2026-11-18 drive-handoff: #744 (skill text describing the #741 CLI) was dispatched in parallel with #741, so it documented the ticket, not the code; `drive worktree sync` without `--base` was wrong; the Orchestrator fixed it inline (76f36928f) (Orchestrator's own) → A ticket that documents code is dispatched before that code merges
+- 2026-11-18 drive-handoff: the Decision PR watch counted the Orchestrator's own reply (same GitHub account) and woke early; fixed by the `<!-- drive -->` marker in #741/#744 (Orchestrator's own) → The PR watch counts the Orchestrator's own reply as a new comment
+- 2026-11-18 drive-handoff: the first `drive pr watch 768` ran from the main checkout, whose CLI predates #741, and failed with "unknown group 'pr'" (Orchestrator's own) → A CLI change is dogfooded from a checkout older than the change
+- 2026-11-18 drive-handoff: `drive worktree done` refused to remove a worktree over pids that belonged to other sessions (#744) or had already exited (review fix); the first left the worktree on disk (Subagents, twice) → `drive worktree done` refuses over pids that belong to other sessions or have exited
+- 2026-11-18 drive-handoff: one commit hook failed on two unrelated test timeouts while a Subagent ran in parallel (test stage 221 s); the retry passed (Orchestrator's own) → A commit hook times out two unrelated tests while a Subagent runs in parallel
+- 2026-11-18 drive-handoff: the notify port's push notification reached only the terminal; Remote Control was off, so no phone push (gap) → The notify port's push notification reaches only the terminal
