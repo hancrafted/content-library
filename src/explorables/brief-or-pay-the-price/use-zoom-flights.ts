@@ -1,10 +1,18 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, type Dispatch, type RefObject } from 'react';
-import { useBraceFlight } from './brace-flight.client';
 import type { ExplorableEvent, ExplorableState, Level } from './explorable-state.pure';
 import { yieldingToViewer } from './flight-schedule.pure';
 import type { Layout, PlainScenario } from './scenario.types';
-import { assembleFrom, enterNodes, growFrom, shrinkInto, visibleWorkflow, type Source } from './zoom-flights';
-import { entriesOf, isNarrow, originOf } from './zoom-geometry.pure';
+import { useBraceFlight } from './use-brace-flight';
+import {
+  assembleFrom,
+  enterNodes,
+  growFrom,
+  orientationIn,
+  shrinkInto,
+  visibleWorkflow,
+  type Source,
+} from './zoom-flights';
+import { entriesOf, originOf } from './zoom-geometry.pure';
 
 type Job =
   | { readonly kind: 'assemble'; readonly source: Source; readonly chips: readonly DOMRect[] }
@@ -65,8 +73,8 @@ function landGrowth(todo: Extract<Job, { kind: 'grow' }>, { root, zoomRoot, layo
 function landEntry(todo: Extract<Job, { kind: 'enter' }>, { root, scenario }: Landing): void {
   const svg = visibleWorkflow(root);
   if (svg === undefined) return;
-  const vertical = svg.getAttribute('data-orient') === 'vertical';
-  enterNodes(svg, entriesOf(scenario.layouts[vertical ? 'vertical' : 'horizontal'], scenario.nodes), vertical);
+  const orientation = orientationIn(root);
+  enterNodes(svg, entriesOf(scenario.layouts[orientation], scenario.nodes), orientation === 'vertical');
   if (todo.node !== null) svg.querySelector<SVGElement>(`[data-node="${todo.node}"]`)?.focus();
 }
 
@@ -77,11 +85,7 @@ function land(todo: Job, landing: Landing): void {
 }
 
 function useLayoutInUse(container: RefObject<HTMLElement | null>, scenario: PlainScenario): () => Layout {
-  return useCallback(() => {
-    const width = container.current?.clientWidth ?? Infinity;
-    const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    return scenario.layouts[isNarrow(width, rem) ? 'vertical' : 'horizontal'];
-  }, [container, scenario]);
+  return useCallback(() => scenario.layouts[orientationIn(container.current)], [container, scenario]);
 }
 
 function useLanding(input: ZoomFlightsInput, job: RefObject<Job | null>, layoutInUse: () => Layout): void {

@@ -13,7 +13,7 @@ const WORKFLOW_ON: Preset = {
   view: 'stages',
   level: 'workflow',
   scenario: 'drive',
-  picker: true,
+  controls: {},
   layers: ['tryIt'],
 };
 const clientOf = (locale: string, preset: Preset, slots: { habits?: string; tryIt?: string } = {}) => {
@@ -77,7 +77,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('draws no Scenario button when the Preset hides the picker', () => {
     // ARRANGE
-    const $ = clientOf('en', { ...WORKFLOW_ON, picker: false, layers: [] });
+    const $ = clientOf('en', { ...WORKFLOW_ON, controls: { scenarioPicker: { show: false } }, layers: [] });
     // ACT
     const pickers = $('[data-scenario-picker]').length;
     // ASSERT

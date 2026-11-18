@@ -21,7 +21,17 @@ function level(locale: 'en' | 'de', events: readonly ExplorableEvent[]) {
   const props = {
     data,
     state,
-    dispatch: none,
+    actions: {
+      onShowAll: none,
+      onReset: none,
+      onWorkflow: none,
+      onCloseCell: none,
+      onCell: none,
+      onNode: none,
+      onStep: none,
+      onPlay: none,
+      onTick: none,
+    },
     handlers: { onOpen: none, onLeave: none, onTurn: none },
     matrixHandlers: HANDLERS,
     labels: { backs: data.words.backs, turn: data.words.chrome.turn },

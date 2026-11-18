@@ -1,4 +1,5 @@
 import { DEFINITION_IDS, LEVEL_IDS, PRESET_IDS } from './brief-or-pay-the-price.types';
+import { controlProblems } from './controls.pure';
 import { LAYERS_OF } from './layer-state.pure';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -18,7 +19,7 @@ function layerProblems(preset: Record<string, unknown>, at: string): string[] {
 }
 
 function onePresetProblems(preset: unknown, at: string): string[] {
-  if (!isRecord(preset)) return [`${at}: needs view, level, scenario, picker and layers`];
+  if (!isRecord(preset)) return [`${at}: needs view, level, scenario, controls and layers`];
   return [
     ...(oneOf(preset.view, VIEW_IDS)
       ? []
@@ -27,7 +28,7 @@ function onePresetProblems(preset: unknown, at: string): string[] {
       ? []
       : [`${at}: level "${String(preset.level)}" is not one of ${LEVEL_IDS.join(', ')}`]),
     ...(typeof preset.scenario === 'string' && preset.scenario !== '' ? [] : [`${at}: scenario names a Scenario file`]),
-    ...(typeof preset.picker === 'boolean' ? [] : [`${at}: picker is true or false`]),
+    ...controlProblems(preset.controls, at),
     ...layerProblems(preset, at),
   ];
 }

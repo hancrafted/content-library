@@ -3,8 +3,14 @@ import type { Preset } from './brief-or-pay-the-price.types';
 import { presetStart } from './preset-state.pure';
 
 const COUNTS = { price: 5, brief: 5, brace: 5, 'stages:drive': 5 };
-const DEFINE: Preset = { view: 'price', level: 'define', scenario: 'drive', picker: true, layers: [] };
-const WORKFLOW: Preset = { view: 'stages', level: 'workflow', scenario: 'drive', picker: false, layers: [] };
+const DEFINE: Preset = { view: 'price', level: 'define', scenario: 'drive', controls: {}, layers: [] };
+const WORKFLOW: Preset = {
+  view: 'stages',
+  level: 'workflow',
+  scenario: 'drive',
+  controls: { scenarioPicker: { show: false } },
+  layers: [],
+};
 
 describe('success cases', () => {
   it('opens on the Preset’s Definition tab and Scenario', () => {

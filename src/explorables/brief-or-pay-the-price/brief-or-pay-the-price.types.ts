@@ -1,4 +1,5 @@
 import type { Locale } from '@/shared/lib/locale.pure';
+import type { ControlMap, Layer } from './controls.types';
 
 export const DEFINITION_IDS = ['price', 'brief', 'brace'] as const;
 export type DefinitionId = (typeof DEFINITION_IDS)[number];
@@ -126,6 +127,9 @@ export interface WorkflowWords {
   readonly braceSteps: string;
   readonly play: string;
   readonly pause: string;
+  readonly previous: string;
+  readonly next: string;
+  readonly stepLines: Readonly<Record<string, string>>;
 }
 
 export const QUESTION_IDS = ['budget', 'signOff', 'lastTime', 'date', 'diet', 'lastYear'] as const;
@@ -177,6 +181,7 @@ export interface Words {
     readonly views: string;
     readonly showAll: string;
     readonly dayOne: string;
+    readonly reset: string;
     readonly caption: string;
     readonly turn: string;
     readonly zoom: string;
@@ -202,8 +207,7 @@ export interface MoveCounters {
   readonly source: string;
 }
 
-const LAYERS = ['thoughtExperiment', 'freelancer', 'habits', 'tryIt'] as const;
-export type Layer = (typeof LAYERS)[number];
+export type { Layer };
 
 export const PRESET_IDS = ['play', 'drive'] as const;
 export type PresetId = (typeof PRESET_IDS)[number];
@@ -214,7 +218,7 @@ export interface Preset {
   readonly view: ViewId;
   readonly level: (typeof LEVEL_IDS)[number];
   readonly scenario: string;
-  readonly picker: boolean;
+  readonly controls: ControlMap;
   readonly layers: readonly Layer[];
 }
 
@@ -243,6 +247,4 @@ export interface Definition {
 
 export type WordsOverride = DeepPartial<Words>;
 
-type DeepPartial<T> = {
-  readonly [K in keyof T]?: T[K] extends string ? string : DeepPartial<T[K]>;
-};
+type DeepPartial<T> = { readonly [K in keyof T]?: T[K] extends string ? string : DeepPartial<T[K]> };

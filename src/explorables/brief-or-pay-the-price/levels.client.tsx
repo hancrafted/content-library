@@ -1,23 +1,17 @@
 'use client';
 
 import { Button } from '@/shared/components/ui/button';
-import type { Dispatch, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Matrix, type MatrixHandlers } from './agent-matrix.client';
 import { BoardThoughtExperiment } from './board-thought-experiment.client';
 import type { MatrixData } from './brief-or-pay-the-price-data';
 import type { Words } from './brief-or-pay-the-price.types';
 import { CellView } from './cell-view.client';
-import {
-  isWiping,
-  rowAt,
-  type CellKey,
-  type ExplorableEvent,
-  type ExplorableState,
-  type Level,
-} from './explorable-state.pure';
+import { isWiping, rowAt, type CellKey, type ExplorableState, type Level } from './explorable-state.pure';
 import { definitionOf, rowOf, type ViewData } from './explorable-view.pure';
 import { FreelancerCardView } from './freelancer-layer-view';
 import { hasLayer } from './layer-state.pure';
+import type { LevelActions } from './level-actions';
 import { cellsIn, format, isCounter, neighbour } from './matrix-data.pure';
 import type { SceneLabels } from './mirror-card.client';
 import type { MirrorHandlers } from './mirror-row.client';
@@ -38,7 +32,7 @@ export interface LevelProps {
     readonly tryIt?: ReactNode;
   };
   readonly state: ExplorableState;
-  readonly dispatch: Dispatch<ExplorableEvent>;
+  readonly actions: LevelActions;
   readonly handlers: MirrorHandlers;
   readonly matrixHandlers: MatrixHandlers;
   readonly labels: SceneLabels;
@@ -46,26 +40,31 @@ export interface LevelProps {
 
 function DefineFoot({
   chrome,
-  dispatch,
+  resetLabel,
+  onShowAll,
+  onReset,
 }: {
   readonly chrome: Words['chrome'];
-  readonly dispatch: LevelProps['dispatch'];
+  readonly resetLabel: string;
+  readonly onShowAll: () => void;
+  readonly onReset: () => void;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Button type="button" size="sm" variant="outline" data-show-all onClick={() => dispatch({ type: 'showAll' })}>
+      <Button type="button" size="sm" variant="outline" data-show-all onClick={onShowAll}>
         {chrome.showAll}
       </Button>
-      <Button type="button" size="sm" variant="outline" data-reset onClick={() => dispatch({ type: 'reset' })}>
-        {chrome.dayOne}
+      <Button type="button" size="sm" variant="outline" data-reset onClick={onReset}>
+        {resetLabel}
       </Button>
       <span className="text-caption text-muted-foreground">{chrome.caption}</span>
     </div>
   );
 }
 
-function DefineLevel({ data, state, dispatch, handlers, labels }: LevelProps) {
+function DefineLevel({ data, state, actions, handlers, labels }: LevelProps) {
   const definition = definitionOf(data, state);
+  const { chrome } = data.words;
   return (
     <>
       <Mirror
@@ -75,7 +74,12 @@ function DefineLevel({ data, state, dispatch, handlers, labels }: LevelProps) {
         labels={labels}
         handlers={handlers}
       />
-      <DefineFoot chrome={data.words.chrome} dispatch={dispatch} />
+      <DefineFoot
+        chrome={chrome}
+        resetLabel={state.view === 'price' ? chrome.dayOne : chrome.reset}
+        onShowAll={actions.onShowAll}
+        onReset={actions.onReset}
+      />
     </>
   );
 }
@@ -86,16 +90,9 @@ const nodeOf = ({ data, state }: Pick<LevelProps, 'data' | 'state'>) => {
   return found && node ? { node, said: found.words } : null;
 };
 
-function BackToWorkflow({ label, dispatch }: { readonly label: string; readonly dispatch: LevelProps['dispatch'] }) {
+function BackToWorkflow({ label, onClick }: { readonly label: string; readonly onClick: () => void }) {
   return (
-    <Button
-      type="button"
-      size="sm"
-      variant="outline"
-      data-agent-back
-      className="self-start"
-      onClick={() => dispatch({ type: 'zoom', level: 'workflow' })}
-    >
+    <Button type="button" size="sm" variant="outline" data-agent-back className="self-start" onClick={onClick}>
       {label}
     </Button>
   );
@@ -120,13 +117,13 @@ function LayerSlot({
 }
 
 function MatrixLevel(props: LevelProps) {
-  const { data, state, matrixHandlers, dispatch } = props;
+  const { data, state, matrixHandlers, actions } = props;
   const { words, definitions, matrix } = data;
   const from = nodeOf(props);
   const freelancer = hasLayer(state, 'freelancer');
   return (
     <>
-      {from ? <BackToWorkflow label={words.matrix.backToWorkflow} dispatch={dispatch} /> : null}
+      {from ? <BackToWorkflow label={words.matrix.backToWorkflow} onClick={actions.onWorkflow} /> : null}
       {from ? <RoleStripView words={words.matrix} node={from.node} said={from.said} /> : null}
       <Matrix
         words={words.matrix}
@@ -170,7 +167,7 @@ const positionOf = (cells: readonly CellKey[], cell: CellKey) => ({
 });
 
 function CellLevel({ cell, ...props }: LevelProps & { readonly cell: CellKey }) {
-  const { data, state, dispatch, handlers, labels } = props;
+  const { data, state, actions, handlers, labels } = props;
   const { words, definitions, matrix } = data;
   const from = nodeOf(props);
   const cells = cellsIn(matrix.counters, from?.node ?? null);
@@ -190,8 +187,8 @@ function CellLevel({ cell, ...props }: LevelProps & { readonly cell: CellKey }) 
         evidence={{ text: words.matrix.evidenceOf[cell.move], source: matrix.sources[cell.move] }}
         labels={labels}
         handlers={handlers}
-        onBack={() => dispatch({ type: 'closeCell' })}
-        onStep={(delta) => dispatch({ type: 'openCell', cell: neighbour(cells, cell, delta) })}
+        onBack={actions.onCloseCell}
+        onStep={(delta) => actions.onCell(neighbour(cells, cell, delta))}
       />
       <p className="text-caption text-muted-foreground">{caption}</p>
     </>
@@ -206,18 +203,21 @@ function AgentLevel(props: LevelProps) {
   return <MatrixLevel {...props} />;
 }
 
-function WorkflowZoom({ data, state, dispatch }: LevelProps) {
+function WorkflowZoom({ data, state, actions }: LevelProps) {
   if (hasLayer(state, 'thoughtExperiment'))
     return <BoardThoughtExperiment words={data.words.thoughtExperiment.board} />;
   return (
     <>
       <WorkflowLevel
         words={data.words.workflow}
-        state={state}
+        slice={{ step: state.braceStep, playing: state.playing }}
         counters={data.matrix.counters}
         braceRows={data.definitions.brace.rows}
-        scenarios={data.scenarios}
-        dispatch={dispatch}
+        shown={data.scenarios[state.scenario] ?? (Object.values(data.scenarios)[0] as WorkflowScenario)}
+        onNode={actions.onNode}
+        onStep={actions.onStep}
+        onPlay={actions.onPlay}
+        onTick={actions.onTick}
       />
       <LayerSlot on={hasLayer(state, 'tryIt')} slot="tryIt" label={data.words.layers.tryIt} content={data.tryIt} />
     </>

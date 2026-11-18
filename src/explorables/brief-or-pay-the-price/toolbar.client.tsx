@@ -2,8 +2,10 @@
 
 import { Button } from '@/shared/components/ui/button';
 import type { Definition, ViewId, Words } from './brief-or-pay-the-price.types';
+import { toolsOf } from './controls.pure';
+import type { ControlMap } from './controls.types';
 import { ZOOM_LEVELS, type ExplorableState, type ZoomLevel } from './explorable-state.pure';
-import { hasLayer, LAYERS_OF, type Layer } from './layer-state.pure';
+import { hasLayer, type Layer } from './layer-state.pure';
 
 export const TAB_ORDER = ['price', 'brief', 'stages', 'brace'] as const satisfies readonly ViewId[];
 
@@ -32,7 +34,7 @@ export interface ToolbarProps {
   readonly tabs: Readonly<Record<ViewId, Definition>>;
   readonly state: Pick<ExplorableState, 'view' | 'level' | 'scenario' | 'cell' | 'layers'>;
   readonly scenarios: readonly { readonly id: string; readonly name: string }[];
-  readonly picker: boolean;
+  readonly controls: ControlMap;
   readonly title: string;
   readonly onView: (view: ViewId) => void;
   readonly onScenario: (scenario: string) => void;
@@ -75,9 +77,7 @@ function ZoomTabs({ words, state, onZoom }: ToolbarProps) {
   );
 }
 
-function ScenarioPicker({ words, state, scenarios, picker, onScenario }: ToolbarProps) {
-  if (!picker || state.level !== 'workflow' || scenarios.length < 2 || hasLayer(state, 'thoughtExperiment'))
-    return null;
+function ScenarioPicker({ words, state, scenarios, onScenario }: ToolbarProps) {
   return (
     <div
       role="group"
@@ -99,15 +99,15 @@ function ScenarioPicker({ words, state, scenarios, picker, onScenario }: Toolbar
   );
 }
 
-function LayerToggles({ words, state, onLayer, unfilled = [] }: ToolbarProps) {
-  if (state.level === 'define' || state.cell !== null) return null;
-  const experiment = hasLayer(state, 'thoughtExperiment');
-  const shown = LAYERS_OF[state.level].filter(
-    (layer) => !unfilled.includes(layer) && (!experiment || layer === 'thoughtExperiment'),
-  );
+function LayerToggles({
+  words,
+  state,
+  onLayer,
+  layers,
+}: Pick<ToolbarProps, 'words' | 'state' | 'onLayer'> & { readonly layers: readonly Layer[] }) {
   return (
     <>
-      {shown.map((layer) => (
+      {layers.map((layer) => (
         <Press
           key={layer}
           label={words.layers[layer]}
@@ -121,6 +121,12 @@ function LayerToggles({ words, state, onLayer, unfilled = [] }: ToolbarProps) {
 }
 
 export function Toolbar(props: ToolbarProps) {
+  const tools = toolsOf({
+    controls: props.controls,
+    state: props.state,
+    scenarios: props.scenarios.length,
+    unfilled: props.unfilled ?? [],
+  });
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
@@ -131,8 +137,8 @@ export function Toolbar(props: ToolbarProps) {
         {props.title}
       </p>
       <div data-tools className="flex flex-wrap items-center gap-2">
-        <ScenarioPicker {...props} />
-        <LayerToggles {...props} />
+        {tools.picker ? <ScenarioPicker {...props} /> : null}
+        <LayerToggles words={props.words} state={props.state} onLayer={props.onLayer} layers={tools.layers} />
       </div>
     </div>
   );

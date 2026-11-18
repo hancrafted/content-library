@@ -158,6 +158,22 @@ function oneMoveProblems(move: unknown, at: string): string[] {
   return [...countersProblems(move.counters, at), ...(source ? [] : [`${at}: needs a source`])];
 }
 
+function stepLinesProblems(i18n: unknown): string[] {
+  if (!isRecord(i18n)) return [];
+  return LOCALES.flatMap((locale) => {
+    const workflow = isRecord(i18n[locale]) ? i18n[locale].workflow : undefined;
+    const said = isRecord(workflow) && isRecord(workflow.stepLines) ? Object.keys(workflow.stepLines) : [];
+    return [
+      ...ROW_IDS_OF.brace
+        .filter((id) => !said.includes(id))
+        .map((id) => `i18n.${locale}.workflow.stepLines.${id}: missing`),
+      ...said
+        .filter((id) => !ROW_IDS_OF.brace.includes(id as never))
+        .map((id) => `i18n.${locale}.workflow.stepLines.${id}: names no BRACE letter`),
+    ];
+  });
+}
+
 function evidenceProblems(i18n: unknown): string[] {
   if (!isRecord(i18n)) return [];
   return LOCALES.flatMap((locale) => {
@@ -197,6 +213,7 @@ function checkConfig(source: string): ConfigResult {
     ...structureProblems(doc.definitions),
     ...movesProblems(doc.matrix),
     ...evidenceProblems(doc.i18n),
+    ...stepLinesProblems(doc.i18n),
     ...localeProblems(doc.i18n),
     ...emptyOutsideEnglishGlossProblems(doc.i18n),
     ...LOCALES.flatMap((locale) => rowWordsProblems(doc, locale)),
