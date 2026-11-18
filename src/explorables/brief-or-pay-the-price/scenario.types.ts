@@ -144,13 +144,20 @@ export interface Layout {
   readonly nodes: Readonly<Record<string, NodeRect>>;
   readonly goal: GoalCircle;
   readonly edges: readonly LaidOutEdge[];
-  readonly box: (id: string) => Box;
+  readonly boxes: Readonly<Record<string, Box>>;
   readonly lanes: { readonly under: number; readonly over: number };
 }
 
 export interface Scenario extends ScenarioFile {
   readonly file: string;
   readonly layouts: Readonly<Record<Orientation, Layout>>;
+}
+
+export type PlainScenario = Omit<Scenario, 'i18n'>;
+
+export interface WorkflowScenario {
+  readonly scenario: PlainScenario;
+  readonly words: ScenarioWords;
 }
 
 export type ScenarioResult = { readonly scenario: Scenario } | { readonly problems: readonly string[] };

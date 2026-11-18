@@ -29,9 +29,11 @@ function Press({ label, pressed, ...rest }: PressProps & { readonly onClick: () 
 export interface ToolbarProps {
   readonly words: Words;
   readonly tabs: Readonly<Record<ViewId, Definition>>;
-  readonly state: Pick<ExplorableState, 'view' | 'level'>;
+  readonly state: Pick<ExplorableState, 'view' | 'level' | 'scenario'>;
+  readonly scenarios: readonly { readonly id: string; readonly name: string }[];
   readonly title: string;
   readonly onView: (view: ViewId) => void;
+  readonly onScenario: (scenario: string) => void;
   readonly onZoom: (level: ZoomLevel) => void;
 }
 
@@ -69,6 +71,29 @@ function ZoomTabs({ words, state, onZoom }: ToolbarProps) {
   );
 }
 
+function ScenarioPicker({ words, state, scenarios, onScenario }: ToolbarProps) {
+  if (state.level !== 'workflow' || scenarios.length < 2) return null;
+  return (
+    <div
+      role="group"
+      aria-label={words.workflow.scenario}
+      data-scenario-picker
+      className="flex flex-wrap items-center gap-2"
+    >
+      <span className={GROUP_LABEL}>{words.workflow.scenario}</span>
+      {scenarios.map(({ id, name }) => (
+        <Press
+          key={id}
+          label={name}
+          pressed={state.scenario === id}
+          data-scenario-go={id}
+          onClick={() => onScenario(id)}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function Toolbar(props: ToolbarProps) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
@@ -79,6 +104,9 @@ export function Toolbar(props: ToolbarProps) {
       <p data-mirror-title className="text-body font-semibold">
         {props.title}
       </p>
+      <div data-tools className="flex flex-wrap items-center gap-2">
+        <ScenarioPicker {...props} />
+      </div>
     </div>
   );
 }

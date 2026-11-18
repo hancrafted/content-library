@@ -1,6 +1,7 @@
 import { cn } from '@/shared/lib/utils';
+import { tagSpot, type Point } from './annotation-spots.pure';
 import type { Annotation, Layout } from './scenario.types';
-import { pillAt, rightEdgeOf, type Point } from './workflow-annotations.pure';
+import { pillAt } from './workflow-annotations.pure';
 import { SizedText } from './workflow-text';
 
 type PillKind = 'tag' | 'chip';
@@ -49,18 +50,8 @@ interface AnnotationPillProps<T extends Annotation> {
 export function TagView({ annotation, layout, text, past }: AnnotationPillProps<Extract<Annotation, { type: 'tag' }>>) {
   const rect = layout.nodes[annotation.node];
   if (rect === undefined) return null;
-  if (layout.orient === 'vertical')
-    return (
-      <PillView
-        at={{ x: rightEdgeOf(layout), y: rect.y - 32 }}
-        text={text}
-        kind="tag"
-        past={past}
-        size={13}
-        align="end"
-      />
-    );
-  return <PillView at={{ x: rect.cx, y: rect.y - 30 }} text={text} kind="tag" past={past} />;
+  const { at, size, align } = tagSpot(layout, rect);
+  return <PillView at={at} text={text} kind="tag" past={past} size={size} align={align} />;
 }
 
 export function ChipView({

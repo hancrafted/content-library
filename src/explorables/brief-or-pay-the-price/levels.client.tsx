@@ -19,11 +19,13 @@ import { cellsOf, neighbour } from './matrix-data.pure';
 import type { SceneLabels } from './mirror-card.client';
 import type { MirrorHandlers } from './mirror-row.client';
 import { Mirror } from './mirror.client';
-import type { ScenarioLocale } from './scenario.types';
+import type { WorkflowScenario } from './scenario.types';
 import { WorkflowLevel } from './workflow-level.client';
 
+type Scenarios = Readonly<Record<string, WorkflowScenario>>;
+
 export interface LevelProps {
-  readonly data: ViewData & { readonly matrix: MatrixData; readonly locale: ScenarioLocale };
+  readonly data: ViewData & { readonly matrix: MatrixData; readonly scenarios: Scenarios };
   readonly state: ExplorableState;
   readonly dispatch: Dispatch<ExplorableEvent>;
   readonly handlers: MirrorHandlers;
@@ -122,11 +124,10 @@ function WorkflowZoom({ data, state, dispatch }: LevelProps) {
   return (
     <WorkflowLevel
       words={data.words.workflow}
-      locale={data.locale}
       state={state}
       counters={data.matrix.counters}
       braceRows={data.definitions.brace.rows}
-      stages={data.stages}
+      scenarios={data.scenarios}
       dispatch={dispatch}
     />
   );

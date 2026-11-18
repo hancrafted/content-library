@@ -1,4 +1,4 @@
-import { boxOf, drawsArrow, fans, type Plan } from './scenario-layout-parts.pure';
+import { boxesOf, drawsArrow, fans, type Plan } from './scenario-layout-parts.pure';
 import type { Edge, GoalCircle, LaidOutEdge, Layout, NodeRect, ScenarioFile, StageBand } from './scenario.types';
 
 const NARROW = {
@@ -100,7 +100,7 @@ export function layoutVertical(file: ScenarioFile): Layout {
     nodes,
     goal,
     edges,
-    box: boxOf(plan, 0),
+    boxes: boxesOf(plan, 0),
     lanes,
   };
 }

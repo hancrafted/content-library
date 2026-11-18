@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useReducer, useRef, type Dispatch } from 'react';
+import { useEffect, useMemo, useReducer, useRef, type Dispatch, type RefObject } from 'react';
+import { useBraceFlight } from './brace-flight.client';
 import type { MatrixData } from './brief-or-pay-the-price-data';
 import type { Definition, DefinitionId, Words } from './brief-or-pay-the-price.types';
 import {
@@ -13,20 +14,21 @@ import {
   type Lit,
   type Side,
   type Target,
+  type ZoomLevel,
 } from './explorable-state.pure';
 import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
 import { LEVEL } from './levels.client';
 import { cellsOf } from './matrix-data.pure';
-import type { ScenarioLocale } from './scenario.types';
+import type { WorkflowScenario } from './scenario.types';
 import { Toolbar } from './toolbar.client';
 import { useCellKeys } from './use-cell-keys';
 import { useCellZoom } from './use-cell-zoom';
 
 export interface BriefOrPayThePriceClientProps {
-  readonly locale: ScenarioLocale;
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;
+  readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly matrix: MatrixData;
 }
 
@@ -83,14 +85,41 @@ function useAgent(state: ExplorableState, dispatch: Dispatch<ExplorableEvent>, m
   return { container, matrixHandlers };
 }
 
-export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
-  const { words, definitions, stages, matrix } = props;
-  const { state, dispatch, handlers } = useExplorable(props);
-  const { container, matrixHandlers } = useAgent(state, dispatch, matrix);
+interface ToolbarInput {
+  readonly data: BriefOrPayThePriceClientProps;
+  readonly state: ExplorableState;
+  readonly dispatch: Dispatch<ExplorableEvent>;
+  readonly container: RefObject<HTMLElement | null>;
+}
+
+function useToolbar({ data, state, dispatch, container }: ToolbarInput) {
+  const { scenarios, stages, definitions } = data;
+  const picks = useMemo(
+    () =>
+      Object.entries(scenarios).map(([id, { scenario }]) => ({
+        id,
+        name: scenario.acronym ?? stages[id]?.acronym ?? id,
+      })),
+    [scenarios, stages],
+  );
   const tabs = useMemo(
     () => ({ ...definitions, stages: stages[state.scenario] as Definition }),
     [definitions, stages, state.scenario],
   );
+  const shown = (scenarios[state.scenario] ?? Object.values(scenarios)[0]) as WorkflowScenario;
+  const flyToWorkflow = useBraceFlight({ container, scenario: shown.scenario, level: state.level, dispatch });
+  const onZoom = (level: ZoomLevel) =>
+    level === 'workflow' && state.level === 'define' && state.view === 'brace'
+      ? flyToWorkflow()
+      : dispatch({ type: 'zoom', level });
+  return { picks, tabs, onZoom };
+}
+
+export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
+  const { words, matrix } = props;
+  const { state, dispatch, handlers } = useExplorable(props);
+  const { container, matrixHandlers } = useAgent(state, dispatch, matrix);
+  const { picks, tabs, onZoom } = useToolbar({ data: props, state, dispatch, container });
   const labels = useMemo(() => ({ backs: words.backs, turn: words.chrome.turn }), [words]);
   return (
     <div
@@ -103,9 +132,11 @@ export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
         words={words}
         tabs={tabs}
         state={state}
+        scenarios={picks}
         title={titleOf(props, tabs, state)}
         onView={(view) => dispatch({ type: 'view', view })}
-        onZoom={(zoom) => dispatch({ type: 'zoom', level: zoom })}
+        onScenario={(scenario) => dispatch({ type: 'scenario', scenario })}
+        onZoom={onZoom}
       />
       <div data-agent-root={state.level === 'agent' ? '' : undefined} className="flex flex-col gap-6">
         {LEVEL[state.level]({ data: props, state, dispatch, handlers, matrixHandlers, labels })}

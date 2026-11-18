@@ -1,8 +1,8 @@
 import { cn } from '@/shared/lib/utils';
 import { MOVE_IDS, TRAIT_IDS } from './brief-or-pay-the-price.types';
-import type { Cell, Layout, ScenarioNode } from './scenario.types';
+import type { Cell, Layout, ScenarioNode, ScenarioWords } from './scenario.types';
 import { SizedText } from './workflow-text';
-import type { CountersTest, ScenarioWords, WorkflowViewWords } from './workflow.types';
+import type { CountersTest, WorkflowViewWords } from './workflow.types';
 
 const NODE_ROLE_LINES = 3;
 const ROLE_CHARS_PER_PIXEL = 8.4;
@@ -110,6 +110,7 @@ function Role({ rect, role }: { readonly rect: Layout['nodes'][string]; readonly
 function NodeBox({ rect, lit }: { readonly rect: Layout['nodes'][string]; readonly lit: boolean }) {
   const classes = cn(
     'fill-card motion-safe:transition-[stroke-width] motion-safe:duration-300',
+    'group-focus-visible:stroke-ring group-focus-visible:[stroke-width:6px]',
     lit ? 'stroke-ai' : 'stroke-foreground',
   );
   return (
@@ -131,7 +132,7 @@ export function NodeView({ node, layout, words, ui, lit, counters }: NodeProps) 
       role="button"
       tabIndex={0}
       aria-label={zoomLabel(ui, text)}
-      className="cursor-pointer outline-none"
+      className="group cursor-pointer outline-none"
     >
       <NodeBox rect={rect} lit={lit} />
       <SizedText className="fill-foreground font-semibold" size={26} x={rect.x + 18} y={rect.y + 40} anchor="start">

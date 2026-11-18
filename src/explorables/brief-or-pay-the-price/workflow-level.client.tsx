@@ -1,22 +1,20 @@
 'use client';
 
 import type { Dispatch, KeyboardEvent, MouseEvent } from 'react';
-import type { Definition, MirrorRow, MoveId, TraitId, Words } from './brief-or-pay-the-price.types';
+import type { MirrorRow, MoveId, TraitId, Words } from './brief-or-pay-the-price.types';
 import type { ExplorableEvent, ExplorableState } from './explorable-state.pure';
 import type { Counters } from './matrix-data.pure';
 import { isCounter } from './matrix-data.pure';
-import type { ScenarioLocale } from './scenario.types';
-import { SCENARIO_IDS, allScenarios, scenarioFor, type ScenarioId } from './scenarios';
+import type { WorkflowScenario } from './scenario.types';
 import { WorkflowControls } from './workflow-controls.client';
 import { WorkflowView } from './workflow-view';
 
 export interface WorkflowLevelProps {
   readonly words: Words['workflow'];
-  readonly locale: ScenarioLocale;
   readonly state: ExplorableState;
   readonly counters: Counters;
   readonly braceRows: readonly MirrorRow[];
-  readonly stages: Readonly<Record<string, Definition>>;
+  readonly scenarios: Readonly<Record<string, WorkflowScenario>>;
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
@@ -38,22 +36,18 @@ function nodeHandlers(dispatch: Dispatch<ExplorableEvent>) {
   };
 }
 
-const scenarioOf = (id: string) =>
-  scenarioFor((SCENARIO_IDS.includes(id as ScenarioId) ? id : SCENARIO_IDS[0]) as ScenarioId);
-
-export function WorkflowLevel({ words, locale, state, counters, braceRows, stages, dispatch }: WorkflowLevelProps) {
-  const scenario = scenarioOf(state.scenario);
-  const scenarios = allScenarios().map(({ id, acronym }) => ({ id, name: acronym ?? stages[id]?.acronym ?? id }));
+export function WorkflowLevel({ words, state, counters, braceRows, scenarios, dispatch }: WorkflowLevelProps) {
+  const { scenario, words: scenarioWords } = (scenarios[state.scenario] ??
+    Object.values(scenarios)[0]) as WorkflowScenario;
   const shared = {
     scenario,
-    words: scenario.i18n[locale],
+    words: scenarioWords,
     ui: words,
-    step: state.step,
+    step: state.braceStep,
     counters: (move: MoveId, trait: TraitId) => isCounter(counters, { move, trait }),
   };
   return (
     <>
-      <WorkflowControls words={words} state={state} scenarios={scenarios} braceRows={braceRows} dispatch={dispatch} />
       <div data-workflow-root role="presentation" {...nodeHandlers(dispatch)}>
         <div className="@3xl:hidden">
           <WorkflowView {...shared} layout={scenario.layouts.vertical} />
@@ -62,6 +56,7 @@ export function WorkflowLevel({ words, locale, state, counters, braceRows, stage
           <WorkflowView {...shared} layout={scenario.layouts.horizontal} />
         </div>
       </div>
+      <WorkflowControls words={words} state={state} braceRows={braceRows} dispatch={dispatch} />
     </>
   );
 }

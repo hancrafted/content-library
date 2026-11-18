@@ -1,4 +1,4 @@
-import { boxOf, drawsArrow, fans, type Plan } from './scenario-layout-parts.pure';
+import { boxesOf, drawsArrow, fans, type Plan } from './scenario-layout-parts.pure';
 import type { Edge, GoalCircle, LaidOutEdge, Layout, NodeRect, ScenarioFile, StageBand } from './scenario.types';
 
 const WIDE = {
@@ -68,5 +68,5 @@ export function layoutHorizontal(file: ScenarioFile): Layout {
   const plan: Plan = { file, nodes, goal, stages };
   const lanes = { under: WIDE.underY, over: WIDE.overY };
   const edges = file.edges.map((edge) => edgeOf(plan, edge));
-  return { orient: 'horizontal', w: WIDE.w, h: WIDE.h, stages, nodes, goal, edges, box: boxOf(plan, 44), lanes };
+  return { orient: 'horizontal', w: WIDE.w, h: WIDE.h, stages, nodes, goal, edges, boxes: boxesOf(plan, 44), lanes };
 }

@@ -1,5 +1,6 @@
 import { useCallback, useLayoutEffect, useRef, type Dispatch, type RefObject } from 'react';
 import type { CellKey, ExplorableEvent } from './explorable-state.pure';
+import { prefersReducedMotion } from './reduced-motion';
 
 interface Point {
   readonly x: number;
@@ -25,13 +26,11 @@ const ENTER: Keyframe[] = [
 ];
 
 function zoom(root: HTMLElement, from: Point | null, [keyframes, duration]: readonly [Keyframe[], number]): void {
-  if (typeof root.animate !== 'function' || reducedMotion()) return;
+  if (typeof root.animate !== 'function' || prefersReducedMotion()) return;
   const box = root.getBoundingClientRect();
   root.style.transformOrigin = from === null ? '50% 50%' : `${from.x - box.left}px ${from.y - box.top}px`;
   root.animate(keyframes, { duration, easing: EASING });
 }
-
-const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const keyOf = (cell: CellKey): string => `${cell.move}|${cell.trait}`;
 

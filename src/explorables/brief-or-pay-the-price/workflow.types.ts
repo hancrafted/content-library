@@ -1,15 +1,13 @@
 import type { WorkflowWords } from './brief-or-pay-the-price.types';
 import type { MoveId, TraitId } from './brief-or-pay-the-price.types';
-import type { Layout, Scenario, ScenarioLocale } from './scenario.types';
+import type { Layout, PlainScenario, ScenarioWords } from './scenario.types';
 
 export type WorkflowViewWords = Pick<WorkflowWords, 'goal' | 'thenGoal' | 'zoomNode'>;
-
-export type ScenarioWords = Scenario['i18n'][ScenarioLocale];
 
 export type CountersTest = (move: MoveId, trait: TraitId) => boolean;
 
 export interface WorkflowViewProps {
-  readonly scenario: Scenario;
+  readonly scenario: PlainScenario;
   readonly layout: Layout;
   readonly words: ScenarioWords;
   readonly ui: WorkflowViewWords;

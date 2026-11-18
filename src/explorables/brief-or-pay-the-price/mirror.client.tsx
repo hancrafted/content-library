@@ -8,6 +8,7 @@ import type { SceneLabels } from './mirror-card.client';
 import { MirrorHeadsView } from './mirror-heads-view';
 import { ClosingLine, Row, type MirrorHandlers } from './mirror-row.client';
 import styles from './mirror.module.css';
+import { prefersReducedMotion } from './reduced-motion';
 
 interface MirrorProps {
   readonly definition: Definition;
@@ -18,8 +19,6 @@ interface MirrorProps {
 }
 
 const FADE_MILLISECONDS = 160;
-
-const prefersReducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 interface Frozen {
   readonly id: string;
