@@ -29,6 +29,49 @@ const binding = (text: string) => {
   return read;
 };
 
+describe('notify', () => {
+  it.each(['push-notification', 'none'])('accepts the %s adapter', (adapter) => {
+    // ARRANGE
+    const text = updateBinding(null, []).replace('adapter: push-notification', `adapter: ${adapter}`);
+    // ACT
+    const result = binding(text);
+    // ASSERT
+    expect(result.notify).toEqual({ adapter });
+  });
+
+  it('defaults to push-notification when absent', () => {
+    // ARRANGE
+    const full = PHASES.map((phase) => `  ${phase}: { model: mid, skills: [] }`).join('\n');
+    // ACT
+    const result = binding(`agentType: x\nphases:\n${full}\n`);
+    // ASSERT
+    expect(result.notify).toEqual({ adapter: 'push-notification' });
+  });
+
+  it('fails on an unknown adapter and lists the known ones', () => {
+    // ARRANGE
+    const text = updateBinding(null, []).replace('adapter: push-notification', 'adapter: carrier-pigeon');
+    // ACT
+    const result = readBinding(text);
+    // ASSERT
+    expect(result).toEqual({
+      error: "notify.adapter 'carrier-pigeon' is unknown; expected push-notification, none",
+    });
+  });
+
+  it('seeds notify once and keeps a hand edit', () => {
+    // ARRANGE
+    const first = updateBinding(null, []);
+    const edited = first.replace('adapter: push-notification', 'adapter: none # quiet');
+    // ACT
+    const second = updateBinding(edited, []);
+    // ASSERT
+    expect(first).toContain('notify:');
+    expect(second).toBe(edited);
+    expect(binding(second).notify).toEqual({ adapter: 'none' });
+  });
+});
+
 describe('updateBinding', () => {
   describe('seeding', () => {
     it('binds a known skill to every phase the catalog gives it, n:m', () => {
