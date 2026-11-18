@@ -1,6 +1,6 @@
 {
   "title": "Agenda",
-  "caption": "Two hours, times from the start: theory and live demo in turn, with a short check-in after each Episode.",
+  "caption": "Three hours, times from the start: two and a half hours of content, then the handover to CyberLab and the debrief.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
@@ -8,40 +8,54 @@
       "title": "Welcome"
     },
     "first": {
-      "time": "0:20",
+      "time": "0:30",
       "title": "Treat AI like a brilliant freelancer with amnesia"
     },
     "grill": {
-      "time": "0:35",
+      "time": "0:50",
       "title": "Live demo: “Grill me”"
     },
+    "break": {
+      "time": "1:10",
+      "title": "Break"
+    },
     "second": {
-      "time": "0:50",
+      "time": "1:20",
       "title": "Why AI has a weird attention span you must learn to manage"
     },
-    "workflow": {
-      "time": "1:15",
-      "title": "Live demo: an agentic workflow"
-    },
     "third": {
-      "time": "1:30",
+      "time": "1:50",
       "title": "Will AI reduce your work? It adds work: managing it."
     },
+    "practice": {
+      "time": "2:00",
+      "title": "More hands-on time"
+    },
+    "tracks": {
+      "time": "2:20",
+      "title": "Master class: track 1 or track 2"
+    },
+    "handover": {
+      "time": "2:30",
+      "title": "Handover to CyberLab"
+    },
     "qa": {
-      "time": "1:40",
-      "title": "Questions and buffer"
+      "time": "2:45",
+      "title": "Questions, debrief and feedback"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theory",
     "demo": "Demo",
+    "break": "Break",
+    "practice": "Hands-on",
     "close": "Wrap-up"
   },
   "notes": {
     "talking-points": {
-      "header": "Two hours, counted from 0:00",
-      "description": "20 minutes of welcome, then Episode 1 (15), the “Grill me” demo (15), Episode 2 (25), the agentic workflow (15) and Episode 3 (10); the last 20 minutes are questions and buffer. Each check-in belongs to its Episode’s time."
+      "header": "Three hours, counted from 0:00",
+      "description": "30 minutes of welcome, five of them for late arrivals, then Episode 1 (20), the “Grill me” demo (20) and a 10-minute break. Episode 2 (30), Episode 3 (10), hands-on time (20) and the master class tracks (10) close the content at 2:30. The handover to CyberLab (15) and questions, debrief and feedback (15) fill the last half hour; there is no other buffer. Each check-in belongs to its Episode’s time."
     }
   }
 }

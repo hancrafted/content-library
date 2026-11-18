@@ -1,0 +1,79 @@
+{
+  "title": "Why · How · What",
+  "caption": "Why AI needs a brief, how five moves and five principles give it one, and what the Explorable shows.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "You brief an AI, and it forgets, guesses and still sounds sure.",
+      "caption": "<marker>Every new chat starts from zero, and when it is unsure it answers anyway instead of asking.</marker> Five traits, PRICE, explain why it costs you, side by side for a freelancer and for AI."
+    },
+    "how": {
+      "title": "Five moves brief one agent: BRIEF.",
+      "caption": "<marker>Break it down, put requirements first, interview yourself with AI, evaluate each step and start fresh for each piece.</marker> Each move counters one or more of the five traits."
+    },
+    "what": {
+      "title": "Five principles run the work across stages: BRACE.",
+      "caption": "<marker>Start backwards from the goal, resolve dependencies early, give autonomy through intent, agree contracts at the seams and engineer trust.</marker> See them on DRIVE: Define, Reason, Implement, Verify, Evolve."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "The forgetting and the guessing are built in",
+      "description": "The context window is the model's working memory, and memory across chats exists only where an application stores notes and puts them back, because the memory tool runs client-side [1][2]. Most benchmarks score a guess above an abstention, so training rewards guessing instead of asking [3] (Episode evidence: Pay the price).",
+      "sources": {
+        "anthropic-context-windows": {
+          "title": "Anthropic, Context windows"
+        },
+        "anthropic-memory-tool": {
+          "title": "Anthropic, Memory tool"
+        },
+        "kalai-why-models-hallucinate": {
+          "title": "Kalai et al., Why Language Models Hallucinate"
+        }
+      }
+    },
+    "how": {
+      "header": "Each move has evidence behind it",
+      "description": "Solving simpler subproblems in sequence scored 99% or better on a compositional benchmark against 16% for chain-of-thought prompting with an older model [1]. Results varied more than twice as much for a requirement left unstated as for one stated [2]. Feedback on each reasoning step beats feedback on the final result alone [3]. Top models scored on average 39% lower in multi-turn conversation than with the full instruction at once [4] (Episode evidence: Manage the price). \"Interview yourself with AI\" is backed by two further studies there.",
+      "sources": {
+        "zhou-least-to-most": {
+          "title": "Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models"
+        },
+        "yang-underspecification": {
+          "title": "Yang, Shi, Ma, Liu, Kästner, Wu, What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts (v3)"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        },
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost in Multi-Turn Conversation"
+        }
+      }
+    },
+    "what": {
+      "header": "BRACE: five principles, each with its own source",
+      "description": "Anthropic tells builders to define success criteria up front [1]. Planning backwards from the goal is established practice in planning, but no study tests it on agent work (research PLAN-0003). Subagents without detailed tasks \"duplicate work, leave gaps, or fail to find necessary information\", and multi-agent systems are a poor fit where many dependencies run between agents [2] (research SWE-0007, SWE-0008). Army doctrine tells commanders to state the results to be attained, not how, and says trust \"must be earned\" [3] (research AIE-0027). Reliance should match demonstrated reliability [4], and agents need checkpoints, guardrails and ground truth from the environment [5] (research AIE-0028).",
+      "sources": {
+        "anthropic-define-success": {
+          "title": "Anthropic, Define your success criteria"
+        },
+        "anthropic-multi-agent-research": {
+          "title": "Anthropic, How we built our multi-agent research system"
+        },
+        "us-army-adp-6-0-mission-command": {
+          "title": "US Army, ADP 6-0 Mission Command (17 May 2012), copy hosted by Brigham Young University-Idaho"
+        },
+        "lee-see-trust-in-automation": {
+          "title": "Lee and See, Trust in Automation: Designing for Appropriate Reliance (Human Factors, 2004), abstract"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        }
+      }
+    }
+  }
+}

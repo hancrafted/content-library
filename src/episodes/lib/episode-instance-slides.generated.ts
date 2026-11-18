@@ -298,7 +298,7 @@ declare module './episode-instance' {
       readonly 'pay-the-price': {
         readonly en: typeof onboardAiEveryTime__payThePrice__en;
         readonly de: typeof onboardAiEveryTime__payThePrice__de;
-        readonly targets: 'relentless' | 'probabilistic' | 'every-word-billed' | 'confident' | 'informed' | 'closing';
+        readonly targets: 'title';
       };
       readonly 'one-prompt': {
         readonly en: typeof onboardAiEveryTime__onePrompt__en;
@@ -316,12 +316,7 @@ declare module './episode-instance' {
       readonly 'manage-the-price': {
         readonly en: typeof onboardAiEveryTime__manageThePrice__en;
         readonly de: typeof onboardAiEveryTime__manageThePrice__de;
-        readonly targets:
-          | 'break-it-down'
-          | 'requirements-first'
-          | 'interview-yourself-with-ai'
-          | 'evaluate-each-step'
-          | 'fresh-start-for-each-piece';
+        readonly targets: 'title';
       };
     };
     readonly 'what-agentic-workflows-require': {

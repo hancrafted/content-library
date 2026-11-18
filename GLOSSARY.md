@@ -104,6 +104,10 @@ _Avoid_: derived Episode, variant
 _Avoid_: slot (a decorative slot is the Slide wrapper's rear or front host), property
 _Avoid_: shared Slides, Slide library (the Master slides a Slide is copied from), common Slides
 
+**Pin**: the fingerprint of the Base Episode's default at one overridden Episode override path, kept so a later change to that default fails the fast suite until the override is re-pinned (`npm run overrides:pin`) or deleted.
+
+**Pin lock**: an Episode instance's `overrides.lock.json`, holding one Pin per overridden path; written only by `npm run overrides:pin`, never by `npm run registry`.
+
 **Master slide**: one entry of the Slide library, a Slide folder of a Master slide Template (Timelines or Grids). The Dossier's `master:` key stays.
 _Avoid_: Catalog entry, template
 

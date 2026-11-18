@@ -1,12 +1,12 @@
 ---
 type: adr
 id: FE-012
-title: 'Explorables'
+title: "Explorables"
 domain: frontend
 rules: false
-files: ['src/explorables/**', 'src/episodes/components/slide-shared/**']
-paths: ['src/explorables/**', 'src/episodes/components/slide-shared/**']
-description: 'An Explorable may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
+files: ["src/explorables/**", "src/episodes/components/slide-shared/**"]
+paths: ["src/explorables/**", "src/episodes/components/slide-shared/**"]
+description: "An Explorable may own its data and default words in its own folder, as a locale pair of files or one file holding both locales under i18n, picked by the path locale on the server at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words."
 ---
 
 # Explorables
@@ -29,16 +29,16 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ## Decision
 
-### 1. One locale pair per Explorable
+### 1. One set of both locales per Explorable
 
-1. An Explorable MAY hold, in its own folder, one config pair (`<name>.config.yml` and `<name>.config.de.yml`) carrying its Presets, numbers and default words, and data pairs such as `<name>.jsonl` and `<name>.de.jsonl`.
-2. The pair MUST be picked by the path locale at build time, through static imports — never fetched, never chosen by the browser.
-3. Both files of a pair MUST hold the same keys and the same steps; only the words differ.
+1. An Explorable MAY hold, in its own folder, config (Presets, numbers, default words) and data as a pair (`<name>.config.yml` + `<name>.config.de.yml`) or as one file with both locales under a top-level `i18n: { en, de }`, structure once at the top.
+2. The server MUST pick the locale by the path at build time, through static imports — never fetched, never chosen by the browser. A client leaf gets one locale only.
+3. Both locales MUST hold the same keys (and steps); only words differ. The loader MUST refuse a gap at build time, naming file, locale and key.
 
 ### 2. The Slide has the last word
 
 1. The server entry MUST take a `words` prop that overrides every default word, key by key.
-2. A Slide's own claim — its title, caption, callouts, notes — stays in the Slide's folder; the visual's defaults are labels and its story data, not a Slide's argument.
+2. A Slide's own claim (title, caption, callouts, notes) stays in the Slide's folder; the visual's defaults are labels and story data.
 
 ### 3. Scope
 
@@ -47,21 +47,21 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ### 4. Parts of an interactive Explorable
 
-1. A visual with several panels MUST be built from controlled parts: the parent owns all state and the Preset; each part gets its own slice as props and sends events up by callbacks. No part sees the whole state.
+1. A multi-panel visual MUST be built from controlled parts: the parent owns all state and the Preset; each part gets its slice as props and sends events up by callbacks.
 2. Hover and pin MUST be brushing and linking: the parent holds the lit key, each part turns it into one `on` boolean per item and passes that to a memoised item, so a hover redraws only items whose `on` flipped.
 3. `renderMode` (Simple or Technical) MUST be one global value plus a per-part override in the parent's state; the latest action wins. `orientation` is a prop.
 4. Controls MUST come from a typed registry in code; a Preset's `controls` map overrides it key by key. One definition says what a control flips.
-5. A part a Server Component can show alone MUST be a pure `*-view.tsx` (props only, no hooks, no handlers).
+5. A part a Server Component can show alone MUST be a pure `*-view.tsx` (no hooks, no handlers).
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** keep an Explorable's chat, labels and Presets in its folder as one pair per locale — `summer-party.jsonl` beside `summer-party.de.jsonl`. (Decision 1)
-2. **DO** import both locales statically and pick by the path locale. (Decision 1)
+1. **DO** keep an Explorable's chat, labels and Presets in its folder, as one pair per locale — `summer-party.jsonl` beside `summer-party.de.jsonl` — or as one file with `i18n: { en, de }` and structure once at the top level. (Decision 1)
+2. **DO** import both locales statically and pick one on the server by the path locale. (Decision 1)
 3. **DO** give the server entry a `words` prop that overrides any default word. (Decision 2)
 4. **DO** put a Slide's own title, caption and callouts in its own `i18n/`. (Decision 2)
-5. **DO** test that both files of a pair hold the same keys and steps. (Decision 1)
+5. **DO** check at build time that both locales hold the same keys (and steps), and refuse a gap naming file, locale and key. (Decision 1)
 6. **DO** hand each part a slice plus callbacks, `onLight`/`onPin`, never the state. (Decision 4)
 7. **DO** compute `on` per item in the part and pass the boolean to a memoised item. (Decision 4)
 8. **DO** read a part's mode as `renderModes[part] ?? global`. (Decision 4)
@@ -71,11 +71,12 @@ For this project the chat and its labels are one artifact, authored together fro
 ### Don'ts
 
 1. **DON'T** copy an Explorable's chat or labels into each Slide that shows it. (Decision 1)
-2. **DON'T** read the pair at runtime or by `Accept-Language`. (Decision 1)
-3. **DON'T** put a Slide's argument in the visual's config — `story:` holds the visual's data, not a Slide's caption. (Decision 2)
-4. **DON'T** give words to a `slide-shared` part that has no Presets or one user. (Decision 3)
-5. **DON'T** pass a shared `View` object or `dispatch` into a part. (Decision 4)
-6. **DON'T** hook or attach handlers in a `*-view.tsx`. (Decision 4)
+2. **DON'T** read the locales at runtime or by `Accept-Language`, or send a client leaf both locales. (Decision 1)
+3. **DON'T** repeat structure (ids, numbers) inside each locale of an `i18n` file. (Decision 1)
+4. **DON'T** put a Slide's argument in the visual's config — `story:` holds the visual's data, not a Slide's caption. (Decision 2)
+5. **DON'T** give words to a `slide-shared` part that has no Presets or one user. (Decision 3)
+6. **DON'T** pass a shared `View` object or `dispatch` into a part. (Decision 4)
+7. **DON'T** hook or attach handlers in a `*-view.tsx`. (Decision 4)
 
 ## Consequences
 
@@ -83,7 +84,7 @@ For this project the chat and its labels are one artifact, authored together fro
 
 1. **One copy:** a label or chat fix lands once and shows on every Slide.
 2. **Slides stay data:** a new Slide showing the visual is a Preset and a few words.
-3. **Locale safe:** a static pair renders complete in both exports, no hydration flash.
+3. **Locale safe:** a static pick renders complete in both exports, no hydration flash.
 
 **Negative:**
 
@@ -93,15 +94,15 @@ For this project the chat and its labels are one artifact, authored together fro
 
 **Risks:**
 
-1. **The pair drifts:** English gains a step German lacks. **Mitigation:** a test compares keys and steps of both files.
+1. **The locales drift:** English gains a step or key German lacks. **Mitigation:** the loader compares the keys (and steps) of both locales at build time and refuses a gap.
 2. **Defaults grow into Slide copy.** **Mitigation:** review duty below; a Slide's claim moves to its `i18n/`.
 
 ## Compliance and Enforcement
 
-1. **Tests:** each Explorable tests its pair for matching keys and steps, and that `words` overrides a default.
+1. **Loader and tests:** each Explorable's loader refuses, at build time, a key one locale lacks, naming file, locale and key; its tests cover that refusal, matching steps of a pair, and that `words` overrides a default.
 2. **Types:** the words type keys the config and the `words` prop alike.
 
-**Manual review duties:** words sit in an Explorable's pair only when it has Presets and two users (§3); no Slide caption or callout hides in `story:` (§2); the pair is picked statically (§1).
+**Manual review duties:** words sit in an Explorable's pair only when it has Presets and two users (§3); no Slide caption or callout hides in `story:` (§2); the locale is picked statically on the server and a client leaf receives one locale (§1).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

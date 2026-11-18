@@ -1,0 +1,24 @@
+{
+  "heading": "Your AI is a brilliant freelancer with amnesia. Brief it, or pay the price.",
+  "caption": "Five traits make AI cost you. Point at each one and watch a freelancer and an AI meet it.",
+  "tryIt": "Try it",
+  "why": "How it works",
+  "share": {
+    "title": "Show it to your team",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "text": "Settle why AI needs a brief in one meeting: point at each letter of PRICE and let the cards do the talking."
+  },
+  "motion": {
+    "pause": "Pause background animation",
+    "play": "Play background animation",
+    "stilled": "The background is still: reduced motion is on"
+  },
+  "preview": {
+    "label": "Stylised preview of the Brief or pay the price Explorable: the five letters P, R, I, C and E, each with a freelancer card on the left and an AI card on the right.",
+    "title": "Brief or pay the price",
+    "tag": "PRICE",
+    "freelancer": "Freelancer",
+    "ai": "AI"
+  }
+}
