@@ -194,7 +194,7 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 - **Count:** 1 (last: 2026-11-18, drive-handoff)
 - **Enforcer:** test-runner: new `drive notify` command whose test fails when the adapter reports no delivery, architectural
-- **Status:** proposed
+- **Status:** ticket https://github.com/hancrafted/content-library/issues/772
 - **Evidence:** drive-handoff: #768 was ready and the Operator was notified, but Remote Control was off, so no phone push; the Binding's `notify` port (`docs/drive/binding.yml`) names an adapter and checks nothing
 
 ## Corrections
