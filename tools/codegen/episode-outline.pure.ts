@@ -8,18 +8,21 @@ export interface PlacedSlide {
   readonly anchor: string;
 }
 
+export type TextLayers = Readonly<Record<string, readonly string[]>>;
+
 export interface OutlineSlide extends PlacedSlide {
-  readonly textSource: string;
+  readonly text: TextLayers;
   readonly pool: boolean;
 }
 
 export interface TextSource {
-  readonly textSource: string;
+  readonly text: TextLayers;
   readonly pool: boolean;
 }
 
 export interface OutlineEntry {
   readonly folder: string;
+  readonly text: TextLayers;
   readonly title?: OutlineSlide;
   readonly sections: readonly (readonly OutlineSlide[])[];
 }
@@ -35,29 +38,25 @@ export interface OutlineInput {
 export function episodeOutlinesFile(
   episodes: readonly OutlineInput[],
   textSourceOf: (folders: readonly string[], slug: string) => TextSource,
+  episodeTextOf: (folders: readonly string[]) => TextLayers,
 ): RegistryFile {
   const byId = new Map(episodes.map((episode) => [episode.id, episode]));
   const foldersOf = (episode: OutlineInput | undefined): string[] =>
     episode === undefined
       ? []
       : [episode.folder, ...foldersOf(episode.base === undefined ? undefined : byId.get(episode.base))];
-  const withText = (folders: readonly string[]) => (slide: PlacedSlide) => ({
-    ...slide,
-    ...textSourceOf(folders, slide.slug),
-  });
+  const entryOf = ({ folder, title, sections, ...episode }: OutlineInput): OutlineEntry => {
+    const folders = foldersOf({ folder, sections, ...episode });
+    const text = (slide: PlacedSlide) => ({ ...slide, ...textSourceOf(folders, slide.slug) });
+    return {
+      folder,
+      text: episodeTextOf(folders),
+      ...(title === undefined ? {} : { title: text(title) }),
+      sections: sections.map((section) => section.map(text)),
+    };
+  };
   const entries = [...episodes]
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-    .map((episode): [string, OutlineEntry] => {
-      const { id, folder, title, sections } = episode;
-      const text = withText(foldersOf(episode));
-      return [
-        id,
-        {
-          folder,
-          ...(title === undefined ? {} : { title: text(title) }),
-          sections: sections.map((section) => section.map(text)),
-        },
-      ];
-    });
+    .map((episode): [string, OutlineEntry] => [episode.id, entryOf(episode)]);
   return { path: EPISODE_OUTLINES_PATH, text: `${JSON.stringify(Object.fromEntries(entries))}\n` };
 }

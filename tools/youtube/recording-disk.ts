@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { episodeFolders, EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
+import { layeredText } from '../../src/episodes/lib/episode-outline-text.ts';
 import { episodeOutline, type OutlineSlide } from '../../src/episodes/lib/episode-outline.ts';
 import { validateRecording, type Composition, type RecordingFolder, type Violation } from './recording.pure.ts';
 import { RECORDING_FOLDER, SPOKEN_LANGUAGES, type SpokenLanguage } from './transcript.pure.ts';
@@ -27,27 +28,10 @@ export function compositionOf(root: string, episodeDir: string): Composition {
   };
 }
 
-export interface SlideRow {
-  readonly slug: string;
-  readonly section: number;
-  readonly title: string;
-}
-
 const slugOf = ({ slug }: { slug: string }): string => slug;
 
-function slideI18nFile(
-  root: string,
-  slide: OutlineSlide,
-  language: SpokenLanguage,
-): { file: string; pool: boolean } | undefined {
-  const file = path.join(root, slide.textSource, `${language}.json`);
-  return existsSync(file) ? { file, pool: slide.pool } : undefined;
-}
-
 function slideTitle(root: string, slide: OutlineSlide, language: SpokenLanguage): string {
-  const found = slideI18nFile(root, slide, language);
-  const title =
-    found === undefined ? undefined : (JSON.parse(readFileSync(found.file, 'utf8')) as { title?: unknown }).title;
+  const title = layeredText(root, slide.text, language)['title'];
   return typeof title === 'string' ? title : slide.slug;
 }
 
@@ -55,7 +39,9 @@ export interface SlideRow {
   readonly slug: string;
   readonly section: number;
   readonly title: string;
-  readonly i18n: { file: string; pool: boolean } | undefined;
+  readonly text: Record<string, unknown>;
+  readonly files: readonly string[];
+  readonly pool: boolean;
 }
 
 export function slideRows(root: string, episodeDir: string, language: SpokenLanguage): SlideRow[] {
@@ -64,7 +50,9 @@ export function slideRows(root: string, episodeDir: string, language: SpokenLang
     slug: slide.slug,
     section,
     title: slideTitle(root, slide, language),
-    i18n: slideI18nFile(root, slide, language),
+    text: layeredText(root, slide.text, language),
+    files: slide.text[language],
+    pool: slide.pool,
   });
   return [
     ...(outline.title === undefined ? [] : [row(outline.title, 0)]),

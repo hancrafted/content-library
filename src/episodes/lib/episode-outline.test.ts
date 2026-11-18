@@ -3,13 +3,25 @@ import { episodeOutline } from './episode-outline.ts';
 
 describe('success cases', () => {
   describe('episodeOutline', () => {
-    it('names a pool Slide with its pool text source, among the Episode own Slides in Section order', () => {
+    it('names a pool Slide with its pool text layers, among the Episode own Slides in Section order', () => {
       // ARRANGE
-      const expected = { slug: 'one-prompt', pool: true, textSource: 'src/episodes/slide-pool/one-prompt/i18n' };
+      const expected = { pool: true, layers: ['src/episodes/slide-pool/one-prompt/i18n/en.json'] };
       // ACT
-      const slides = episodeOutline('onboard-ai-every-time').sections.flat();
+      const slide = episodeOutline('onboard-ai-every-time')
+        .sections.flat()
+        .find(({ slug }) => slug === 'one-prompt');
       // ASSERT
-      expect(slides).toContainEqual(expect.objectContaining(expected));
+      expect({ pool: slide?.pool, layers: slide?.text.en }).toEqual(expected);
+    });
+
+    it("gives an Episode instance its Base Episode's text first and its own override after", () => {
+      // ARRANGE
+      const folder = 'by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work';
+      const expected = ['src/episodes/ai-gives-you-more-work/i18n/en.json', `src/episodes/${folder}/i18n/en.json`];
+      // ACT
+      const layers = episodeOutline(folder).text.en;
+      // ASSERT
+      expect(layers).toEqual(expected);
     });
 
     it('gives the Title slide the top anchor and each Section Slide its placed anchor', () => {

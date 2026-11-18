@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
 import { readRecordingFolder, slideRows } from './recording-disk.ts';
 import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
@@ -34,15 +32,12 @@ const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
 console.log(`# ${episode.id} (${language})`);
-for (const { slug, section, title, i18n: found } of rows) {
-  const messages = found === undefined ? {} : (JSON.parse(readFileSync(found.file, 'utf8')) as Messages);
+for (const { slug, section, title, text, files, pool } of rows) {
+  const messages = text as Messages;
   const segments = Object.entries(messages.voiceScript?.segments ?? {});
   const texts = segments.flatMap(([, { script = '', bridge = '' }]) => [script, bridge]);
   scripts.push(...texts);
-  const where =
-    found === undefined
-      ? 'NO I18N FILE'
-      : `${path.relative(ROOT, found.file)}${found.pool ? ' (POOL: shared, read only)' : ''}`;
+  const where = files.length === 0 ? 'NO I18N FILE' : `${files.join(' + ')}${pool ? ' (POOL: shared, read only)' : ''}`;
   const start = starts[slug];
   console.log(`\n## ${title} {#${slug}} section ${section}, start ${start === undefined ? 'unmatched' : clock(start)}`);
   console.log(`file: ${where}`);

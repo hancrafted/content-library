@@ -14,5 +14,5 @@ describe('success cases', () => {
     const stale = await staleRegistryFiles(ROOT, load);
     // ASSERT
     expect(stale).toEqual(expected);
-  }, 60_000);
+  });
 });
