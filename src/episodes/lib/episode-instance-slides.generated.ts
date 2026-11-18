@@ -74,10 +74,12 @@ declare module './episode-instance' {
       readonly 'the-long-phone-call-story': {
         readonly en: typeof aiAttentionSpan__theLongPhoneCallStory__en;
         readonly de: typeof aiAttentionSpan__theLongPhoneCallStory__de;
+        readonly targets: 'middle' | 'start' | 'end' | 'standout' | 'lab-note';
       };
       readonly 'ai-forgets-the-middle-too': {
         readonly en: typeof aiAttentionSpan__aiForgetsTheMiddleToo__en;
         readonly de: typeof aiAttentionSpan__aiForgetsTheMiddleToo__de;
+        readonly targets: 'middle' | 'start' | 'end' | 'study-note';
       };
       readonly 'the-ais-attention-span': {
         readonly en: typeof aiAttentionSpan__theAisAttentionSpan__en;
@@ -86,18 +88,22 @@ declare module './episode-instance' {
       readonly 'the-context-window': {
         readonly en: typeof aiAttentionSpan__theContextWindow__en;
         readonly de: typeof aiAttentionSpan__theContextWindow__de;
+        readonly targets: 'resend' | 'limit' | 'apps';
       };
       readonly 'what-happens-when-the-bar-fills-up': {
         readonly en: typeof aiAttentionSpan__whatHappensWhenTheBarFillsUp__en;
         readonly de: typeof aiAttentionSpan__whatHappensWhenTheBarFillsUp__de;
+        readonly targets: 'caption' | 'reason' | 'first';
       };
       readonly 'attention-is-a-budget': {
         readonly en: typeof aiAttentionSpan__attentionIsABudget__en;
         readonly de: typeof aiAttentionSpan__attentionIsABudget__de;
+        readonly targets: 'attention' | 'lost' | 'zones';
       };
       readonly 'what-we-learned-so-far': {
         readonly en: typeof aiAttentionSpan__whatWeLearnedSoFar__en;
         readonly de: typeof aiAttentionSpan__whatWeLearnedSoFar__de;
+        readonly targets: 'same';
       };
       readonly 'what-fills-the-window': {
         readonly en: typeof aiAttentionSpan__whatFillsTheWindow__en;
@@ -106,14 +112,17 @@ declare module './episode-instance' {
       readonly 'whats-really-in-the-window': {
         readonly en: typeof aiAttentionSpan__whatsReallyInTheWindow__en;
         readonly de: typeof aiAttentionSpan__whatsReallyInTheWindow__de;
+        readonly targets: 'memory' | 'start' | 'named';
       };
       readonly 'one-innocent-question': {
         readonly en: typeof aiAttentionSpan__oneInnocentQuestion__en;
         readonly de: typeof aiAttentionSpan__oneInnocentQuestion__de;
+        readonly targets: 'card' | 'sizes' | 'illustrative';
       };
       readonly 'you-cant-watch-the-meter': {
         readonly en: typeof aiAttentionSpan__youCantWatchTheMeter__en;
         readonly de: typeof aiAttentionSpan__youCantWatchTheMeter__de;
+        readonly targets: 'after' | 'footer' | 'chat';
       };
       readonly 'managing-the-attention-span': {
         readonly en: typeof aiAttentionSpan__managingTheAttentionSpan__en;
@@ -122,14 +131,17 @@ declare module './episode-instance' {
       readonly 'everyday-habits': {
         readonly en: typeof aiAttentionSpan__everydayHabits__en;
         readonly de: typeof aiAttentionSpan__everydayHabits__de;
+        readonly targets: 'habit-next-chat' | 'habit-one-chat' | 'habit-handoff';
       };
       readonly 'the-workflow-for-bigger-projects': {
         readonly en: typeof aiAttentionSpan__theWorkflowForBiggerProjects__en;
         readonly de: typeof aiAttentionSpan__theWorkflowForBiggerProjects__de;
+        readonly targets: 'after' | 'after-note';
       };
       readonly 'human-in-the-loop-workflow': {
         readonly en: typeof aiAttentionSpan__humanInTheLoopWorkflow__en;
         readonly de: typeof aiAttentionSpan__humanInTheLoopWorkflow__de;
+        readonly targets: 'workers' | 'loop-note';
       };
       readonly 'now-you-know-how-it-feels': {
         readonly en: typeof aiAttentionSpan__nowYouKnowHowItFeels__en;
@@ -173,10 +185,12 @@ declare module './episode-instance' {
       readonly 'you-are-the-new-hire': {
         readonly en: typeof onboardAiEveryTime__youAreTheNewHire__en;
         readonly de: typeof onboardAiEveryTime__youAreTheNewHire__de;
+        readonly targets: 'hidden' | 'handover';
       };
       readonly 'pay-the-price': {
         readonly en: typeof onboardAiEveryTime__payThePrice__en;
         readonly de: typeof onboardAiEveryTime__payThePrice__de;
+        readonly targets: 'relentless' | 'probabilistic' | 'every-word-billed' | 'confident' | 'informed' | 'closing';
       };
       readonly 'one-prompt': {
         readonly en: typeof onboardAiEveryTime__onePrompt__en;
@@ -189,10 +203,17 @@ declare module './episode-instance' {
       readonly 'first-human-in-the-loop-agentic-workflow': {
         readonly en: typeof onboardAiEveryTime__firstHumanInTheLoopAgenticWorkflow__en;
         readonly de: typeof onboardAiEveryTime__firstHumanInTheLoopAgenticWorkflow__de;
+        readonly targets: 'requirements' | 'interview' | 'research' | 'caption' | 'page';
       };
       readonly 'manage-the-price': {
         readonly en: typeof onboardAiEveryTime__manageThePrice__en;
         readonly de: typeof onboardAiEveryTime__manageThePrice__de;
+        readonly targets:
+          | 'break-it-down'
+          | 'requirements-first'
+          | 'interview-yourself-with-ai'
+          | 'evaluate-each-step'
+          | 'fresh-start-for-each-piece';
       };
     };
   }
