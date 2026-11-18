@@ -120,12 +120,13 @@ async function summaryFiles(load: SiteLoader): Promise<RegistryFile[]> {
   return [pageSummariesFile(summaries.compositionSummaries())];
 }
 
-function textSourceOf(root: string, folder: string, slug: string): TextSource {
-  const own = `${EPISODES_DIR}/${folder}/slides/${slug}/i18n`;
+function textSourceOf(root: string, folders: readonly string[], slug: string): TextSource {
+  const owned = folders.map((folder) => `${EPISODES_DIR}/${folder}/slides/${slug}/i18n`);
   const pooled = `${EPISODES_DIR}/${SLIDE_POOL_FOLDER}/${slug}/i18n`;
-  if (existsSync(path.join(root, own))) return { textSource: own, pool: false };
+  const own = owned.find((candidate) => existsSync(path.join(root, candidate)));
+  if (own !== undefined) return { textSource: own, pool: false };
   if (existsSync(path.join(root, pooled))) return { textSource: pooled, pool: true };
-  throw new Error(`Slide "${slug}" of ${folder} has no i18n folder in ${own} or ${pooled}`);
+  throw new Error(`Slide "${slug}" of ${folders[0]} has no i18n folder in ${[...owned, pooled].join(' or ')}`);
 }
 
 async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFile[]> {
@@ -138,7 +139,7 @@ async function outlineFiles(root: string, load: SiteLoader): Promise<RegistryFil
     if (folder === undefined) throw new Error(`The Episode registry holds "${id}" but no folder does`);
     return { id, folder, ...outline };
   });
-  return [episodeOutlinesFile(episodes, (folder, slug) => textSourceOf(root, folder, slug))];
+  return [episodeOutlinesFile(episodes, (folders, slug) => textSourceOf(root, folders, slug))];
 }
 
 async function formatted(root: string, files: readonly RegistryFile[]): Promise<RegistryFile[]> {

@@ -125,7 +125,7 @@
     "title": {
       "slug": "hero",
       "anchor": "top",
-      "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/slides/hero/i18n",
+      "textSource": "src/episodes/ai-gives-you-more-work/slides/hero/i18n",
       "pool": false
     },
     "sections": [
@@ -133,7 +133,7 @@
         {
           "slug": "from-execution-to-management",
           "anchor": "from-execution-to-management",
-          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "textSource": "src/episodes/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
           "pool": false
         },
         {
@@ -340,7 +340,7 @@
     "title": {
       "slug": "hero",
       "anchor": "top",
-      "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/slides/hero/i18n",
+      "textSource": "src/episodes/ai-gives-you-more-work/slides/hero/i18n",
       "pool": false
     },
     "sections": [
@@ -348,7 +348,7 @@
         {
           "slug": "from-execution-to-management",
           "anchor": "from-execution-to-management",
-          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "textSource": "src/episodes/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
           "pool": false
         },
         {
@@ -650,7 +650,7 @@
     "title": {
       "slug": "hero",
       "anchor": "top",
-      "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/slides/hero/i18n",
+      "textSource": "src/episodes/ai-gives-you-more-work/slides/hero/i18n",
       "pool": false
     },
     "sections": [
@@ -658,7 +658,7 @@
         {
           "slug": "from-execution-to-management",
           "anchor": "from-execution-to-management",
-          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "textSource": "src/episodes/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
           "pool": false
         },
         {
@@ -1389,7 +1389,7 @@
     "title": {
       "slug": "hero",
       "anchor": "top",
-      "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/slides/hero/i18n",
+      "textSource": "src/episodes/ai-gives-you-more-work/slides/hero/i18n",
       "pool": false
     },
     "sections": [
@@ -1397,7 +1397,7 @@
         {
           "slug": "from-execution-to-management",
           "anchor": "from-execution-to-management",
-          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "textSource": "src/episodes/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
           "pool": false
         },
         {

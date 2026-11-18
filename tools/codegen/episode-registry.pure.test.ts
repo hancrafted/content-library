@@ -85,6 +85,20 @@ describe('success cases', () => {
     expected.forEach((line) => expect(compositions).toContain(line));
   });
 
+  it('imports an Episode instance, the record its episode.ts resolves with instanceOf, like any record', () => {
+    // ARRANGE
+    const instance: EpisodeFolder = {
+      ...EVENT_COPY_KEEPING_SOURCE_EXPORT_NAME,
+      files: ['episode-metadata.ts', 'episode.ts'],
+      episodeSource: 'export const axelAiTokenEconomy = instanceOf(aiTokenEconomy, {});\n',
+    };
+    const expected = `import { axelAiTokenEconomy as _20261023Axel__aiTokenEconomy } from '@/episodes/by-event/2026-10-23-axel/ai-token-economy/episode';`;
+    // ACT
+    const compositions = fileAt([WITH_PAGE, instance], REGISTRY_PATHS.compositions);
+    // ASSERT
+    expect(compositions).toContain(expected);
+  });
+
   it("types each map against the Episode ids, so a record whose slug is not its folder's name fails tsc", () => {
     // ARRANGE
     const expected = {
