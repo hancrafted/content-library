@@ -270,6 +270,51 @@ describe('drive worktree', () => {
       expect(existsSync(tree)).toBe(true);
     });
 
+    it('runs beforeMerge in the Task worktree and merges when it passes', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(
+        config,
+        readFileSync(config, 'utf8').replace(
+          '  beforeRemove',
+          '  beforeMerge: ["echo ran-in $(pwd -P)"]\n  beforeRemove',
+        ),
+      );
+      git(main, 'commit', '-qam', 'hook');
+      git(main, 'push', '-q', 'origin', 'main');
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stdout).toContain(`ran-in ${tree}`);
+      expect(git(main, 'rev-list', '--merges', '--count', 'feat/x')).toBe('1');
+    });
+
+    it('leaves the Task branch unmerged and the worktree in place when a beforeMerge hook fails', () => {
+      // ARRANGE
+      const { main } = fixture();
+      const config = path.join(main, 'docs', 'drive', 'project.yml');
+      writeFileSync(
+        config,
+        readFileSync(config, 'utf8').replace('  beforeRemove', '  beforeMerge: ["exit 3"]\n  beforeRemove'),
+      );
+      git(main, 'commit', '-qam', 'failing hook');
+      git(main, 'push', '-q', 'origin', 'main');
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      const baseTip = git(main, 'rev-parse', 'feat/x');
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(1);
+      expect(existsSync(tree)).toBe(true);
+      expect(git(main, 'rev-parse', 'feat/x')).toBe(baseTip);
+      expect(git(main, 'branch', '--list', 'feat/x--1-task')).toContain('feat/x--1-task');
+    });
+
     it('rejects a config that names a lock module without withLock', () => {
       // ARRANGE
       const { main } = fixture(path.join(import.meta.dirname, 'git.ts'));
