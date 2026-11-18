@@ -130,7 +130,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ### 3. Each module owns one thing
 
-1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section. Event copy: Instance (0028).
+1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section. Event copy: instance (0028).
 2. A Slide folder owns its Scene, widgets, logic, CSS, text, notes, Voice script; imports no other.
 3. `episodes/slide-pool/<slide>/`: content Slides ≥2 Episodes compose, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
@@ -163,7 +163,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 | Kind               | Home                   |
 | ------------------ | ---------------------- |
-| Episode at Event   | Instance               |
+| Episode at Event   | Episode instance       |
 | Slide, as-is       | Slide pool             |
 | Slide to adapt     | Slide library, `cp -r` |
 | part               | `slide-shared/`        |

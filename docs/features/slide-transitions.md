@@ -93,7 +93,7 @@ The adapter writes discrete `data-page-tone` on `<html>` and local `--surface-ed
 
 **Accepted:** Decision record _Standard Title and section looks by position_, Han, 2026-11-18. The spacing values are tuned by visual check, and they need Han's acceptance on a preview before they are recorded here.
 
-Episode composition gives a Slide that declares no `presentation` a standard look, by its position. It does this in the same step that resolves Instance Overrides, before adjacent edges are resolved and before the surface clock decides whether to run. The looks are named constants in the Slide master.
+Episode composition gives a Slide that declares no `presentation` a standard look, by its position. It does this in the same step that resolves Episode overrides, before adjacent edges are resolved and before the surface clock decides whether to run. The looks are named constants in the Slide master.
 
 | Position                      | Standard look                                                                                          |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -101,7 +101,7 @@ Episode composition gives a Slide that declares no `presentation` a standard loo
 | First Section's section slide | `var(--section-band)` surface, no effect, space before and after; the Title's leave runs dark to light |
 | Later section slides          | inverse, softened surface, liquid enter and leave, space before and after                              |
 
-A declared `presentation` (the Slide's own, the Title's `title.presentation`, or an Instance Override) replaces the standard look in full; the two are never merged. The Waterline's bubbles and the Explorable heroes keep their declarations. A section slide that should have no look declares `presentation: {}`.
+A declared `presentation` (the Slide's own, the Title's `title.presentation`, or an Episode instance Episode override) replaces the standard look in full; the two are never merged. The Waterline's bubbles and the Explorable heroes keep their declarations. A section slide that should have no look declares `presentation: {}`.
 
 ## Authoring
 
