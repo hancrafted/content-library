@@ -11,6 +11,7 @@ import {
   type EventSlug,
 } from '../../src/content-store/catalogue/record-routes';
 import { listEpisodes, listEvents } from '../../src/content-store/store';
+import summaries from '../../src/episodes/lib/page-summaries.generated.json' with { type: 'json' };
 import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
 import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
@@ -115,20 +116,8 @@ function recordingOf(episode: EpisodeRef): { id: string; language: Locale } | un
   return video !== undefined && 'language' in video ? { id: video.id, language: video.language as Locale } : undefined;
 }
 
-function episodeTitle(event: string, slug: string, locale: string): string {
-  const file = join(
-    import.meta.dirname,
-    '..',
-    '..',
-    'src',
-    'episodes',
-    'by-event',
-    event,
-    slug,
-    'i18n',
-    `${locale}.json`,
-  );
-  return JSON.parse(readFileSync(file, 'utf8')).title;
+function episodeTitle(episode: EpisodeRef, locale: Locale): string {
+  return (summaries.episodes as Record<string, Record<Locale, { title: string }>>)[episode.id][locale].title;
 }
 
 describe('an unlisted Episode plays its Event recording', () => {
@@ -138,7 +127,7 @@ describe('an unlisted Episode plays its Event recording', () => {
       // ARRANGE
       const $ = exportedPage(localizePath(eventEpisodeRoute(event, episode), locale));
       const recording = recordingOf(episode);
-      const title = episodeTitle(event, episode.slug, locale);
+      const title = episodeTitle(episode, locale);
       const expected =
         recording === undefined
           ? { video: undefined, language: undefined, label: '', title: '' }

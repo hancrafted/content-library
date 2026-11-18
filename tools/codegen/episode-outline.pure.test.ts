@@ -1,9 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { episodeOutlinesFile } from './episode-outline.pure.ts';
 
-const textSourceOf = (folder: string, slug: string) => ({
+const textSourceOf = ([folder]: readonly string[], slug: string) => ({
   textSource: `src/episodes/${folder}/slides/${slug}/i18n`,
   pool: slug === 'shared',
+});
+
+const lastFolderHolding = (folders: readonly string[], slug: string) => ({
+  textSource: `src/episodes/${folders.at(-1)}/slides/${slug}/i18n`,
+  pool: false,
 });
 
 function outlinesOf(...args: Parameters<typeof episodeOutlinesFile>): unknown {
@@ -43,6 +48,20 @@ describe('success cases', () => {
       const outlines = outlinesOf(episodes, textSourceOf);
       // ASSERT
       expect(outlines).toEqual(expected);
+    });
+
+    it("looks an Episode instance's Slides up in its own folder first, then in its Base Episode's", () => {
+      // ARRANGE
+      const sections = [[{ slug: 'why', anchor: 'why' }]];
+      const episodes = [
+        { id: 'cash', folder: 'cash', sections },
+        { id: 'axel__cash', folder: 'by-event/axel/cash', base: 'cash', sections },
+      ];
+      const expected = [{ slug: 'why', anchor: 'why', textSource: 'src/episodes/cash/slides/why/i18n', pool: false }];
+      // ACT
+      const outlines = outlinesOf(episodes, lastFolderHolding) as Record<string, { sections: unknown[] }>;
+      // ASSERT
+      expect(outlines['axel__cash'].sections[0]).toEqual(expected);
     });
 
     it('writes to the checked-in path the stale-file check compares', () => {
