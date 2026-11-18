@@ -1,6 +1,6 @@
 import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
-import { readRecordingFolder, slideRows } from './recording-disk.ts';
-import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
+import { baseEpisodeOf, readRecordingFolder, slideRows } from './recording-disk.ts';
+import { cutBySlide, parseCues, readingMinutes, spokenWords, writeSurface } from './voice-script.pure.ts';
 
 interface Messages {
   voiceScript?: { segments?: Record<string, { title?: string; script?: string; bridge?: string }> } | null;
@@ -22,6 +22,7 @@ if (transcript === undefined || startsFile === undefined)
 
 const { starts } = JSON.parse(startsFile) as { starts: Record<string, number> };
 const rows = slideRows(ROOT, dir, language);
+const base = baseEpisodeOf(ROOT, dir);
 const speech = cutBySlide(
   parseCues(transcript),
   rows.map(({ slug }) => slug),
@@ -31,13 +32,13 @@ const speech = cutBySlide(
 const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
-console.log(`# ${episode.id} (${language})`);
+console.log(`# ${episode.id} (${language})${base === undefined ? '' : `, an Episode instance of ${base}`}`);
 for (const { slug, section, title, text, files, pool } of rows) {
   const messages = text as Messages;
   const segments = Object.entries(messages.voiceScript?.segments ?? {});
   const texts = segments.flatMap(([, { script = '', bridge = '' }]) => [script, bridge]);
   scripts.push(...texts);
-  const where = files.length === 0 ? 'NO I18N FILE' : `${files.join(' + ')}${pool ? ' (POOL: shared, read only)' : ''}`;
+  const where = writeSurface({ slug, files, pool }, language, base !== undefined);
   const start = starts[slug];
   console.log(`\n## ${title} {#${slug}} section ${section}, start ${start === undefined ? 'unmatched' : clock(start)}`);
   console.log(`file: ${where}`);
