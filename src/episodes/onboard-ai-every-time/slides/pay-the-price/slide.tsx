@@ -1,9 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { BriefOrPayThePrice } from '@/explorables/brief-or-pay-the-price/brief-or-pay-the-price';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { PriceMirror } from './price-mirror';
-import { TRAITS } from './trait-flip.pure';
 
 const source = (slug: string, url: string) => ({ slug, url });
 const LIGHTMAN = source('lightman-verify-step-by-step', 'https://arxiv.org/abs/2305.20050');
@@ -36,26 +35,18 @@ const MEMORY_TOOL = source(
   'https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool',
 );
 
-const ROW_NOTE = {
-  probabilistic: 'probable-not-random',
-  relentless: 'right-or-not-the-output-looks-finished',
-  informed: 'why-it-is-blind-to-your-company',
-  confident: 'why-it-guesses-instead-of-asking',
-  'every-word-billed': 'the-bill-covers-the-whole-chat',
-} as const;
-
 export const payThePrice = slide({
   slug: 'pay-the-price',
   messages: { en, de },
   notes: [
-    { slug: 'right-or-not-the-output-looks-finished', target: 'relentless', sources: [LIGHTMAN] },
-    { slug: 'probable-not-random', target: 'probabilistic', sources: [HOLTZMAN, MESSAGES_API] },
-    { slug: 'how-much-varies', target: 'probabilistic', sources: [HE, ATIL] },
-    { slug: 'the-bill-covers-the-whole-chat', target: 'every-word-billed', sources: [CONTEXT_WINDOWS, PRICING] },
-    { slug: 'a-discount-not-an-exemption', target: 'every-word-billed', sources: [PROMPT_CACHING] },
-    { slug: 'why-it-guesses-instead-of-asking', target: 'confident', sources: [KALAI, KUHN] },
-    { slug: 'why-it-is-blind-to-your-company', target: 'informed', sources: [KANDPAL, TOUVRON, TRAINING_DATA] },
-    { slug: 'the-forgetting-is-in-the-design', target: 'closing', sources: [CONTEXT_WINDOWS, MEMORY_TOOL] },
+    { slug: 'right-or-not-the-output-looks-finished', target: 'title', sources: [LIGHTMAN] },
+    { slug: 'probable-not-random', target: 'title', sources: [HOLTZMAN, MESSAGES_API] },
+    { slug: 'how-much-varies', target: 'title', sources: [HE, ATIL] },
+    { slug: 'the-bill-covers-the-whole-chat', target: 'title', sources: [CONTEXT_WINDOWS, PRICING] },
+    { slug: 'a-discount-not-an-exemption', target: 'title', sources: [PROMPT_CACHING] },
+    { slug: 'why-it-guesses-instead-of-asking', target: 'title', sources: [KALAI, KUHN] },
+    { slug: 'why-it-is-blind-to-your-company', target: 'title', sources: [KANDPAL, TOUVRON, TRAINING_DATA] },
+    { slug: 'the-forgetting-is-in-the-design', target: 'title', sources: [CONTEXT_WINDOWS, MEMORY_TOOL] },
   ],
   segments: [
     { slug: 'who-gets-the-job' },
@@ -63,35 +54,9 @@ export const payThePrice = slide({
     { slug: 'informed' },
     { slug: 'confident-every-word-billed' },
   ],
-  content: ({ t, marker, Marker }) => (
-    <SlideFrame className="mt-8">
-      <PriceMirror
-        columns={{ freelancer: t('columns.freelancer'), traits: t('columns.traits'), ai: t('columns.ai') }}
-        rows={TRAITS.map((slug) => ({
-          slug,
-          initial: t(`traits.${slug}.initial`),
-          name: t(`traits.${slug}.name`),
-          gloss: t(`traits.${slug}.gloss`),
-          back: t(`traits.${slug}.back`),
-          aside: t(`traits.${slug}.popover`),
-          freelancer: t(`traits.${slug}.freelancer`),
-          ai: t.rich(`traits.${slug}.ai`, { marker: marker(ROW_NOTE[slug]) }),
-        }))}
-        closing={t.rich('closing', { strong: (chunks) => <strong className="font-semibold">{chunks}</strong> })}
-        closingMarker={<Marker note="the-forgetting-is-in-the-design" className="relative inset-auto" />}
-        labels={{
-          prompt: t('backs.prompt'),
-          handbook: t('backs.handbook'),
-          bill: t('backs.bill'),
-          tokens: t('backs.tokens'),
-          handbookWords: {
-            first: t('backs.handbookWords.first'),
-            second: t('backs.handbookWords.second'),
-            last: t('backs.handbookWords.last'),
-          },
-          turn: t('backs.turn'),
-        }}
-      />
+  content: ({ locale }) => (
+    <SlideFrame className="mt-6 gap-6">
+      <BriefOrPayThePrice preset="play" locale={locale} />
     </SlideFrame>
   ),
 });

@@ -37,11 +37,14 @@ On 2026-11-04 Han selected the Tag options below, then exchanged the selected Co
 
 On 2026-11-04 Han selected Context window A, Human in the loop C and AI capability B from the Explorable artwork chooser:
 
-| Explorable        | Selected artwork          | Meaning                                                                                                            |
-| ----------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Context window    | Intention + capacity      | Human intention sits outside a bounded meter of occupied context capacity, not a measure of alignment.             |
-| Human in the loop | The review funnel         | Parallel branches converge before a mandatory human review gate, with a correction loop returning to the input.    |
-| AI capability     | Built on what came before | Chat, agents with tools and loops, workflows, then a Factory retain earlier building blocks as coordination grows. |
+| Explorable             | Selected artwork          | Meaning                                                                                                                                       |
+| ---------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Context window         | Intention + capacity      | Human intention sits outside a bounded meter of occupied context capacity, not a measure of alignment.                                        |
+| Human in the loop      | The review funnel         | Parallel branches converge before a mandatory human review gate, with a correction loop returning to the input.                               |
+| AI capability          | Built on what came before | Chat, agents with tools and loops, workflows, then a Factory retain earlier building blocks as coordination grows.                            |
+| Brief or pay the price | Matrix to workflow        | One agent's 5 × 5 PRICE × BRIEF grid, the brief at the start, shrinks into the nodes of a workflow that fans out and back in before the goal. |
+
+On 2026-11-18 Han selected Matrix (A) from the brief-or-pay-the-price artwork chooser, because it shows the brief at the beginning and one fan-out and fan-in.
 
 These are static, decorative diagrams, not live meters or claims about historical replacement. Their wide view box fits the existing top panel, keeps strokes legible at small sizes, and centers the drawn bounds without browser measurement.
 

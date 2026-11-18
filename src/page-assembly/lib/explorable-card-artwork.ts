@@ -5,4 +5,5 @@ export const EXPLORABLE_CARD_ARTWORK = {
   'human-in-the-loop': 'review-funnel',
   'ai-capability': 'cumulative-orchestration',
   'software-ecology': 'review-funnel',
+  'brief-or-pay-the-price': 'matrix-to-workflow',
 } as const satisfies Record<ExplorablePageSlug, string>;

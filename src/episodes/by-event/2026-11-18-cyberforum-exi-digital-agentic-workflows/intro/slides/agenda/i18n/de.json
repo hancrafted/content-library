@@ -1,6 +1,6 @@
 {
   "title": "Agenda",
-  "caption": "Zwei Stunden, Zeiten ab Start: Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
+  "caption": "Drei Stunden, Zeiten ab Start: zweieinhalb Stunden Inhalt, dann die Übergabe an CyberLab und das Debrief.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
@@ -8,40 +8,54 @@
       "title": "Einstieg"
     },
     "first": {
-      "time": "0:20",
+      "time": "0:30",
       "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
     },
     "grill": {
-      "time": "0:35",
+      "time": "0:50",
       "title": "Live-Demo „Grill me“"
     },
+    "break": {
+      "time": "1:10",
+      "title": "Pause"
+    },
     "second": {
-      "time": "0:50",
+      "time": "1:20",
       "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
     },
-    "workflow": {
-      "time": "1:15",
-      "title": "Live-Demo: ein agentischer Workflow"
-    },
     "third": {
-      "time": "1:30",
+      "time": "1:50",
       "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
     },
+    "practice": {
+      "time": "2:00",
+      "title": "Mehr Zeit zum Ausprobieren"
+    },
+    "tracks": {
+      "time": "2:20",
+      "title": "Masterclass: Track 1 oder Track 2"
+    },
+    "handover": {
+      "time": "2:30",
+      "title": "Übergabe an CyberLab"
+    },
     "qa": {
-      "time": "1:40",
-      "title": "Fragen und Puffer"
+      "time": "2:45",
+      "title": "Fragen, Debrief und Feedback"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theorie",
     "demo": "Demo",
+    "break": "Pause",
+    "practice": "Praxis",
     "close": "Abschluss"
   },
   "notes": {
     "talking-points": {
-      "header": "Zwei Stunden, ab 0:00 gezählt",
-      "description": "20 Minuten Einstieg, dann Episode 1 (15), die Demo „Grill me“ (15), Episode 2 (25), der agentische Workflow (15) und Episode 3 (10); die letzten 20 Minuten sind Fragen und Puffer. Die Check-ins gehören zur Zeit ihrer Episode."
+      "header": "Drei Stunden, ab 0:00 gezählt",
+      "description": "30 Minuten Einstieg, davon fünf für Nachzügler, dann Episode 1 (20), die Demo „Grill me“ (20) und 10 Minuten Pause. Episode 2 (30), Episode 3 (10), Praxiszeit (20) und die Masterclass-Tracks (10) schließen den Inhalt um 2:30 ab. Die Übergabe an CyberLab (15) sowie Fragen, Debrief und Feedback (15) füllen die letzte halbe Stunde; weiteren Puffer gibt es nicht. Die Check-ins gehören zur Zeit ihrer Episode."
     }
   }
 }

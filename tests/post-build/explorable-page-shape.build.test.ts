@@ -14,7 +14,7 @@ const COLUMN_NOTES: Readonly<Record<string, ColumnNotes>> = {
   'ai-capability': { why: 2, how: 1, what: 1 },
   'software-ecology': { why: 2, how: 0, what: 2 },
 };
-const GLOW_ONLY_PAGES: readonly string[] = ['software-ecology'];
+const GLOW_ONLY_PAGES: readonly string[] = ['software-ecology', 'brief-or-pay-the-price'];
 const TEMPLATE_FOLDER = 'templates/explorable-page';
 const PLACEHOLDER = /example\.com\/replace-with-a-source|replace with/i;
 const exportedHtml = (url: string) => readFileSync(join(OUT_DIR, exportedFile(url)), 'utf8');

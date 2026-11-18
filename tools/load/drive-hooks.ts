@@ -1,12 +1,30 @@
+import { spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 import { stopServers } from '../../src/pipeline/lib/servers.ts';
+import { branchDiffRange, buildIfNeeded } from './build-if-needed.pure.ts';
 import { slowTestReport, trimSlowTests } from './slow-tests.mts';
 
 const env = (name: string): string => process.env[name] ?? '';
 const slug = env('DRIVE_BRANCH').replaceAll('/', '-');
 
+function changedPathsOfBranch(): string[] {
+  const range = branchDiffRange(env('DRIVE_BASE'), env('DRIVE_BRANCH'));
+  if (typeof range !== 'string') throw new Error(range.error);
+  const diff = spawnSync('git', ['diff', '--name-only', range], { encoding: 'utf8' });
+  if (diff.status !== 0) throw new Error(`git diff failed: ${diff.stderr.trim()}`);
+  return diff.stdout.split('\n').filter(Boolean);
+}
+
 const hooks: Record<string, () => void> = {
+  'build-if-needed': () => {
+    const built = buildIfNeeded({
+      changedPaths: changedPathsOfBranch(),
+      run: (command) => spawnSync(command, { shell: true, stdio: 'inherit' }).status,
+      log: console.log,
+    });
+    if (!built) process.exit(1);
+  },
   'stop-servers': () => {
     for (const port of stopServers(env('DRIVE_WORKTREE'))) console.log(`✔ stopped the Run's server on :${port}`);
   },
