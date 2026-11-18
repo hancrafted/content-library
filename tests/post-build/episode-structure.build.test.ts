@@ -75,6 +75,7 @@ describe('episode structure', () => {
     const route = localizePath('/master-slides/grids/', locale);
     const expected = [
       { host: 'top', effect: 'liquid', removable: false, inert: true },
+      { host: 'grids', effect: 'liquid', removable: false, inert: true },
       { host: 'grids--grid-1x1', effect: 'wave', removable: false, inert: true },
       { host: 'grids--grid-1x2', effect: 'goo', removable: false, inert: true },
     ];
