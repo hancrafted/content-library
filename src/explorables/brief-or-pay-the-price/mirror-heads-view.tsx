@@ -44,7 +44,7 @@ export function MirrorHeadsView({ heads }: { readonly heads: Heads }) {
           '@3xl:order-none @3xl:w-60 @3xl:shrink-0 @3xl:self-center',
         )}
       >
-        {heads.traits}
+        {heads.middle}
       </p>
       <AiHead label={heads.ai} />
     </div>

@@ -2,10 +2,11 @@
 
 import { cn } from '@/shared/lib/utils';
 import { memo, type MouseEvent, type PointerEvent } from 'react';
-import type { Definition } from './brief-or-pay-the-price.types';
+import type { Definition, DefinitionId } from './brief-or-pay-the-price.types';
 import type { RowRead, Side, Target } from './explorable-state.pure';
 import { Card, type SceneLabels } from './mirror-card.client';
 import styles from './mirror.module.css';
+import { MorphText } from './morph-text.client';
 
 export interface MirrorHandlers {
   readonly onOpen: (target: Target) => void;
@@ -51,18 +52,21 @@ function accessibleName({ words }: RowView): string {
   return `${name}: ${words.short}`;
 }
 
-function ChipFace({ row }: { readonly row: RowView }) {
+function ChipFace({ row, index }: { readonly row: RowView; readonly index: number }) {
   const { words } = row;
   return (
     <>
       <span data-trait-initial translate="no" className="text-heading leading-none font-semibold">
-        {row.letter}
+        <MorphText text={row.letter} index={index} />
       </span>
-      <span translate="no" className="text-caption whitespace-nowrap text-primary-foreground/80">
-        {words.name}
+      <span translate="no" className="text-center text-caption leading-tight text-balance text-primary-foreground/80">
+        <MorphText text={words.name} index={index} />
       </span>
       {words.gloss === '' ? null : (
-        <span data-trait-gloss className="text-caption leading-none whitespace-nowrap text-primary-foreground/70">
+        <span
+          data-trait-gloss
+          className="text-center text-caption leading-tight text-balance text-primary-foreground/70"
+        >
           {words.gloss}
         </span>
       )}
@@ -74,6 +78,7 @@ const CHIP =
   'flex w-44 touch-manipulation flex-col items-center gap-1 rounded-full bg-primary px-4 py-2 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
 interface RowProps {
+  readonly definitionId: DefinitionId;
   readonly row: RowView;
   readonly index: number;
   readonly read: RowRead;
@@ -92,16 +97,17 @@ function ChipTrack({ row, index, read, handlers }: Omit<RowProps, 'labels'>) {
         {...controlHandlers(index, handlers)}
         className={cn(styles.chip, CHIP)}
       >
-        <ChipFace row={row} />
+        <ChipFace row={row} index={index} />
       </button>
       <Arrow toAi />
     </div>
   );
 }
 
-function SideCard({ row, index, read, handlers, labels, side }: RowProps & { readonly side: Side }) {
+function SideCard({ definitionId, row, index, read, handlers, labels, side }: RowProps & { readonly side: Side }) {
   return (
     <Card
+      key={`${definitionId}-${side}`}
       id={row.id}
       side={side}
       short={row.words.short}
@@ -126,6 +132,7 @@ const sameRead = (a: RowRead, b: RowRead): boolean =>
   a.turned.ai === b.turned.ai;
 
 const sameRowByRead = (before: RowProps, after: RowProps): boolean =>
+  before.definitionId === after.definitionId &&
   before.row === after.row &&
   before.index === after.index &&
   before.handlers === after.handlers &&
@@ -153,26 +160,42 @@ export const Row = memo(function Row(props: RowProps) {
   );
 }, sameRowByRead);
 
-export function ClosingLine({
-  lead,
-  text,
-  open,
-  handlers,
-}: {
+interface ClosingProps {
   readonly lead: string;
   readonly text: string;
+  readonly wipes: boolean;
   readonly open: boolean;
   readonly handlers: MirrorHandlers;
-}) {
+}
+
+const CLOSING = 'flex items-center justify-center pt-4 text-center text-body';
+
+function ClosingWords({ lead, text }: Pick<ClosingProps, 'lead' | 'text'>) {
   return (
-    <p data-target="closing" className="flex items-center justify-center gap-1 pt-4 text-center text-body">
+    <>
+      <strong className="font-semibold">{lead}</strong> {text}
+    </>
+  );
+}
+
+export function ClosingLine({ wipes, open, handlers, ...words }: ClosingProps) {
+  if (!wipes)
+    return (
+      <p data-target="closing" className={cn(CLOSING, 'text-balance')}>
+        <span className={cn(styles.swap, 'px-3 py-1')}>
+          <ClosingWords {...words} />
+        </span>
+      </p>
+    );
+  return (
+    <p data-target="closing" className={cn(CLOSING, 'gap-1')}>
       <button
         type="button"
         aria-expanded={open}
         {...controlHandlers('closing', handlers)}
-        className={cn(styles.footer, 'touch-manipulation rounded-full px-3 py-1 text-balance')}
+        className={cn(styles.footer, styles.swap, 'touch-manipulation rounded-full px-3 py-1 text-balance')}
       >
-        <strong className="font-semibold">{lead}</strong> {text}
+        <ClosingWords {...words} />
       </button>
     </p>
   );

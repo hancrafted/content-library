@@ -11,7 +11,7 @@ import {
 } from './explorable-state.pure';
 
 const BEATS = [2600, 3600, 3600, 2900, 9900];
-const REST = start({ price: BEATS.length });
+const REST = start({ price: BEATS.length, brief: BEATS.length, brace: BEATS.length });
 const run = (events: readonly ExplorableEvent[], from: ExplorableState = REST) => events.reduce(step, from);
 const shownRows = (state: ExplorableState) => BEATS.map((_, row) => rowAt(state, row).shown);
 
@@ -118,6 +118,38 @@ describe('success cases', () => {
     };
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+
+  it("keeps each tab's shown and turned cards when the viewer switches away and comes back", () => {
+    // ARRANGE
+    const played = run([
+      { type: 'open', target: 1 },
+      { type: 'turn', row: 1, side: 'ai' },
+      { type: 'view', view: 'brief' },
+      { type: 'open', target: 3 },
+    ]);
+    const expected = {
+      brief: { shown: [false, false, false, true, false], turnedAi: false },
+      price: { shown: [false, true, false, false, false], turnedAi: true },
+    };
+    // ACT
+    const brief = { shown: shownRows(played), turnedAi: rowAt(played, 1).turned.ai };
+    const back = step(played, { type: 'view', view: 'price' });
+    const price = { shown: shownRows(back), turnedAi: rowAt(back, 1).turned.ai };
+    // ASSERT
+    expect({ brief, price }).toEqual(expected);
+  });
+
+  it('shows all and resets only the tab in view, and leaves the other tabs as they were', () => {
+    // ARRANGE
+    const brace = run([{ type: 'open', target: 0 }, { type: 'view', view: 'brace' }, { type: 'showAll' }]);
+    const expected = { brace: [true, true, true, true, true], priceKept: [true, false, false, false, false] };
+    // ACT
+    const afterReset = step(brace, { type: 'reset' });
+    const back = step(brace, { type: 'view', view: 'price' });
+    const seen = { brace: shownRows(brace), priceKept: shownRows(back), reset: shownRows(afterReset) };
+    // ASSERT
+    expect(seen).toEqual({ ...expected, reset: [false, false, false, false, false] });
   });
 });
 

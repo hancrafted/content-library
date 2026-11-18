@@ -98,3 +98,66 @@ export function AiIcon({ x, y, className }: { x: number; y: number; className?: 
 export function Who({ ai, x, y, className }: SceneProps & { x: number; y: number; className?: string }) {
   return ai ? <AiIcon x={x} y={y} className={className} /> : <Person x={x} y={y} className={className} />;
 }
+
+export const inkOf = (ai: boolean): string => (ai ? 'fill-none stroke-ai' : 'fill-none stroke-foreground');
+export const paperOf = (ai: boolean): string => (ai ? 'fill-ai/10 stroke-ai' : 'fill-card stroke-foreground');
+export const textOf = (ai: boolean): string => (ai ? 'fill-ai' : 'fill-foreground');
+
+export function DrawnArrow({
+  x1,
+  x2,
+  y,
+  ai,
+  d,
+  t = 0.4,
+}: SceneProps & { x1: number; x2: number; y: number; d: number; t?: number }) {
+  return (
+    <path
+      className={`${styles.draw} ${inkOf(ai)}`}
+      style={beat({ d, t })}
+      pathLength={1}
+      strokeDasharray="1"
+      d={`M${x1} ${y}H${x2}m-4 -4 4 4-4 4`}
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  );
+}
+
+export function Check({ x, y, d }: { x: number; y: number; d: number }) {
+  return (
+    <g className={styles.pop} style={beat({ d, fx: 0 })}>
+      <path
+        d={`M${x - 5} ${y}l3.5 3.5 6.5 -7`}
+        className="fill-none stroke-foreground"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  );
+}
+
+export function Mark({
+  x,
+  y,
+  size,
+  ai,
+  d,
+  children,
+}: SceneProps & {
+  x: number;
+  y: number;
+  size: number;
+  d: number;
+  children: ReactNode;
+}) {
+  return (
+    <g className={styles.pop} style={beat({ d, fx: 0 })}>
+      <Label x={x} y={y} size={size} className={`${textOf(ai)} font-semibold`}>
+        {children}
+      </Label>
+    </g>
+  );
+}

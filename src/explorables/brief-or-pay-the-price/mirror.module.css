@@ -102,6 +102,44 @@
 .isLooping .chip {
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--ai) 35%, transparent);
 }
+.swap {
+  animation: swapIn 0.5s ease-out both;
+}
+@keyframes swapIn {
+  from {
+    opacity: 0;
+  }
+}
+.morph {
+  display: inline-grid;
+  overflow: clip;
+  justify-items: center;
+}
+.morphOld,
+.morphNew {
+  grid-area: 1 / 1;
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+.morphOld {
+  animation-name: morphOut;
+}
+.morphNew {
+  animation-name: morphIn;
+}
+@keyframes morphOut {
+  to {
+    opacity: 0;
+    transform: translateY(-90%);
+  }
+}
+@keyframes morphIn {
+  from {
+    opacity: 0;
+    transform: translateY(90%);
+  }
+}
 .footer {
   cursor: pointer;
 }
@@ -176,6 +214,10 @@
   animation: fly 0.8s ease-in both;
   animation-delay: var(--d);
 }
+.isPlayed .slide {
+  animation: slide 0.45s ease-out both;
+  animation-delay: var(--d);
+}
 .isPlayed .pop {
   animation: pop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   animation-delay: var(--d);
@@ -239,6 +281,12 @@
   to {
     opacity: 0;
     transform: translate(var(--tx), var(--ty)) scale(var(--s, 0.2));
+  }
+}
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(var(--fx));
   }
 }
 @keyframes pop {
@@ -647,6 +695,9 @@
   }
   .root * {
     animation: none !important;
+  }
+  .morphOld {
+    display: none;
   }
 }
 

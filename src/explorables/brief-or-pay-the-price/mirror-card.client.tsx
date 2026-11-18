@@ -2,9 +2,23 @@
 
 import { cn } from '@/shared/lib/utils';
 import { memo, type ReactNode } from 'react';
-import type { TraitId, Words } from './brief-or-pay-the-price.types';
+import type { RowId, Words } from './brief-or-pay-the-price.types';
 import type { Side } from './explorable-state.pure';
 import styles from './mirror.module.css';
+import {
+  AutonomyScene,
+  BackwardsScene,
+  ContractsScene,
+  EngineerTrustScene,
+  ResolveDependenciesScene,
+} from './scene-brace';
+import {
+  BreakItDownScene,
+  EvaluateEachStepScene,
+  FreshStartScene,
+  InterviewYourselfScene,
+  RequirementsFirstScene,
+} from './scene-brief';
 import { ConfidentScene } from './scene-confident';
 import { EveryWordBilledScene } from './scene-every-word-billed';
 import { InformedScene } from './scene-informed';
@@ -21,7 +35,7 @@ interface SceneProps {
   readonly labels: SceneLabels;
 }
 
-const SCENES: Readonly<Record<TraitId, (props: SceneProps) => ReactNode>> = {
+const SCENES: Readonly<Record<RowId, (props: SceneProps) => ReactNode>> = {
   probabilistic: ({ ai, labels }) => <ProbabilisticScene ai={ai} prompt={labels.backs.prompt} />,
   relentless: ({ ai }) => <RelentlessScene ai={ai} />,
   informed: ({ ai, labels }) => (
@@ -31,9 +45,19 @@ const SCENES: Readonly<Record<TraitId, (props: SceneProps) => ReactNode>> = {
   'every-word-billed': ({ ai, labels }) => (
     <EveryWordBilledScene ai={ai} unit={ai ? labels.backs.tokens : labels.backs.bill} />
   ),
+  'break-it-down': ({ ai }) => <BreakItDownScene ai={ai} />,
+  'requirements-first': ({ ai }) => <RequirementsFirstScene ai={ai} />,
+  'interview-yourself-with-ai': ({ ai }) => <InterviewYourselfScene ai={ai} />,
+  'evaluate-each-step': ({ ai }) => <EvaluateEachStepScene ai={ai} />,
+  'fresh-start-for-each-piece': ({ ai }) => <FreshStartScene ai={ai} />,
+  'backwards-from-the-goal': ({ ai }) => <BackwardsScene ai={ai} />,
+  'resolve-dependencies-early': ({ ai }) => <ResolveDependenciesScene ai={ai} />,
+  'autonomy-through-intent': ({ ai }) => <AutonomyScene ai={ai} />,
+  'contracts-at-the-seams': ({ ai }) => <ContractsScene ai={ai} />,
+  'engineer-trust': ({ ai }) => <EngineerTrustScene ai={ai} />,
 };
 
-function Scene({ id, ...props }: SceneProps & { readonly id: TraitId }) {
+function Scene({ id, ...props }: SceneProps & { readonly id: RowId }) {
   return SCENES[id](props);
 }
 
@@ -43,7 +67,7 @@ const FREELANCER_SURFACE = 'border border-border bg-card';
 const AI_SURFACE = 'border border-ai/40 bg-linear-to-l from-ai/10 to-card shadow-sm shadow-ai/20';
 
 export interface CardProps {
-  readonly id: TraitId;
+  readonly id: RowId;
   readonly side: Side;
   readonly short: string;
   readonly text: ReactNode;
