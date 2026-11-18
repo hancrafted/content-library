@@ -50,7 +50,7 @@ const SCENES: Readonly<Record<SceneKey, (props: SceneProps) => ReactNode>> = {
   'requirements-first': ({ ai }) => <RequirementsFirstScene ai={ai} />,
   'interview-yourself-with-ai': ({ ai }) => <InterviewYourselfScene ai={ai} />,
   'evaluate-each-step': ({ ai }) => <EvaluateEachStepScene ai={ai} />,
-  'fresh-start-for-each-piece': ({ ai }) => <FreshStartScene ai={ai} />,
+  'fresh-start-for-each-piece': ({ ai, labels }) => <FreshStartScene ai={ai} word={labels.backs.fresh} />,
   'backwards-from-the-goal': ({ ai }) => <BackwardsScene ai={ai} />,
   'resolve-dependencies-early': ({ ai }) => <ResolveDependenciesScene ai={ai} />,
   'autonomy-through-intent': ({ ai }) => <AutonomyScene ai={ai} />,
