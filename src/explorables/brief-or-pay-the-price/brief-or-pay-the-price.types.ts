@@ -82,6 +82,28 @@ export interface StagesWords {
   readonly close: DefinitionWords['close'];
 }
 
+export interface MatrixWords {
+  readonly title: string;
+  readonly corner: string;
+  readonly legend: string;
+  readonly counters: string;
+  readonly counterLink: string;
+  readonly cellTitle: string;
+  readonly cellName: string;
+  readonly openCell: string;
+  readonly problem: string;
+  readonly fix: string;
+  readonly evidence: string;
+  readonly back: string;
+  readonly backToMatrix: string;
+  readonly previous: string;
+  readonly next: string;
+  readonly where: string;
+  readonly caption: string;
+  readonly cellCaption: string;
+  readonly evidenceOf: Readonly<Record<MoveId, string>>;
+}
+
 export interface Words {
   readonly chrome: {
     readonly define: string;
@@ -90,7 +112,10 @@ export interface Words {
     readonly dayOne: string;
     readonly caption: string;
     readonly turn: string;
+    readonly zoom: string;
+    readonly agent: string;
   };
+  readonly matrix: MatrixWords;
   readonly backs: {
     readonly prompt: string;
     readonly handbook: string;
@@ -102,8 +127,14 @@ export interface Words {
   readonly definitions: Readonly<Record<DefinitionId, DefinitionWords>>;
 }
 
+export interface MoveCounters {
+  readonly counters: readonly TraitId[];
+  readonly source: string;
+}
+
 export interface Config {
   readonly definitions: Readonly<Record<DefinitionId, DefinitionStructure>>;
+  readonly matrix: Readonly<Record<MoveId, MoveCounters>>;
   readonly i18n: Readonly<Record<Locale, Words>>;
 }
 

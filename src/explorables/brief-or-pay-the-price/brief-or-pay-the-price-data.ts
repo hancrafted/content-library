@@ -2,13 +2,16 @@ import { DEFAULT_LOCALE, isLocale, type Locale } from '@/shared/lib/locale.pure'
 import configSource from './brief-or-pay-the-price.config.yml';
 import {
   DEFINITION_IDS,
+  MOVE_IDS,
   type Definition,
   type DefinitionId,
+  type MoveId,
   type RowWords,
   type Words,
   type WordsOverride,
 } from './brief-or-pay-the-price.types';
 import { CONFIG_FILE, mergeWords, parseConfig } from './config.pure';
+import type { Counters } from './matrix-data.pure';
 import type { Scenario } from './scenario.types';
 import { allScenarios } from './scenarios';
 
@@ -17,6 +20,12 @@ export interface ExplorableData {
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;
+  readonly matrix: MatrixData;
+}
+
+export interface MatrixData {
+  readonly counters: Counters;
+  readonly sources: Readonly<Record<MoveId, string>>;
 }
 
 const STAGE_BEAT_MILLISECONDS = 2600;
@@ -39,7 +48,13 @@ function stageRow(scenario: Scenario, locale: Locale, index: number): Definition
     scene: stage.scene,
     letter: scenario.acronym?.[index] ?? String(index + 1),
     beatMilliseconds: STAGE_BEAT_MILLISECONDS,
-    words: { name: said.name, gloss: '', short: said.short, freelancer: said.analogy, ai: said.ai },
+    words: {
+      name: said.name,
+      gloss: '',
+      short: said.short,
+      freelancer: said.analogy,
+      ai: said.ai,
+    },
   };
 }
 
@@ -51,7 +66,10 @@ function stagesOf(scenario: Scenario, words: Words, locale: Locale): Definition 
     wipe: false,
     words: {
       title: scenario.i18n[locale].title,
-      heads: { ...stages.heads, middle: `${scenario.stages.length} ${stages.heads.middle}` },
+      heads: {
+        ...stages.heads,
+        middle: `${scenario.stages.length} ${stages.heads.middle}`,
+      },
       close: stages.close,
       rows: {},
     },
@@ -78,5 +96,9 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
     Definition
   >;
   const stages = Object.fromEntries(allScenarios().map((scenario) => [scenario.id, stagesOf(scenario, words, chosen)]));
-  return { locale: chosen, words, definitions, stages };
+  const matrix: MatrixData = {
+    counters: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].counters])) as Counters,
+    sources: Object.fromEntries(MOVE_IDS.map((id) => [id, config.matrix[id].source])) as Record<MoveId, string>,
+  };
+  return { locale: chosen, words, definitions, stages, matrix };
 }

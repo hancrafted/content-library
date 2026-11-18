@@ -2,7 +2,9 @@ import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { parse } from 'yaml';
 import {
   DEFINITION_IDS,
+  MOVE_IDS,
   ROW_IDS_OF,
+  TRAIT_IDS,
   type Config,
   type DefinitionId,
   type Words,
@@ -60,7 +62,11 @@ function rowProblems(definition: unknown, id: DefinitionId): string[] {
       : [`definitions.${id}: wipe is true or false`];
   const seen = new Set<string>();
   const rows = definition.rows.flatMap((row: unknown, index) =>
-    oneRowProblems(row, { at: `definitions.${id}.rows[${index}]`, seen, allowed: ROW_IDS_OF[id] }),
+    oneRowProblems(row, {
+      at: `definitions.${id}.rows[${index}]`,
+      seen,
+      allowed: ROW_IDS_OF[id],
+    }),
   );
   return [...wipe, ...rows];
 }
@@ -127,6 +133,44 @@ function emptyOutsideEnglishGlossProblems(i18n: unknown): string[] {
   );
 }
 
+function movesProblems(matrix: unknown): string[] {
+  if (!isRecord(matrix)) return ['matrix: missing'];
+  const unknown = Object.keys(matrix).filter((id) => !(MOVE_IDS as readonly string[]).includes(id));
+  return [
+    ...unknown.map((id) => `matrix.${id}: not a move`),
+    ...MOVE_IDS.flatMap((id) => oneMoveProblems(matrix[id], `matrix.${id}`)),
+  ];
+}
+
+function countersProblems(counters: unknown, at: string): string[] {
+  if (!Array.isArray(counters) || counters.length === 0) return [`${at}: counters is a list of at least one trait`];
+  const unknown = counters.filter((trait) => !(TRAIT_IDS as readonly unknown[]).includes(trait));
+  return [
+    ...unknown.map((trait) => `${at}: "${String(trait)}" is not a trait`),
+    ...(new Set(counters).size === counters.length ? [] : [`${at}: a trait is listed twice`]),
+  ];
+}
+
+function oneMoveProblems(move: unknown, at: string): string[] {
+  if (!isRecord(move)) return [`${at}: needs counters and a source`];
+  const source = typeof move.source === 'string' && move.source !== '';
+  return [...countersProblems(move.counters, at), ...(source ? [] : [`${at}: needs a source`])];
+}
+
+function evidenceProblems(i18n: unknown): string[] {
+  if (!isRecord(i18n)) return [];
+  return LOCALES.flatMap((locale) => {
+    const matrix = isRecord(i18n[locale]) ? i18n[locale].matrix : undefined;
+    const said = isRecord(matrix) && isRecord(matrix.evidenceOf) ? Object.keys(matrix.evidenceOf) : [];
+    return [
+      ...MOVE_IDS.filter((id) => !said.includes(id)).map((id) => `i18n.${locale}.matrix.evidenceOf.${id}: missing`),
+      ...said
+        .filter((id) => !(MOVE_IDS as readonly string[]).includes(id))
+        .map((id) => `i18n.${locale}.matrix.evidenceOf.${id}: names no move`),
+    ];
+  });
+}
+
 export const CONFIG_FILE = 'brief-or-pay-the-price.config.yml';
 
 export function loadConfig(source: string): ConfigResult {
@@ -149,6 +193,8 @@ function checkConfig(source: string): ConfigResult {
   if (!isRecord(doc)) return { problems: ['the file is not a mapping'] };
   const problems = [
     ...structureProblems(doc.definitions),
+    ...movesProblems(doc.matrix),
+    ...evidenceProblems(doc.i18n),
     ...localeProblems(doc.i18n),
     ...emptyOutsideEnglishGlossProblems(doc.i18n),
     ...LOCALES.flatMap((locale) => rowWordsProblems(doc, locale)),

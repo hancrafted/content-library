@@ -1,45 +1,32 @@
 'use client';
 
-import { Button } from '@/shared/components/ui/button';
-import { useEffect, useMemo, useReducer, type Dispatch } from 'react';
-import {
-  DEFINITION_IDS,
-  type Definition,
-  type DefinitionId,
-  type ViewId,
-  type Words,
-} from './brief-or-pay-the-price.types';
+import { useEffect, useMemo, useReducer, useRef, type Dispatch } from 'react';
+import type { MatrixData } from './brief-or-pay-the-price-data';
+import type { Definition, DefinitionId, Words } from './brief-or-pay-the-price.types';
 import {
   currentMirror,
-  isWiping,
   nextTimer,
-  rowAt,
   start,
   step,
   type ExplorableEvent,
   type ExplorableState,
+  type Lit,
   type Side,
   type Target,
 } from './explorable-state.pure';
-import { Mirror } from './mirror.client';
+import { beatsOf, rowCounts, titleOf } from './explorable-view.pure';
+import { LEVEL } from './levels.client';
+import { cellsOf } from './matrix-data.pure';
+import { Toolbar } from './toolbar.client';
+import { useCellKeys } from './use-cell-keys';
+import { useCellZoom } from './use-cell-zoom';
 
 export interface BriefOrPayThePriceClientProps {
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
   readonly stages: Readonly<Record<string, Definition>>;
+  readonly matrix: MatrixData;
 }
-
-const TAB_ORDER = ['price', 'brief', 'stages', 'brace'] as const satisfies readonly ViewId[];
-
-const rowCounts = ({ definitions, stages }: Pick<BriefOrPayThePriceClientProps, 'definitions' | 'stages'>) => ({
-  ...Object.fromEntries(DEFINITION_IDS.map((id) => [id, definitions[id].rows.length])),
-  ...Object.fromEntries(Object.entries(stages).map(([id, each]) => [`stages:${id}`, each.rows.length])),
-});
-
-const definitionOf = (
-  { definitions, stages }: Pick<BriefOrPayThePriceClientProps, 'definitions' | 'stages'>,
-  state: Pick<ExplorableState, 'view' | 'scenario'>,
-): Definition => (state.view === 'stages' ? (stages[state.scenario] as Definition) : definitions[state.view]);
 
 function useDismiss(open: Target | null, dispatch: Dispatch<ExplorableEvent>) {
   useEffect(() => {
@@ -55,11 +42,11 @@ function useDismiss(open: Target | null, dispatch: Dispatch<ExplorableEvent>) {
   }, [open, dispatch]);
 }
 
-function useExplorable(data: Pick<BriefOrPayThePriceClientProps, 'definitions' | 'stages'>) {
+function useExplorable(data: Pick<BriefOrPayThePriceClientProps, 'definitions' | 'stages' | 'matrix'>) {
   const [state, dispatch] = useReducer(step, data, (own) => start(rowCounts(own), Object.keys(own.stages)[0]));
   const { open, blank, rows } = currentMirror(state);
   const pass = open === null || open === 'closing' ? 0 : (rows[open]?.passes ?? 0);
-  const beats = definitionOf(data, state).rows.map((row) => row.beatMilliseconds);
+  const beats = beatsOf(data, state);
   useEffect(() => {
     const timer = nextTimer({ open, blank }, beats);
     if (timer === null) return;
@@ -78,102 +65,49 @@ function useExplorable(data: Pick<BriefOrPayThePriceClientProps, 'definitions' |
   return { state, dispatch, handlers };
 }
 
-function ViewButton({
-  view,
-  definition,
-  pressed,
-  onView,
-}: {
-  readonly view: ViewId;
-  readonly definition: Definition;
-  readonly pressed: boolean;
-  readonly onView: (view: ViewId) => void;
-}) {
-  return (
-    <Button
-      type="button"
-      size="sm"
-      variant={pressed ? 'default' : 'outline'}
-      aria-pressed={pressed}
-      data-view-go={view}
-      onClick={() => onView(view)}
-    >
-      {definition.acronym}
-    </Button>
+function useAgent(state: ExplorableState, dispatch: Dispatch<ExplorableEvent>, matrix: MatrixData) {
+  const container = useRef<HTMLDivElement>(null);
+  const cells = useMemo(() => cellsOf(matrix.counters), [matrix.counters]);
+  useCellKeys(state.cell, cells, dispatch);
+  const onOpenCell = useCellZoom({ container, cell: state.cell, restore: state.restore, dispatch });
+  const matrixHandlers = useMemo(
+    () => ({
+      onLight: (lit: Lit) => dispatch({ type: 'light', lit }),
+      onUnlight: () => dispatch({ type: 'unlight' }),
+      onOpenCell,
+    }),
+    [dispatch, onOpenCell],
   );
+  return { container, matrixHandlers };
 }
 
-interface DefineBarProps {
-  readonly words: Words;
-  readonly tabs: Readonly<Record<ViewId, Definition>>;
-  readonly view: ViewId;
-  readonly onView: (view: ViewId) => void;
-}
-
-function DefineBar({ words, tabs, view, onView }: DefineBarProps) {
-  const { chrome } = words;
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-      <div role="group" aria-label={chrome.views} className="flex flex-wrap items-center gap-2">
-        <span className="text-caption font-semibold tracking-wide text-muted-foreground uppercase">
-          {chrome.define}
-        </span>
-        {TAB_ORDER.map((id) => (
-          <ViewButton key={id} view={id} definition={tabs[id]} pressed={view === id} onView={onView} />
-        ))}
-      </div>
-      <p data-mirror-title className="text-body font-semibold">
-        {tabs[view].words.title}
-      </p>
-    </div>
-  );
-}
-
-function Foot({
-  chrome,
-  onShowAll,
-  onReset,
-}: {
-  readonly chrome: Words['chrome'];
-  readonly onShowAll: () => void;
-  readonly onReset: () => void;
-}) {
-  return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Button type="button" size="sm" variant="outline" data-show-all onClick={onShowAll}>
-        {chrome.showAll}
-      </Button>
-      <Button type="button" size="sm" variant="outline" data-reset onClick={onReset}>
-        {chrome.dayOne}
-      </Button>
-      <span className="text-caption text-muted-foreground">{chrome.caption}</span>
-    </div>
-  );
-}
-
-export function BriefOrPayThePriceClient({ words, definitions, stages }: BriefOrPayThePriceClientProps) {
-  const { state, dispatch, handlers } = useExplorable({ definitions, stages });
-  const definition = definitionOf({ definitions, stages }, state);
+export function BriefOrPayThePriceClient(props: BriefOrPayThePriceClientProps) {
+  const { words, definitions, stages, matrix } = props;
+  const { state, dispatch, handlers } = useExplorable(props);
+  const { container, matrixHandlers } = useAgent(state, dispatch, matrix);
   const tabs = useMemo(
     () => ({ ...definitions, stages: stages[state.scenario] as Definition }),
     [definitions, stages, state.scenario],
   );
   const labels = useMemo(() => ({ backs: words.backs, turn: words.chrome.turn }), [words]);
   return (
-    <div data-explorable="brief-or-pay-the-price" className="@container flex w-full flex-col gap-6 text-body">
-      <DefineBar words={words} tabs={tabs} view={state.view} onView={(view) => dispatch({ type: 'view', view })} />
-      <Mirror
-        definition={definition}
-        reads={definition.rows.map((_, index) => rowAt(state, index))}
-        wiping={isWiping(state)}
-        labels={labels}
-        handlers={handlers}
+    <div
+      ref={container}
+      data-explorable="brief-or-pay-the-price"
+      data-level={state.level}
+      className="@container flex w-full flex-col gap-6 text-body"
+    >
+      <Toolbar
+        words={words}
+        tabs={tabs}
+        state={state}
+        title={titleOf(props, tabs, state)}
+        onView={(view) => dispatch({ type: 'view', view })}
+        onZoom={(zoom) => dispatch({ type: 'zoom', level: zoom })}
       />
-      <Foot
-        chrome={words.chrome}
-        onShowAll={() => dispatch({ type: 'showAll' })}
-        onReset={() => dispatch({ type: 'reset' })}
-      />
+      <div data-agent-root={state.level === 'agent' ? '' : undefined} className="flex flex-col gap-6">
+        {LEVEL[state.level]({ data: props, state, dispatch, handlers, matrixHandlers, labels })}
+      </div>
     </div>
   );
 }

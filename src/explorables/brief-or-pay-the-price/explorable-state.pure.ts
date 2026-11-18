@@ -1,4 +1,20 @@
+import {
+  AGENT_REST,
+  CELL_MEMORY,
+  CELL_ROWS,
+  closeCell,
+  focused,
+  light,
+  openCell,
+  toDefinition,
+  unlight,
+  zoomTo,
+  type AgentEvent,
+  type AgentSlice,
+} from './agent-state.pure';
 import { DEFINITION_IDS, type ViewId } from './brief-or-pay-the-price.types';
+
+export { ZOOM_LEVELS, type CellKey, type Level, type Lit, type ZoomLevel } from './agent-state.pure';
 
 export const SIDES = ['freelancer', 'ai'] as const;
 export type Side = (typeof SIDES)[number];
@@ -17,13 +33,12 @@ export interface MirrorMemory {
   readonly blank: boolean;
 }
 
-export interface ExplorableState {
-  readonly view: View;
+export interface ExplorableState extends AgentSlice<MirrorMemory> {
   readonly scenario: string;
-  readonly mirrors: Readonly<Record<string, MirrorMemory>>;
 }
 
 export type ExplorableEvent =
+  | AgentEvent
   | { readonly type: 'view'; readonly view: View }
   | { readonly type: 'scenario'; readonly scenario: string }
   | { readonly type: 'open'; readonly target: Target }
@@ -44,14 +59,18 @@ const emptyMirror = (rowCount: number): MirrorMemory => ({
   blank: false,
 });
 
-export const memoryKey = (state: Pick<ExplorableState, 'view' | 'scenario'>): string =>
-  state.view === 'stages' ? `stages:${state.scenario}` : state.view;
+export const memoryKey = (state: Pick<ExplorableState, 'view' | 'scenario' | 'cell'>): string => {
+  if (state.cell !== null) return CELL_MEMORY;
+  return state.view === 'stages' ? `stages:${state.scenario}` : state.view;
+};
 
 export function start(rowCounts: Readonly<Record<string, number>>, scenario = ''): ExplorableState {
+  const counts = { ...rowCounts, [CELL_MEMORY]: CELL_ROWS };
   return {
+    ...AGENT_REST,
     view: DEFINITION_IDS[0],
     scenario,
-    mirrors: Object.fromEntries(Object.entries(rowCounts).map(([key, count]) => [key, emptyMirror(count)])),
+    mirrors: Object.fromEntries(Object.entries(counts).map(([key, count]) => [key, emptyMirror(count)])),
   };
 }
 
@@ -96,8 +115,20 @@ type Handlers = {
   ) => ExplorableState;
 };
 
+const playedCell: MirrorMemory = {
+  rows: Array.from({ length: CELL_ROWS }, () => ({ passes: 1, turned: [] })),
+  open: null,
+  blank: false,
+};
+
 const ON: Handlers = {
-  view: (state, { view }) => (state.view === view ? state : { ...state, view }),
+  view: (state, { view }) => toDefinition(state, view),
+  zoom: (state, { level }) => zoomTo(state, level),
+  openCell: (state, { cell }) => openCell(state, cell, playedCell),
+  closeCell: (state) => closeCell(state, playedCell),
+  light: (state, { lit }) => light(state, lit),
+  unlight: (state) => unlight(state),
+  focused: (state) => focused(state),
   scenario: (state, { scenario }) => (state.scenario === scenario ? state : { ...state, scenario }),
   open: (state, { target }) => open(state, target),
   leave: (state, { target }) =>
