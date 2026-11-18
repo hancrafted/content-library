@@ -7,15 +7,6 @@ import en from './i18n/en.json';
 export const contextIsTheRequirement = slide({
   slug: 'context-is-the-requirement',
   messages: { en, de },
-  presentation: {
-    tone: 'inverse',
-    style: {
-      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
-      '--slide-space-after': '265px',
-    },
-    enter: { effect: 'liquid' },
-    leave: { effect: 'liquid' },
-  },
   segments: [{ slug: 'the-claim' }, { slug: 'the-route' }],
   content: ({ t }) => (
     <SlideFrame>

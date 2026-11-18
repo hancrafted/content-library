@@ -41,15 +41,6 @@ const ROUNDS: readonly { round: string; tone: DartTone; r: number; darts: readon
 export const creatingContextForAgents = slide({
   slug: 'creating-context-for-agents',
   messages: { en, de },
-  presentation: {
-    tone: 'inverse',
-    style: {
-      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
-      '--slide-space-after': '265px',
-    },
-    enter: { effect: 'liquid' },
-    leave: { effect: 'liquid' },
-  },
   segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
   content: ({ t }) => (
     <SlideFrame>
