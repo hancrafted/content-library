@@ -20,13 +20,22 @@ export function Mirror({ definition, reads, wiping, labels, handlers }: MirrorPr
   const { words, rows } = definition;
   return (
     <div data-mirror={definition.id} className={cn(styles.root, 'flex flex-col gap-8')}>
-      <MirrorHeadsView heads={words.heads} />
+      <div key={definition.id} className={styles.swap}>
+        <MirrorHeadsView heads={words.heads} />
+      </div>
       <ol className="focus-group focus-group--dim-others flex flex-col gap-3">
         {rows.map((row, index) => (
-          <Row key={row.id} row={row} index={index} read={reads[index]} handlers={handlers} labels={labels} />
+          <Row key={index} {...{ row, index, handlers, labels }} definitionId={definition.id} read={reads[index]} />
         ))}
       </ol>
-      <ClosingLine lead={words.close.lead} text={words.close.text} open={wiping} handlers={handlers} />
+      <ClosingLine
+        key={`closing-${definition.id}`}
+        lead={words.close.lead}
+        text={words.close.text}
+        wipes={definition.wipe}
+        open={wiping}
+        handlers={handlers}
+      />
     </div>
   );
 }

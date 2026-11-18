@@ -10,6 +10,9 @@ import { keyPaths, loadConfig, mergeWords } from './config.pure';
 const render = (locale: string, words?: Parameters<typeof BriefOrPayThePrice>[0]['words']): string =>
   renderToStaticMarkup(createElement(BriefOrPayThePrice, { locale, words }));
 
+const english = explorableData('en');
+const german = explorableData('de');
+
 describe('success cases', () => {
   it('renders the PRICE heads, the five chips with their letters, and the closing line in English', () => {
     // ARRANGE
@@ -66,9 +69,13 @@ describe('success cases', () => {
     expect(names[0]).toBe(expected);
   });
 
-  it('shows the Define tab bar with PRICE as its only tab, pressed', () => {
+  it('shows the Define tab bar with PRICE, BRIEF and BRACE, PRICE pressed', () => {
     // ARRANGE
-    const expected = [['price', 'true', 'PRICE']];
+    const expected = [
+      ['price', 'true', 'PRICE'],
+      ['brief', 'false', 'BRIEF'],
+      ['brace', 'false', 'BRACE'],
+    ];
     // ACT
     const html = render('en');
     const tabs = [...html.matchAll(/aria-pressed="(true|false)"[^>]*data-view-go="([a-z]+)"[^>]*>([^<]+)</g)].map(
@@ -99,6 +106,57 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toContain('Show it all');
     expect(html).toContain('Reset to day one');
+  });
+  it('gives BRIEF its five moves and BRACE its five requirements, in the acronym letters', () => {
+    // ARRANGE
+    const expected = { brief: 'BRIEF', brace: 'BRACE' };
+    // ACT
+    const letters = (id: 'brief' | 'brace') => english.definitions[id].rows.map((row) => row.letter).join('');
+    // ASSERT
+    expect({ brief: letters('brief'), brace: letters('brace') }).toEqual(expected);
+  });
+
+  it('keeps BRACE A as Autonomy through intent', () => {
+    // ARRANGE
+    const row = english.definitions.brace.rows[2];
+    // ACT
+    const name = row?.words.name;
+    // ASSERT
+    expect(name).toBe('Autonomy through intent');
+  });
+
+  it('keeps every English name in German and adds a gloss, for all three definitions', () => {
+    // ARRANGE
+    const ids = ['price', 'brief', 'brace'] as const;
+    const rowCount = 15;
+    // ACT
+    const rows = ids.flatMap((id) =>
+      german.definitions[id].rows.map((row) => ({
+        sameName: row.words.name === english.definitions[id].rows.find((one) => one.id === row.id)?.words.name,
+        gloss: row.words.gloss,
+      })),
+    );
+    // ASSERT
+    expect(rows).toHaveLength(rowCount);
+    for (const row of rows) {
+      expect(row.sameName).toBe(true);
+      expect(row.gloss).not.toBe('');
+    }
+  });
+
+  it('gives each definition heads and a closing line in both locales, and only PRICE the wipe', () => {
+    // ARRANGE
+    const ids = ['price', 'brief', 'brace'] as const;
+    // ACT
+    const wipes = ids.map((id) => english.definitions[id].wipe);
+    const words = ids.flatMap((id) => [english, german].map((data) => data.definitions[id].words));
+    // ASSERT
+    expect(wipes).toEqual([true, false, false]);
+    for (const word of words) {
+      expect(word.heads.middle).not.toBe('');
+      expect(word.close.lead).not.toBe('');
+    }
+    expect(german.definitions.brace.words.heads.ai).toBe('KI-Agenten');
   });
 });
 
@@ -144,6 +202,16 @@ describe('failure cases', () => {
     // ASSERT
     expect('problems' in result && result.problems).toContain(
       'brief-or-pay-the-price.config.yml: i18n.en.definitions.price.rows.probabilistic.short: needs words',
+    );
+  });
+  it('refuses a BRACE row id that is not a requirement', () => {
+    // ARRANGE
+    const source = configSource.replace('id: engineer-trust,', 'id: probabilistic,');
+    // ACT
+    const result = loadConfig(source);
+    // ASSERT
+    expect('problems' in result && result.problems.join('\n')).toContain(
+      'definitions.brace.rows[4]: id "probabilistic" is not one of backwards-from-the-goal',
     );
   });
 });

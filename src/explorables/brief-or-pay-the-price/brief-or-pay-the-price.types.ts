@@ -1,19 +1,46 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 
-export const DEFINITION_IDS = ['price'] as const;
+export const DEFINITION_IDS = ['price', 'brief', 'brace'] as const;
 export type DefinitionId = (typeof DEFINITION_IDS)[number];
 
 export const TRAIT_IDS = ['probabilistic', 'relentless', 'informed', 'confident', 'every-word-billed'] as const;
 export type TraitId = (typeof TRAIT_IDS)[number];
 
+export const MOVE_IDS = [
+  'break-it-down',
+  'requirements-first',
+  'interview-yourself-with-ai',
+  'evaluate-each-step',
+  'fresh-start-for-each-piece',
+] as const;
+export type MoveId = (typeof MOVE_IDS)[number];
+
+export const REQUIREMENT_IDS = [
+  'backwards-from-the-goal',
+  'resolve-dependencies-early',
+  'autonomy-through-intent',
+  'contracts-at-the-seams',
+  'engineer-trust',
+] as const;
+export type RequirementId = (typeof REQUIREMENT_IDS)[number];
+
+export type RowId = TraitId | MoveId | RequirementId;
+
+export const ROW_IDS_OF: Readonly<Record<DefinitionId, readonly RowId[]>> = {
+  price: TRAIT_IDS,
+  brief: MOVE_IDS,
+  brace: REQUIREMENT_IDS,
+};
+
 export interface RowStructure {
-  readonly id: TraitId;
+  readonly id: RowId;
   readonly letter: string;
   readonly beatMilliseconds: number;
 }
 
 export interface DefinitionStructure {
   readonly acronym: string;
+  readonly wipe?: boolean;
   readonly rows: readonly RowStructure[];
 }
 
@@ -27,9 +54,13 @@ export interface RowWords {
 
 export interface DefinitionWords {
   readonly title: string;
-  readonly heads: { readonly freelancer: string; readonly traits: string; readonly ai: string };
+  readonly heads: {
+    readonly freelancer: string;
+    readonly middle: string;
+    readonly ai: string;
+  };
   readonly close: { readonly lead: string; readonly text: string };
-  readonly rows: Readonly<Record<TraitId, RowWords>>;
+  readonly rows: Readonly<Record<string, RowWords>>;
 }
 
 export interface HandbookWords {
@@ -65,10 +96,13 @@ export interface Config {
 export interface Definition {
   readonly id: DefinitionId;
   readonly acronym: string;
+  readonly wipe: boolean;
   readonly words: DefinitionWords;
   readonly rows: readonly (RowStructure & { readonly words: RowWords })[];
 }
 
 export type WordsOverride = DeepPartial<Words>;
 
-type DeepPartial<T> = { readonly [K in keyof T]?: T[K] extends string ? string : DeepPartial<T[K]> };
+type DeepPartial<T> = {
+  readonly [K in keyof T]?: T[K] extends string ? string : DeepPartial<T[K]>;
+};
