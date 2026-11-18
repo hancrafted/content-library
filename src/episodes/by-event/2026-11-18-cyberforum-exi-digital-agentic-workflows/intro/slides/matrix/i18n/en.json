@@ -1,0 +1,41 @@
+{
+  "title": "What each track covers",
+  "caption": "Both tracks share the foundation; the tools differ.",
+  "columns": {
+    "enablement": "AI Enablement",
+    "engineering": "Agentic Engineering"
+  },
+  "today": "Covered today",
+  "groups": {
+    "foundation": "Foundation",
+    "enablement": "Enablement: Claude Desktop",
+    "engineering": "Agentic Engineering: the CLI"
+  },
+  "rows": {
+    "attention": "Attention and the context window",
+    "freelancer": "Onboarding AI like a freelancer",
+    "more-work": "AI adds work: managing it",
+    "spec": "From shared understanding to shared context",
+    "skills": "Skills below the waterline",
+    "workflows": "What agentic workflows require",
+    "projects": "Projects and their knowledge",
+    "connectors": "Tools and connectors",
+    "documents": "Slides and documents",
+    "voice": "Voice mode",
+    "scheduling": "Scheduled tasks",
+    "harness": "The repo as harness",
+    "ci-cd": "CI/CD, local and remote",
+    "parallel-cli": "Operating multiple agents in parallel with the CLI"
+  },
+  "topic": "Topic",
+  "marks": {
+    "yes": "covered",
+    "no": "not covered"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Read it top down, then hand over",
+      "description": "The foundation is checked in both columns: that is what today was about. The tools split: Claude Desktop for Enablement, the CLI for Agentic Engineering. The badged rows are what we covered today. Then hand over to the organiser."
+    }
+  }
+}

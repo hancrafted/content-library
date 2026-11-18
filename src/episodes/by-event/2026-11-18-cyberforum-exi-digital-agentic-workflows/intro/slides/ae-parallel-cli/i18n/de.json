@@ -1,0 +1,78 @@
+{
+  "title": "Mehrere Agenten parallel mit der CLI steuern",
+  "caption": "Drei Sessions, drei Phasen eines Workflows; Sie orchestrieren.",
+  "terminalsLabel": "Drei Terminal-Sessions eines /drive-Workflows",
+  "terminals": {
+    "implement": {
+      "stage": "Umsetzen",
+      "app": "GitHub Copilot CLI",
+      "tab": "feat/pricing-page",
+      "cmd": "copilot",
+      "lines": {
+        "cmd": "$ sed -n 1,60p src/ui/card-artwork.tsx",
+        "read": "● Read 60 lines",
+        "plan": "● The artwork lives in one SVG file. I'll build the decision page with four options, light and dark.",
+        "brief": "MD Create artwork.brief.md +18",
+        "agent": "● archgate:developer  Artwork options page",
+        "started": "  │ Agent started in background",
+        "probe": "  └ Shell  Probe scroll behaviour",
+        "handoff": "● A Subagent is drawing the options; I'll send the path when it's ready.",
+        "rule": "─────────────────────",
+        "wait": "● Waiting for background agents · 8m"
+      }
+    },
+    "grill": {
+      "stage": "Grillen",
+      "app": "Claude Code",
+      "tab": "improve-episode-reuse",
+      "cmd": "claude",
+      "lines": {
+        "q15": "? Q15 · contract: where is an override's fingerprint stored?",
+        "o1": "1. In a generated lockfile, written only by npm run overrides:pin.",
+        "o2": "2. Inline in the override, edited by hand.",
+        "rec": "➜ Recommendation: Option 1. Re-pinning is a deliberate command; the diff shows which defaults were accepted.",
+        "code": "'{' \"title.de\": \"3f9a1c…\" '}'",
+        "sep": "---",
+        "q16": "? Q16 · Should the Title slide get a standard default look?",
+        "rule": "─────────────────────",
+        "status": "▲ flightdeck: ctx 46% · agents 0/17"
+      }
+    },
+    "monitor": {
+      "stage": "Überwachen",
+      "app": "Claude Code + flightdeck",
+      "tab": "monitor-drive-session",
+      "cmd": "claude",
+      "lines": {
+        "cooked": "✻ Cooked for 2s · 1 monitor running",
+        "event": "● Monitor event: ORCH: the revised review page is open.",
+        "gate": "● The session is at the review gate, waiting for the Operator's verdict.",
+        "so-far": "Feedback so far:",
+        "f1": "1. The first grill ignored the grilling format.",
+        "f2": "2. The first review page was too low-fidelity.",
+        "rule": "─────────────────────",
+        "status": "▲ flightdeck: ctx 25% · 1 monitor"
+      }
+    }
+  },
+  "flightdeck": {
+    "head": "FLIGHTDECK · idle",
+    "model": "Sonnet · main",
+    "ctx": "ctx 25%",
+    "gate": "GATE · permissions",
+    "allowed": "10 allowed · 0 denied",
+    "turn": "✓ last turn 6s · 0 errors",
+    "log": "session log",
+    "entry": "engine  task notification"
+  },
+  "drive": {
+    "head": "/drive: ein Workflow, jede Phase in ihrer eigenen Session",
+    "body": "Agenten setzen in eigenen Worktrees um, Sie werden zu den Entscheidungen gegrillt, und ein Monitor bewacht die Gates; Sie mergen und prüfen einmal."
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Drei Sessions, ein Workflow",
+      "description": "Links: Ein Agent setzt ein Ticket im eigenen Worktree um und gibt Arbeit an einen Subagenten. Mitte: Der Agent grillt mich zu den offenen Entscheidungen, eine Frage, Optionen und eine Empfehlung. Rechts: Eine Monitor-Session beobachtet die anderen; flightdeck zeigt Kontext, Gates und Fehler auf einen Blick."
+    }
+  }
+}

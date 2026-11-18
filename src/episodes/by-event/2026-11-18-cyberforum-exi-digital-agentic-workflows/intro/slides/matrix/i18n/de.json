@@ -1,0 +1,41 @@
+{
+  "title": "Was jeder Track abdeckt",
+  "caption": "Beide Tracks teilen das Fundament; die Werkzeuge unterscheiden sich.",
+  "columns": {
+    "enablement": "KI-Enablement",
+    "engineering": "Agentic Engineering"
+  },
+  "today": "Heute behandelt",
+  "groups": {
+    "foundation": "Fundament",
+    "enablement": "Enablement: Claude Desktop",
+    "engineering": "Agentic Engineering: die CLI"
+  },
+  "rows": {
+    "attention": "Aufmerksamkeit und Kontextfenster",
+    "freelancer": "KI einarbeiten wie einen Freelancer",
+    "more-work": "KI bringt Arbeit: sie zu managen",
+    "spec": "Vom geteilten Verständnis zum geteilten Kontext",
+    "skills": "Skills unter der Wasserlinie",
+    "workflows": "Was agentische Workflows verlangen",
+    "projects": "Projekte und ihr Wissen",
+    "connectors": "Werkzeuge und Konnektoren",
+    "documents": "Folien und Dokumente",
+    "voice": "Sprachmodus",
+    "scheduling": "Geplante Aufgaben",
+    "harness": "Das Repo als Harness",
+    "ci-cd": "CI/CD, lokal und remote",
+    "parallel-cli": "Mehrere Agenten parallel mit der CLI steuern"
+  },
+  "topic": "Thema",
+  "marks": {
+    "yes": "abgedeckt",
+    "no": "nicht abgedeckt"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Von oben lesen, dann übergeben",
+      "description": "Das Fundament ist in beiden Spalten abgehakt: Darum ging es heute. Die Werkzeuge trennen sich: Claude Desktop für Enablement, die CLI für Agentic Engineering. Die markierten Zeilen haben wir heute behandelt. Dann an den Veranstalter übergeben."
+    }
+  }
+}
