@@ -63,30 +63,21 @@ _Avoid_: scratchpad (a session's own, lost with it), workspace
 _Avoid_: notes, minutes, handoff
 
 **Decision docs**: the glossary, Decision records and feature docs: high-level wording that is written and approved before codify starts. Only the Orchestrator writes them, on a `decisions/<topic>` branch through the Decision PR; a Subagent proposes terms in its report.
+_Avoid_: specs (a spec lives on the tracker), docs, documentation
 
-**Decision PR**: the one PR of `decisions/<topic>` into the Integration branch. Its body links the spec and every ticket, names what the change touches that is live or scheduled, and states the Run terms. Review comments on it are grilling input; closing it unmerged stops the Workflow.
+**Decision PR**: the one PR of `decisions/<topic>` into the Integration branch. Its body links the spec and every ticket, names what the change touches that is live or scheduled, and states the run's terms: the Operator's remaining stops, the expected duration and the closed reasons to stop. Review comments on it are grilling input; closing it unmerged stops the Workflow.
 _Avoid_: docs PR, ADR PR
 
 **Decision gate**: the one point where the Operator approves a Workflow's Decision docs, spec and tickets together: merging the Decision PR, or an explicit approval in the conversation when no Decision doc changes. Every decision the Workflow can settle early is settled before it; after it the Workflow runs unattended to a ready PR.
 _Avoid_: approval step, sign-off, checkpoint
 
-**Run terms**: what the Orchestrator promises at the Decision gate: the Operator's remaining stops, the expected duration, and the closed list of Interrupts.
-_Avoid_: hand-off (a Handoff carries one task to a Subagent), contract, SLA
-
-**Interrupt**: one of the closed reasons an unattended Workflow stops and notifies the Operator: a conflict with the spec or a binding decision, CI red after two fix rounds, a Subagent blocked by something outside its brief. Review findings and their verdicts are not Interrupts: they are logged, and the Operator contests them in the PR.
-_Avoid_: escalation, question, blocker
-_Avoid_: specs (a spec lives on the tracker), docs, documentation
-
 ## Binding
 
-**Binding**: a project's mapping of the DRIVE phases to the skills it has, the Model tier each phase's Subagents run on, the agent type every agent uses and the Notify adapter. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
+**Binding**: a project's mapping of the DRIVE phases to the skills it has, the Model tier each phase's Subagents run on, the agent type every agent uses and how the Operator is notified. `/drive` detects it at setup; the Operator edits it afterwards. The phases are the ports, the Binding the adapter.
 _Avoid_: config, mapping, registry
 
 **Enforcer**: a deterministic check a project already runs that can govern a failure mode: types, lint, tests, an ADR checker's rule, a hook. A narrow LLM judge counts only when its verdict can be checked. Fortify picks from the project's Enforcers.
 _Avoid_: guardrail, gate, linter
-
-**Notify adapter**: the Binding's port for telling the Operator that an unattended Workflow stopped at an Interrupt or has a PR ready. The default is the agent harness's push notification; a project may bind another channel.
-_Avoid_: alert, notifier, webhook
 
 **Model tier**: the class of model a Subagent runs on, `mid` or `top`, named in the Binding per phase. The project maps each tier to each provider's model, so the Binding states intent and stays provider-neutral. A decision page runs on `top` when any item needs rendering, a mockup, a visual prototype or interaction, otherwise on `mid`.
 _Avoid_: model, model class, size
