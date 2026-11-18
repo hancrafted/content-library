@@ -1,9 +1,10 @@
 'use client';
 
 import { cn } from '@/shared/lib/utils';
-import { memo, type CSSProperties } from 'react';
+import { memo } from 'react';
 import type { MirrorRow, MoveId, TraitId } from './brief-or-pay-the-price.types';
 import type { CellKey, Lit } from './explorable-state.pure';
+import type { CellMark } from './matrix-data.pure';
 import styles from './matrix.module.css';
 
 export interface MatrixHandlers {
@@ -25,7 +26,6 @@ function headHandlers({ onLight, onUnlight }: MatrixHandlers, lit: Lit) {
 
 interface HeadProps {
   readonly row: MirrorRow;
-  readonly index: number;
   readonly head: Head;
   readonly on: boolean;
   readonly handlers: MatrixHandlers;
@@ -48,26 +48,22 @@ function HeadNames({ row }: { readonly row: MirrorRow }) {
 }
 
 const sameHead = (before: HeadProps, after: HeadProps): boolean =>
-  before.row === after.row &&
-  before.index === after.index &&
-  before.on === after.on &&
-  before.handlers === after.handlers;
+  before.row === after.row && before.on === after.on && before.handlers === after.handlers;
 
 // decision: FE-012 §4.2
-export const ColumnHead = memo(function ColumnHead({ row, index, head, on, handlers }: HeadProps) {
+export const ColumnHead = memo(function ColumnHead({ row, head, on, handlers }: HeadProps) {
   return (
     <th
       scope="col"
       data-trait={head.id}
       {...headHandlers(handlers, head)}
-      style={{ '--i': index } as CSSProperties}
       className={cn('p-1 align-bottom font-normal', on && LIT)}
     >
       <span className="flex flex-col items-center gap-0.5 text-center">
-        <span translate="no" className={cn(styles.letterCol, 'inline-block text-heading leading-none font-semibold')}>
+        <span translate="no" data-head-letter="column" className="inline-block text-heading leading-none font-semibold">
           {row.letter}
         </span>
-        <span className={cn(styles.rest, 'flex flex-col items-center')}>
+        <span data-head-rest className="flex flex-col items-center">
           <HeadNames row={row} />
         </span>
       </span>
@@ -76,23 +72,23 @@ export const ColumnHead = memo(function ColumnHead({ row, index, head, on, handl
 }, sameHead);
 
 // decision: FE-012 §4.2
-export const RowHead = memo(function RowHead({ row, index, head, on, handlers }: HeadProps) {
+export const RowHead = memo(function RowHead({ row, head, on, handlers }: HeadProps) {
   return (
     <th
       scope="row"
       data-move={head.id}
       {...headHandlers(handlers, head)}
-      style={{ '--i': index } as CSSProperties}
       className={cn('p-1 text-left align-middle font-normal', on && LIT)}
     >
       <span className="flex items-center gap-2">
         <span
           translate="no"
-          className={cn(styles.letterRow, 'inline-block text-heading leading-none font-semibold text-ai')}
+          data-head-letter="row"
+          className="inline-block text-heading leading-none font-semibold text-ai"
         >
           {row.letter}
         </span>
-        <span className={cn(styles.rest, 'flex flex-col')}>
+        <span data-head-rest className="flex flex-col">
           <HeadNames row={row} />
         </span>
       </span>
@@ -102,48 +98,76 @@ export const RowHead = memo(function RowHead({ row, index, head, on, handlers }:
 
 interface CellProps {
   readonly cell: CellKey;
-  readonly filled: boolean;
+  readonly mark: CellMark;
   readonly on: boolean;
   readonly label: string;
-  readonly delay: number;
+  readonly contextLabel: string;
   readonly handlers: MatrixHandlers;
 }
 
 const sameCell = (before: CellProps, after: CellProps): boolean =>
   before.cell.move === after.cell.move &&
   before.cell.trait === after.cell.trait &&
-  before.filled === after.filled &&
+  before.mark === after.mark &&
   before.on === after.on &&
   before.label === after.label &&
+  before.contextLabel === after.contextLabel &&
   before.handlers === after.handlers;
 
-// decision: FE-012 §4.2
-export const MatrixCell = memo(function MatrixCell({ cell, filled, on, label, delay, handlers }: CellProps) {
+const BUTTON_BASE =
+  'mx-auto flex min-h-11 w-11 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring @3xl:w-auto @3xl:min-w-11 @3xl:px-2';
+
+const BUTTON: Readonly<Record<Exclude<CellMark, 'none'>, string>> = {
+  on: 'bg-ai/20 hover:bg-ai/35',
+  mark: 'bg-ai/40 ring-2 ring-ai hover:bg-ai/55',
+  dim: 'bg-ai/10 opacity-50 hover:opacity-100',
+  context: 'border-2 border-dashed border-ai hover:bg-ai/10',
+};
+
+const DOT: Readonly<Record<Exclude<CellMark, 'none'>, string>> = {
+  on: 'bg-ai',
+  mark: 'bg-ai',
+  dim: 'bg-ai/60',
+  context: 'ring-2 ring-ai',
+};
+
+function CellButton({
+  cell,
+  mark,
+  label,
+  contextLabel,
+  handlers,
+}: Omit<CellProps, 'on'> & { mark: Exclude<CellMark, 'none'> }) {
   return (
-    <td
-      data-move={cell.move}
-      data-trait={cell.trait}
-      className={cn('p-1 text-center', on && LIT)}
-      style={{ '--d': delay } as CSSProperties}
+    <button
+      type="button"
+      data-cell={`${cell.move}|${cell.trait}`}
+      data-mark={mark}
+      aria-label={label}
+      onClick={(event) => {
+        event.stopPropagation();
+        handlers.onOpenCell(cell, event.currentTarget);
+      }}
+      className={cn(styles.cellButton, BUTTON_BASE, BUTTON[mark])}
     >
-      {filled ? (
-        <button
-          type="button"
-          data-cell={`${cell.move}|${cell.trait}`}
-          aria-label={label}
-          onClick={(event) => {
-            event.stopPropagation();
-            handlers.onOpenCell(cell, event.currentTarget);
-          }}
-          className={cn(
-            styles.cellButton,
-            'mx-auto grid size-11 touch-manipulation place-items-center rounded-lg bg-ai/20 outline-none hover:bg-ai/35 focus-visible:ring-2 focus-visible:ring-ring',
-          )}
-        >
-          <span className={cn(styles.dot, 'size-3 rounded-full bg-ai')} />
-        </button>
-      ) : (
+      <span data-dot className={cn('size-3 rounded-full', DOT[mark])} />
+      {mark === 'context' ? (
+        <span data-context-label className="hidden text-caption leading-tight text-ai @3xl:block">
+          {contextLabel}
+        </span>
+      ) : null}
+    </button>
+  );
+}
+
+// decision: FE-012 §4.2
+export const MatrixCell = memo(function MatrixCell({ mark, on, ...rest }: CellProps) {
+  return (
+    <td data-move={rest.cell.move} data-trait={rest.cell.trait} className={cn('p-1 text-center', on && LIT)}>
+      {mark === 'none' ? (
         <span aria-hidden="true" className="mx-auto block size-11" />
+      ) : (
+        <CellButton mark={mark} {...rest} />
       )}
     </td>
   );

@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState, type Dispatch, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type RefObject } from 'react';
 import type { ExplorableEvent, Level } from './explorable-state.pure';
+import { scheduleLandings, type Timers } from './flight-schedule.pure';
 import { prefersReducedMotion } from './reduced-motion';
 import { LETTERS, type Letter, type PlainScenario } from './scenario.types';
 import { MAX_STEP, anchorOf, type Point } from './workflow-annotations.pure';
+import { visibleWorkflow } from './zoom-flights';
 
 export interface FlightChip {
   readonly letter: string;
@@ -15,6 +17,11 @@ interface Flight {
   readonly chip: FlightChip;
   readonly to: Point;
 }
+
+const WINDOW_TIMERS: Timers = {
+  set: (run, milliseconds) => window.setTimeout(run, milliseconds),
+  clear: (id) => window.clearTimeout(id),
+};
 
 const CHIP_SELECTOR = '[data-mirror="brace"] [data-trait-initial]';
 const FLIGHT_MILLISECONDS = 900;
@@ -31,9 +38,6 @@ const chipsIn = (container: HTMLElement): FlightChip[] =>
     letter: chip.textContent?.trim() ?? '',
     rect: chip.getBoundingClientRect(),
   }));
-
-const visibleWorkflow = (container: HTMLElement): SVGSVGElement | undefined =>
-  [...container.querySelectorAll<SVGSVGElement>('svg[data-workflow]')].find((svg) => svg.getClientRects().length > 0);
 
 function flightsOf(container: HTMLElement, chips: readonly FlightChip[], scenario: PlainScenario): Flight[] {
   const svg = visibleWorkflow(container);
@@ -75,14 +79,18 @@ function fly({ chip, to }: Flight, index: number): HTMLElement {
 
 function startFlights(flights: readonly Flight[], dispatch: Dispatch<ExplorableEvent>, onDone: () => void) {
   const flyers = flights.map(fly);
-  const timers = flights.map((_, index) =>
-    window.setTimeout(() => {
+  const cancel = scheduleLandings({
+    count: flights.length,
+    landsAt: landsAtMilliseconds,
+    timers: WINDOW_TIMERS,
+    land: (index) => {
+      flyers[index]?.remove();
       dispatch({ type: 'braceStep', step: index + 1 });
       if (index === flights.length - 1) onDone();
-    }, landsAtMilliseconds(index)),
-  );
+    },
+  });
   return () => {
-    timers.forEach((timer) => window.clearTimeout(timer));
+    cancel();
     flyers.forEach((flyer) => flyer.remove());
   };
 }
@@ -94,9 +102,13 @@ export interface BraceFlightProps {
   readonly dispatch: Dispatch<ExplorableEvent>;
 }
 
-export function useBraceFlight({ container, scenario, level, dispatch }: BraceFlightProps) {
-  const pending = useRef<readonly FlightChip[] | null>(null);
-  const [departure, setDeparture] = useState(0);
+export interface BraceFlight {
+  readonly depart: () => void;
+  readonly cancel: () => void;
+}
+
+function useFlights({ container, scenario, level, dispatch }: BraceFlightProps, pending: Pending, departure: number) {
+  const stop = useRef<(() => void) | null>(null);
   useEffect(() => {
     const root = container.current;
     if (level !== 'workflow') pending.current = null;
@@ -106,16 +118,36 @@ export function useBraceFlight({ container, scenario, level, dispatch }: BraceFl
       pending.current = null;
       dispatch({ type: 'braceStep', step: MAX_STEP });
     }
-    return startFlights(flights, dispatch, () => {
+    const end = startFlights(flights, dispatch, () => {
       pending.current = null;
     });
-  }, [departure, level, scenario, container, dispatch]);
-  return (): void => {
+    stop.current = end;
+    return () => {
+      end();
+      stop.current = null;
+    };
+  }, [departure, level, scenario, container, dispatch, pending]);
+  return stop;
+}
+
+type Pending = RefObject<readonly FlightChip[] | null>;
+
+export function useBraceFlight(props: BraceFlightProps): BraceFlight {
+  const { container, dispatch } = props;
+  const pending = useRef<readonly FlightChip[] | null>(null);
+  const [departure, setDeparture] = useState(0);
+  const stop = useFlights(props, pending, departure);
+  const cancel = useCallback(() => {
+    pending.current = null;
+    stop.current?.();
+  }, [stop]);
+  const depart = useCallback((): void => {
     dispatch({ type: 'zoom', level: 'workflow' });
     const root = container.current;
     if (root === null || prefersReducedMotion()) return dispatch({ type: 'braceStep', step: MAX_STEP });
     pending.current = chipsIn(root);
     setDeparture((count) => count + 1);
     if (pending.current.length === 0) dispatch({ type: 'braceStep', step: 1 });
-  };
+  }, [container, dispatch]);
+  return useMemo(() => ({ depart, cancel }), [depart, cancel]);
 }

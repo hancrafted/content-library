@@ -9,7 +9,9 @@ import { Row, type MirrorHandlers } from './mirror-row.client';
 
 export interface CellViewProps {
   readonly words: MatrixWords;
-  readonly agent: string;
+  readonly crumbs: readonly string[];
+  readonly counter?: boolean;
+  readonly example?: { readonly heading: string; readonly freelancer: string; readonly ai: string } | null;
   readonly cell: CellKey;
   readonly position: { readonly at: number; readonly of: number };
   readonly trait: Definition['rows'][number];
@@ -45,15 +47,19 @@ function StepButton({
   );
 }
 
-function CellTop({ words, agent, trait, move, position, onBack, onStep }: CellViewProps) {
+function CellTop({ words, crumbs, trait, move, position, onBack, onStep }: CellViewProps) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
       <Button type="button" size="sm" variant="outline" data-cell-back onClick={onBack}>
         {words.back}
       </Button>
       <nav aria-label={words.where} className="flex items-center gap-1 text-caption text-muted-foreground">
-        <span>{agent}</span>
-        <span aria-hidden="true">›</span>
+        {crumbs.map((crumb) => (
+          <span key={crumb} className="flex items-center gap-1">
+            {crumb}
+            <span aria-hidden="true">›</span>
+          </span>
+        ))}
         <b translate="no" className="font-semibold text-foreground">
           {move.letter} × {trait.letter}
         </b>
@@ -75,9 +81,17 @@ function Label({ children }: { readonly children: string }) {
   );
 }
 
-function CounterLink({ template, names }: { readonly template: string; readonly names: Parameters<typeof fill>[1] }) {
+function CounterLink({
+  template,
+  names,
+  context,
+}: {
+  readonly template: string;
+  readonly names: Parameters<typeof fill>[1];
+  readonly context: boolean;
+}) {
   return (
-    <p data-cell-link className="text-center text-body text-ai">
+    <p data-cell-link data-context={context} className="text-center text-body text-ai">
       <span aria-hidden="true">↓</span>{' '}
       {fill(template, names).map((part, index) =>
         typeof part === 'string' ? (
@@ -89,6 +103,28 @@ function CounterLink({ template, names }: { readonly template: string; readonly 
         ),
       )}
     </p>
+  );
+}
+
+function Example({
+  label,
+  example,
+  words,
+}: {
+  readonly label: string;
+  readonly example: NonNullable<CellViewProps['example']>;
+  readonly words: MatrixWords;
+}) {
+  return (
+    <div data-cell-example className="flex flex-col gap-2 rounded-lg border border-ai/40 bg-ai/10 p-3">
+      <b className="text-caption font-semibold tracking-wide text-muted-foreground uppercase">{label}</b>
+      <p data-example-side="freelancer" className="text-body">
+        <b className="font-semibold">{words.freelancerSays}</b> {example.freelancer}
+      </p>
+      <p data-example-side="ai" className="text-body text-ai">
+        <b className="font-semibold">{words.aiSays}</b> {example.ai}
+      </p>
+    </div>
   );
 }
 
@@ -112,12 +148,17 @@ export function CellView(props: CellViewProps) {
       <ol>
         <Row definitionId="price" row={trait} index={0} read={reads[0]} handlers={handlers} labels={labels} />
       </ol>
-      <CounterLink template={words.counterLink} names={names} />
+      <CounterLink
+        template={props.counter === false ? words.linkContext : words.counterLink}
+        names={names}
+        context={props.counter === false}
+      />
       <Label>{words.fix}</Label>
       <ol>
         <Row definitionId="brief" row={move} index={1} read={reads[1]} handlers={handlers} labels={labels} />
       </ol>
       <Evidence label={words.evidence} text={evidence.text} source={evidence.source} />
+      {props.example ? <Example label={props.example.heading} example={props.example} words={words} /> : null}
     </div>
   );
 }

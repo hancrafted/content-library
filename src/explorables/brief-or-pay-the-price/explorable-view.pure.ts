@@ -7,7 +7,7 @@ import {
   type Words,
 } from './brief-or-pay-the-price.types';
 import type { ExplorableState } from './explorable-state.pure';
-import { plain } from './matrix-data.pure';
+import { format, plain } from './matrix-data.pure';
 
 export interface ViewData {
   readonly words: Words;
@@ -43,12 +43,13 @@ export function beatsOf(
 export function titleOf(
   { words, definitions }: Pick<ViewData, 'words' | 'definitions'>,
   tabs: Readonly<Record<ViewId, Definition>>,
-  state: Pick<ExplorableState, 'view' | 'level' | 'cell'>,
+  state: Pick<ExplorableState, 'view' | 'level' | 'cell'> & { readonly nodeLabel?: string },
 ): string {
-  const { cell } = state;
+  const { cell, nodeLabel } = state;
   if (state.level === 'define') return tabs[state.view].words.title;
   if (state.level === 'workflow') return tabs.stages.words.title;
-  if (cell === null) return words.matrix.title;
+  if (cell === null)
+    return nodeLabel === undefined ? words.matrix.title : format(words.matrix.nodeTitle, { label: nodeLabel });
   const names = {
     move: rowOf(definitions.brief, cell.move).words.name,
     trait: rowOf(definitions.price, cell.trait).words.name,

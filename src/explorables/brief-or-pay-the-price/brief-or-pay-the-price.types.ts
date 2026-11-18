@@ -101,6 +101,20 @@ export interface MatrixWords {
   readonly where: string;
   readonly caption: string;
   readonly cellCaption: string;
+  readonly cellNameMarked: string;
+  readonly cellNameContext: string;
+  readonly nodeTitle: string;
+  readonly nodeCorner: string;
+  readonly ctxLabel: string;
+  readonly stage: string;
+  readonly inPlay: string;
+  readonly backToWorkflow: string;
+  readonly nodeCaption: string;
+  readonly nodeCellCaption: string;
+  readonly linkContext: string;
+  readonly inNode: string;
+  readonly freelancerSays: string;
+  readonly aiSays: string;
   readonly evidenceOf: Readonly<Record<MoveId, string>>;
 }
 
