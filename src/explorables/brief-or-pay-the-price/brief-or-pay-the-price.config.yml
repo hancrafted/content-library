@@ -1,0 +1,513 @@
+# The brief-or-pay-the-price Explorable. The top level is structure: which definitions exist and the rows of each.
+# Every string sits under `i18n`, keyed by id, in both locales; the loader refuses a file whose locales differ.
+# German keeps each trait's English name and adds a gloss (`gloss`); English leaves the gloss empty.
+# Authoring guide: docs/features/explorables/brief-or-pay-the-price-scenarios.md.
+# Presets: how a Slide opens the Explorable. `view` is the Definition tab (price, brief, stages, brace), `level` the zoom
+# (define, agent, workflow), `scenario` a file in scenarios/, `controls` overrides the control registry key by key
+# (code: controls.pure.ts; `show: false` hides one), and `layers` are the toggles that start on at that level (a toggle
+# whose slot the Slide leaves empty stays off).
+presets:
+  play: { view: price, level: define, scenario: drive, controls: {}, layers: [] }
+  drive: { view: stages, level: workflow, scenario: drive, controls: { scenarioPicker: { show: false } }, layers: [] }
+definitions:
+  price:
+    acronym: PRICE
+    wipe: true
+    rows:
+      - { id: probabilistic, letter: P, beatMilliseconds: 2600 }
+      - { id: relentless, letter: R, beatMilliseconds: 3600 }
+      - { id: informed, letter: I, beatMilliseconds: 3600 }
+      - { id: confident, letter: C, beatMilliseconds: 2900 }
+      - { id: every-word-billed, letter: E, beatMilliseconds: 9900 }
+  brief:
+    acronym: BRIEF
+    rows:
+      - { id: break-it-down, letter: B, beatMilliseconds: 2600 }
+      - { id: requirements-first, letter: R, beatMilliseconds: 2400 }
+      - { id: interview-yourself-with-ai, letter: I, beatMilliseconds: 2600 }
+      - { id: evaluate-each-step, letter: E, beatMilliseconds: 2400 }
+      - { id: fresh-start-for-each-piece, letter: F, beatMilliseconds: 2600 }
+  brace:
+    acronym: BRACE
+    rows:
+      - { id: backwards-from-the-goal, letter: B, beatMilliseconds: 2800 }
+      - { id: resolve-dependencies-early, letter: R, beatMilliseconds: 2400 }
+      - { id: autonomy-through-intent, letter: A, beatMilliseconds: 2800 }
+      - { id: contracts-at-the-seams, letter: C, beatMilliseconds: 2600 }
+      - { id: engineer-trust, letter: E, beatMilliseconds: 3000 }
+# The counters table: the traits each move counters, and the source its evidence line cites.
+matrix:
+  break-it-down: { counters: [relentless, every-word-billed], source: 'Zhou et al., Least-to-Most Prompting' }
+  requirements-first: { counters: [probabilistic, confident], source: 'Yang et al., What Prompts Don’t Say' }
+  interview-yourself-with-ai: { counters: [confident, informed], source: 'Vijayvargiya et al., Ambig-SWE' }
+  evaluate-each-step: { counters: [relentless, probabilistic], source: 'Lightman et al., Let’s Verify Step by Step' }
+  fresh-start-for-each-piece:
+    counters: [every-word-billed, relentless, probabilistic]
+    source: 'Laban et al., LLMs Get Lost In Multi-Turn Conversation'
+i18n:
+  en:
+    chrome:
+      define: 'Define'
+      views: 'Views'
+      showAll: 'Show all and play'
+      dayOne: 'Reset to day one'
+      reset: 'Reset'
+      turn: 'Turn the card to its text'
+      zoom: 'Zoom'
+      agent: 'Agent'
+      workflow: 'Workflow'
+    workflow:
+      goal: 'Goal'
+      thenGoal: 'then the goal'
+      zoomNode: '{label}, {role}: zoom in to its PRICE × BRIEF'
+      scenario: 'Scenario'
+      braceSteps: 'BRACE steps'
+      play: 'Play'
+      pause: 'Pause'
+      previous: 'Previous step'
+      next: 'Next step'
+      stepLines:
+        backwards-from-the-goal: 'Start at 🏁 and plan every step back from it. Each upstream task exists for the goal.'
+        resolve-dependencies-early: 'Settle the big decisions first, so the agents downstream work on their own, in parallel.'
+        autonomy-through-intent: 'Give each agent the intent, the goal and the why, and let it find the how. No script.'
+        contracts-at-the-seams: 'Every handoff is an artefact: what a step receives, what it delivers, how it is checked.'
+        engineer-trust: 'Review each result against its contract, and harden the checks after every run.'
+    layers:
+      thoughtExperiment: 'Thought experiment'
+      freelancer: 'Freelancer'
+      habits: 'Habits'
+      tryIt: 'Try it'
+    freelancerLayer:
+      title: 'A brilliant freelancer with amnesia, every time'
+      text: 'After each conversation they forget everything, so you onboard them again, and every job starts from zero.'
+    thoughtExperiment:
+      agent:
+        title: 'Thought experiment: your first day'
+        hire: 'New hire · You'
+        day: 'Day 1'
+        task: 'Your first task: plan the company summer party. 200 colleagues, five offices across Europe.'
+        questions:
+          budget: 'Budget?'
+          signOff: 'Who signs off?'
+          lastTime: 'What went wrong last time?'
+          date: 'Which date suits five offices?'
+          diet: 'Any dietary needs?'
+          lastYear: 'Who did it last year?'
+        caption: 'You would ask all of these before booking anything. AI asks none of them, unless you brief it.'
+      board:
+        title: 'Thought experiment: four freelancers, one board'
+        intro: 'Four excellent freelancers plan the party. They never meet; they share one board.'
+        teams:
+          activities: { name: 'Activities', note: "Boat trip\n14:00" }
+          travel: { name: 'Travel', note: "Buses from\nfive offices" }
+          venue: { name: 'Venue', note: "Kitchen:\negg dishes" }
+          food: { name: 'Food & drinks', note: "31\nvegetarian" }
+        seam: '"vegetarian" → served with eggs'
+        caption: 'Four perfect cards on one board, and the party still fails between them.'
+    matrix:
+      title: 'Five traits cost you. Five moves keep them in check.'
+      corner: 'Moves against traits'
+      legend: 'Legend'
+      counters: 'counters'
+      counterLink: '{move} counters {trait}'
+      cellTitle: '{move} against {trait}'
+      cellName: '{move} counters {trait}: open the Cell'
+      openCell: 'Open the Cell'
+      problem: 'The problem · PRICE'
+      fix: 'The fix · BRIEF'
+      evidence: 'Evidence'
+      back: '← Back'
+      backToMatrix: '← Back to the matrix'
+      previous: 'Previous Cell'
+      next: 'Next Cell'
+      where: 'Where you are'
+      caption: 'Select a Cell for its detail.'
+      cellCaption: 'Esc goes back; ← → step through the Cells. Click a card to turn it.'
+      cellNameMarked: '{move} counters {trait}, in this agent: open the Cell'
+      cellNameContext: '{move} meets {trait}, in this context: open the Cell'
+      nodeTitle: '{label} agent · PRICE × BRIEF in this stage'
+      nodeCorner: 'Cells this agent meets'
+      ctxLabel: 'in this context'
+      stage: '{stage} stage'
+      inPlay: '{count} Cells in play'
+      backToWorkflow: '⤢ Back to the workflow'
+      nodeCaption: 'Marked: the Cells this agent meets. Outlined: in this context only. Select a Cell for its detail.'
+      nodeCellCaption: 'Esc goes back; ← → step through this agent’s Cells. Click a card to turn it.'
+      linkContext: 'In this context: {move} also meets {trait}, outside the counters table'
+      inNode: 'In {label} · {role}'
+      freelancerSays: 'Freelancer team'
+      aiSays: 'AI agent'
+      evidenceOf:
+        break-it-down: 'Solving simpler subproblems in sequence scored 99% or better on a compositional benchmark, against 16% for chain-of-thought.'
+        requirements-first: 'A requirement left unstated varied more than twice as much across prompts as one that was stated.'
+        interview-yourself-with-ai: 'Agents that asked the user for missing information improved by up to 74% on an underspecified coding benchmark.'
+        evaluate-each-step: 'Feedback on each reasoning step significantly outperforms feedback on the final result alone.'
+        fresh-start-for-each-piece: 'Top models scored on average 39% lower in multi-turn conversation than with the full instruction at once.'
+    stages:
+      tab: 'Stages'
+      heads: { freelancer: 'A freelancer team', middle: 'stages', ai: 'AI agents' }
+      close: { lead: 'One goal:', text: 'each stage hands an artefact to the next.' }
+    backs:
+      prompt: 'prompt'
+      handbook: 'How we work here'
+      bill: 'bill'
+      tokens: 'tokens'
+      fresh: 'new'
+      handbookWords:
+        first: 'We'
+        second: 'always'
+        last: 'never'
+    definitions:
+      price:
+        title: 'PRICE · five traits of a brilliant freelancer with amnesia'
+        heads:
+          freelancer: 'The freelancer'
+          middle: 'Five traits'
+          ai: 'AI'
+        close:
+          lead: 'Amnesia:'
+          text: 'after each conversation, they forget everything, so you have to onboard them again, and every job starts from zero.'
+        rows:
+          probabilistic:
+            name: 'Probabilistic'
+            gloss: ''
+            short: 'Outcome changes every time'
+            freelancer: 'Give the same brief to a new freelancer, and get a different plan.'
+            ai: 'Give the same prompt in a new chat, and get a different answer.'
+          relentless:
+            name: 'Relentless'
+            gloss: ''
+            short: 'High output, unknown quality'
+            freelancer: 'Hand over the job, and they work day and night, producing stacks of polished pages, whether they’re right or not.'
+            ai: 'Send the prompt, and it produces pages in seconds, as many as you ask for, whether they’re right or not.'
+          informed:
+            name: 'Informed'
+            gloss: ''
+            short: 'Knowledgeable, but not about you'
+            freelancer: 'Ask a freelancer who knows every trade, and get expert answers, blind to your company and culture.'
+            ai: 'Ask AI, trained on more text than anyone could read, and get the likeliest answer, blind to your company and culture.'
+          confident:
+            name: 'Confident'
+            gloss: ''
+            short: 'Fills the gap without question'
+            freelancer: 'Give a vague request, and they start without asking, fill the gaps with their own assumptions, and sell it to you as right.'
+            ai: 'Give a vague prompt, and it starts without asking, fills the gaps with the most common answers, and replies with full confidence.'
+          every-word-billed:
+            name: 'Every word billed'
+            gloss: ''
+            short: 'The bill grows every turn'
+            freelancer: 'They bill every word they read and write, so one more question means paying to reread the whole file, their own pages included.'
+            ai: 'It charges for every word it reads and writes, so one more message means paying for the whole chat again, its own answers included.'
+      brief:
+        title: 'BRIEF · five moves to brief a freelancer with amnesia'
+        heads:
+          freelancer: 'The freelancer'
+          middle: 'Five moves'
+          ai: 'AI'
+        close:
+          lead: 'The brief:'
+          text: 'written once, handed over every time.'
+        rows:
+          break-it-down:
+            name: 'Break it down'
+            gloss: ''
+            short: 'Small pieces, small risk'
+            freelancer: 'Hand the freelancer one piece of the job, not the whole project.'
+            ai: 'Give AI one piece per prompt, not the whole project.'
+          requirements-first:
+            name: 'Requirements first'
+            gloss: ''
+            short: 'Good is defined first'
+            freelancer: 'Tell them what a finished piece looks like before they start.'
+            ai: 'Write down what good looks like before the first prompt.'
+          interview-yourself-with-ai:
+            name: 'Interview yourself with AI'
+            gloss: ''
+            short: 'Your context comes out first'
+            freelancer: 'Let them interview you first, so your unwritten rules come out.'
+            ai: 'Ask AI to ask you its questions before it answers.'
+          evaluate-each-step:
+            name: 'Evaluate each step'
+            gloss: ''
+            short: 'Caught early, not late'
+            freelancer: 'Check each piece against the brief when it lands.'
+            ai: 'Check each answer against the requirements before the next step.'
+          fresh-start-for-each-piece:
+            name: 'Fresh start for each piece'
+            gloss: ''
+            short: 'Every piece starts clean'
+            freelancer: 'Brief them fresh for each piece, with only what that piece needs.'
+            ai: 'Open a new chat for each piece, with only what it needs.'
+      brace:
+        title: 'BRACE · five requirements for a team of agents'
+        heads:
+          freelancer: 'A freelancer team'
+          middle: 'Five requirements'
+          ai: 'AI agents'
+        close:
+          lead: 'Systems thinking:'
+          text: 'the plan, not their memory, holds the team together.'
+        rows:
+          backwards-from-the-goal:
+            name: 'Backwards from the goal'
+            gloss: ''
+            short: 'Every step serves the goal'
+            freelancer: 'Start from the delivery date and plan each hand-over back from it.'
+            ai: 'Start from the goal and plan each step back from it.'
+          resolve-dependencies-early:
+            name: 'Resolve dependencies early'
+            gloss: ''
+            short: 'Parallel, not waiting'
+            freelancer: 'Settle the big decisions first, so every freelancer can work without waiting.'
+            ai: 'Resolve decisions and dependencies early, so agents run in parallel.'
+          autonomy-through-intent:
+            name: 'Autonomy through intent'
+            gloss: ''
+            short: 'Intent fixed, the how is theirs'
+            freelancer: 'Give each freelancer the goal and the why, not a script.'
+            ai: 'Give each agent the intent, and let it find the how.'
+          contracts-at-the-seams:
+            name: 'Contracts at the seams'
+            gloss: ''
+            short: 'Clear in, clear out'
+            freelancer: 'Each hand-over has a written spec: what you get, what you deliver, how it is checked.'
+            ai: 'Each seam has a contract: what a step receives, delivers, and how it is checked.'
+          engineer-trust:
+            name: 'Engineer trust'
+            gloss: ''
+            short: 'Trust is built, not assumed'
+            freelancer: 'Check each delivery against its spec, and tighten the checks after every project.'
+            ai: 'Review each result against its contract, and harden the checks after every run.'
+  de:
+    chrome:
+      define: 'Begriffe'
+      views: 'Ansichten'
+      showAll: 'Alle zeigen und abspielen'
+      dayOne: 'Auf Tag eins zurücksetzen'
+      reset: 'Zurücksetzen'
+      turn: 'Karte auf ihren Text drehen'
+      zoom: 'Zoom'
+      agent: 'Agent'
+      workflow: 'Workflow'
+    workflow:
+      goal: 'Ziel'
+      thenGoal: 'dann das Ziel'
+      zoomNode: '{label}, {role}: hineinzoomen zu PRICE × BRIEF'
+      scenario: 'Szenario'
+      braceSteps: 'BRACE-Schritte'
+      play: 'Abspielen'
+      pause: 'Pause'
+      previous: 'Voriger Schritt'
+      next: 'Nächster Schritt'
+      stepLines:
+        backwards-from-the-goal: 'Starte bei 🏁 und plane jeden Schritt rückwärts. Jede Aufgabe davor existiert für das Ziel.'
+        resolve-dependencies-early: 'Kläre die großen Entscheidungen zuerst, damit die Agenten danach eigenständig und parallel arbeiten.'
+        autonomy-through-intent: 'Gib jedem Agenten die Absicht, das Ziel und das Warum, und lass ihn das Wie finden. Kein Drehbuch.'
+        contracts-at-the-seams: 'Jede Übergabe ist ein Artefakt: was ein Schritt bekommt, was er liefert, wie es geprüft wird.'
+        engineer-trust: 'Prüfe jedes Ergebnis gegen seinen Contract, und härte die Checks nach jedem Lauf.'
+    layers:
+      thoughtExperiment: 'Gedankenexperiment'
+      freelancer: 'Freelancer'
+      habits: 'Gewohnheiten'
+      tryIt: 'Ausprobieren'
+    freelancerLayer:
+      title: 'Ein brillanter Freelancer mit Amnesie, jedes Mal'
+      text: 'Nach jedem Gespräch vergessen sie alles, also arbeitest Du sie neu ein, und jeder Auftrag beginnt bei null.'
+    thoughtExperiment:
+      agent:
+        title: 'Gedankenexperiment: Dein erster Tag'
+        hire: 'Neu im Team · Du'
+        day: 'Tag 1'
+        task: 'Deine erste Aufgabe: Plane das Sommerfest der Firma. 200 Kolleginnen und Kollegen, fünf Standorte in Europa.'
+        questions:
+          budget: 'Budget?'
+          signOff: 'Wer gibt frei?'
+          lastTime: 'Was lief letztes Mal schief?'
+          date: 'Welcher Termin passt fünf Standorten?'
+          diet: 'Ernährungswünsche?'
+          lastYear: 'Wer hat es letztes Jahr gemacht?'
+        caption: 'Du würdest all das fragen, bevor Du irgendetwas buchst. Die KI fragt nichts davon, außer Du briefst sie.'
+      board:
+        title: 'Gedankenexperiment: vier Freelancer, ein Board'
+        intro: 'Vier hervorragende Freelancer planen das Fest. Sie treffen sich nie; sie teilen ein Board.'
+        teams:
+          activities: { name: 'Programm', note: "Bootsfahrt\n14:00" }
+          travel: { name: 'Anreise', note: "Busse von\nfünf Standorten" }
+          venue: { name: 'Location', note: "Küche:\nEiergerichte" }
+          food: { name: 'Essen & Getränke', note: "31\nvegetarisch" }
+        seam: '„vegetarisch“ → mit Eiern serviert'
+        caption: 'Vier perfekte Karten auf einem Board, und das Fest scheitert trotzdem dazwischen.'
+    matrix:
+      title: 'Fünf Eigenschaften kosten Dich. Fünf Schritte halten sie in Schach.'
+      corner: 'Schritte gegen Eigenschaften'
+      legend: 'Legende'
+      counters: 'wirkt gegen'
+      counterLink: '{move} wirkt gegen {trait}'
+      cellTitle: '{move} gegen {trait}'
+      cellName: '{move} wirkt gegen {trait}: Zelle öffnen'
+      openCell: 'Zelle öffnen'
+      problem: 'Das Problem · PRICE'
+      fix: 'Die Lösung · BRIEF'
+      evidence: 'Belege'
+      back: '← Zurück'
+      backToMatrix: '← Zurück zur Matrix'
+      previous: 'Vorige Zelle'
+      next: 'Nächste Zelle'
+      where: 'Wo Du bist'
+      caption: 'Wähle eine Zelle für ihr Detail.'
+      cellCaption: 'Esc geht zurück; ← → blättert durch die Zellen. Klick eine Karte, um sie zu drehen.'
+      cellNameMarked: '{move} wirkt gegen {trait}, bei diesem Agenten: Zelle öffnen'
+      cellNameContext: '{move} trifft {trait}, in diesem Kontext: Zelle öffnen'
+      nodeTitle: '{label}-Agent · PRICE × BRIEF in dieser Phase'
+      nodeCorner: 'Zellen dieses Agenten'
+      ctxLabel: 'in diesem Kontext'
+      stage: 'Phase {stage}'
+      inPlay: '{count} Zellen im Spiel'
+      backToWorkflow: '⤢ Zurück zum Workflow'
+      nodeCaption: 'Markiert: die Zellen dieses Agenten. Umrandet: nur in diesem Kontext. Wähle eine Zelle für ihr Detail.'
+      nodeCellCaption: 'Esc geht zurück; ← → blättert durch die Zellen dieses Agenten. Klick eine Karte, um sie zu drehen.'
+      linkContext: 'In diesem Kontext: {move} trifft auch {trait}, außerhalb der Gegenmittel-Tabelle'
+      inNode: 'In {label} · {role}'
+      freelancerSays: 'Freelancer-Team'
+      aiSays: 'KI-Agent'
+      evidenceOf:
+        break-it-down: 'Einfachere Teilprobleme der Reihe nach zu lösen erreichte 99 % oder mehr auf einem Kompositions-Benchmark, gegenüber 16 % mit Chain-of-Thought.'
+        requirements-first: 'Eine nicht genannte Anforderung schwankte über Prompts hinweg mehr als doppelt so stark wie eine genannte.'
+        interview-yourself-with-ai: 'Agenten, die fehlende Informationen beim Nutzer erfragten, wurden auf einem unterspezifizierten Coding-Benchmark um bis zu 74 % besser.'
+        evaluate-each-step: 'Feedback zu jedem Denkschritt schneidet deutlich besser ab als Feedback nur zum Endergebnis.'
+        fresh-start-for-each-piece: 'Top-Modelle schnitten im mehrstufigen Gespräch im Schnitt 39 % schlechter ab als mit der vollständigen Anweisung auf einmal.'
+    stages:
+      tab: 'Phasen'
+      heads: { freelancer: 'Ein Freelancer-Team', middle: 'Phasen', ai: 'KI-Agenten' }
+      close: { lead: 'Ein Ziel:', text: 'Jede Phase übergibt der nächsten ein Artefakt.' }
+    backs:
+      prompt: 'Prompt'
+      handbook: 'Wie wir arbeiten'
+      bill: 'Rechnung'
+      tokens: 'Tokens'
+      fresh: 'neu'
+      handbookWords:
+        first: 'Wir'
+        second: 'immer'
+        last: 'nie'
+    definitions:
+      price:
+        title: 'PRICE · fünf Eigenschaften eines brillanten Freelancers mit Amnesie'
+        heads:
+          freelancer: 'Der Freelancer'
+          middle: 'Fünf Eigenschaften'
+          ai: 'KI'
+        close:
+          lead: 'Amnesie:'
+          text: 'Nach jedem Gespräch vergessen sie alles, also musst Du sie neu einarbeiten, und jeder Auftrag beginnt bei null.'
+        rows:
+          probabilistic:
+            name: 'Probabilistic'
+            gloss: 'probabilistisch'
+            short: 'Jedes Mal ein anderes Ergebnis'
+            freelancer: 'Gib einem neuen Freelancer dasselbe Briefing, und Du bekommst einen anderen Plan.'
+            ai: 'Gib denselben Prompt in einem neuen Chat ein, und Du bekommst eine andere Antwort.'
+          relentless:
+            name: 'Relentless'
+            gloss: 'unermüdlich'
+            short: 'Viel Output, unklare Qualität'
+            freelancer: 'Gib den Auftrag ab, und er arbeitet Tag und Nacht und liefert Stapel polierter Seiten, ob sie stimmen oder nicht.'
+            ai: 'Schick den Prompt ab, und sie liefert Seiten in Sekunden, so viele Du willst, ob sie stimmen oder nicht.'
+          informed:
+            name: 'Informed'
+            gloss: 'informiert'
+            short: 'Weiß viel, nur nicht über Dich'
+            freelancer: 'Frag einen Freelancer, der jedes Fach kennt, und Du bekommst Expertenantworten, blind für Dein Unternehmen und eure Kultur.'
+            ai: 'Frag die KI, trainiert auf mehr Text, als je ein Mensch lesen könnte, und Du bekommst die wahrscheinlichste Antwort, blind für Dein Unternehmen und eure Kultur.'
+          confident:
+            name: 'Confident'
+            gloss: 'selbstsicher'
+            short: 'Füllt die Lücke, ohne zu fragen'
+            freelancer: 'Gib eine vage Anfrage, und er legt los, ohne zu fragen, füllt die Lücken mit eigenen Annahmen und verkauft es Dir als richtig.'
+            ai: 'Gib einen vagen Prompt, und sie legt los, ohne zu fragen, füllt die Lücken mit den häufigsten Antworten und antwortet voller Überzeugung.'
+          every-word-billed:
+            name: 'Every word billed'
+            gloss: 'jedes Wort berechnet'
+            short: 'Die Rechnung wächst mit jeder Runde'
+            freelancer: 'Er rechnet jedes Wort ab, das er liest und schreibt, also heißt eine Frage mehr, das ganze Dossier neu lesen zu lassen, seine eigenen Seiten inklusive.'
+            ai: 'Sie berechnet jedes Wort, das sie liest und schreibt, also heißt eine Nachricht mehr, den ganzen Chat noch einmal zu bezahlen, ihre eigenen Antworten inklusive.'
+      brief:
+        title: 'BRIEF · fünf Schritte, um einen Freelancer mit Amnesie zu briefen'
+        heads:
+          freelancer: 'Der Freelancer'
+          middle: 'Fünf Schritte'
+          ai: 'KI'
+        close:
+          lead: 'Das Briefing:'
+          text: 'einmal geschrieben, jedes Mal übergeben.'
+        rows:
+          break-it-down:
+            name: 'Break it down'
+            gloss: 'Zerleg es'
+            short: 'Kleine Stücke, kleines Risiko'
+            freelancer: 'Gib dem Freelancer ein Stück des Auftrags, nicht das ganze Projekt.'
+            ai: 'Gib der KI ein Stück pro Prompt, nicht das ganze Projekt.'
+          requirements-first:
+            name: 'Requirements first'
+            gloss: 'Anforderungen zuerst'
+            short: 'Gut ist vorher definiert'
+            freelancer: 'Sag ihm, wie ein fertiges Stück aussieht, bevor er anfängt.'
+            ai: 'Schreib auf, wie gut aussieht, vor dem ersten Prompt.'
+          interview-yourself-with-ai:
+            name: 'Interview yourself with AI'
+            gloss: 'Lass Dich von der KI interviewen'
+            short: 'Dein Kontext kommt zuerst'
+            freelancer: 'Lass Dich zuerst von ihm befragen, damit Deine ungeschriebenen Regeln herauskommen.'
+            ai: 'Lass die KI Dir ihre Fragen stellen, bevor sie antwortet.'
+          evaluate-each-step:
+            name: 'Evaluate each step'
+            gloss: 'Prüfe jeden Schritt'
+            short: 'Früh erkannt, nicht spät'
+            freelancer: 'Prüfe jedes Stück gegen das Briefing, sobald es kommt.'
+            ai: 'Prüfe jede Antwort gegen die Anforderungen, vor dem nächsten Schritt.'
+          fresh-start-for-each-piece:
+            name: 'Fresh start for each piece'
+            gloss: 'Frischer Start für jedes Teil'
+            short: 'Jedes Teil startet sauber'
+            freelancer: 'Brief ihn für jedes Stück neu, nur mit dem, was es braucht.'
+            ai: 'Öffne für jedes Stück einen neuen Chat, nur mit dem, was es braucht.'
+      brace:
+        title: 'BRACE · fünf Anforderungen an ein Team aus Agenten'
+        heads:
+          freelancer: 'Ein Freelancer-Team'
+          middle: 'Fünf Anforderungen'
+          ai: 'KI-Agenten'
+        close:
+          lead: 'Systemdenken:'
+          text: 'Der Plan hält das Team zusammen, nicht ihr Gedächtnis.'
+        rows:
+          backwards-from-the-goal:
+            name: 'Backwards from the goal'
+            gloss: 'Vom Ziel rückwärts'
+            short: 'Jeder Schritt dient dem Ziel'
+            freelancer: 'Starte beim Liefertermin und plane jede Übergabe rückwärts davon.'
+            ai: 'Starte beim Ziel und plane jeden Schritt rückwärts davon.'
+          resolve-dependencies-early:
+            name: 'Resolve dependencies early'
+            gloss: 'Abhängigkeiten früh klären'
+            short: 'Parallel statt wartend'
+            freelancer: 'Kläre die großen Entscheidungen zuerst, damit jeder Freelancer ohne Warten arbeiten kann.'
+            ai: 'Kläre Entscheidungen und Abhängigkeiten früh, damit Agenten parallel laufen.'
+          autonomy-through-intent:
+            name: 'Autonomy through intent'
+            gloss: 'Autonomie durch Absicht'
+            short: 'Die Absicht steht, das Wie ist ihres'
+            freelancer: 'Gib jedem Freelancer das Ziel und das Warum, kein Drehbuch.'
+            ai: 'Gib jedem Agenten die Absicht, und lass ihn das Wie finden.'
+          contracts-at-the-seams:
+            name: 'Contracts at the seams'
+            gloss: 'Verträge an den Nahtstellen'
+            short: 'Klar rein, klar raus'
+            freelancer: 'Jede Übergabe hat eine schriftliche Spec: was Du bekommst, was Du lieferst, wie es geprüft wird.'
+            ai: 'Jede Nahtstelle hat einen Contract: was ein Schritt bekommt, liefert und wie es geprüft wird.'
+          engineer-trust:
+            name: 'Engineer trust'
+            gloss: 'Vertrauen erarbeiten'
+            short: 'Vertrauen wird gebaut, nicht angenommen'
+            freelancer: 'Prüfe jede Lieferung gegen ihre Spec, und verschärfe die Checks nach jedem Projekt.'
+            ai: 'Prüfe jedes Ergebnis gegen seinen Contract, und härte die Checks nach jedem Lauf.'

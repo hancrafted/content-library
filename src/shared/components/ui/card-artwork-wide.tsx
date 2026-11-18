@@ -45,6 +45,47 @@ const FACTORY = (
   </>
 );
 
+const COUNTERS = [
+  [1, 4],
+  [0, 3],
+  [3, 2],
+  [1, 0],
+  [4, 1, 0],
+];
+const MATRIX = (
+  <>
+    <rect x="56" y="90" width="80" height="80" rx="7" />
+    <path d="M72 90v80M56 106h80M88 90v80M56 122h80M104 90v80M56 138h80M120 90v80M56 154h80" />
+    {COUNTERS.flatMap((cols, row) =>
+      cols.map((col) => (
+        <circle
+          key={`${row}-${col}`}
+          cx={56 + 16 * (col + 0.5)}
+          cy={90 + 16 * (row + 0.5)}
+          r="3"
+          fill="currentColor"
+          stroke="none"
+        />
+      )),
+    )}
+  </>
+);
+const MiniNode = ({ cx, cy }: { cx: number; cy: number }) => (
+  <>
+    <rect x={cx - 15} y={cy - 15} width="30" height="30" rx="6" />
+    <path
+      d={`M${cx - 5} ${cy - 15}V${cy + 15}M${cx + 5} ${cy - 15}V${cy + 15}M${cx - 15} ${cy - 5}H${cx + 15}M${cx - 15} ${cy + 5}H${cx + 15}`}
+    />
+  </>
+);
+const MATRIX_NODES = [
+  [232, 130],
+  [302, 88],
+  [302, 172],
+  [372, 130],
+  [438, 130],
+];
+
 export const WIDE_CARD_ARTWORK = {
   'intention-capacity': (
     <g transform="translate(6.5 0)">
@@ -102,6 +143,19 @@ export const WIDE_CARD_ARTWORK = {
       <g transform="translate(481 139) scale(.48)">{WORKFLOW}</g>
       <g transform="translate(481 79) scale(.72)">{FACTORY}</g>
       <path d="M45 155h66M164 118h77M294 80h88M435 39h93" opacity=".35" />
+    </g>
+  ),
+  'matrix-to-workflow': (
+    <g transform="translate(5 0)">
+      <circle cx="96" cy="130" r="62" fill="currentColor" stroke="none" opacity=".1" />
+      {MATRIX}
+      <path d="M168 130H204m-6-4 6 4-6 4" />
+      {MATRIX_NODES.map(([cx, cy]) => (
+        <MiniNode key={`${cx}-${cy}`} cx={cx} cy={cy} />
+      ))}
+      <path d="M247 130H266V88H287M266 130V172H287M317 88H336V130H357M317 172H336V130M387 130H423M453 130H478" />
+      <path d="M488 162V98" />
+      <path d="M488 100H516L508 112 516 124H488Z" fill="currentColor" stroke="none" opacity=".8" />
     </g>
   ),
 } satisfies Record<string, ReactNode>;
