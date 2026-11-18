@@ -11,9 +11,9 @@ const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 // The Episodes area's tier folders, each the tier its name says (FE-007): components, browser hooks, plain logic.
 const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and Template's record, so they sit
-// above the Episodes they list and the lib rules below leave them out. composition-summaries works the page summaries
-// out of them for `npm run registry`; no page imports it (FE-004 §4).
-const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries)';
+// above the Episodes they list and the lib rules below leave them out. composition-summaries and composition-outlines work
+// the page summaries and the Episode outlines out of them for `npm run registry`; no page imports them (FE-004 §4).
+const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated|composition-summaries|composition-outlines)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The Episode-level checks that read one page's composition (ARCH-003 §4.7): like the registries they sit above the
 // Episode they check, rendering its Slides (and, in the checks' own test, a Scene) and reading the store; only each page

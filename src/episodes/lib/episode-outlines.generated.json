@@ -1,0 +1,2591 @@
+{
+  "2026-10-23-axel-agentic-workflow__ai-attention-span": {
+    "folder": "by-event/2026-10-23-axel-agentic-workflow/ai-attention-span",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "thought-experiment",
+          "anchor": "thought-experiment",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-long-phone-call-story",
+          "anchor": "thought-experiment--the-long-phone-call-story",
+          "textSource": "src/episodes/slide-pool/the-long-phone-call-story/i18n",
+          "pool": true
+        },
+        {
+          "slug": "ai-forgets-the-middle-too",
+          "anchor": "thought-experiment--ai-forgets-the-middle-too",
+          "textSource": "src/episodes/slide-pool/ai-forgets-the-middle-too/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "the-ais-attention-span",
+          "anchor": "the-ais-attention-span",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-context-window",
+          "anchor": "the-ais-attention-span--the-context-window",
+          "textSource": "src/episodes/slide-pool/the-context-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-happens-when-the-bar-fills-up",
+          "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+          "textSource": "src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n",
+          "pool": true
+        },
+        {
+          "slug": "attention-is-a-budget",
+          "anchor": "the-ais-attention-span--attention-is-a-budget",
+          "textSource": "src/episodes/slide-pool/attention-is-a-budget/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-we-learned-so-far",
+          "anchor": "the-ais-attention-span--what-we-learned-so-far",
+          "textSource": "src/episodes/slide-pool/what-we-learned-so-far/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "what-fills-the-window",
+          "anchor": "what-fills-the-window",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n",
+          "pool": false
+        },
+        {
+          "slug": "whats-really-in-the-window",
+          "anchor": "what-fills-the-window--whats-really-in-the-window",
+          "textSource": "src/episodes/slide-pool/whats-really-in-the-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-innocent-question",
+          "anchor": "what-fills-the-window--one-innocent-question",
+          "textSource": "src/episodes/slide-pool/one-innocent-question/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-cant-watch-the-meter",
+          "anchor": "what-fills-the-window--you-cant-watch-the-meter",
+          "textSource": "src/episodes/slide-pool/you-cant-watch-the-meter/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "managing-the-attention-span",
+          "anchor": "managing-the-attention-span",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "everyday-habits",
+          "anchor": "managing-the-attention-span--everyday-habits",
+          "textSource": "src/episodes/slide-pool/everyday-habits/i18n",
+          "pool": true
+        },
+        {
+          "slug": "the-workflow-for-bigger-projects",
+          "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
+          "textSource": "src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n",
+          "pool": true
+        },
+        {
+          "slug": "human-in-the-loop-workflow",
+          "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
+          "textSource": "src/episodes/slide-pool/human-in-the-loop-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "now-you-know-how-it-feels",
+          "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
+          "textSource": "src/episodes/slide-pool/now-you-know-how-it-feels/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-10-23-axel-agentic-workflow__ai-gives-you-more-work": {
+    "folder": "by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "from-execution-to-management",
+          "anchor": "from-execution-to-management",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-revolution-one-card",
+          "anchor": "from-execution-to-management--every-revolution-one-card",
+          "textSource": "src/episodes/slide-pool/every-revolution-one-card/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-were-promoted",
+          "anchor": "from-execution-to-management--you-were-promoted",
+          "textSource": "src/episodes/slide-pool/you-were-promoted/i18n",
+          "pool": true
+        },
+        {
+          "slug": "practise-it-today-at-work",
+          "anchor": "from-execution-to-management--practise-it-today-at-work",
+          "textSource": "src/episodes/slide-pool/practise-it-today-at-work/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-10-23-axel-agentic-workflow__onboard-ai-every-time": {
+    "folder": "by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "the-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-are-the-new-hire",
+          "anchor": "the-thought-experiment--you-are-the-new-hire",
+          "textSource": "src/episodes/slide-pool/you-are-the-new-hire/i18n",
+          "pool": true
+        },
+        {
+          "slug": "pay-the-price",
+          "anchor": "the-thought-experiment--pay-the-price",
+          "textSource": "src/episodes/slide-pool/pay-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-prompt",
+          "anchor": "the-thought-experiment--one-prompt",
+          "textSource": "src/episodes/slide-pool/one-prompt/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "five-moves-to-brief-a-freelancer",
+          "anchor": "five-moves-to-brief-a-freelancer",
+          "textSource": "src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n",
+          "pool": false
+        },
+        {
+          "slug": "first-human-in-the-loop-agentic-workflow",
+          "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+          "textSource": "src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "manage-the-price",
+          "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
+          "textSource": "src/episodes/slide-pool/manage-the-price/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span": {
+    "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "thought-experiment",
+          "anchor": "thought-experiment",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-long-phone-call-story",
+          "anchor": "thought-experiment--the-long-phone-call-story",
+          "textSource": "src/episodes/slide-pool/the-long-phone-call-story/i18n",
+          "pool": true
+        },
+        {
+          "slug": "ai-forgets-the-middle-too",
+          "anchor": "thought-experiment--ai-forgets-the-middle-too",
+          "textSource": "src/episodes/slide-pool/ai-forgets-the-middle-too/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "the-ais-attention-span",
+          "anchor": "the-ais-attention-span",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/the-ais-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-context-window",
+          "anchor": "the-ais-attention-span--the-context-window",
+          "textSource": "src/episodes/slide-pool/the-context-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-happens-when-the-bar-fills-up",
+          "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+          "textSource": "src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n",
+          "pool": true
+        },
+        {
+          "slug": "attention-is-a-budget",
+          "anchor": "the-ais-attention-span--attention-is-a-budget",
+          "textSource": "src/episodes/slide-pool/attention-is-a-budget/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-we-learned-so-far",
+          "anchor": "the-ais-attention-span--what-we-learned-so-far",
+          "textSource": "src/episodes/slide-pool/what-we-learned-so-far/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "what-fills-the-window",
+          "anchor": "what-fills-the-window",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/what-fills-the-window/i18n",
+          "pool": false
+        },
+        {
+          "slug": "whats-really-in-the-window",
+          "anchor": "what-fills-the-window--whats-really-in-the-window",
+          "textSource": "src/episodes/slide-pool/whats-really-in-the-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-innocent-question",
+          "anchor": "what-fills-the-window--one-innocent-question",
+          "textSource": "src/episodes/slide-pool/one-innocent-question/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-cant-watch-the-meter",
+          "anchor": "what-fills-the-window--you-cant-watch-the-meter",
+          "textSource": "src/episodes/slide-pool/you-cant-watch-the-meter/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "managing-the-attention-span",
+          "anchor": "managing-the-attention-span",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-attention-span/slides/managing-the-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "everyday-habits",
+          "anchor": "managing-the-attention-span--everyday-habits",
+          "textSource": "src/episodes/slide-pool/everyday-habits/i18n",
+          "pool": true
+        },
+        {
+          "slug": "the-workflow-for-bigger-projects",
+          "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
+          "textSource": "src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n",
+          "pool": true
+        },
+        {
+          "slug": "human-in-the-loop-workflow",
+          "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
+          "textSource": "src/episodes/slide-pool/human-in-the-loop-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "now-you-know-how-it-feels",
+          "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
+          "textSource": "src/episodes/slide-pool/now-you-know-how-it-feels/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work": {
+    "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "from-execution-to-management",
+          "anchor": "from-execution-to-management",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-revolution-one-card",
+          "anchor": "from-execution-to-management--every-revolution-one-card",
+          "textSource": "src/episodes/slide-pool/every-revolution-one-card/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-were-promoted",
+          "anchor": "from-execution-to-management--you-were-promoted",
+          "textSource": "src/episodes/slide-pool/you-were-promoted/i18n",
+          "pool": true
+        },
+        {
+          "slug": "practise-it-today-at-work",
+          "anchor": "from-execution-to-management--practise-it-today-at-work",
+          "textSource": "src/episodes/slide-pool/practise-it-today-at-work/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro": {
+    "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "grounding",
+          "anchor": "grounding",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/grounding/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "agenda",
+          "anchor": "agenda",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/agenda/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "in-scope",
+          "anchor": "in-scope",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/in-scope/i18n",
+          "pool": false
+        },
+        {
+          "slug": "out-of-scope",
+          "anchor": "in-scope--out-of-scope",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/out-of-scope/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "poll",
+          "anchor": "poll",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/poll/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "about-me",
+          "anchor": "about-me",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/about-me/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "orga",
+          "anchor": "orga",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/orga/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-1",
+          "anchor": "check-in-1",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-1/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-2",
+          "anchor": "check-in-2",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-2/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-3",
+          "anchor": "check-in-3",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/check-in-3/i18n",
+          "pool": false
+        },
+        {
+          "slug": "disciplines-recap",
+          "anchor": "check-in-3--disciplines-recap",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/slides/disciplines-recap/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time": {
+    "folder": "by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "the-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-are-the-new-hire",
+          "anchor": "the-thought-experiment--you-are-the-new-hire",
+          "textSource": "src/episodes/slide-pool/you-are-the-new-hire/i18n",
+          "pool": true
+        },
+        {
+          "slug": "pay-the-price",
+          "anchor": "the-thought-experiment--pay-the-price",
+          "textSource": "src/episodes/slide-pool/pay-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-prompt",
+          "anchor": "the-thought-experiment--one-prompt",
+          "textSource": "src/episodes/slide-pool/one-prompt/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "five-moves-to-brief-a-freelancer",
+          "anchor": "five-moves-to-brief-a-freelancer",
+          "textSource": "src/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n",
+          "pool": false
+        },
+        {
+          "slug": "manage-the-price",
+          "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
+          "textSource": "src/episodes/slide-pool/manage-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "first-human-in-the-loop-agentic-workflow",
+          "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+          "textSource": "src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-04-intro-hitl-workflows__ai-attention-span": {
+    "folder": "by-event/2026-11-04-intro-hitl-workflows/ai-attention-span",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "thought-experiment",
+          "anchor": "thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-long-phone-call-story",
+          "anchor": "thought-experiment--the-long-phone-call-story",
+          "textSource": "src/episodes/slide-pool/the-long-phone-call-story/i18n",
+          "pool": true
+        },
+        {
+          "slug": "ai-forgets-the-middle-too",
+          "anchor": "thought-experiment--ai-forgets-the-middle-too",
+          "textSource": "src/episodes/slide-pool/ai-forgets-the-middle-too/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "the-ais-attention-span",
+          "anchor": "the-ais-attention-span",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/the-ais-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-context-window",
+          "anchor": "the-ais-attention-span--the-context-window",
+          "textSource": "src/episodes/slide-pool/the-context-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-happens-when-the-bar-fills-up",
+          "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+          "textSource": "src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n",
+          "pool": true
+        },
+        {
+          "slug": "attention-is-a-budget",
+          "anchor": "the-ais-attention-span--attention-is-a-budget",
+          "textSource": "src/episodes/slide-pool/attention-is-a-budget/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-we-learned-so-far",
+          "anchor": "the-ais-attention-span--what-we-learned-so-far",
+          "textSource": "src/episodes/slide-pool/what-we-learned-so-far/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "what-fills-the-window",
+          "anchor": "what-fills-the-window",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/what-fills-the-window/i18n",
+          "pool": false
+        },
+        {
+          "slug": "whats-really-in-the-window",
+          "anchor": "what-fills-the-window--whats-really-in-the-window",
+          "textSource": "src/episodes/slide-pool/whats-really-in-the-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-innocent-question",
+          "anchor": "what-fills-the-window--one-innocent-question",
+          "textSource": "src/episodes/slide-pool/one-innocent-question/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-cant-watch-the-meter",
+          "anchor": "what-fills-the-window--you-cant-watch-the-meter",
+          "textSource": "src/episodes/slide-pool/you-cant-watch-the-meter/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "managing-the-attention-span",
+          "anchor": "managing-the-attention-span",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/slides/managing-the-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "everyday-habits",
+          "anchor": "managing-the-attention-span--everyday-habits",
+          "textSource": "src/episodes/slide-pool/everyday-habits/i18n",
+          "pool": true
+        },
+        {
+          "slug": "the-workflow-for-bigger-projects",
+          "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
+          "textSource": "src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n",
+          "pool": true
+        },
+        {
+          "slug": "human-in-the-loop-workflow",
+          "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
+          "textSource": "src/episodes/slide-pool/human-in-the-loop-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "now-you-know-how-it-feels",
+          "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
+          "textSource": "src/episodes/slide-pool/now-you-know-how-it-feels/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-04-intro-hitl-workflows__ai-gives-you-more-work": {
+    "folder": "by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "from-execution-to-management",
+          "anchor": "from-execution-to-management",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-revolution-one-card",
+          "anchor": "from-execution-to-management--every-revolution-one-card",
+          "textSource": "src/episodes/slide-pool/every-revolution-one-card/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-were-promoted",
+          "anchor": "from-execution-to-management--you-were-promoted",
+          "textSource": "src/episodes/slide-pool/you-were-promoted/i18n",
+          "pool": true
+        },
+        {
+          "slug": "practise-it-today-at-work",
+          "anchor": "from-execution-to-management--practise-it-today-at-work",
+          "textSource": "src/episodes/slide-pool/practise-it-today-at-work/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-04-intro-hitl-workflows__intro": {
+    "folder": "by-event/2026-11-04-intro-hitl-workflows/intro",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "grounding",
+          "anchor": "grounding",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/grounding/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "agenda",
+          "anchor": "agenda",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/agenda/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "poll",
+          "anchor": "poll",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/poll/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-1",
+          "anchor": "check-in-1",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-1/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-2",
+          "anchor": "check-in-2",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-2/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-3",
+          "anchor": "check-in-3",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/slides/check-in-3/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-11-04-intro-hitl-workflows__onboard-ai-every-time": {
+    "folder": "by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "the-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-are-the-new-hire",
+          "anchor": "the-thought-experiment--you-are-the-new-hire",
+          "textSource": "src/episodes/slide-pool/you-are-the-new-hire/i18n",
+          "pool": true
+        },
+        {
+          "slug": "pay-the-price",
+          "anchor": "the-thought-experiment--pay-the-price",
+          "textSource": "src/episodes/slide-pool/pay-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-prompt",
+          "anchor": "the-thought-experiment--one-prompt",
+          "textSource": "src/episodes/slide-pool/one-prompt/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "five-moves-to-brief-a-freelancer",
+          "anchor": "five-moves-to-brief-a-freelancer",
+          "textSource": "src/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n",
+          "pool": false
+        },
+        {
+          "slug": "manage-the-price",
+          "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
+          "textSource": "src/episodes/slide-pool/manage-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "first-human-in-the-loop-agentic-workflow",
+          "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+          "textSource": "src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro": {
+    "folder": "by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "orga",
+          "anchor": "orga",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/orga/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "hook",
+          "anchor": "hook",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/hook/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "agenda",
+          "anchor": "agenda",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/agenda/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "in-scope",
+          "anchor": "in-scope",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/in-scope/i18n",
+          "pool": false
+        },
+        {
+          "slug": "out-of-scope",
+          "anchor": "in-scope--out-of-scope",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/out-of-scope/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "grounding",
+          "anchor": "grounding",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/grounding/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "about-me",
+          "anchor": "about-me",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/about-me/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "todays-quiz",
+          "anchor": "hands-on",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/todays-quiz/i18n",
+          "pool": false
+        },
+        {
+          "slug": "ask-ai-for-help",
+          "anchor": "hands-on--ask-ai-for-help",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/ask-ai-for-help/i18n",
+          "pool": false
+        },
+        {
+          "slug": "start-the-interview",
+          "anchor": "hands-on--start-the-interview",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/start-the-interview/i18n",
+          "pool": false
+        },
+        {
+          "slug": "spec-and-quiz-page",
+          "anchor": "hands-on--spec-and-quiz-page",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/spec-and-quiz-page/i18n",
+          "pool": false
+        },
+        {
+          "slug": "make-it-a-skill",
+          "anchor": "hands-on--make-it-a-skill",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/make-it-a-skill/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "close",
+          "anchor": "close",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/slides/close/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-agentic-workflows-require": {
+    "folder": "by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "a-thought-experiment",
+          "anchor": "a-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/a-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "a-thought-experiment--the-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "now-with-agents",
+          "anchor": "a-thought-experiment--now-with-agents",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/now-with-agents/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-an-agentic-workflow-is",
+          "anchor": "what-an-agentic-workflow-is",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-an-agent-is",
+          "anchor": "what-an-agentic-workflow-is--what-an-agent-is",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agent-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-an-agentic-workflow-is-slide",
+          "anchor": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "how-far-you-step-out",
+          "anchor": "how-far-you-step-out",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/how-far-you-step-out/i18n",
+          "pool": false
+        },
+        {
+          "slug": "in-on-or-out-of-the-loop",
+          "anchor": "how-far-you-step-out--in-on-or-out-of-the-loop",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n",
+          "pool": false
+        },
+        {
+          "slug": "reviewability-sets-the-distance",
+          "anchor": "how-far-you-step-out--reviewability-sets-the-distance",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-it-requires-of-each-person",
+          "anchor": "what-it-requires-of-each-person",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n",
+          "pool": false
+        },
+        {
+          "slug": "plan-back-from-the-goal",
+          "anchor": "what-it-requires-of-each-person--plan-back-from-the-goal",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n",
+          "pool": false
+        },
+        {
+          "slug": "contracts-at-the-seams",
+          "anchor": "what-it-requires-of-each-person--contracts-at-the-seams",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n",
+          "pool": false
+        },
+        {
+          "slug": "reviewing-the-result",
+          "anchor": "what-it-requires-of-each-person--reviewing-the-result",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/reviewing-the-result/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-it-requires-of-the-organisation",
+          "anchor": "what-it-requires-of-the-organisation",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-org-chart-trap",
+          "anchor": "what-it-requires-of-the-organisation--the-org-chart-trap",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/the-org-chart-trap/i18n",
+          "pool": false
+        },
+        {
+          "slug": "designed-ai-first",
+          "anchor": "what-it-requires-of-the-organisation--designed-ai-first",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/designed-ai-first/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-to-look-for-in-your-team",
+          "anchor": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n",
+          "pool": false
+        },
+        {
+          "slug": "from-article-to-quiz",
+          "anchor": "what-it-requires-of-the-organisation--from-article-to-quiz",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-agentic-workflows-require/slides/from-article-to-quiz/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__what-lies-below-the-waterline-of-sustainable-ai-skills": {
+    "folder": "by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "a-thought-experiment",
+          "anchor": "a-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "an-ai-model-that-forgets-every-morning",
+          "anchor": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n",
+          "pool": false
+        },
+        {
+          "slug": "a-skill-hands-the-ai-your-procedure",
+          "anchor": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-a-skill-is",
+          "anchor": "what-a-skill-is",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "a-skill-is-a-written-procedure",
+          "anchor": "what-a-skill-is--a-skill-is-a-written-procedure",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n",
+          "pool": false
+        },
+        {
+          "slug": "three-levels-of-loading",
+          "anchor": "what-a-skill-is--three-levels-of-loading",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n",
+          "pool": false
+        },
+        {
+          "slug": "skills-are-dynamic-context",
+          "anchor": "what-a-skill-is--skills-are-dynamic-context",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n",
+          "pool": false
+        },
+        {
+          "slug": "instructions-skills-and-connectors",
+          "anchor": "what-a-skill-is--instructions-skills-and-connectors",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n",
+          "pool": false
+        },
+        {
+          "slug": "two-ways-to-call-a-skill",
+          "anchor": "what-a-skill-is--two-ways-to-call-a-skill",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "when-to-write-one",
+          "anchor": "when-to-write-one",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-third-time-is-the-signal",
+          "anchor": "when-to-write-one--the-third-time-is-the-signal",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n",
+          "pool": false
+        },
+        {
+          "slug": "not-every-repeat-deserves-a-skill",
+          "anchor": "when-to-write-one--not-every-repeat-deserves-a-skill",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n",
+          "pool": false
+        },
+        {
+          "slug": "write-it-from-a-good-run",
+          "anchor": "when-to-write-one--write-it-from-a-good-run",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "the-label",
+          "anchor": "the-label",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-description-is-all-the-ai-sees",
+          "anchor": "the-label--the-description-is-all-the-ai-sees",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n",
+          "pool": false
+        },
+        {
+          "slug": "name-the-moment-not-the-content",
+          "anchor": "the-label--name-the-moment-not-the-content",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n",
+          "pool": false
+        },
+        {
+          "slug": "more-skills-harder-choice",
+          "anchor": "the-label--more-skills-harder-choice",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-goes-inside",
+          "anchor": "what-goes-inside",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-goes-where-is-information-architecture",
+          "anchor": "what-goes-inside--what-goes-where-is-information-architecture",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n",
+          "pool": false
+        },
+        {
+          "slug": "one-skill-one-job",
+          "anchor": "what-goes-inside--one-skill-one-job",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n",
+          "pool": false
+        },
+        {
+          "slug": "inside-the-skill",
+          "anchor": "what-goes-inside--inside-the-skill",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-stays-beside",
+          "anchor": "what-stays-beside",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n",
+          "pool": false
+        },
+        {
+          "slug": "beside-the-skill",
+          "anchor": "what-stays-beside--beside-the-skill",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n",
+          "pool": false
+        },
+        {
+          "slug": "who-uses-it-and-where",
+          "anchor": "what-stays-beside--who-uses-it-and-where",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n",
+          "pool": false
+        },
+        {
+          "slug": "how-grill-me-and-grill-with-docs-work",
+          "anchor": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "sharing-it",
+          "anchor": "sharing-it",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n",
+          "pool": false
+        },
+        {
+          "slug": "shared-skills-are-knowledge-articles",
+          "anchor": "sharing-it--shared-skills-are-knowledge-articles",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n",
+          "pool": false
+        },
+        {
+          "slug": "who-owns-the-shared-skill-library",
+          "anchor": "sharing-it--who-owns-the-shared-skill-library",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n",
+          "pool": false
+        },
+        {
+          "slug": "does-the-skill-make-things-better",
+          "anchor": "sharing-it--does-the-skill-make-things-better",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "keeping-it-alive",
+          "anchor": "keeping-it-alive",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-skill-is-a-loan",
+          "anchor": "keeping-it-alive--every-skill-is-a-loan",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-model-changes-the-skill-doesn-t",
+          "anchor": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n",
+          "pool": false
+        },
+        {
+          "slug": "retire-skills",
+          "anchor": "keeping-it-alive--retire-skills",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-whole-iceberg",
+          "anchor": "keeping-it-alive--the-whole-iceberg",
+          "textSource": "src/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-11-18-cyberforum-exi-digital-agentic-workflows__ai-attention-span": {
+    "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "thought-experiment",
+          "anchor": "thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-long-phone-call-story",
+          "anchor": "thought-experiment--the-long-phone-call-story",
+          "textSource": "src/episodes/slide-pool/the-long-phone-call-story/i18n",
+          "pool": true
+        },
+        {
+          "slug": "ai-forgets-the-middle-too",
+          "anchor": "thought-experiment--ai-forgets-the-middle-too",
+          "textSource": "src/episodes/slide-pool/ai-forgets-the-middle-too/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "the-ais-attention-span",
+          "anchor": "the-ais-attention-span",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/the-ais-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-context-window",
+          "anchor": "the-ais-attention-span--the-context-window",
+          "textSource": "src/episodes/slide-pool/the-context-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-happens-when-the-bar-fills-up",
+          "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+          "textSource": "src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n",
+          "pool": true
+        },
+        {
+          "slug": "attention-is-a-budget",
+          "anchor": "the-ais-attention-span--attention-is-a-budget",
+          "textSource": "src/episodes/slide-pool/attention-is-a-budget/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-we-learned-so-far",
+          "anchor": "the-ais-attention-span--what-we-learned-so-far",
+          "textSource": "src/episodes/slide-pool/what-we-learned-so-far/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "what-fills-the-window",
+          "anchor": "what-fills-the-window",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/what-fills-the-window/i18n",
+          "pool": false
+        },
+        {
+          "slug": "whats-really-in-the-window",
+          "anchor": "what-fills-the-window--whats-really-in-the-window",
+          "textSource": "src/episodes/slide-pool/whats-really-in-the-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-innocent-question",
+          "anchor": "what-fills-the-window--one-innocent-question",
+          "textSource": "src/episodes/slide-pool/one-innocent-question/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-cant-watch-the-meter",
+          "anchor": "what-fills-the-window--you-cant-watch-the-meter",
+          "textSource": "src/episodes/slide-pool/you-cant-watch-the-meter/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "managing-the-attention-span",
+          "anchor": "managing-the-attention-span",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-attention-span/slides/managing-the-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "everyday-habits",
+          "anchor": "managing-the-attention-span--everyday-habits",
+          "textSource": "src/episodes/slide-pool/everyday-habits/i18n",
+          "pool": true
+        },
+        {
+          "slug": "the-workflow-for-bigger-projects",
+          "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
+          "textSource": "src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n",
+          "pool": true
+        },
+        {
+          "slug": "human-in-the-loop-workflow",
+          "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
+          "textSource": "src/episodes/slide-pool/human-in-the-loop-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "now-you-know-how-it-feels",
+          "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
+          "textSource": "src/episodes/slide-pool/now-you-know-how-it-feels/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-18-cyberforum-exi-digital-agentic-workflows__ai-gives-you-more-work": {
+    "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "from-execution-to-management",
+          "anchor": "from-execution-to-management",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-revolution-one-card",
+          "anchor": "from-execution-to-management--every-revolution-one-card",
+          "textSource": "src/episodes/slide-pool/every-revolution-one-card/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-were-promoted",
+          "anchor": "from-execution-to-management--you-were-promoted",
+          "textSource": "src/episodes/slide-pool/you-were-promoted/i18n",
+          "pool": true
+        },
+        {
+          "slug": "practise-it-today-at-work",
+          "anchor": "from-execution-to-management--practise-it-today-at-work",
+          "textSource": "src/episodes/slide-pool/practise-it-today-at-work/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "2026-11-18-cyberforum-exi-digital-agentic-workflows__intro": {
+    "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "grounding",
+          "anchor": "grounding",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/grounding/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "agenda",
+          "anchor": "agenda",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/agenda/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "in-scope",
+          "anchor": "in-scope",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/in-scope/i18n",
+          "pool": false
+        },
+        {
+          "slug": "out-of-scope",
+          "anchor": "in-scope--out-of-scope",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/out-of-scope/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "poll",
+          "anchor": "poll",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/poll/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "about-me",
+          "anchor": "about-me",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/about-me/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "orga",
+          "anchor": "orga",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/orga/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-1",
+          "anchor": "check-in-1",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-1/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-2",
+          "anchor": "check-in-2",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-2/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "check-in-3",
+          "anchor": "check-in-3",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/check-in-3/i18n",
+          "pool": false
+        },
+        {
+          "slug": "disciplines-recap",
+          "anchor": "check-in-3--disciplines-recap",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/intro/slides/disciplines-recap/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "2026-11-18-cyberforum-exi-digital-agentic-workflows__onboard-ai-every-time": {
+    "folder": "by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "the-thought-experiment",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-are-the-new-hire",
+          "anchor": "the-thought-experiment--you-are-the-new-hire",
+          "textSource": "src/episodes/slide-pool/you-are-the-new-hire/i18n",
+          "pool": true
+        },
+        {
+          "slug": "pay-the-price",
+          "anchor": "the-thought-experiment--pay-the-price",
+          "textSource": "src/episodes/slide-pool/pay-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-prompt",
+          "anchor": "the-thought-experiment--one-prompt",
+          "textSource": "src/episodes/slide-pool/one-prompt/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "five-moves-to-brief-a-freelancer",
+          "anchor": "five-moves-to-brief-a-freelancer",
+          "textSource": "src/episodes/by-event/2026-11-18-cyberforum-exi-digital-agentic-workflows/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n",
+          "pool": false
+        },
+        {
+          "slug": "manage-the-price",
+          "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
+          "textSource": "src/episodes/slide-pool/manage-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "first-human-in-the-loop-agentic-workflow",
+          "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+          "textSource": "src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "ai-attention-span": {
+    "folder": "ai-attention-span",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/ai-attention-span/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "thought-experiment",
+          "anchor": "thought-experiment",
+          "textSource": "src/episodes/ai-attention-span/slides/thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-long-phone-call-story",
+          "anchor": "thought-experiment--the-long-phone-call-story",
+          "textSource": "src/episodes/slide-pool/the-long-phone-call-story/i18n",
+          "pool": true
+        },
+        {
+          "slug": "ai-forgets-the-middle-too",
+          "anchor": "thought-experiment--ai-forgets-the-middle-too",
+          "textSource": "src/episodes/slide-pool/ai-forgets-the-middle-too/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "the-ais-attention-span",
+          "anchor": "the-ais-attention-span",
+          "textSource": "src/episodes/ai-attention-span/slides/the-ais-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-context-window",
+          "anchor": "the-ais-attention-span--the-context-window",
+          "textSource": "src/episodes/slide-pool/the-context-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-happens-when-the-bar-fills-up",
+          "anchor": "the-ais-attention-span--what-happens-when-the-bar-fills-up",
+          "textSource": "src/episodes/slide-pool/what-happens-when-the-bar-fills-up/i18n",
+          "pool": true
+        },
+        {
+          "slug": "attention-is-a-budget",
+          "anchor": "the-ais-attention-span--attention-is-a-budget",
+          "textSource": "src/episodes/slide-pool/attention-is-a-budget/i18n",
+          "pool": true
+        },
+        {
+          "slug": "what-we-learned-so-far",
+          "anchor": "the-ais-attention-span--what-we-learned-so-far",
+          "textSource": "src/episodes/slide-pool/what-we-learned-so-far/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "what-fills-the-window",
+          "anchor": "what-fills-the-window",
+          "textSource": "src/episodes/ai-attention-span/slides/what-fills-the-window/i18n",
+          "pool": false
+        },
+        {
+          "slug": "whats-really-in-the-window",
+          "anchor": "what-fills-the-window--whats-really-in-the-window",
+          "textSource": "src/episodes/slide-pool/whats-really-in-the-window/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-innocent-question",
+          "anchor": "what-fills-the-window--one-innocent-question",
+          "textSource": "src/episodes/slide-pool/one-innocent-question/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-cant-watch-the-meter",
+          "anchor": "what-fills-the-window--you-cant-watch-the-meter",
+          "textSource": "src/episodes/slide-pool/you-cant-watch-the-meter/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "managing-the-attention-span",
+          "anchor": "managing-the-attention-span",
+          "textSource": "src/episodes/ai-attention-span/slides/managing-the-attention-span/i18n",
+          "pool": false
+        },
+        {
+          "slug": "everyday-habits",
+          "anchor": "managing-the-attention-span--everyday-habits",
+          "textSource": "src/episodes/slide-pool/everyday-habits/i18n",
+          "pool": true
+        },
+        {
+          "slug": "the-workflow-for-bigger-projects",
+          "anchor": "managing-the-attention-span--the-workflow-for-bigger-projects",
+          "textSource": "src/episodes/slide-pool/the-workflow-for-bigger-projects/i18n",
+          "pool": true
+        },
+        {
+          "slug": "human-in-the-loop-workflow",
+          "anchor": "managing-the-attention-span--human-in-the-loop-workflow",
+          "textSource": "src/episodes/slide-pool/human-in-the-loop-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "now-you-know-how-it-feels",
+          "anchor": "managing-the-attention-span--now-you-know-how-it-feels",
+          "textSource": "src/episodes/slide-pool/now-you-know-how-it-feels/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "ai-gives-you-more-work": {
+    "folder": "ai-gives-you-more-work",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/ai-gives-you-more-work/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "from-execution-to-management",
+          "anchor": "from-execution-to-management",
+          "textSource": "src/episodes/ai-gives-you-more-work/slides/from-execution-to-management/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-revolution-one-card",
+          "anchor": "from-execution-to-management--every-revolution-one-card",
+          "textSource": "src/episodes/slide-pool/every-revolution-one-card/i18n",
+          "pool": true
+        },
+        {
+          "slug": "you-were-promoted",
+          "anchor": "from-execution-to-management--you-were-promoted",
+          "textSource": "src/episodes/slide-pool/you-were-promoted/i18n",
+          "pool": true
+        },
+        {
+          "slug": "practise-it-today-at-work",
+          "anchor": "from-execution-to-management--practise-it-today-at-work",
+          "textSource": "src/episodes/slide-pool/practise-it-today-at-work/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "ai-token-economy": {
+    "folder": "ai-token-economy",
+    "sections": [
+      [
+        {
+          "slug": "motivation",
+          "anchor": "motivation",
+          "textSource": "src/episodes/ai-token-economy/slides/motivation/i18n",
+          "pool": false
+        },
+        {
+          "slug": "lead-one-upskill-many",
+          "anchor": "motivation--lead-one-upskill-many",
+          "textSource": "src/episodes/ai-token-economy/slides/lead-one-upskill-many/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-four-eras-of-ai",
+          "anchor": "motivation--the-four-eras-of-ai",
+          "textSource": "src/episodes/ai-token-economy/slides/the-four-eras-of-ai/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-invisible-invoice",
+          "anchor": "motivation--the-invisible-invoice",
+          "textSource": "src/episodes/ai-token-economy/slides/the-invisible-invoice/i18n",
+          "pool": false
+        },
+        {
+          "slug": "outcome-per-euro",
+          "anchor": "motivation--outcome-per-euro",
+          "textSource": "src/episodes/ai-token-economy/slides/outcome-per-euro/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-is-a-token",
+          "anchor": "what-is-a-token",
+          "textSource": "src/episodes/ai-token-economy/slides/what-is-a-token/i18n",
+          "pool": false
+        },
+        {
+          "slug": "live-context-breakdown",
+          "anchor": "what-is-a-token--live-context-breakdown",
+          "textSource": "src/episodes/ai-token-economy/slides/live-context-breakdown/i18n",
+          "pool": false
+        },
+        {
+          "slug": "cli-vs-web-tool-obscurity",
+          "anchor": "what-is-a-token--cli-vs-web-tool-obscurity",
+          "textSource": "src/episodes/ai-token-economy/slides/cli-vs-web-tool-obscurity/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "managing-context",
+          "anchor": "managing-context",
+          "textSource": "src/episodes/ai-token-economy/slides/managing-context/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-lost-middle",
+          "anchor": "managing-context--the-lost-middle",
+          "textSource": "src/episodes/ai-token-economy/slides/the-lost-middle/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-fullness-gauge-and-levers",
+          "anchor": "managing-context--the-fullness-gauge-and-levers",
+          "textSource": "src/episodes/ai-token-economy/slides/the-fullness-gauge-and-levers/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "cost-of-agentic-ai",
+          "anchor": "cost-of-agentic-ai",
+          "textSource": "src/episodes/ai-token-economy/slides/cost-of-agentic-ai/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-compounding-cost-curve",
+          "anchor": "cost-of-agentic-ai--the-compounding-cost-curve",
+          "textSource": "src/episodes/ai-token-economy/slides/the-compounding-cost-curve/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "model-tiers",
+          "anchor": "model-tiers",
+          "textSource": "src/episodes/ai-token-economy/slides/model-tiers/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "tools-and-tips",
+          "anchor": "tools-and-tips",
+          "textSource": "src/episodes/ai-token-economy/slides/tools-and-tips/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "from-shared-understanding-to-shared-context": {
+    "folder": "from-shared-understanding-to-shared-context",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "a-thought-experiment",
+          "anchor": "a-thought-experiment",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/a-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-the-customer-really-wanted",
+          "anchor": "a-thought-experiment--what-the-customer-really-wanted",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/what-the-customer-really-wanted/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-happens-with-ai",
+          "anchor": "a-thought-experiment--what-happens-with-ai",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/what-happens-with-ai/i18n",
+          "pool": false
+        },
+        {
+          "slug": "speed-the-whole-line-can-carry",
+          "anchor": "a-thought-experiment--speed-the-whole-line-can-carry",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/speed-the-whole-line-can-carry/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "every-product-is-a-translation",
+          "anchor": "every-product-is-a-translation",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/every-product-is-a-translation/i18n",
+          "pool": false
+        },
+        {
+          "slug": "value-was-always-translation",
+          "anchor": "every-product-is-a-translation--value-was-always-translation",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/value-was-always-translation/i18n",
+          "pool": false
+        },
+        {
+          "slug": "defining-and-building",
+          "anchor": "every-product-is-a-translation--defining-and-building",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/defining-and-building/i18n",
+          "pool": false
+        },
+        {
+          "slug": "precision-and-accuracy",
+          "anchor": "every-product-is-a-translation--precision-and-accuracy",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/precision-and-accuracy/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "context-is-the-requirement",
+          "anchor": "context-is-the-requirement",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/context-is-the-requirement/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-the-ai-actually-sees",
+          "anchor": "context-is-the-requirement--what-the-ai-actually-sees",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/what-the-ai-actually-sees/i18n",
+          "pool": false
+        },
+        {
+          "slug": "context-engineering-is-requirements-engineering-for-agents",
+          "anchor": "context-is-the-requirement--context-engineering-is-requirements-engineering-for-agents",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/context-engineering-is-requirements-engineering-for-agents/i18n",
+          "pool": false
+        },
+        {
+          "slug": "static-and-dynamic-context",
+          "anchor": "context-is-the-requirement--static-and-dynamic-context",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/static-and-dynamic-context/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-run-the-bench",
+          "anchor": "context-is-the-requirement--you-run-the-bench",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/you-run-the-bench/i18n",
+          "pool": false
+        },
+        {
+          "slug": "context-rot",
+          "anchor": "context-is-the-requirement--context-rot",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/context-rot/i18n",
+          "pool": false
+        },
+        {
+          "slug": "keeping-the-bench-clean",
+          "anchor": "context-is-the-requirement--keeping-the-bench-clean",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/keeping-the-bench-clean/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "creating-context-for-agents",
+          "anchor": "creating-context-for-agents",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/creating-context-for-agents/i18n",
+          "pool": false
+        },
+        {
+          "slug": "meta-prompting",
+          "anchor": "creating-context-for-agents--meta-prompting",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/meta-prompting/i18n",
+          "pool": false
+        },
+        {
+          "slug": "grill-me",
+          "anchor": "creating-context-for-agents--grill-me",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/grill-me/i18n",
+          "pool": false
+        },
+        {
+          "slug": "brief",
+          "anchor": "creating-context-for-agents--brief",
+          "textSource": "src/episodes/from-shared-understanding-to-shared-context/slides/brief/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "maintaining-markdown-for-ai": {
+    "folder": "maintaining-markdown-for-ai",
+    "sections": [
+      [
+        {
+          "slug": "markdown-in-ai-workflows",
+          "anchor": "markdown-in-ai-workflows",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/markdown-in-ai-workflows/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "volume-outruns-review",
+          "anchor": "volume-outruns-review",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/volume-outruns-review/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "where-the-effort-goes",
+          "anchor": "where-the-effort-goes",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/where-the-effort-goes/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-the-machine-verifies",
+          "anchor": "where-the-effort-goes--what-the-machine-verifies",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/what-the-machine-verifies/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-ai-accelerates",
+          "anchor": "where-the-effort-goes--what-ai-accelerates",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/what-ai-accelerates/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-remains-human",
+          "anchor": "where-the-effort-goes--what-remains-human",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/what-remains-human/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "google-okf",
+          "anchor": "google-okf",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/google-okf/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "steering-the-ai",
+          "anchor": "steering-the-ai",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/steering-the-ai/i18n",
+          "pool": false
+        },
+        {
+          "slug": "deterministic-core",
+          "anchor": "steering-the-ai--deterministic-core",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/deterministic-core/i18n",
+          "pool": false
+        },
+        {
+          "slug": "live-demo",
+          "anchor": "steering-the-ai--live-demo",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/live-demo/i18n",
+          "pool": false
+        },
+        {
+          "slug": "feature-roadmap",
+          "anchor": "steering-the-ai--feature-roadmap",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/feature-roadmap/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "the-verifying-half-is-yours",
+          "anchor": "the-verifying-half-is-yours",
+          "textSource": "src/episodes/maintaining-markdown-for-ai/slides/the-verifying-half-is-yours/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "never-too-early-sales": {
+    "folder": "never-too-early-sales",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/never-too-early-sales/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "why-watching-cashflow-is-mission-critical",
+          "anchor": "why-watching-cashflow-is-mission-critical",
+          "textSource": "src/episodes/never-too-early-sales/slides/why-watching-cashflow-is-mission-critical/i18n",
+          "pool": false
+        },
+        {
+          "slug": "watch-your-cashflow",
+          "anchor": "why-watching-cashflow-is-mission-critical--watch-your-cashflow",
+          "textSource": "src/episodes/never-too-early-sales/slides/watch-your-cashflow/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "why-sales-is-more-than-just-selling",
+          "anchor": "why-sales-is-more-than-just-selling",
+          "textSource": "src/episodes/never-too-early-sales/slides/why-sales-is-more-than-just-selling/i18n",
+          "pool": false
+        },
+        {
+          "slug": "sales-is-more-than-selling",
+          "anchor": "why-sales-is-more-than-just-selling--sales-is-more-than-selling",
+          "textSource": "src/episodes/never-too-early-sales/slides/sales-is-more-than-selling/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "how-to-start-doing-sales",
+          "anchor": "how-to-start-doing-sales",
+          "textSource": "src/episodes/never-too-early-sales/slides/how-to-start-doing-sales/i18n",
+          "pool": false
+        },
+        {
+          "slug": "stages-of-sale",
+          "anchor": "how-to-start-doing-sales--stages-of-sale",
+          "textSource": "src/episodes/never-too-early-sales/slides/stages-of-sale/i18n",
+          "pool": false
+        },
+        {
+          "slug": "pipeline-tools-in-practice",
+          "anchor": "how-to-start-doing-sales--pipeline-tools-in-practice",
+          "textSource": "src/episodes/never-too-early-sales/slides/pipeline-tools-in-practice/i18n",
+          "pool": false
+        },
+        {
+          "slug": "how-marketing-feeds-the-pipeline",
+          "anchor": "how-to-start-doing-sales--how-marketing-feeds-the-pipeline",
+          "textSource": "src/episodes/never-too-early-sales/slides/how-marketing-feeds-the-pipeline/i18n",
+          "pool": false
+        },
+        {
+          "slug": "watch-your-cashflow-revenue-pulled-in",
+          "anchor": "how-to-start-doing-sales--watch-your-cashflow-revenue-pulled-in",
+          "textSource": "src/episodes/never-too-early-sales/slides/watch-your-cashflow-revenue-pulled-in/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "why-building-an-effective-sales-pipeline-takes-time",
+          "anchor": "why-building-an-effective-sales-pipeline-takes-time",
+          "textSource": "src/episodes/never-too-early-sales/slides/why-building-an-effective-sales-pipeline-takes-time/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-is-a-sales-pipeline",
+          "anchor": "why-building-an-effective-sales-pipeline-takes-time--what-is-a-sales-pipeline",
+          "textSource": "src/episodes/never-too-early-sales/slides/what-is-a-sales-pipeline/i18n",
+          "pool": false
+        },
+        {
+          "slug": "pipeline-by-the-numbers",
+          "anchor": "why-building-an-effective-sales-pipeline-takes-time--pipeline-by-the-numbers",
+          "textSource": "src/episodes/never-too-early-sales/slides/pipeline-by-the-numbers/i18n",
+          "pool": false
+        },
+        {
+          "slug": "why-it-takes-time-to-ramp-up",
+          "anchor": "why-building-an-effective-sales-pipeline-takes-time--why-it-takes-time-to-ramp-up",
+          "textSource": "src/episodes/never-too-early-sales/slides/why-it-takes-time-to-ramp-up/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "start-before-you-need-the-money",
+          "anchor": "start-before-you-need-the-money",
+          "textSource": "src/episodes/never-too-early-sales/slides/start-before-you-need-the-money/i18n",
+          "pool": false
+        },
+        {
+          "slug": "watch-your-cashflow-start-when",
+          "anchor": "start-before-you-need-the-money--watch-your-cashflow-start-when",
+          "textSource": "src/episodes/never-too-early-sales/slides/watch-your-cashflow-start-when/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "onboard-ai-every-time": {
+    "folder": "onboard-ai-every-time",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/onboard-ai-every-time/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "the-thought-experiment",
+          "textSource": "src/episodes/onboard-ai-every-time/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "you-are-the-new-hire",
+          "anchor": "the-thought-experiment--you-are-the-new-hire",
+          "textSource": "src/episodes/slide-pool/you-are-the-new-hire/i18n",
+          "pool": true
+        },
+        {
+          "slug": "pay-the-price",
+          "anchor": "the-thought-experiment--pay-the-price",
+          "textSource": "src/episodes/slide-pool/pay-the-price/i18n",
+          "pool": true
+        },
+        {
+          "slug": "one-prompt",
+          "anchor": "the-thought-experiment--one-prompt",
+          "textSource": "src/episodes/slide-pool/one-prompt/i18n",
+          "pool": true
+        }
+      ],
+      [
+        {
+          "slug": "five-moves-to-brief-a-freelancer",
+          "anchor": "five-moves-to-brief-a-freelancer",
+          "textSource": "src/episodes/onboard-ai-every-time/slides/five-moves-to-brief-a-freelancer/i18n",
+          "pool": false
+        },
+        {
+          "slug": "first-human-in-the-loop-agentic-workflow",
+          "anchor": "five-moves-to-brief-a-freelancer--first-human-in-the-loop-agentic-workflow",
+          "textSource": "src/episodes/slide-pool/first-human-in-the-loop-agentic-workflow/i18n",
+          "pool": true
+        },
+        {
+          "slug": "manage-the-price",
+          "anchor": "five-moves-to-brief-a-freelancer--manage-the-price",
+          "textSource": "src/episodes/slide-pool/manage-the-price/i18n",
+          "pool": true
+        }
+      ]
+    ]
+  },
+  "what-agentic-workflows-require": {
+    "folder": "what-agentic-workflows-require",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/what-agentic-workflows-require/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "a-thought-experiment",
+          "anchor": "a-thought-experiment",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/a-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-thought-experiment",
+          "anchor": "a-thought-experiment--the-thought-experiment",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/the-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "now-with-agents",
+          "anchor": "a-thought-experiment--now-with-agents",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/now-with-agents/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-an-agentic-workflow-is",
+          "anchor": "what-an-agentic-workflow-is",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-an-agent-is",
+          "anchor": "what-an-agentic-workflow-is--what-an-agent-is",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-an-agent-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-an-agentic-workflow-is-slide",
+          "anchor": "what-an-agentic-workflow-is--what-an-agentic-workflow-is-slide",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-an-agentic-workflow-is-slide/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "how-far-you-step-out",
+          "anchor": "how-far-you-step-out",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/how-far-you-step-out/i18n",
+          "pool": false
+        },
+        {
+          "slug": "in-on-or-out-of-the-loop",
+          "anchor": "how-far-you-step-out--in-on-or-out-of-the-loop",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/in-on-or-out-of-the-loop/i18n",
+          "pool": false
+        },
+        {
+          "slug": "reviewability-sets-the-distance",
+          "anchor": "how-far-you-step-out--reviewability-sets-the-distance",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/reviewability-sets-the-distance/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-it-requires-of-each-person",
+          "anchor": "what-it-requires-of-each-person",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-each-person/i18n",
+          "pool": false
+        },
+        {
+          "slug": "plan-back-from-the-goal",
+          "anchor": "what-it-requires-of-each-person--plan-back-from-the-goal",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/plan-back-from-the-goal/i18n",
+          "pool": false
+        },
+        {
+          "slug": "contracts-at-the-seams",
+          "anchor": "what-it-requires-of-each-person--contracts-at-the-seams",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/contracts-at-the-seams/i18n",
+          "pool": false
+        },
+        {
+          "slug": "reviewing-the-result",
+          "anchor": "what-it-requires-of-each-person--reviewing-the-result",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/reviewing-the-result/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-it-requires-of-the-organisation",
+          "anchor": "what-it-requires-of-the-organisation",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-it-requires-of-the-organisation/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-org-chart-trap",
+          "anchor": "what-it-requires-of-the-organisation--the-org-chart-trap",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/the-org-chart-trap/i18n",
+          "pool": false
+        },
+        {
+          "slug": "designed-ai-first",
+          "anchor": "what-it-requires-of-the-organisation--designed-ai-first",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/designed-ai-first/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-to-look-for-in-your-team",
+          "anchor": "what-it-requires-of-the-organisation--what-to-look-for-in-your-team",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/what-to-look-for-in-your-team/i18n",
+          "pool": false
+        },
+        {
+          "slug": "from-article-to-quiz",
+          "anchor": "what-it-requires-of-the-organisation--from-article-to-quiz",
+          "textSource": "src/episodes/what-agentic-workflows-require/slides/from-article-to-quiz/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  },
+  "what-lies-below-the-waterline-of-sustainable-ai-skills": {
+    "folder": "what-lies-below-the-waterline-of-sustainable-ai-skills",
+    "title": {
+      "slug": "hero",
+      "anchor": "top",
+      "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/hero/i18n",
+      "pool": false
+    },
+    "sections": [
+      [
+        {
+          "slug": "a-thought-experiment",
+          "anchor": "a-thought-experiment",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-thought-experiment/i18n",
+          "pool": false
+        },
+        {
+          "slug": "an-ai-model-that-forgets-every-morning",
+          "anchor": "a-thought-experiment--an-ai-model-that-forgets-every-morning",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/an-ai-model-that-forgets-every-morning/i18n",
+          "pool": false
+        },
+        {
+          "slug": "a-skill-hands-the-ai-your-procedure",
+          "anchor": "a-thought-experiment--a-skill-hands-the-ai-your-procedure",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-hands-the-ai-your-procedure/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-a-skill-is",
+          "anchor": "what-a-skill-is",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-a-skill-is/i18n",
+          "pool": false
+        },
+        {
+          "slug": "a-skill-is-a-written-procedure",
+          "anchor": "what-a-skill-is--a-skill-is-a-written-procedure",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/a-skill-is-a-written-procedure/i18n",
+          "pool": false
+        },
+        {
+          "slug": "three-levels-of-loading",
+          "anchor": "what-a-skill-is--three-levels-of-loading",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/three-levels-of-loading/i18n",
+          "pool": false
+        },
+        {
+          "slug": "skills-are-dynamic-context",
+          "anchor": "what-a-skill-is--skills-are-dynamic-context",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/skills-are-dynamic-context/i18n",
+          "pool": false
+        },
+        {
+          "slug": "instructions-skills-and-connectors",
+          "anchor": "what-a-skill-is--instructions-skills-and-connectors",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/instructions-skills-and-connectors/i18n",
+          "pool": false
+        },
+        {
+          "slug": "two-ways-to-call-a-skill",
+          "anchor": "what-a-skill-is--two-ways-to-call-a-skill",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/two-ways-to-call-a-skill/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "when-to-write-one",
+          "anchor": "when-to-write-one",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/when-to-write-one/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-third-time-is-the-signal",
+          "anchor": "when-to-write-one--the-third-time-is-the-signal",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-third-time-is-the-signal/i18n",
+          "pool": false
+        },
+        {
+          "slug": "not-every-repeat-deserves-a-skill",
+          "anchor": "when-to-write-one--not-every-repeat-deserves-a-skill",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/not-every-repeat-deserves-a-skill/i18n",
+          "pool": false
+        },
+        {
+          "slug": "write-it-from-a-good-run",
+          "anchor": "when-to-write-one--write-it-from-a-good-run",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/write-it-from-a-good-run/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "the-label",
+          "anchor": "the-label",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-label/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-description-is-all-the-ai-sees",
+          "anchor": "the-label--the-description-is-all-the-ai-sees",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-description-is-all-the-ai-sees/i18n",
+          "pool": false
+        },
+        {
+          "slug": "name-the-moment-not-the-content",
+          "anchor": "the-label--name-the-moment-not-the-content",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/name-the-moment-not-the-content/i18n",
+          "pool": false
+        },
+        {
+          "slug": "more-skills-harder-choice",
+          "anchor": "the-label--more-skills-harder-choice",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/more-skills-harder-choice/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-goes-inside",
+          "anchor": "what-goes-inside",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-inside/i18n",
+          "pool": false
+        },
+        {
+          "slug": "what-goes-where-is-information-architecture",
+          "anchor": "what-goes-inside--what-goes-where-is-information-architecture",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-goes-where-is-information-architecture/i18n",
+          "pool": false
+        },
+        {
+          "slug": "one-skill-one-job",
+          "anchor": "what-goes-inside--one-skill-one-job",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/one-skill-one-job/i18n",
+          "pool": false
+        },
+        {
+          "slug": "inside-the-skill",
+          "anchor": "what-goes-inside--inside-the-skill",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/inside-the-skill/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "what-stays-beside",
+          "anchor": "what-stays-beside",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/what-stays-beside/i18n",
+          "pool": false
+        },
+        {
+          "slug": "beside-the-skill",
+          "anchor": "what-stays-beside--beside-the-skill",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/beside-the-skill/i18n",
+          "pool": false
+        },
+        {
+          "slug": "who-uses-it-and-where",
+          "anchor": "what-stays-beside--who-uses-it-and-where",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-uses-it-and-where/i18n",
+          "pool": false
+        },
+        {
+          "slug": "how-grill-me-and-grill-with-docs-work",
+          "anchor": "what-stays-beside--how-grill-me-and-grill-with-docs-work",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/how-grill-me-and-grill-with-docs-work/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "sharing-it",
+          "anchor": "sharing-it",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/sharing-it/i18n",
+          "pool": false
+        },
+        {
+          "slug": "shared-skills-are-knowledge-articles",
+          "anchor": "sharing-it--shared-skills-are-knowledge-articles",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/shared-skills-are-knowledge-articles/i18n",
+          "pool": false
+        },
+        {
+          "slug": "who-owns-the-shared-skill-library",
+          "anchor": "sharing-it--who-owns-the-shared-skill-library",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/who-owns-the-shared-skill-library/i18n",
+          "pool": false
+        },
+        {
+          "slug": "does-the-skill-make-things-better",
+          "anchor": "sharing-it--does-the-skill-make-things-better",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/does-the-skill-make-things-better/i18n",
+          "pool": false
+        }
+      ],
+      [
+        {
+          "slug": "keeping-it-alive",
+          "anchor": "keeping-it-alive",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/keeping-it-alive/i18n",
+          "pool": false
+        },
+        {
+          "slug": "every-skill-is-a-loan",
+          "anchor": "keeping-it-alive--every-skill-is-a-loan",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/every-skill-is-a-loan/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-model-changes-the-skill-doesn-t",
+          "anchor": "keeping-it-alive--the-model-changes-the-skill-doesn-t",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-model-changes-the-skill-doesn-t/i18n",
+          "pool": false
+        },
+        {
+          "slug": "retire-skills",
+          "anchor": "keeping-it-alive--retire-skills",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/retire-skills/i18n",
+          "pool": false
+        },
+        {
+          "slug": "the-whole-iceberg",
+          "anchor": "keeping-it-alive--the-whole-iceberg",
+          "textSource": "src/episodes/what-lies-below-the-waterline-of-sustainable-ai-skills/slides/the-whole-iceberg/i18n",
+          "pool": false
+        }
+      ]
+    ]
+  }
+}
