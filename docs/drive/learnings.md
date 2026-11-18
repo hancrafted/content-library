@@ -85,6 +85,34 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed (unpicked, picks skipped 2026-11-17)
 - **Evidence:** drive: #667 and #668 both edited `learnings.md`, parallel fix Subagents shared it and `binding.yml`; rules relayed by SendMessage and one sync conflicted (fortify-decision AR-3)
 
+### A Subagent merges a render-changing task without running the build and its tests
+
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Enforcer:** test-runner: test:build, quick win (Implementer profile line) or architectural (`drive worktree done` runs the build lane)
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool: #711 merged on `npm run verify` alone; pre-push failed on `tests/post-build/episode-text/ai-attention-span.de.json` and cost one fix task
+
+### A Subagent skips an acceptance criterion and the report passes the shape check
+
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Enforcer:** none deterministic yet: Implementer profile line, quick win; new test for a report parser called by `worktree done`, architectural
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately
+
+### A pool Slide's test references a by-event Episode, and nothing checks it
+
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Enforcer:** adr-checker: archgate, new rule in ARCH-003-testing over `src/episodes/slide-pool/**/*.test.ts`, quick win
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool: #711 left pool tests rendering through the 2026-10-28 Event copy and pool asserts duplicated in five section tests; review caught it, fix-review b54769a05
+
+### The harness attribution reminder conflicts with the commit rule and a Subagent has to arbitrate
+
+- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Enforcer:** hook: .husky/commit-msg, architectural (brittle by the commit skill's account); or an Implementer profile line
+- **Status:** proposed
+- **Evidence:** ai-attention-span-pool: both implementation Subagents noted `/commit` strips the Co-Authored-By the harness asks for; the project rule won
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
