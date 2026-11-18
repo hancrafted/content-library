@@ -23,6 +23,8 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 - [Why does AI-assisted execution move the bottleneck to specification and review?](research/AIE/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md) — AI speeds up execution but the saved time is re-spent on verification, and review load rises with no company-level gain; the specification half is inferred, not measured.
+- [Why does telling a delegate the purpose and end state, not the steps, let them act on their own, and where does that stop working?](research/AIE/AIE-0027__autonomy-through-intent/research.md) — Mission command and Marquet let those nearest the work act within a stated purpose, and OpenAI advises goals for reasoning models, but Anthropic also asks for explicit instructions.
+- [Why is trust in an AI agent something to engineer through review and safeguards, rather than assume?](research/AIE/AIE-0028__engineering-trust-in-agents/research.md) — Trust should match an agent's demonstrated reliability: unchecked output has caused harm, and vendors advise sandbox tests, checkpoints and guardrails, but no study measures them as a set.
 
 ### Large language models (LLM)
 
@@ -50,6 +52,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 
 - [Why does tacit organisational knowledge fail to transfer during employee onboarding?](research/ORG/ORG-0001__tacit-knowledge-onboarding-transfer/research.md) — Tacit knowledge resists being written down, and the receiver needs prior knowledge and close contact to absorb it, so what is not shown in practice is lost on a newcomer.
 
+### Planning and problem solving (PLAN)
+
+- [Why does starting a plan from the goal, not from the first step, find the steps and dependencies the work needs?](research/PLAN/PLAN-0003__working-backwards-from-the-goal/research.md) — Planning from the goal asks what must hold just before it, which surfaces steps and dependencies; the evidence is for formal planning and project scheduling, and no study tests it on agent work.
+
 ### Sales (SALES)
 
 - [Why do typical B2B sales cycles take as long as they do?](research/SALES/SALES-0001__b2b-sales-cycle-length/research.md) — B2B sales cycles are long because the buyer is a group whose members each hold veto power, so cycle length is significantly affected by group size and purchase type.
@@ -67,6 +73,8 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 
 - [Why does the software ecology video treat software as a socio-technical ecosystem?](research/SWE/SWE-0001__software-as-socio-technical-system/research.md) — The software ecology talk treats software as a socio-technical ecosystem because what an organization builds mirrors its people, culture and tools, so no single node explains or fixes the whole.
 - [Why do unclear requirements lead to rework and failed projects?](research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md) — Practitioners name incomplete requirements their top problem and report rework and overruns, but the famous failure rates and the 100x late-fix cost are disputed.
+- [Why does finding the dependencies between tasks before dividing the work help, and is fixing them early cheaper?](research/SWE/SWE-0007__resolving-dependencies-early/research.md) — Dependencies decide what can run in parallel, and agents split across dependent work duplicate or miss it; but the claim that late fixes cost far more was not found in 171 projects.
+- [Why does a stated contract at each handoff between workers keep the parts of a workflow from failing at their seams?](research/SWE/SWE-0008__contracts-at-handoff-seams/research.md) — A contract states what the receiver needs and the supplier returns, not the steps; builders report vague handoffs duplicate or miss work, but no study tests contracts between agents.
 
 ## Raw
 
