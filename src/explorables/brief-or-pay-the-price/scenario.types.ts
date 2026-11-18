@@ -1,16 +1,4 @@
-import type { TraitId } from './brief-or-pay-the-price.types';
-
-export const MOVE_IDS = [
-  'break-it-down',
-  'requirements-first',
-  'interview-yourself-with-ai',
-  'evaluate-each-step',
-  'fresh-start-for-each-piece',
-] as const;
-export type MoveId = (typeof MOVE_IDS)[number];
-
-export const SCENES = ['grill', 'plan', 'parallel', 'check', 'harden', 'draft'] as const;
-export type SceneId = (typeof SCENES)[number];
+import type { MoveId, SceneId, TraitId } from './brief-or-pay-the-price.types';
 
 export const LETTERS = ['B', 'R', 'A', 'C', 'E'] as const;
 export type Letter = (typeof LETTERS)[number];

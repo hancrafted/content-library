@@ -211,4 +211,22 @@ describe('edge cases', () => {
     // ASSERT
     expect(rowAt(dismissed, lastRow)).toMatchObject({ shown: true, looping: false });
   });
+
+  it('keeps one memory per Scenario, apart from the definitions', () => {
+    // ARRANGE
+    const counts = { price: BEATS.length, 'stages:drive': 2, 'stages:other': 3 };
+    const start0 = start(counts, 'drive');
+    const events: ExplorableEvent[] = [
+      { type: 'view', view: 'stages' },
+      { type: 'open', target: 1 },
+      { type: 'scenario', scenario: 'other' },
+    ];
+    // ACT
+    const onOther = events.reduce(step, start0);
+    const back = step(onOther, { type: 'scenario', scenario: 'drive' });
+    // ASSERT
+    expect(rowAt(onOther, 1).shown).toBe(false);
+    expect(rowAt(back, 1).shown).toBe(true);
+    expect(rowAt(step(back, { type: 'view', view: 'price' }), 1).shown).toBe(false);
+  });
 });

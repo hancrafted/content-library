@@ -69,11 +69,12 @@ describe('success cases', () => {
     expect(names[0]).toBe(expected);
   });
 
-  it('shows the Define tab bar with PRICE, BRIEF and BRACE, PRICE pressed', () => {
+  it('shows the Define tab bar with PRICE, BRIEF, a Scenario acronym and BRACE, PRICE pressed', () => {
     // ARRANGE
     const expected = [
       ['price', 'true', 'PRICE'],
       ['brief', 'false', 'BRIEF'],
+      ['stages', 'false', 'DRIVE'],
       ['brace', 'false', 'BRACE'],
     ];
     // ACT
@@ -157,6 +158,31 @@ describe('success cases', () => {
       expect(word.close.lead).not.toBe('');
     }
     expect(german.definitions.brace.words.heads.ai).toBe('KI-Agenten');
+  });
+
+  describe('stages', () => {
+    it('names the Stages view by the acronym and draws one row per Stage with its scene', () => {
+      // ARRANGE
+      const data = explorableData('en');
+      const expected = ['grill', 'plan', 'parallel', 'check', 'harden'];
+      // ACT
+      const rows = data.stages.drive?.rows.map((row) => row.scene);
+      // ASSERT
+      expect(data.stages.drive?.acronym).toBe('DRIVE');
+      expect(rows).toEqual(expected);
+    });
+
+    it('gives each Stage its letter, its name, and the analogy and AI texts of its Scenario', () => {
+      // ARRANGE
+      const data = explorableData('de');
+      // ACT
+      const first = data.stages.drive?.rows[0];
+      // ASSERT
+      expect(first?.letter).toBe('D');
+      expect(first?.words.name).toBe('Define');
+      expect(first?.words.freelancer).toContain('Kunden');
+      expect(data.stages.drive?.words.heads.middle).toMatch(/Phasen$/);
+    });
   });
 });
 

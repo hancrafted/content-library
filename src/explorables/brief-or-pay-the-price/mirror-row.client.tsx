@@ -2,7 +2,7 @@
 
 import { cn } from '@/shared/lib/utils';
 import { memo, type MouseEvent, type PointerEvent } from 'react';
-import type { Definition, DefinitionId } from './brief-or-pay-the-price.types';
+import type { Definition, ViewId } from './brief-or-pay-the-price.types';
 import type { RowRead, Side, Target } from './explorable-state.pure';
 import { Card, type SceneLabels } from './mirror-card.client';
 import styles from './mirror.module.css';
@@ -78,7 +78,7 @@ const CHIP =
   'flex w-44 touch-manipulation flex-col items-center gap-1 rounded-full bg-primary px-4 py-2 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
 interface RowProps {
-  readonly definitionId: DefinitionId;
+  readonly definitionId: ViewId;
   readonly row: RowView;
   readonly index: number;
   readonly read: RowRead;
@@ -108,7 +108,7 @@ function SideCard({ definitionId, row, index, read, handlers, labels, side }: Ro
   return (
     <Card
       key={`${definitionId}-${side}`}
-      id={row.id}
+      id={row.scene}
       side={side}
       short={row.words.short}
       text={row.words[side]}

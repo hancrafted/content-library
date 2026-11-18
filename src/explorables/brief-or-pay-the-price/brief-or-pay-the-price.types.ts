@@ -24,7 +24,14 @@ export const REQUIREMENT_IDS = [
 ] as const;
 export type RequirementId = (typeof REQUIREMENT_IDS)[number];
 
+export const SCENES = ['grill', 'plan', 'parallel', 'check', 'harden', 'draft'] as const;
+export type SceneId = (typeof SCENES)[number];
+
 export type RowId = TraitId | MoveId | RequirementId;
+
+export type ViewId = DefinitionId | 'stages';
+
+export type SceneKey = RowId | SceneId;
 
 export const ROW_IDS_OF: Readonly<Record<DefinitionId, readonly RowId[]>> = {
   price: TRAIT_IDS,
@@ -69,6 +76,12 @@ export interface HandbookWords {
   readonly last: string;
 }
 
+export interface StagesWords {
+  readonly tab: string;
+  readonly heads: DefinitionWords['heads'];
+  readonly close: DefinitionWords['close'];
+}
+
 export interface Words {
   readonly chrome: {
     readonly define: string;
@@ -85,6 +98,7 @@ export interface Words {
     readonly tokens: string;
     readonly handbookWords: HandbookWords;
   };
+  readonly stages: StagesWords;
   readonly definitions: Readonly<Record<DefinitionId, DefinitionWords>>;
 }
 
@@ -93,12 +107,20 @@ export interface Config {
   readonly i18n: Readonly<Record<Locale, Words>>;
 }
 
+export interface MirrorRow {
+  readonly id: string;
+  readonly scene: SceneKey;
+  readonly letter: string;
+  readonly beatMilliseconds: number;
+  readonly words: RowWords;
+}
+
 export interface Definition {
-  readonly id: DefinitionId;
+  readonly id: ViewId;
   readonly acronym: string;
   readonly wipe: boolean;
   readonly words: DefinitionWords;
-  readonly rows: readonly (RowStructure & { readonly words: RowWords })[];
+  readonly rows: readonly MirrorRow[];
 }
 
 export type WordsOverride = DeepPartial<Words>;

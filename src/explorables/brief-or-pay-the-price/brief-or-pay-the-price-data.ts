@@ -9,12 +9,17 @@ import {
   type WordsOverride,
 } from './brief-or-pay-the-price.types';
 import { CONFIG_FILE, mergeWords, parseConfig } from './config.pure';
+import type { Scenario } from './scenario.types';
+import { allScenarios } from './scenarios';
 
 export interface ExplorableData {
   readonly locale: Locale;
   readonly words: Words;
   readonly definitions: Readonly<Record<DefinitionId, Definition>>;
+  readonly stages: Readonly<Record<string, Definition>>;
 }
+
+const STAGE_BEAT_MILLISECONDS = 2600;
 
 const config = parseConfig(configSource);
 
@@ -22,6 +27,36 @@ function rowWords(words: Words, id: DefinitionId, row: string): RowWords {
   const found = words.definitions[id].rows[row];
   if (found === undefined) throw new Error(`${CONFIG_FILE}: no words for ${id} row ${row}`);
   return found;
+}
+
+const NO_WORDS = { name: '', short: '', analogy: '', ai: '' };
+
+function stageRow(scenario: Scenario, locale: Locale, index: number): Definition['rows'][number] {
+  const stage = scenario.stages[index] as Scenario['stages'][number];
+  const said = scenario.i18n[locale].stages[stage.id] ?? NO_WORDS;
+  return {
+    id: stage.id,
+    scene: stage.scene,
+    letter: scenario.acronym?.[index] ?? String(index + 1),
+    beatMilliseconds: STAGE_BEAT_MILLISECONDS,
+    words: { name: said.name, gloss: '', short: said.short, freelancer: said.analogy, ai: said.ai },
+  };
+}
+
+function stagesOf(scenario: Scenario, words: Words, locale: Locale): Definition {
+  const { stages } = words;
+  return {
+    id: 'stages',
+    acronym: scenario.acronym ?? stages.tab,
+    wipe: false,
+    words: {
+      title: scenario.i18n[locale].title,
+      heads: { ...stages.heads, middle: `${scenario.stages.length} ${stages.heads.middle}` },
+      close: stages.close,
+      rows: {},
+    },
+    rows: scenario.stages.map((_, index) => stageRow(scenario, locale, index)),
+  };
 }
 
 export function explorableData(locale: string, override?: WordsOverride): ExplorableData {
@@ -34,6 +69,7 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
     words: words.definitions[id],
     rows: config.definitions[id].rows.map((row) => ({
       ...row,
+      scene: row.id,
       words: rowWords(words, id, row.id),
     })),
   });
@@ -41,5 +77,6 @@ export function explorableData(locale: string, override?: WordsOverride): Explor
     DefinitionId,
     Definition
   >;
-  return { locale: chosen, words, definitions };
+  const stages = Object.fromEntries(allScenarios().map((scenario) => [scenario.id, stagesOf(scenario, words, chosen)]));
+  return { locale: chosen, words, definitions, stages };
 }

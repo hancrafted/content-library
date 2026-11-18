@@ -37,6 +37,10 @@ i18n:
       dayOne: 'Reset to day one'
       caption: 'Hover a letter to reveal it; click a card to turn it.'
       turn: 'Turn the card to its text'
+    stages:
+      tab: 'Stages'
+      heads: { freelancer: 'A freelancer team', middle: 'stages', ai: 'AI agents' }
+      close: { lead: 'One goal:', text: 'each stage hands an artefact to the next.' }
     backs:
       prompt: 'prompt'
       handbook: 'How we work here'
@@ -175,6 +179,10 @@ i18n:
       dayOne: 'Zurück auf Tag eins'
       caption: 'Fahr über einen Buchstaben, um ihn aufzudecken; klick eine Karte, um sie zu drehen.'
       turn: 'Karte auf ihren Text drehen'
+    stages:
+      tab: 'Phasen'
+      heads: { freelancer: 'Ein Freelancer-Team', middle: 'Phasen', ai: 'KI-Agenten' }
+      close: { lead: 'Ein Ziel:', text: 'Jede Phase übergibt der nächsten ein Artefakt.' }
     backs:
       prompt: 'Prompt'
       handbook: 'Wie wir arbeiten'

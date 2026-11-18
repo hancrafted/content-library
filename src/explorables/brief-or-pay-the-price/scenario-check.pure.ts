@@ -1,8 +1,7 @@
-import { TRAIT_IDS } from './brief-or-pay-the-price.types';
+import { MOVE_IDS, SCENES, TRAIT_IDS } from './brief-or-pay-the-price.types';
 import { checkAnnotations } from './scenario-check-annotations.pure';
 import { isTree, isText, list, unknownFields, type Check, type Ids, type Tree } from './scenario-check-context.pure';
 import { checkWords } from './scenario-check-words.pure';
-import { MOVE_IDS, SCENES } from './scenario.types';
 
 const ROOT_FIELDS = ['id', 'acronym', 'stages', 'nodes', 'edges', 'annotations', 'i18n'];
 
