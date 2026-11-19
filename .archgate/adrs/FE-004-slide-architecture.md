@@ -3,7 +3,7 @@ type: adr
 id: FE-004
 title: 'Slide Architecture'
 domain: frontend
-rules: false
+rules: true
 # oxfmt-ignore
 files: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # oxfmt-ignore
@@ -15,7 +15,7 @@ description: 'Read-first architecture map: tiers, Episode modules, static compos
 
 ## Context
 
-Map of shape and ownership. Rules stay with their owner (Episode page, imports, server/client, Slide wrapper, Context drawer), which wins on conflict.
+Map of shape and ownership. Rules stay with their owner, which wins on conflict.
 
 **Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
@@ -45,7 +45,7 @@ flowchart TD
   tools["skills/, tools/"] -. "node-safe entries" .-> pipeline
 ```
 
-Areas meet in page assembly via props: the Event template passes Episode cards to the Playlist list.
+Areas meet in page assembly via props.
 
 **Episodes:** content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) stays apart from code (`components/`, `lib/`, `hooks/`); these names are reserved.
 
@@ -149,7 +149,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
-4. A Slide MAY declare a Surface and an inverse flag, independently (Decision record 0030). One container adapter publishes the flag as `data-page-tone` on `<html>` at the sampling line; chrome follows it, never a Surface.
+4. A Slide MAY declare a Surface and an inverse flag, independently (Decision record 0030). One container adapter publishes the flag as `data-page-tone` on `<html>` at the sampling line; chrome follows it, never a Surface. (📜 Rule: `no-retired-tone`)
 
 ### 6. What an agent may change
 
@@ -173,7 +173,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 ### Do's
 
-1. **DO** start from this map, then open the record that owns the concern. (Decision 1)
+1. **DO** start from this map, then open the owning record. (Decision 1)
 2. **DO** run `npm run registry` after adding an Episode (copy `episode-template/`, add metadata) or editing a folder, Playlist, text or Voice script. (Decision 3, Decision 4)
 3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, Decision record 0008)
 4. **DO** promote a part a second Slide needs to `slide-shared/`, a Slide ≥2 Episodes show as-is to the Slide pool, imported via `@/`. (Decision 3, Decision 7)
@@ -190,7 +190,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 4. **DON'T** put an Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
 6. **DON'T** add a tier, module or Slide schema beyond the approved presentation boundary without a new ADR. (Decision 6)
-7. **DON'T** restyle chrome from a Scene, infer tone from colours, or declare `tone`. (Decision 5)
+7. **DON'T** restyle chrome from a Scene, infer tone from colours, or declare `tone`. (Decision 5, 📜 Rule: `no-retired-tone`)
 8. **DON'T** let shared measurement import Episode records or Title policy. (Decision 3)
 9. **DON'T** list a page via `compositionOf(ref)`; read `summaryOf(ref)`. (Decision 4)
 
@@ -205,7 +205,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 
 **Negative:**
 
-1. **Two reads:** map plus owner.
+1. **Two reads:** map, owner.
 2. **One more command:** text or Playlist edits need `npm run registry`.
 3. **Restatement:** owner rules recur here.
 4. **A pool fix travels:** a pool Slide change reaches every Episode that composes it; copy it out first to differ.
@@ -220,9 +220,11 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and shared reach, the Section → pool Slide edge and its alias, no pool section slide, page chrome reached only from assembly or the container, no Episode or listing route reaching the registry.
 2. **Lint** holds the `'use client'` classifier; **types** hold the record, registry and per-Slide text; **unit and post-build tests** hold anchors, folder names, pool Slide checks, slot order, routes and summaries.
 
+3. **Archgate** (`no-retired-tone`): `tone`, `data-tone-flip`, text-colour keys in a presentation (§5.4).
+
 **Manual review:** approved module/tier/text/style homes; per-Episode bundles; presentation config governs mechanics, never Scene layout; domain-free measurement; one geometry-driven tone adapter; server defaults and leaf clients.
 
-**Exceptions:** raise a separate ADR; human approval required.
+**Exceptions:** a separate ADR; human approval required.
 
 ## References
 
