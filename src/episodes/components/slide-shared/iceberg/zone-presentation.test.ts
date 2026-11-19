@@ -76,9 +76,9 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('fills a Surface section slide with the top of its sky, so the wave rising into it reads as one with the sky', () => {
+  it('fills a Surface section slide with the top of its sky, so the wave reads as one with the sky, its bubbles still tinted --zone-surface', () => {
     // ARRANGE
-    const expected = { surface: SKY_TOP, bubbleTint: undefined };
+    const expected = { surface: SKY_TOP, bubbleTint: { '--slide-transition-bubble': 'var(--zone-surface)' } };
     // ACT
     const presentation = zonePresentation({
       sections: SECTIONS,

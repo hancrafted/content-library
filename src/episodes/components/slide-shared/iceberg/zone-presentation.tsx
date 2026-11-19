@@ -23,7 +23,10 @@ export type ZoneStyle = Readonly<Record<`--${string}`, string>>;
 export interface ZonePresentation {
   readonly surface?: ZoneSurface;
   readonly style: ZoneStyle;
-  readonly enter?: { readonly effect: 'bubbles' };
+  readonly enter?: {
+    readonly effect: 'bubbles';
+    readonly style?: Readonly<Record<'--slide-transition-bubble', string>>;
+  };
   readonly rear: ReactNode;
   readonly rearMobile: true;
 }
@@ -55,6 +58,11 @@ function surfaceOf(zone: Zone): string {
   return zone === 'surface' ? skyTop() : zoneToken(zone);
 }
 
+// decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md
+function bubbleTint(zone: Zone): Pick<NonNullable<ZonePresentation['enter']>, 'style'> {
+  return surfaceOf(zone) === zoneToken(zone) ? {} : { style: { '--slide-transition-bubble': zoneToken(zone) } };
+}
+
 export function zoneTitlePresentation(): Pick<ZonePresentation, 'surface' | 'style'> {
   return zoneLook('surface', 'title');
 }
@@ -65,7 +73,7 @@ export function zonePresentation({ sections, section, kind, scene }: ZonePresent
   if (kind === 'page') return { ...zoneLook(zone, kind), rear: rail, rearMobile: true };
   return {
     ...zoneLook(zone, kind),
-    enter: { effect: 'bubbles' },
+    enter: { effect: 'bubbles', ...bubbleTint(zone) },
     rear: (
       <>
         {scene}
