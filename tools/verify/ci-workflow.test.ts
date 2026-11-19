@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -7,6 +8,8 @@ const WORKFLOW = '.github/workflows/ci.yml';
 const DEPLOY_WORKFLOW = '.github/workflows/deploy-cloudflare.yml';
 
 interface Step {
+  id?: string;
+  if?: string;
   uses?: string;
   run?: string;
   with?: Record<string, unknown>;
@@ -21,6 +24,7 @@ interface Workflow {
       if?: string;
       needs?: string[];
       env?: Record<string, string>;
+      outputs?: Record<string, string>;
       steps: Step[];
     }
   >;
@@ -110,6 +114,188 @@ describe('the CI workflow', () => {
   });
 });
 
+const stepRunning = (job: string, run: string | RegExp): Step | undefined =>
+  workflow().jobs[job]?.steps.find((step) => (typeof run === 'string' ? step.run === run : run.test(step.run ?? '')));
+const NOT_DOCS_ONLY = "steps.kind.outputs.docs-only != 'true'";
+
+describe('the CI preview and post-build jobs', () => {
+  it('gates the preview job on the export job and its build output', () => {
+    // ARRANGE
+    const { export: exportJob, preview } = workflow().jobs;
+    // ACT
+    const needs = [preview?.needs ?? []].flat();
+    // ASSERT
+    expect(needs).toContain('export');
+    expect(exportJob?.outputs).toHaveProperty('build');
+    expect(preview?.if).toContain('needs.export.outputs.build');
+  });
+
+  it('runs the post-build suite in a build-test job beside the preview, not inside export', () => {
+    // ARRANGE
+    const { export: exportJob, preview, 'build-test': buildTest } = workflow().jobs;
+    const runs = (job?: { steps?: Step[] }) => (job?.steps ?? []).map((step) => step.run ?? '');
+    // ACT
+    const previewNeeds = [preview?.needs ?? []].flat();
+    // ASSERT
+    expect([buildTest?.needs ?? []].flat()).toEqual(['export']);
+    expect(previewNeeds).not.toContain('build-test');
+    expect(runs(buildTest)).toContain('npm run test:build');
+    expect(runs(exportJob)).not.toContain('npm run test:build');
+  });
+
+  it('builds the post-build suite with the same env as the export it tests', () => {
+    // ARRANGE
+    const { export: exportJob, 'build-test': buildTest } = workflow().jobs;
+    // ACT
+    // ASSERT
+    expect(exportJob?.env).toBeDefined();
+    expect(buildTest?.env).toEqual(exportJob?.env);
+  });
+
+  it('keeps main out of the preview, since production publishes it', () => {
+    // ARRANGE
+    const condition = workflow().jobs.preview?.if ?? '';
+    // ACT
+    // ASSERT
+    expect(condition).toContain("github.ref != 'refs/heads/main'");
+  });
+
+  it('keeps forks and Dependabot away from the preview', () => {
+    // ARRANGE
+    const condition = workflow().jobs.preview?.if ?? '';
+    // ACT
+    // ASSERT
+    expect(condition).toContain('github.repository');
+    expect(condition).toContain('dependabot[bot]');
+  });
+});
+
+describe('the CI docs lane', () => {
+  it('asks verify:change-kind itself in each of the three jobs, after npm ci and never on main', () => {
+    // ARRANGE
+    const jobs = ['static', 'unit', 'export'];
+    // ACT
+    const detects = jobs.map((job) => {
+      const steps = workflow().jobs[job]?.steps ?? [];
+      const detect = steps.find((step) => step.id === 'kind');
+      return {
+        detectIndex: steps.findIndex((step) => step === detect),
+        installIndex: steps.findIndex((step) => step.run === 'npm ci'),
+        run: detect?.run,
+        condition: detect?.if,
+      };
+    });
+    // ASSERT
+    for (const { detectIndex, installIndex, run, condition } of detects) {
+      expect(installIndex).toBeGreaterThan(-1);
+      expect(detectIndex).toBeGreaterThan(installIndex);
+      expect(run).toContain('git merge-base origin/main HEAD');
+      expect(run).toContain('verify:change-kind');
+      expect(run).toContain('$GITHUB_OUTPUT');
+      expect(condition).toBe("github.ref != 'refs/heads/main'");
+    }
+  });
+
+  it('skips lint, typecheck and knip only on docs-only, and keeps preflight, archgate, format and check:docs always', () => {
+    // ARRANGE
+    const steps = workflow().jobs.static?.steps ?? [];
+    const skipped = ['npm run lint', 'npm run typecheck', 'npm run knip'];
+    const kept = ['npm run preflight', 'npm run archgate:full', 'npm run format:check', 'npm run check:docs'];
+    // ACT
+    const conditionOf = (run: string) => steps.find((step) => step.run === run);
+    // ASSERT
+    for (const run of skipped) expect(conditionOf(run)?.if).toBe(NOT_DOCS_ONLY);
+    for (const run of kept) {
+      expect(conditionOf(run)).toBeDefined();
+      expect(conditionOf(run)?.if).toBeUndefined();
+    }
+  });
+
+  it('runs the full fast suite unless docs-only, vitest --changed origin/main on docs-only, and the 3 s budget on both', () => {
+    // ARRANGE
+    const steps = workflow().jobs.unit?.steps ?? [];
+    // ACT
+    const full = steps.find((step) => step.run?.startsWith('npm test'));
+    const budget = steps.find((step) => step.run?.includes('over-budget.ts'));
+    const changed = steps.find((step) => step.run?.includes('--changed origin/main'));
+    // ASSERT
+    expect(full?.if).toBe(NOT_DOCS_ONLY);
+    expect(budget).toMatchObject({ run: expect.stringContaining('over-budget.ts fast-suite.json 3000') });
+    expect(budget?.if).toBeUndefined();
+    expect(changed?.if).toBe("steps.kind.outputs.docs-only == 'true'");
+    expect(changed).toMatchObject({
+      run: expect.stringMatching(
+        /^npx vitest run --changed origin\/main .*--reporter=json --outputFile.json=fast-suite.json/,
+      ),
+    });
+  });
+
+  it('skips the build and the upload only on docs-only, and publishes both outputs', () => {
+    // ARRANGE
+    const { export: job } = workflow().jobs;
+    const build = stepRunning('export', 'npm run build');
+    const upload = job?.steps.find((step) => step.uses?.startsWith('actions/upload-artifact@'));
+    // ACT
+    // ASSERT
+    expect(build?.if).toBe(NOT_DOCS_ONLY);
+    expect(upload?.if).toBe(NOT_DOCS_ONLY);
+    expect(job?.outputs).toEqual({
+      build: '${{ steps.kind.outputs.build }}',
+      'docs-only': '${{ steps.kind.outputs.docs-only }}',
+    });
+  });
+
+  it('skips nothing on main: every skip reads an output the detect step leaves empty there', () => {
+    // ARRANGE
+    const conditions = Object.values(workflow().jobs).flatMap((job) => job.steps.map((step) => step.if ?? ''));
+    // ACT
+    const readsDocsOnly = conditions.filter((condition) => condition.includes('docs-only'));
+    // ASSERT
+    expect(readsDocsOnly.length).toBeGreaterThan(0);
+    for (const condition of readsDocsOnly)
+      expect(condition).toMatch(/^steps\.kind\.outputs\.docs-only (!=|==) 'true'$/);
+    expect(workflow().jobs['build-test']?.if).toBe("needs.export.outputs.docs-only != 'true'");
+  });
+
+  it('skips build-test, and so the preview, on docs-only, and keeps their job names for the required checks', () => {
+    // ARRANGE
+    const { 'build-test': buildTest, preview } = workflow().jobs;
+    // ACT
+    // ASSERT
+    expect(buildTest?.if).toBe("needs.export.outputs.docs-only != 'true'");
+    expect(preview?.if).toContain("needs.export.outputs.build == 'true'");
+    expect(Object.values(workflow().jobs).map((job) => job.name)).toEqual([
+      'preflight, archgate, lint, typecheck',
+      'unit tests',
+      'build',
+      'post-build tests',
+      'build, post-build tests',
+      'deploy to Cloudflare Pages (preview)',
+    ]);
+  });
+
+  it('lets the gate accept a skipped build-test only on docs-only', () => {
+    // ARRANGE
+    const { gate } = workflow().jobs;
+    const run = gate?.steps.map((step) => step.run ?? '').join('\n') ?? '';
+    const gateExitCode = (build: string, postBuild: string, docsOnly: string) =>
+      spawnSync('sh', ['-c', run], {
+        env: { ...process.env, BUILD: build, POST_BUILD: postBuild, DOCS_ONLY: docsOnly },
+      }).status;
+    // ACT
+    const verdicts = {
+      passes: gateExitCode('success', 'success', ''),
+      docsOnlySkip: gateExitCode('success', 'skipped', 'true'),
+      otherSkip: gateExitCode('success', 'skipped', ''),
+      skipAfterFailedBuild: gateExitCode('failure', 'skipped', 'true'),
+      failedTests: gateExitCode('success', 'failure', 'true'),
+    };
+    // ASSERT
+    expect(gate?.if).toBe('always()');
+    expect(verdicts).toEqual({ passes: 0, docsOnlySkip: 0, otherSkip: 1, skipAfterFailedBuild: 1, failedTests: 1 });
+  });
+});
+
 describe('the Cloudflare deploy workflow', () => {
   it('deploys production only after CI completes on main: no push trigger and no pull_request trigger, the manual run stays', () => {
     // ARRANGE
@@ -174,7 +360,7 @@ describe('the Cloudflare deploy workflow', () => {
     }
   });
 
-  it('reports the required check from a gate job that fails unless build and post-build tests both succeeded', () => {
+  it('reports the required check from a gate job that fails unless build and post-build tests both succeeded, or the latter was skipped on docs-only', () => {
     // ARRANGE
     const { gate } = workflow().jobs;
     // ACT
@@ -185,6 +371,7 @@ describe('the Cloudflare deploy workflow', () => {
     expect(gate?.if).toBe('always()');
     expect(run).toContain('"$BUILD" = success');
     expect(run).toContain('"$POST_BUILD" = success');
+    expect(run).toContain('"$DOCS_ONLY" = true');
     expect(Object.values(workflow().jobs).filter((job) => job.name === 'build, post-build tests')).toHaveLength(1);
   });
 
