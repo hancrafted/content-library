@@ -94,7 +94,10 @@ function sessionsOfTopic(root: string, topic: string): string[] {
   const transcripts = parseLog(readFileSync(log, 'utf8'))
     .filter(isSubagentEntry)
     .map((entry) => entry.parent ?? entry.transcript);
-  return [...new Set(transcripts)];
+  const sessions = [...new Set(transcripts)];
+  if (sessions.length === 0)
+    fail(`no sessions linked in ${logPath(topic)}: the SubagentStart hook has logged none; pass a session id instead`);
+  return sessions;
 }
 
 function transcriptFiles(root: string, options: Options): string[] {

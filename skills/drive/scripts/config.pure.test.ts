@@ -168,6 +168,6 @@ describe('DRIVE_FOLDER', () => {
     const folder = DRIVE_FOLDER;
     // ASSERT
     expect(folder).toBe(expected);
-    expect(CONFIG_PATH.startsWith(`${folder}/`)).toBe(true);
+    expect(CONFIG_PATH).toMatch(new RegExp(`^${folder}/`));
   });
 });

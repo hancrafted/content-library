@@ -2,15 +2,21 @@ import { describe, expect, it } from 'vitest';
 import {
   derivePhase,
   type Facts,
+  fortifyOfRecord,
   lastCommand,
   mergedTicketsOf,
   pickIntegrationBranch,
+  recordFileOf,
+  specOfDecisionBody,
   renderStatus,
   ticketsOfBodies,
 } from './status.pure.ts';
 
 const base: Facts = {
   topic: 'demo',
+  epic: null,
+  ghFailed: false,
+  fortify: null,
   integrationBranch: 'chore/demo',
   pushed: true,
   decisionPr: null,
@@ -20,6 +26,7 @@ const base: Facts = {
   lastLog: null,
 };
 const pr = (number: number, state: 'OPEN' | 'MERGED' | 'CLOSED', isDraft = false) => ({ number, state, isDraft });
+const allMerged = { ...base, decisionPr: pr(5, 'MERGED'), tickets: [1], mergedTickets: [1] };
 
 describe('derivePhase', () => {
   it.each([
@@ -33,14 +40,14 @@ describe('derivePhase', () => {
       'Implement',
     ],
     ['tickets but no Decision PR (chat approval)', { tickets: [1] }, 'Implement'],
-    [
-      'every ticket merged, no Integration PR',
-      { decisionPr: pr(5, 'MERGED'), tickets: [1], mergedTickets: [1] },
-      'Verify',
-    ],
+    ['every ticket merged, no Integration PR', allMerged, 'Verify'],
     ['a merged Integration PR', { integrationPr: pr(9, 'MERGED') }, 'Evolve'],
+    ['a merged Integration PR and fortify pending', { integrationPr: pr(9, 'MERGED'), fortify: 'pending' }, 'Evolve'],
+    ['a merged Integration PR and fortify engaged', { integrationPr: pr(9, 'MERGED'), fortify: 'engaged' }, 'Done'],
+    ['a merged Integration PR and fortify skipped', { integrationPr: pr(9, 'MERGED'), fortify: 'skipped' }, 'Done'],
     ['a Decision PR closed unmerged', { decisionPr: pr(5, 'CLOSED') }, 'Stopped'],
     ['an Integration PR closed unmerged', { integrationPr: pr(9, 'CLOSED') }, 'Stopped'],
+    ['a failed gh call', { ghFailed: true }, 'Stopped'],
   ] as const)('names the phase for %s', (_name, patch, phase) => {
     // ARRANGE
     const facts: Facts = { ...base, ...patch };
@@ -50,42 +57,59 @@ describe('derivePhase', () => {
     expect(standing.phase).toBe(phase);
   });
 
-  it('points the Verify stop at the draft, then at the Operator', () => {
+  it('points the first Verify stop at `drive push --spec <epic>`, then at the record and `pr ready`, then at the Operator', () => {
     // ARRANGE
-    const verified = {
-      ...base,
-      decisionPr: pr(5, 'MERGED'),
-      tickets: [1],
-      mergedTickets: [1],
-    };
+    const verified = { ...allMerged, epic: 789 };
+    const expectedNone = 'drive push --spec 789';
+    const expectedDraft = ['commit the record', 'drive pr ready 9'];
+    const expectedReady = 'merges #9';
     // ACT
     const none = derivePhase(verified).next;
-    const draft = derivePhase({
-      ...verified,
-      integrationPr: pr(9, 'OPEN', true),
-    }).next;
-    const ready = derivePhase({
-      ...verified,
-      integrationPr: pr(9, 'OPEN'),
-    }).next;
+    const draft = derivePhase({ ...verified, integrationPr: pr(9, 'OPEN', true) }).next;
+    const ready = derivePhase({ ...verified, integrationPr: pr(9, 'OPEN') }).next;
+    const unknownEpic = derivePhase(allMerged).next;
     // ASSERT
-    expect(none).toContain('drive push');
-    expect(draft).toContain('drive pr ready 9');
-    expect(ready).toContain('merges #9');
+    expect(none).toContain(expectedNone);
+    expect(draft).toEqual(expect.stringContaining(expectedDraft[0] as string));
+    expect(draft).toEqual(expect.stringContaining(expectedDraft[1] as string));
+    expect(ready).toContain(expectedReady);
+    expect(unknownEpic).toContain('--spec <epic>');
+  });
+
+  it('asks the one Fortify question after the merge until the record leaves pending, then says what is left', () => {
+    // ARRANGE
+    const merged = { ...base, integrationPr: pr(9, 'MERGED') };
+    const expectedQuestion = 'Fortify now or skip?';
+    // ACT
+    const unrecorded = derivePhase(merged).next;
+    const pending = derivePhase({ ...merged, fortify: 'pending' }).next;
+    const engaged = derivePhase({ ...merged, fortify: 'engaged' }).next;
+    const skipped = derivePhase({ ...merged, fortify: 'skipped' }).next;
+    // ASSERT
+    expect(unrecorded).toContain(expectedQuestion);
+    expect(pending).toContain(expectedQuestion);
+    expect(engaged).not.toContain(expectedQuestion);
+    expect(skipped).not.toContain(expectedQuestion);
   });
 
   it('lists the unmerged tickets as the Implement stop', () => {
     // ARRANGE
-    const facts = {
-      ...base,
-      decisionPr: pr(5, 'MERGED'),
-      tickets: [1, 2, 3],
-      mergedTickets: [2],
-    };
+    const facts = { ...base, decisionPr: pr(5, 'MERGED'), tickets: [1, 2, 3], mergedTickets: [2] };
+    const expected = '#1, #3';
     // ACT
     const { next } = derivePhase(facts);
     // ASSERT
-    expect(next).toContain('#1, #3');
+    expect(next).toContain(expected);
+  });
+
+  it('says the Tickets section lists none when a merged Decision PR yields no ticket', () => {
+    // ARRANGE
+    const facts = { ...base, decisionPr: pr(5, 'MERGED') };
+    const expected = '`- #<n>`';
+    // ACT
+    const { next } = derivePhase(facts);
+    // ASSERT
+    expect(next).toContain(expected);
   });
 });
 
@@ -100,27 +124,39 @@ describe('renderStatus', () => {
       mergedTickets: [1],
       lastLog: { t: '2026-01-01T00:00:00Z', cmd: 'push' },
     };
+    const expected = [
+      'Workflow demo: Implement',
+      'Integration branch: chore/demo (pushed)',
+      'Decision PR: #5 merged',
+      'Integration PR: #9 draft',
+      'Tickets: 1/2 merged',
+      'Last command: `push`',
+      'Next stop: merge #2',
+    ];
     // ACT
     const text = renderStatus(facts);
     // ASSERT
-    expect(text).toContain('Workflow demo: Implement');
-    expect(text).toContain('Integration branch: chore/demo (pushed)');
-    expect(text).toContain('Decision PR: #5 merged');
-    expect(text).toContain('Integration PR: #9 draft');
-    expect(text).toContain('Tickets: 1/2 merged');
-    expect(text).toContain('Last command: `push`');
-    expect(text).toContain('Next stop: merge #2');
+    for (const line of expected) expect(text).toContain(line);
   });
 
   it('works with no log, no PRs and no branch', () => {
     // ARRANGE
     const facts: Facts = { ...base, integrationBranch: null, pushed: false };
+    const expected = ['Integration branch: none', 'Decision PR: none', 'Last command: no log'];
     // ACT
     const text = renderStatus(facts);
     // ASSERT
-    expect(text).toContain('Integration branch: none');
-    expect(text).toContain('Decision PR: none');
-    expect(text).toContain('Last command: no log');
+    for (const line of expected) expect(text).toContain(line);
+  });
+
+  it('says unknown, not none, when gh failed', () => {
+    // ARRANGE
+    const facts: Facts = { ...base, ghFailed: true };
+    const expected = ['Decision PR: unknown (gh failed)', 'Integration PR: unknown (gh failed)'];
+    // ACT
+    const text = renderStatus(facts);
+    // ASSERT
+    for (const line of expected) expect(text).toContain(line);
   });
 });
 
@@ -128,11 +164,14 @@ describe('fact readers', () => {
   it('picks the Integration branch, never the decisions or a Task branch', () => {
     // ARRANGE
     const branches = ['decisions/demo', 'origin/chore/demo--1-x', 'origin/chore/demo'];
+    const onlyDecisions = ['decisions/demo'];
+    const expected = 'chore/demo';
     // ACT
-    const picked = pickIntegrationBranch(branches, 'demo');
+    const picked = pickIntegrationBranch(branches, 'demo', 'origin');
+    const none = pickIntegrationBranch(onlyDecisions, 'demo', 'origin');
     // ASSERT
-    expect(picked).toBe('chore/demo');
-    expect(pickIntegrationBranch(['decisions/demo'], 'demo')).toBeNull();
+    expect(picked).toBe(expected);
+    expect(none).toBeNull();
   });
 
   it('reads merged tickets from the merge commits of Task branches', () => {
@@ -143,30 +182,59 @@ describe('fact readers', () => {
       "Merge branch 'chore/other--8-x' into chore/other",
       "Merge branch 'chore/demo--review-fix' into chore/demo",
     ];
+    const expected = [7];
     // ACT
     const merged = mergedTicketsOf(subjects, 'chore/demo');
     // ASSERT
-    expect(merged).toEqual([7]);
+    expect(merged).toEqual(expected);
   });
 
-  it('reads tickets from the Closes lines, else the Decision PR Tickets section', () => {
+  it('reads tickets from the Closes lines, else the Decision PR Tickets section, as #n or issue URLs', () => {
     // ARRANGE
     const decision = '## Spec\n\n#1\n\n## Tickets\n\n- #4 a (Skills: tdd)\n- #5 b\n\n## Live\n\n- #99 no';
+    const urls = '## Tickets\n\n- https://github.com/o/r/issues/6 c\n';
+    const expected = { close: [2, 3], decision: [4, 5], urls: [6] };
     // ACT
     const fromClose = ticketsOfBodies('Spec: #1\n\nCloses #2\nCloses #3', decision);
     const fromDecision = ticketsOfBodies(null, decision);
+    const fromUrls = ticketsOfBodies(null, urls);
     // ASSERT
-    expect(fromClose).toEqual([2, 3]);
-    expect(fromDecision).toEqual([4, 5]);
+    expect({ close: fromClose, decision: fromDecision, urls: fromUrls }).toEqual(expected);
+  });
+
+  it('reads the epic from the Decision PR Spec section as a number or an issue URL', () => {
+    // ARRANGE
+    const asUrl = '## Spec\n\nhttps://github.com/o/r/issues/789\n\n## Tickets\n\n- #1';
+    const asNumber = '## Spec\n\n#12\n';
+    const expected = [789, 12, null];
+    // ACT
+    const read = [asUrl, asNumber, 'no spec section'].map(specOfDecisionBody);
+    // ASSERT
+    expect(read).toEqual(expected);
+  });
+
+  it('reads the fortify state of a record and finds the record of exactly this topic', () => {
+    // ARRANGE
+    const record = '---\nworkflow: demo\nfortify: pending\n---\n\n# demo';
+    const files = ['d/records/2026-11-19-other-demo.md', 'd/records/2026-11-19-demo.md'];
+    const expected = { state: 'pending', file: 'd/records/2026-11-19-demo.md', missing: null };
+    // ACT
+    const state = fortifyOfRecord(record);
+    const file = recordFileOf(files, 'demo');
+    const missing = recordFileOf(files, 'emo');
+    // ASSERT
+    expect({ state, file, missing }).toEqual(expected);
   });
 
   it('takes the last log line that is a command', () => {
     // ARRANGE
     const entries = [{ t: 'a', cmd: 'push' }, { t: 'b', cmd: 'status' }, { t: 'c' }];
+    const expected = { t: 'b', cmd: 'status' };
     // ACT
     const last = lastCommand(entries);
+    const none = lastCommand([]);
     // ASSERT
-    expect(last).toEqual({ t: 'b', cmd: 'status' });
-    expect(lastCommand([])).toBeNull();
+    expect(last).toEqual(expected);
+    expect(none).toBeNull();
   });
 });

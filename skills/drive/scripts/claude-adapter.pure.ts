@@ -1,5 +1,6 @@
+import { isIntegrationBranch, topicSlugOf } from './branch-topic.pure.ts';
 import type { SubagentEntry } from './log.pure.ts';
-import { topicOfBranch } from './log.pure.ts';
+import { SCRATCH } from './log.pure.ts';
 
 export interface HookPayload {
   session_id: string;
@@ -35,7 +36,7 @@ export function subagentEntry(
   };
 }
 
-const BRIEF_PATH = /\.scratch\/([^/\s"'\\]+)\//;
+const BRIEF_PATH = new RegExp(`${SCRATCH.replaceAll('.', String.raw`\.`)}/([^/\\s"'\\\\]+)/`);
 
 export const topicOfBrief = (text: string | null): string | null => BRIEF_PATH.exec(text ?? '')?.[1] ?? null;
 
@@ -70,8 +71,8 @@ function worktreeBranches(porcelain: string): { dir: string; branch: string }[] 
 export function topicOfIntegration(porcelain: string, worktreeDir: string): string | null {
   const inside = `/${worktreeDir.replace(/^\/+|\/+$/g, '')}/`;
   const topics = worktreeBranches(porcelain)
-    .filter((entry) => entry.dir.includes(inside) && !entry.branch.includes('--'))
-    .map((entry) => topicOfBranch(entry.branch));
+    .filter((entry) => entry.dir.includes(inside) && isIntegrationBranch(entry.branch))
+    .map((entry) => topicSlugOf(entry.branch));
   const unique = new Set(topics.filter((topic) => topic !== null));
   return unique.size === 1 ? ([...unique][0] ?? null) : null;
 }
@@ -81,5 +82,5 @@ export function subagentTopic(facts: {
   brief: string | null;
   integration: () => string | null;
 }): string | null {
-  return topicOfBranch(facts.cwdBranch) ?? topicOfBrief(facts.brief) ?? facts.integration();
+  return topicSlugOf(facts.cwdBranch) ?? topicOfBrief(facts.brief) ?? facts.integration();
 }

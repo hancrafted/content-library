@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EPIC_BODIES } from './dispatch-fixtures.ts';
-import { checkTickets, globsOverlap, parseTicket, taskBranchGlob } from './dispatch.pure.ts';
+import { checkTickets, epicOfTickets, globsOverlap, parseTicket } from './dispatch.pure.ts';
 
 const tickets = (numbers: readonly number[]) => numbers.map((n) => parseTicket(n, EPIC_BODIES[n] ?? ''));
 
@@ -8,35 +8,41 @@ describe('parseTicket', () => {
   it('reads Files, Describes, ADRs and Evidence from a real ticket body', () => {
     // ARRANGE
     const body = EPIC_BODIES[798] ?? '';
+    const expected = {
+      files: ['skills/drive/SKILL.md', 'skills/drive/references/**', 'docs/agents/grilling-format.md'],
+      describes: [790, 794, 791, 793, 792, 796, 797, 795],
+      adrs: 'GEN-007-naming',
+      evidence: 'Decision record 0030',
+    };
     // ACT
     const ticket = parseTicket(798, body);
     // ASSERT
-    expect(ticket.files).toEqual([
-      'skills/drive/SKILL.md',
-      'skills/drive/references/**',
-      'docs/agents/grilling-format.md',
-    ]);
-    expect(ticket.describes).toEqual([790, 794, 791, 793, 792, 796, 797, 795]);
-    expect(ticket.adrs).toBe('GEN-007-naming');
-    expect(ticket.evidence).toContain('Decision record 0030');
+    expect(ticket).toMatchObject({
+      files: expected.files,
+      describes: expected.describes,
+      adrs: expected.adrs,
+      evidence: expect.stringContaining(expected.evidence),
+    });
   });
 
   it('drops a trailing parenthetical note from a file entry and reads `none` as no target', () => {
     // ARRANGE
     const body = 'Files: a.md (delete), b/** (report template only)\nDescribes: none\nADRs: X\nEvidence from: y';
+    const expected = { files: ['a.md', 'b/**'], describes: [] };
     // ACT
     const ticket = parseTicket(1, body);
     // ASSERT
-    expect(ticket).toMatchObject({ files: ['a.md', 'b/**'], describes: [] });
+    expect(ticket).toMatchObject(expected);
   });
 
   it('reads a missing or blank line as null', () => {
     // ARRANGE
     const body = 'Files: a.ts\nADRs:   \nDescribes: none';
+    const expected = { adrs: null, evidence: null };
     // ACT
     const ticket = parseTicket(1, body);
     // ASSERT
-    expect(ticket).toMatchObject({ adrs: null, evidence: null });
+    expect(ticket).toMatchObject(expected);
   });
 });
 
@@ -52,21 +58,12 @@ describe('globsOverlap', () => {
     ['skills/drive/scripts/setup*.ts', 'skills/drive/scripts/setup.pure.ts', true],
   ])('%s vs %s is %s', (a, b, expected) => {
     // ARRANGE
+    const both = [expected, expected];
     // ACT
     const forward = globsOverlap(a, b);
     const backward = globsOverlap(b, a);
     // ASSERT
-    expect([forward, backward]).toEqual([expected, expected]);
-  });
-});
-
-describe('taskBranchGlob', () => {
-  it('names the Task branches of an issue under an Integration branch', () => {
-    // ARRANGE
-    // ACT
-    const glob = taskBranchGlob('chore/drive-fortify-sweep', 790);
-    // ASSERT
-    expect(glob).toBe('chore/drive-fortify-sweep--790-*');
+    expect([forward, backward]).toEqual(both);
   });
 });
 
@@ -76,13 +73,14 @@ describe('checkTickets', () => {
   it('names both tickets and the files when two Files globs overlap', () => {
     // ARRANGE
     const queued = tickets([790, 795]);
+    const expected = [
+      '#790 and #795 both own skills/drive/scripts/setup*.ts',
+      '#790 and #795 both own skills/drive/scripts/drive.ts',
+    ];
     // ACT
     const problems = checkTickets(queued, allMerged);
     // ASSERT
-    expect(problems).toEqual([
-      '#790 and #795 both own skills/drive/scripts/setup*.ts',
-      '#790 and #795 both own skills/drive/scripts/drive.ts',
-    ]);
+    expect(problems).toEqual(expected);
   });
 
   it('passes tickets whose files are disjoint', () => {
@@ -98,17 +96,12 @@ describe('checkTickets', () => {
     // ARRANGE
     const queued = tickets([798]);
     const mergedOnly = (n: number) => n === 790 || n === 794;
+    const unmerged = [791, 793, 792, 796, 797, 795];
+    const expected = unmerged.map((n) => `#798 describes #${n}, which is unmerged`);
     // ACT
     const problems = checkTickets(queued, mergedOnly);
     // ASSERT
-    expect(problems).toEqual([
-      '#798 describes #791, which is unmerged',
-      '#798 describes #793, which is unmerged',
-      '#798 describes #792, which is unmerged',
-      '#798 describes #796, which is unmerged',
-      '#798 describes #797, which is unmerged',
-      '#798 describes #795, which is unmerged',
-    ]);
+    expect(problems).toEqual(expected);
   });
 
   it('passes #798 once everything it describes is merged', () => {
@@ -126,27 +119,45 @@ describe('checkTickets', () => {
       parseTicket(5, 'Files: a.ts\nDescribes: none\nEvidence from: x'),
       parseTicket(6, 'Files: b.ts\nDescribes: none\nADRs: X'),
     ];
+    const expected = ['#5 has no ADRs line', '#6 has no Evidence from line'];
     // ACT
     const problems = checkTickets(queued, allMerged);
     // ASSERT
-    expect(problems).toEqual(['#5 has no ADRs line', '#6 has no Evidence from line']);
+    expect(problems).toEqual(expected);
   });
 
   it('fails a ticket with no Files line', () => {
     // ARRANGE
     const queued = [parseTicket(5, 'Describes: none\nADRs: X\nEvidence from: x')];
+    const expected = ['#5 has no Files line'];
     // ACT
     const problems = checkTickets(queued, allMerged);
     // ASSERT
-    expect(problems).toEqual(['#5 has no Files line']);
+    expect(problems).toEqual(expected);
   });
 
   it('accepts a ticket that describes a target queued in the same call only when merged', () => {
     // ARRANGE
     const queued = tickets([793, 798]);
+    const mergedExcept793 = (n: number) => n !== 793;
+    const expected = ['#798 describes #793, which is unmerged'];
     // ACT
-    const problems = checkTickets(queued, (n) => n !== 793);
+    const problems = checkTickets(queued, mergedExcept793);
     // ASSERT
-    expect(problems).toEqual(['#798 describes #793, which is unmerged']);
+    expect(problems).toEqual(expected);
+  });
+});
+
+describe('epicOfTickets', () => {
+  it('names the epic every ticket shares and nothing when one differs or names none', () => {
+    // ARRANGE
+    const same = [790, 791].map((n) => EPIC_BODIES[n] ?? '');
+    const mixed = [EPIC_BODIES[790] ?? '', '## Parent\n\n#12\n'];
+    const none = [EPIC_BODIES[790] ?? '', 'no parent here'];
+    const expected = [789, null, null];
+    // ACT
+    const read = [same, mixed, none].map(epicOfTickets);
+    // ASSERT
+    expect(read).toEqual(expected);
   });
 });

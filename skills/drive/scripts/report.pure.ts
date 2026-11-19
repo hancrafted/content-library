@@ -1,11 +1,12 @@
 import { topicOfBranch } from './branch-topic.pure.ts';
+import { SCRATCH } from './log.pure.ts';
 
 export const CRITERIA_HEADING = '## Acceptance criteria';
 export const TEMPLATE_LINE = '- [x] <acceptance criterion> — <evidence>';
 
 export function reportPathFor(branch: string): string | null {
   const parsed = topicOfBranch(branch);
-  return parsed === null || parsed.task === null ? null : `.scratch/${parsed.topic}/${parsed.task}.report.md`;
+  return parsed === null || parsed.task === null ? null : `${SCRATCH}/${parsed.topic}/${parsed.task}.report.md`;
 }
 
 function criteriaLines(report: string): string[] | null {

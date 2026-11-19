@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { mergeSubject } from './branch-topic.pure.ts';
 import { capture, git } from './git.ts';
 import { reportPathFor, unmetCriteria } from './report.pure.ts';
 
@@ -77,8 +78,7 @@ interface Merge {
   cwd: string;
 }
 
-const gitStyleMergeMessage = ({ branch, base }: Merge) =>
-  `Merge branch '${branch}'${['main', 'master'].includes(base) ? '' : ` into ${base}`}`;
+const gitStyleMergeMessage = ({ branch, base }: Merge) => mergeSubject(branch, base);
 
 function buildMerge(merge: Merge, baseTip: string): string {
   const { branch, base, cwd } = merge;

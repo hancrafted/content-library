@@ -14,9 +14,9 @@ describe('reportPathFor', () => {
     expect(path).toBe(expected);
   });
 
-  it('maps a parent without a type', () => {
+  it('maps no report for a branch without a type, the same as every other branch reader', () => {
     // ARRANGE
-    const expected = '.scratch/sweep/1-a.report.md';
+    const expected = null;
     // ACT
     const path = reportPathFor('sweep--1-a');
     // ASSERT

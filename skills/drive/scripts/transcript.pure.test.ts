@@ -28,7 +28,7 @@ describe('extractEvents on the trimmed session 93f19e8f', () => {
     // ACT
     const { events } = extractEvents(FIXTURE);
     // ASSERT
-    expect(texts(events, 'error').some((text) => text.includes(nullExit))).toBe(true);
+    expect(texts(events, 'error')).toContainEqual(expect.stringContaining(nullExit));
   });
 
   it('leaves tool and Skill calls out unless asked', () => {
@@ -40,8 +40,10 @@ describe('extractEvents on the trimmed session 93f19e8f', () => {
     const withTools = extractEvents(FIXTURE, { tools: true }).events;
     // ASSERT
     expect(without.filter((e) => e.kind === 'tool' || e.kind === 'skill')).toEqual([]);
-    expect(withTools.some((e) => e.kind === 'skill' && e.text === skill)).toBe(true);
-    expect(withTools.some((e) => e.kind === 'tool' && e.text.startsWith(tool))).toBe(true);
+    expect(withTools).toContainEqual(expect.objectContaining({ kind: 'skill', text: skill }));
+    expect(withTools).toContainEqual(
+      expect.objectContaining({ kind: 'tool', text: expect.stringMatching(new RegExp(`^${tool}`)) }),
+    );
   });
 });
 
@@ -174,6 +176,39 @@ describe('extractEvents', () => {
     // ASSERT
     expect(events.map((e) => e.text)).toEqual(['two']);
     expect(lines).toBe(2);
+  });
+});
+
+describe('tool errors', () => {
+  const result = (content: string, extra: object = {}) =>
+    line({
+      type: 'user',
+      timestamp: 'a',
+      message: { content: [{ type: 'tool_result', tool_use_id: 'u1', content, ...extra }] },
+    });
+
+  it('prints no event for a successful result that merely quotes "failed (null)" or "refused"', () => {
+    // ARRANGE
+    const quoted = result('✖ git push failed (null)\nthe push was refused and permission denied');
+    // ACT
+    const { events } = extractEvents(quoted);
+    // ASSERT
+    expect(events).toEqual([]);
+  });
+
+  it('prints an error from the is_error flag and from a non-zero exit code, marking refusals only on is_error', () => {
+    // ARRANGE
+    const flagged = result('permission denied', { is_error: true });
+    const exited = result('build output', { exit_code: 2 });
+    const plainFailure = result('boom', { is_error: true });
+    // ACT
+    const flaggedEvents = extractEvents(flagged).events;
+    const exitedEvents = extractEvents(exited).events;
+    const plainEvents = extractEvents(plainFailure).events;
+    // ASSERT
+    expect(flaggedEvents).toEqual([{ t: 'a', kind: 'error', text: 'permission denied  [refusal]' }]);
+    expect(exitedEvents).toEqual([{ t: 'a', kind: 'error', text: 'build output' }]);
+    expect(plainEvents).toEqual([{ t: 'a', kind: 'error', text: 'boom' }]);
   });
 });
 

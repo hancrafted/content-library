@@ -4,26 +4,28 @@ import { missingBindingSkills, parseSetupArgs } from './setup-args.pure.ts';
 describe('parseSetupArgs', () => {
   it('reads --agent-type and --tier, and rejects a tier that is not mid or top', () => {
     // ARRANGE
+    const valid = ['--agent-type', 'team:dev', '--tier', 'top'];
+    const invalid = ['--tier', 'opus'];
+    const expectedValid = { agentType: 'team:dev', tier: 'top' };
+    const expectedInvalid = { error: 'usage: drive setup [--check] [--agent-type <type>] [--tier mid|top]' };
     // ACT
+    const parsedValid = parseSetupArgs(valid);
+    const parsedInvalid = parseSetupArgs(invalid);
     // ASSERT
-    expect(parseSetupArgs(['--agent-type', 'team:dev', '--tier', 'top'])).toEqual({
-      agentType: 'team:dev',
-      tier: 'top',
-    });
-    expect(parseSetupArgs(['--tier', 'opus'])).toEqual({
-      error: 'usage: drive setup [--check] [--agent-type <type>] [--tier mid|top]',
-    });
+    expect(parsedValid).toEqual(expectedValid);
+    expect(parsedInvalid).toEqual(expectedInvalid);
   });
 });
 
 describe('parseSetupArgs --check', () => {
   it('reads --check as a flag that takes no value, beside the seeding options', () => {
     // ARRANGE
+    const argvs = [['--check'], ['--check', '--tier', 'top'], ['--tier', 'top', '--check']];
+    const expected = [{ check: true }, { check: true, tier: 'top' }, { check: true, tier: 'top' }];
     // ACT
+    const parsed = argvs.map(parseSetupArgs);
     // ASSERT
-    expect(parseSetupArgs(['--check'])).toEqual({ check: true });
-    expect(parseSetupArgs(['--check', '--tier', 'top'])).toEqual({ check: true, tier: 'top' });
-    expect(parseSetupArgs(['--tier', 'top', '--check'])).toEqual({ check: true, tier: 'top' });
+    expect(parsed).toEqual(expected);
   });
 });
 

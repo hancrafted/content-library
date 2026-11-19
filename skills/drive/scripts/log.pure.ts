@@ -1,3 +1,5 @@
+import { baseOfBranch, topicSlugOf } from './branch-topic.pure.ts';
+
 export const SCRATCH = '.scratch';
 export const LOG_FILE = 'drive.log.jsonl';
 
@@ -22,20 +24,6 @@ export interface SubagentEntry {
 
 export type LogEntry = CommandEntry | SubagentEntry;
 
-export function topicOfBranch(branch: string | null): string | null {
-  const slash = branch?.indexOf('/') ?? -1;
-  if (branch === null || slash <= 0) return null;
-  const slug = branch.slice(slash + 1).split('--')[0] ?? '';
-  return slug === '' ? null : slug;
-}
-
-const TASK_SEPARATOR = '--';
-
-export const baseOfBranch = (branch: string | null): string | null => {
-  const at = branch?.indexOf(TASK_SEPARATOR) ?? -1;
-  return branch === null || at <= 0 ? null : branch.slice(0, at);
-};
-
 const BRANCH_COMMANDS = new Set(['new', 'done']);
 
 export const branchOfArgs = (argv: readonly string[]): string | null => {
@@ -49,7 +37,7 @@ export const branchOfArgs = (argv: readonly string[]): string | null => {
 };
 
 export const topicOfCommand = (argv: readonly string[], cwdBranch: string | null): string | null =>
-  topicOfBranch(branchOfArgs(argv)) ?? topicOfBranch(baseOfArgs(argv)) ?? topicOfBranch(cwdBranch);
+  topicSlugOf(branchOfArgs(argv)) ?? topicSlugOf(baseOfArgs(argv)) ?? topicSlugOf(cwdBranch);
 
 export const logPath = (topic: string): string => `${SCRATCH}/${topic}/${LOG_FILE}`;
 
