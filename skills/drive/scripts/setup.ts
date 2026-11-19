@@ -3,9 +3,11 @@ import path from 'node:path';
 import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
 import { CONFIG_PATH, harnessCapFrom } from './config.pure.ts';
 import { run } from './git.ts';
+import { LEARNINGS_STORE } from './learnings.pure.ts';
 import { driveEntry, fail } from './project.ts';
 import {
   addGuardToHook,
+  addLearningsCheck,
   decisionDocGlobs,
   detectEnforcers,
   type EnforcerFacts,
@@ -14,6 +16,9 @@ import {
   guardCiLine,
   guardHookLine,
   installCommands,
+  LEARNINGS_README,
+  learningsCheckCommand,
+  learningsCheckNote,
   parseSetupArgs,
   type ProjectFacts,
   renderEnforcers,
@@ -158,10 +163,10 @@ export function setup(root: string, options: SeedOptions = {}, scriptsDir: strin
   );
   write(CONFIG_PATH, updateProjectConfig(read(path.join(root, CONFIG_PATH)), facts));
   write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
-  const note = wireGuard(root, { entry, baseBranch: facts.baseBranch }, write);
-  if (note !== null) notes.push(note);
+  notes.push(...wire(root, { entry, baseBranch: facts.baseBranch }, write));
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
   createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
+  createdOnly(`${LEARNINGS_STORE}/README.md`, LEARNINGS_README);
   createdOnly(`${DRIVE_DIR}/review.md`, REVIEW_STUB);
   return { written, notes };
 }
@@ -177,6 +182,30 @@ function wireGuard(
   if (hook === null) return guardCiLine(guardCommand(entry, `origin/${baseBranch}`));
   if (path.isAbsolute(entry)) return guardHookLine(HOOK, guardCommand(entry));
   write(HOOK, addGuardToHook(hook, guardCommand(entry)));
+  return null;
+}
+
+const MANIFEST = 'package.json';
+
+function wire(
+  root: string,
+  guard: { entry: string; baseBranch: string },
+  write: (relative: string, text: string) => void,
+): string[] {
+  const notes = [wireGuard(root, guard, write), wireLearningsCheck(root, guard.entry, write)];
+  return notes.filter((note): note is string => note !== null);
+}
+
+function wireLearningsCheck(
+  root: string,
+  entry: string,
+  write: (relative: string, text: string) => void,
+): string | null {
+  const command = learningsCheckCommand(entry);
+  if (path.isAbsolute(entry)) return learningsCheckNote(command);
+  const result = addLearningsCheck(read(path.join(root, MANIFEST)), command);
+  if ('note' in result) return result.note;
+  write(MANIFEST, result.text);
   return null;
 }
 

@@ -34,7 +34,7 @@
     "verify:push": "node tools/verify/verify.ts push",
     "verify:change-kind": "node tools/verify/change-kind.ts",
     "lint-staged": "lint-staged",
-    "check:docs": "mh check && npm run check:skills",
+    "check:docs": "mh check && npm run check:skills && mh check --root docs/drive/learnings --config skills/drive/markdown-harness.config.yaml && node skills/drive/scripts/drive.ts learnings check",
     "test:build": "vitest run --config vitest.build.config.mts",
     "test:slow": "vitest run --config vitest.slow.config.mts",
     "drive": "node skills/drive/scripts/drive.ts",
