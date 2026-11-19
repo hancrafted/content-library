@@ -1,8 +1,10 @@
 ---
 title: "The Orchestrator starts a step without naming its DRIVE phase or the Operator's decision points"
-enforcer: 'hook: new PreToolUse hook on `wt:new` that requires a fresh phase marker written by a new `drive status`, architectural'
-status: ticket
+enforcer: 'test-runner: pure tests of phase derivation behind `drive status`, which names the phase and the next stop, architectural'
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/796
+fixed-by: https://github.com/hancrafted/content-library/issues/796
+fixed-on: '2026-11-19'
 ---
 
 # The Orchestrator starts a step without naming its DRIVE phase or the Operator's decision points
