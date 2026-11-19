@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { capture, git } from './git.ts';
 import { fail, loadConfig } from './project.ts';
-import { refuseMerged } from './push-pr.pure.ts';
+import { refuseMerged, skipPrLookup } from './push-pr.pure.ts';
 import { branchPr, openIntegrationPr } from './push-pr.ts';
 import { exitProblem, parseLsRemote, pushedLine, remoteDiffersFrom } from './push.pure.ts';
 
@@ -39,7 +39,9 @@ export function runPush(argv: readonly string[]): void {
   const branch = capture('git', ['branch', '--show-current'], cwd);
   if (branch === '') fail('detached HEAD: check out a branch first');
   const { remote, baseBranch } = loadConfig(capture('git', ['rev-parse', '--show-toplevel'], cwd)).worktree;
-  const prState = branchPr(branch, cwd);
+  const skipped = skipPrLookup(capture('git', ['remote', 'get-url', remote], cwd), remote);
+  if (skipped !== null) console.log(skipped);
+  const prState = skipped === null ? branchPr(branch, cwd) : 'none';
   const merged = refuseMerged(branch, prState);
   if (merged !== null) fail(merged);
   console.log(pushBranch(branch, remote, cwd));

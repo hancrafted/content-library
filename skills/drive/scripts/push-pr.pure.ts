@@ -19,3 +19,11 @@ export function missingCloses(body: string, tickets: readonly number[]): number[
   const closed = new Set([...body.matchAll(/^Closes #(\d+)\s*$/gim)].map((found) => Number(found[1])));
   return tickets.filter((ticket) => !closed.has(ticket));
 }
+
+export function isGithubRemote(url: string): boolean {
+  return /^(?:https?:\/\/(?:[^/@]+@)?|ssh:\/\/(?:[^/@]+@)?|[^/@]+@)github\.com[/:]/i.test(url.trim());
+}
+
+export function skipPrLookup(remoteUrl: string, remote: string): string | null {
+  return isGithubRemote(remoteUrl) ? null : `! ${remote} is not on GitHub (${remoteUrl}); skipped the merged-PR check`;
+}

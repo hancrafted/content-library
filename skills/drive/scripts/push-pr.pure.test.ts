@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { branchPrState, missingCloses, openingBody, refuseMerged } from './push-pr.pure.ts';
+import { branchPrState, missingCloses, openingBody, refuseMerged, skipPrLookup } from './push-pr.pure.ts';
 
 describe('branchPrState', () => {
   it('is none without PRs, open when any is open, merged when only merged ones exist', () => {
@@ -53,5 +53,25 @@ describe('missingCloses', () => {
     // ASSERT
     expect(missing).toEqual([791, 792]);
     expect(none).toEqual([]);
+  });
+});
+
+describe('skipPrLookup', () => {
+  it('skips the merged-PR check with a note for a remote not on GitHub, and asks GitHub otherwise', () => {
+    // ARRANGE
+    const github = [
+      'git@github.com:o/r.git',
+      'https://github.com/o/r',
+      'https://tok@github.com/o/r.git',
+      'ssh://git@github.com/o/r.git',
+    ];
+    const elsewhere = ['/tmp/origin.git', 'https://gitlab.com/o/r.git', 'git@notgithub.com:o/r.git'];
+    // ACT
+    const asked = github.map((url) => skipPrLookup(url, 'origin'));
+    const skipped = elsewhere.map((url) => skipPrLookup(url, 'origin'));
+    // ASSERT
+    expect(asked).toEqual([null, null, null, null]);
+    for (const note of skipped) expect(note).toContain('skipped the merged-PR check');
+    expect(skipped[0]).toContain('/tmp/origin.git');
   });
 });
