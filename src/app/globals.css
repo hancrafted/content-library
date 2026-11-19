@@ -2,10 +2,29 @@
 @source not '../../.agents';
 @source not '../../design-archive';
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md */
+@custom-variant dark (
+  &:is(
+    :where(.dark, .dark *):not(
+        :where([data-inverse], [data-inverse] *, html[data-page-tone='inverse'] [data-testid='site-header'], html[data-page-tone='inverse'] [data-testid='site-header'] *)
+      ),
+    :where(
+        :root:not(.dark) [data-inverse],
+        :root:not(.dark) [data-inverse] *,
+        :root:not(.dark)[data-page-tone='inverse'] [data-testid='site-header'],
+        :root:not(.dark)[data-page-tone='inverse'] [data-testid='site-header'] *
+      ):not(:where([data-inverse] [data-inverse], [data-inverse] [data-inverse] *)),
+    :where(.dark [data-inverse] [data-inverse], .dark [data-inverse] [data-inverse] *):not(:where([data-inverse] [data-inverse] [data-inverse], [data-inverse] [data-inverse] [data-inverse] *)),
+    :where(:root:not(.dark) [data-inverse] [data-inverse] [data-inverse], :root:not(.dark) [data-inverse] [data-inverse] [data-inverse] *)
+  )
+);
 
-:root {
-  --radius: 0.625rem;
+/* decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md */
+:root,
+.dark [data-inverse],
+.dark [data-inverse] [data-inverse] [data-inverse],
+:root:not(.dark) [data-inverse] [data-inverse],
+.dark[data-page-tone='inverse'] [data-testid='site-header'] {
   --background: oklch(0.985 0 0);
   --foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
@@ -86,6 +105,10 @@
   --scenery-window-frame-lit: oklch(0.62 0.07 60);
   --scenery-window-frame-shade: oklch(0.44 0.05 55);
   --scenery-window-glint: oklch(1 0 0 / 0.35);
+}
+
+:root {
+  --radius: 0.625rem;
   /* decision: FE-010 §7 */
   --drawer-width: 26rem;
   --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
@@ -109,7 +132,11 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
-.dark {
+.dark,
+:root:not(.dark) [data-inverse],
+:root:not(.dark) [data-inverse] [data-inverse] [data-inverse],
+.dark [data-inverse] [data-inverse],
+:root:not(.dark)[data-page-tone='inverse'] [data-testid='site-header'] {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
@@ -585,53 +612,17 @@
 }
 
 /* decision: FE-004 §5.4 */
-:root,
-.dark {
-  --tone-paper: var(--primary);
-  --tone-ink: var(--primary-foreground);
+:root {
   --header-block: 4.875rem;
 }
 
-[data-tone='inverse'],
-html[data-page-tone='inverse'] [data-testid='site-header'] {
-  --foreground: var(--tone-ink);
-  --muted-foreground: color-mix(in oklab, var(--tone-ink) 85%, transparent);
-  --header: var(--tone-paper);
-  --accent: color-mix(in oklab, var(--tone-ink) 14%, transparent);
-  --accent-foreground: var(--tone-ink);
-  --border: color-mix(in oklab, var(--tone-ink) 22%, transparent);
-  --primary: var(--tone-ink);
-  --primary-foreground: var(--tone-paper);
-  color: var(--tone-ink);
+@layer base {
+  [data-inverse],
+  html[data-page-tone='inverse'] [data-testid='site-header'] {
+    color: var(--foreground);
+  }
 }
 
 html[data-page-tone='inverse'] [data-testid='site-header'] {
-  --background: var(--tone-paper);
-  --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
-  background-color: color-mix(in oklab, var(--tone-paper) 88%, transparent);
-  --selected: var(--tone-ink);
-  --selected-foreground: var(--tone-paper);
-}
-
-[data-tone='inverse'][data-slot='title-slide'] {
-  padding-top: calc(var(--header-block) + 1rem);
-}
-
-[data-tone='inverse'] [data-slot='slide-header'] h1 {
-  max-width: 16ch;
-}
-
-[data-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
-  max-width: 40rem;
-}
-
-[data-tone='inverse'] [data-tone-flip] {
-  --foreground: var(--tone-paper);
-  --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
-  --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
-  --accent-foreground: var(--tone-paper);
-  --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
-  --primary: var(--tone-paper);
-  --primary-foreground: var(--tone-ink);
-  color: var(--tone-paper);
+  background-color: color-mix(in oklab, var(--header) 88%, transparent);
 }

@@ -59,7 +59,7 @@ export const everyProductIsATranslation = slide({
   segments: [{ slug: 'a-new-pain' }, { slug: 'where-the-section-goes' }],
   content: ({ t }) => (
     <SlideFrame>
-      <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
+      <div className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 20 300 104" className="w-full" role="img" aria-label={t('label')}>
           {BOARDS.map(({ outcome, cx, darts, tone, edge }) => (
             <g key={outcome}>

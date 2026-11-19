@@ -13,8 +13,8 @@ const block = (css: string, opener: string): string => {
   if (start < 0) return '';
   return css.slice(start, css.indexOf('\n}', start));
 };
-const ROOT = block(GLOBALS, ':root {');
-const DARK = block(GLOBALS, '.dark {');
+const ROOT = block(GLOBALS, ':root,\n') + block(GLOBALS, ':root {');
+const DARK = block(GLOBALS, '.dark,\n');
 const THEME = block(GLOBALS, '@theme inline {');
 const lines = (css: string) => css.split('\n').map((line) => line.trim());
 

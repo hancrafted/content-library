@@ -42,7 +42,7 @@ export const grid1x2 = slide({
   presentation: {
     enter: { effect: 'wave', className: surface.arrival },
     leave: { effect: 'goo', style: { '--slide-transition-end-offset': '-24px' } },
-    tone: 'inverse',
+    inverse: true,
     rear: <SurfaceReferenceDrift className={surface.rear} />,
     rearMobile: true,
     front: <div className={surface.front} />,

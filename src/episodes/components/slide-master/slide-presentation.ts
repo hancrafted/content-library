@@ -1,5 +1,6 @@
 import type { TransitionStyle } from '@/shared/components/animations/transition-filters';
 import type { ComponentType, ReactNode } from 'react';
+import type { Surface } from './surface';
 
 export type PresentationStyle = Readonly<Record<`--${string}`, string | number>>;
 
@@ -15,6 +16,7 @@ export interface ResolvedSlideTransition {
   readonly incoming: string;
   readonly declaration: SlideTransition;
   readonly targetSurface: string;
+  readonly targetInverse?: boolean;
   readonly targetStyle?: PresentationStyle;
 }
 
@@ -22,13 +24,12 @@ export interface SlidePresentation {
   readonly Provider?: ComponentType<{ children: ReactNode }>;
   readonly enter?: SlideTransition;
   readonly leave?: SlideTransition;
-  readonly tone?: 'normal' | 'inverse';
+  readonly inverse?: boolean;
+  readonly surface?: Surface;
   readonly rear?: ReactNode;
   readonly rearMobile?: boolean;
   readonly front?: ReactNode;
   readonly style?: Readonly<Record<`--${string}`, string | number>> & {
-    '--slide-surface'?: string;
-    '--slide-surface-foreground'?: string;
     '--slide-space-before'?: string;
     '--slide-space-after'?: string;
     '--slide-transition-start-offset'?: string;

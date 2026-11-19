@@ -24,7 +24,7 @@ export function SlideTransition({ edge }: { edge: ResolvedSlideTransition }) {
         className={cn(styles.edge, declaration.className)}
         style={declaration.style as CSSProperties}
       >
-        <div className={styles.target} style={destinationStyle(edge)}>
+        <div className={styles.target} data-inverse={edge.targetInverse || undefined} style={destinationStyle(edge)}>
           <EdgeEffect effect={declaration.effect} filterId={filterId} />
         </div>
       </div>

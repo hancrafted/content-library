@@ -18,7 +18,7 @@ describe('success cases', () => {
       id: 'a→b',
       outgoing: 'a',
       incoming: 'b',
-      targetSurface: 'var(--tone-paper)',
+      targetSurface: 'var(--background)',
       declaration: {
         effect: 'wave' as const,
         className: 'portable',
@@ -28,7 +28,7 @@ describe('success cases', () => {
     const expectedHost = 'data-transition-edge="a→b"';
     const expectedBoundary = 'data-surface-edge="true"';
     const expectedScope = 'portable';
-    const expectedTarget = 'var(--tone-paper)';
+    const expectedTarget = 'var(--background)';
     const content = 'free-scene';
     const front = 'front-decoration';
     const wrapper = createElement(
@@ -46,6 +46,35 @@ describe('success cases', () => {
     expect(html.indexOf(content)).toBeLessThan(html.indexOf(expectedHost));
     expect(html.indexOf(expectedHost)).toBeLessThan(html.indexOf(front));
   });
+  it('carries the incoming Slide inverse flag on the ink destination, so its swapped background is painted', () => {
+    // ARRANGE
+    const edge = {
+      id: 'a→b',
+      outgoing: 'a',
+      incoming: 'b',
+      targetSurface: 'var(--background)',
+      targetInverse: true,
+      declaration: { effect: 'liquid' as const },
+    };
+    const plain = { ...edge, targetInverse: undefined };
+    // ACT
+    const flagged = renderToStaticMarkup(createElement(SlideWrapper, { id: 'a', transition: edge }, 'content'));
+    const unflagged = renderToStaticMarkup(createElement(SlideWrapper, { id: 'a', transition: plain }, 'content'));
+    // ASSERT
+    expect(flagged).toMatch(/data-inverse="true"[^>]*style="[^"]*--slide-transition-target-surface/);
+    expect(unflagged).not.toContain('data-inverse');
+  });
+
+  it('paints a Surface and its text colour on the Slide and touches no theme token, so a card on it keeps its own colours', () => {
+    // ARRANGE
+    const presentation = { surface: { background: 'navy', foreground: 'white' } };
+    // ACT
+    const html = renderToStaticMarkup(createElement(SlideWrapper, { id: 'a', presentation }, 'content'));
+    const style = /<div id="a"[^>]*style="([^"]*)"/.exec(html)?.[1] ?? '';
+    // ASSERT
+    expect(style).toBe('--slide-surface:navy;--surface-foreground:white');
+  });
+
   it('gives both retained decorations and the Scene their own Slide identity', () => {
     // ARRANGE
     const id = 'a--b';
@@ -66,13 +95,13 @@ describe('success cases', () => {
       slug: 'surface',
       messages: { en: {}, de: {} },
       presentation: {
-        tone: 'inverse',
+        inverse: true,
         rear: createElement('span', null, 'rear'),
         front: createElement('span', null, 'front'),
       },
       content: () => createElement('a', { href: '#next' }, 'free content'),
     });
-    const surface = 'data-surface-tone="inverse"';
+    const surface = 'data-inverse="true"';
     const rear = 'data-slot="slide-backdrop"';
     const front = 'data-slot="slide-front"';
     const text = 'free content';

@@ -42,3 +42,7 @@ The same Title look is hand-copied into 16 Slide files, and two section looks in
 
 - **An opt-in field on each Episode:** keeps one line of copying per Episode, and new Episodes start without the look.
 - **Per Theme:** Themes are copy sources (Decision record _Themes are authoring templates_), not a runtime layer.
+
+## Amended by
+
+- Decision record _Slide Surface and the inverse flag_ (2026-11-19): the standard section look is `{ inverse: true, surface: SOFT_MIRROR }` with liquid enter and leave; `tone` is retired.

@@ -21,7 +21,7 @@ export const theThoughtExperiment = slide({
           compact
           className="w-full -rotate-1 sm:w-2/5"
         />
-        <ul data-tone-flip className="flex flex-1 flex-col gap-2 text-body" aria-label={t('questionsLabel')}>
+        <ul className="flex flex-1 flex-col gap-2 text-body" aria-label={t('questionsLabel')}>
           {QUESTIONS.map((question) => (
             <li
               key={question}

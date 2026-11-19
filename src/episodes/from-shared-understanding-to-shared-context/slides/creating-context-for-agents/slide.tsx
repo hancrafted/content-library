@@ -44,7 +44,7 @@ export const creatingContextForAgents = slide({
   segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
   content: ({ t }) => (
     <SlideFrame>
-      <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
+      <div className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
           <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />
           {ROUNDS.map(({ round, tone, r, darts }) => (

@@ -33,16 +33,15 @@ function hitCentres($: ReturnType<typeof sceneOf>) {
 }
 
 describe('success cases', () => {
-  it('marks the board to sit beside the header on wide screens, on a card flipped to the page tone', () => {
+  it('marks the board to sit beside the header on wide screens, on a plain card', () => {
     // ARRANGE
-    const expected = { beside: 1, flipped: 1, boards: 1 };
+    const expected = { beside: 1, boards: 1 };
     // ACT
     const $ = sceneOf('en');
     const beside = $('[data-hero-beside]');
     // ASSERT
     expect({
       beside: beside.length,
-      flipped: beside.find('[data-tone-flip]').length,
       boards: beside.find('svg[role="img"]').length,
     }).toEqual(expected);
   });

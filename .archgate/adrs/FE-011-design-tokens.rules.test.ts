@@ -95,6 +95,38 @@ describe('no-raw-colour-in-css (A1)', () => {
     expect(violations.map((v) => v.line)).toEqual([10]);
   });
 
+  it('passes a raw colour under a selector list of :root, .dark and their inverse forms', async () => {
+    // ARRANGE
+    const theme = (list: string) => `${list} {\n  --primary: oklch(0.2 0 0);\n}\n`;
+    const files = {
+      [GLOBALS_PATH]: [
+        theme(':root,\n.dark [data-inverse],\n:root:not(.dark) [data-inverse] [data-inverse]'),
+        theme('.dark,\n:root:not(.dark) [data-inverse],\n.dark [data-inverse] [data-inverse] [data-inverse]'),
+        theme(":root:not(.dark)[data-page-tone='inverse'] [data-testid='site-header']"),
+        theme('.dark[data-page-tone="inverse"] [data-testid="site-header"]'),
+      ].join(''),
+    };
+    // ACT
+    const violations = await run('no-raw-colour-in-css', files);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it.each([
+    ['a selector list with one foreign selector', ':root,\n.panel'],
+    ['a bare inverse flag', '[data-inverse]'],
+    ['an inverse flag under a bare :root', ':root [data-inverse]'],
+    ['a bare :root:not(.dark)', ':root:not(.dark)'],
+    ['a fourth nested inverse level', '.dark [data-inverse] [data-inverse] [data-inverse] [data-inverse]'],
+  ])('fails a raw colour under %s in globals.css', async (_name, list) => {
+    // ARRANGE
+    const files = { [GLOBALS_PATH]: `${list} {\n  --primary: oklch(0.2 0 0);\n}\n` };
+    // ACT
+    const violations = await run('no-raw-colour-in-css', files);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+  });
+
   it.each([
     ['a named colour', '.panel {\n  background: white;\n}\n'],
     ['a rarer named colour', '.panel {\n  --brand: chocolate;\n}\n'],

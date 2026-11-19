@@ -12,7 +12,7 @@ export const hero = slide({
   slug: 'hero',
   messages: { en, de },
   presentation: {
-    tone: 'inverse',
+    inverse: true,
     style: { '--slide-space-after': '320px' },
     leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
     rear: <HeroDecoration story="ai-capability" />,

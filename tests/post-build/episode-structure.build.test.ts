@@ -92,6 +92,20 @@ describe('episode structure', () => {
     // ASSERT
     expect(edges).toEqual(expected);
   });
+  it.each(PAGES)('exports no retired tone marker on $url', ({ url }) => {
+    // ARRANGE
+    const retired = [
+      '[data-surface-tone]',
+      '[data-tone-flip]',
+      '[data-slide][data-tone]',
+      '[data-slot="title-slide"][data-tone]',
+    ];
+    // ACT
+    const $ = exportedPage(url);
+    const found = retired.filter((selector) => $(selector).length > 0);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
   beforeAll(() => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);

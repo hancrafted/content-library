@@ -14,6 +14,6 @@ export function withStandardSlideLooks<
   );
 }
 
-export function standardTitleLook(declared: SlidePresentation | undefined, tone: 'inverse' | undefined) {
-  return declared ?? (tone === undefined ? STANDARD_TITLE_LOOK : undefined);
+export function standardTitleLook(declared: SlidePresentation | undefined) {
+  return declared ?? STANDARD_TITLE_LOOK;
 }

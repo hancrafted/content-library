@@ -31,12 +31,12 @@ function surfacesOf(content: EpisodeContent) {
   const surfaces = [
     {
       id: TITLE_ANCHOR,
-      tone: content.titleAppearance.tone,
+      tone: content.titleAppearance.inverse ? ('inverse' as const) : ('normal' as const),
       effect: content.transitions.get(TITLE_ANCHOR)?.declaration.effect,
     },
     ...content.slides.map((slide) => ({
       id: slide.id,
-      tone: slide.presentation?.tone ?? ('normal' as const),
+      tone: slide.presentation?.inverse ? ('inverse' as const) : ('normal' as const),
       effect: content.transitions.get(slide.id)?.declaration.effect,
     })),
   ];

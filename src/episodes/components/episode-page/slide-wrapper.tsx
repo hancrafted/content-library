@@ -1,9 +1,10 @@
 import type { HeaderMode } from '@/episodes/components/slide-master/slide';
 import { SlideHeader, type SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
 import { cn } from '@/shared/lib/utils';
-import { Fragment, type ComponentPropsWithoutRef } from 'react';
+import { Fragment, type ComponentPropsWithoutRef, type CSSProperties } from 'react';
 import { SlideBackdrop } from '../slide-master/slide-master';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
+import { surfaceStyle } from '../slide-master/surface';
 import { SlideIdentity, SlideMount } from './slide-mount.client';
 import styles from './slide-presentation.module.css';
 import { SlideTransition } from './slide-transition';
@@ -31,10 +32,10 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       id={id}
       data-slide={id}
       data-size={size}
-      data-surface-tone={surfaceTone(presentation)}
+      data-inverse={presentation?.inverse || undefined}
       data-surface-edge={transition ? true : undefined}
       className={cn(frameClass, className)}
-      style={{ ...presentation?.style, ...style }}
+      style={styleOf(presentation, style)}
       {...props}
     >
       <WrapperLayers
@@ -49,6 +50,10 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       </WrapperLayers>
     </div>
   );
+}
+
+function styleOf(presentation: SlidePresentation | undefined, style: CSSProperties | undefined): CSSProperties {
+  return { ...surfaceStyle(presentation?.surface), ...presentation?.style, ...style };
 }
 
 function WrapperLayers({
@@ -91,10 +96,6 @@ function wrapperClass(mode: HeaderMode, size: keyof typeof MIN_HEIGHT, presentat
     band,
     presentation && styles.configured,
   );
-}
-
-function surfaceTone(presentation: SlidePresentation | undefined) {
-  return presentation ? (presentation.tone ?? 'normal') : undefined;
 }
 
 function SurfaceLayers({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {

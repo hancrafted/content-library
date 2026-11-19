@@ -12,7 +12,6 @@ import {
   headerModeOf,
   type EpisodeComposition,
   type HeaderMode,
-  type PageTone,
   type Slide,
   type SlideEntrance,
 } from '@/episodes/components/slide-master/slide';
@@ -23,7 +22,7 @@ import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
-import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
+import type { ResolvedSlideTransition, SlidePresentation, SlideTransition } from '../slide-master/slide-presentation';
 import { slideSizeOf } from './episode-page-container.pure';
 import { standardTitleLook, withStandardSlideLooks } from './standard-looks.pure';
 
@@ -36,10 +35,8 @@ export interface PageContext {
 }
 
 export interface TitleAppearance {
-  readonly tone: 'normal' | 'inverse';
-  readonly legacyTone?: PageTone;
+  readonly inverse: boolean;
   readonly presentation?: SlidePresentation;
-  readonly inkTarget?: string;
 }
 
 export interface EpisodeContent {
@@ -85,35 +82,13 @@ export async function recordContent(
 }
 
 function composedLooks(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
-  const title = standardTitleLook(record.title?.presentation, record.tone);
+  const title = standardTitleLook(record.title?.presentation);
   const transitions = transitionsOf({ title, precedence: record.transitionPrecedence }, slides, header);
-  const titleAppearance = titleAppearanceOf(record, slides, {
+  const titleAppearance: TitleAppearance = {
+    inverse: title?.inverse === true,
     presentation: title,
-    outgoingEdge: transitions.has(TITLE_ANCHOR),
-  });
+  };
   return { transitions, titleAppearance };
-}
-
-function titlePresentationOf(
-  presentation: SlidePresentation,
-  tone: TitleAppearance['tone'],
-  legacyTone: PageTone | undefined,
-): SlidePresentation {
-  return presentation.tone === undefined && legacyTone === undefined ? presentation : { ...presentation, tone };
-}
-
-function titleAppearanceOf(
-  record: EpisodeComposition,
-  slides: readonly LocalizedSlide[],
-  { presentation, outgoingEdge }: { presentation: SlidePresentation | undefined; outgoingEdge: boolean },
-): TitleAppearance {
-  const tone = presentation?.tone ?? record.tone ?? 'normal';
-  if (presentation) return { tone, presentation: titlePresentationOf(presentation, tone, record.tone) };
-  return { tone, legacyTone: record.tone, inkTarget: legacyInkTarget(record.tone, slides[0]?.id, outgoingEdge) };
-}
-
-function legacyInkTarget(tone: PageTone | undefined, firstSlide: string | undefined, outgoingEdge: boolean) {
-  return tone && firstSlide && !outgoingEdge ? firstSlide : undefined;
 }
 
 function contextOf(
@@ -125,12 +100,19 @@ function contextOf(
     ...page,
     placed: placeSections<Slide>(record.sections).flat(),
     header: headerModeOf(record),
-    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
+    referenceLabels: {
+      ref: drawer('refNote'),
+      marker: (title) => drawer('markerNote', { title }),
+    },
   };
 }
 
 function resolveTransitions(
-  surfaces: readonly { id: string; presentation?: SlidePresentation; surface?: string }[],
+  surfaces: readonly {
+    id: string;
+    presentation?: SlidePresentation;
+    fallbackSurface?: string;
+  }[],
   precedence = 'enter',
 ): ReadonlyMap<string, ResolvedSlideTransition> {
   const resolved = new Map<string, ResolvedSlideTransition>();
@@ -144,7 +126,7 @@ function resolveTransitions(
       outgoing: outgoing.id,
       incoming: incoming.id,
       declaration,
-      ...transitionTarget(incoming.presentation, incoming.surface),
+      ...transitionTarget(incoming, outgoing.presentation, declaration),
     });
   }
   return resolved;
@@ -154,14 +136,18 @@ function transitionsOf(
   {
     title,
     precedence,
-  }: { title: SlidePresentation | undefined; precedence: EpisodeComposition['transitionPrecedence'] },
+  }: {
+    title: SlidePresentation | undefined;
+    precedence: EpisodeComposition['transitionPrecedence'];
+  },
   slides: readonly LocalizedSlide[],
   header: HeaderMode,
 ) {
   const surfaces = slides.map((slide) => ({
     id: slide.id,
     presentation: slide.presentation,
-    surface: header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
+    fallbackSurface:
+      header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
   }));
   return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...surfaces], precedence);
 }
@@ -170,11 +156,28 @@ function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePrese
   return precedence === 'leave' ? (leave ?? enter) : (enter ?? leave);
 }
 
-function transitionTarget(presentation: SlidePresentation | undefined, fallback = 'var(--background)') {
-  if (!presentation) return { targetSurface: fallback };
-  const { style, tone } = presentation;
+// decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md
+function inkOf(
+  presentation: SlidePresentation | undefined,
+  fallback = 'var(--background)',
+  override: string | number | undefined,
+) {
+  if (override !== undefined) return String(override);
+  if (!presentation) return fallback;
+  return presentation.surface?.background ?? 'var(--background)';
+}
+
+function transitionTarget(
+  { presentation, fallbackSurface }: { presentation?: SlidePresentation; fallbackSurface?: string },
+  outgoing: SlidePresentation | undefined,
+  { style: override }: SlideTransition,
+) {
+  const targetSurface = inkOf(presentation, fallbackSurface, override?.['--slide-transition-ink']);
+  const { style, inverse } = presentation ?? {};
+  const differsFromOutgoingWrapper = (inverse === true) !== (outgoing?.inverse === true);
   return {
-    targetSurface: style?.['--slide-surface'] ?? (tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
+    targetSurface,
+    ...(differsFromOutgoingWrapper && { targetInverse: true }),
     ...(style && { targetStyle: style }),
   };
 }

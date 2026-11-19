@@ -71,7 +71,7 @@
 
   scroll-margin-top: var(--slide-anchor-offset, 6rem);
   min-height: calc(100svh + var(--slide-space-total));
-  color: var(--slide-surface-foreground, var(--foreground));
+  color: var(--surface-foreground, var(--foreground));
 }
 
 .configured[data-size='section'] {
@@ -93,29 +93,6 @@
   height: max(0px, var(--slide-space-after));
 }
 
-.configured[data-surface-tone='inverse'] {
-  --slide-surface: var(--tone-paper);
-  --slide-surface-foreground: var(--tone-ink);
-  --foreground: var(--slide-surface-foreground);
-  --muted-foreground: color-mix(in oklab, var(--slide-surface-foreground) 85%, transparent);
-  --border: color-mix(in oklab, var(--slide-surface-foreground) 22%, transparent);
-  --accent: color-mix(in oklab, var(--slide-surface-foreground) 14%, transparent);
-  --accent-foreground: var(--slide-surface-foreground);
-  --primary: var(--slide-surface-foreground);
-  --primary-foreground: var(--slide-surface);
-}
-
-.configured[data-surface-tone='inverse'] [data-tone-flip] {
-  --foreground: var(--tone-paper);
-  --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
-  --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
-  --accent-foreground: var(--tone-paper);
-  --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
-  --primary: var(--tone-paper);
-  --primary-foreground: var(--tone-ink);
-  color: var(--tone-paper);
-}
-
 .primary {
   display: flex;
   flex: 1;
@@ -132,11 +109,11 @@
   padding-top: var(--slide-title-top-space, calc(var(--header-block) + 1rem));
 }
 
-.configured[data-slot='title-slide'][data-surface-tone='inverse'] [data-slot='slide-header'] h1 {
+.configured[data-slot='title-slide'][data-inverse] [data-slot='slide-header'] h1 {
   max-width: var(--slide-title-measure, 16ch);
 }
 
-.configured[data-slot='title-slide'][data-surface-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+.configured[data-slot='title-slide'][data-inverse] [data-slot='slide-header'] [data-target='caption'] {
   max-width: var(--slide-title-caption-measure, 40rem);
 }
 

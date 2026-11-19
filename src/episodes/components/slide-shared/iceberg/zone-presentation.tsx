@@ -10,14 +10,22 @@ export interface ZonePresentationInput {
   readonly scene?: ReactNode;
 }
 
-export type ZoneStyle = Readonly<Record<`--${string}`, string>> & { readonly '--slide-surface'?: string };
+export interface ZoneSurface {
+  readonly background: string;
+  readonly foreground: string;
+  readonly muted: string;
+  readonly textScope: 'slide';
+}
+
+export type ZoneStyle = Readonly<Record<`--${string}`, string>>;
 
 // decision: docs/decision-records/0022-slide-presentation-and-transition-clock.md
 export interface ZonePresentation {
+  readonly surface?: ZoneSurface;
   readonly style: ZoneStyle;
   readonly enter?: {
     readonly effect: 'bubbles';
-    readonly style: Readonly<Record<'--slide-transition-bubble', string>>;
+    readonly style?: Readonly<Record<'--slide-transition-bubble', string>>;
   };
   readonly rear: ReactNode;
   readonly rearMobile: true;
@@ -27,38 +35,45 @@ type SlideKind = 'title' | ZonePresentationInput['kind'];
 
 const ZONE_BACKGROUNDS: Readonly<Record<SlideKind, boolean>> = { title: true, section: true, page: false };
 
-function zoneText(zone: Zone): ZoneStyle {
+// decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md
+function zoneSurface(zone: Zone): ZoneSurface {
   const ink = isDarkZone(zone) ? 'var(--on-brand-accent)' : zoneToken('abyss');
   return {
-    '--slide-surface-foreground': ink,
-    '--foreground': ink,
-    '--muted-foreground': `color-mix(in oklab, ${ink} 78%, transparent)`,
+    background: surfaceOf(zone),
+    foreground: ink,
+    muted: `color-mix(in oklab, ${ink} 78%, transparent)`,
+    textScope: 'slide',
   };
 }
 
 // spec: docs/features/slide-transitions.md#per-slide-reading-space
-function zoneSurface(zone: Zone, kind: SlideKind): ZoneStyle {
-  if (!ZONE_BACKGROUNDS[kind]) return {};
+function zoneLook(zone: Zone, kind: SlideKind): Pick<ZonePresentation, 'surface' | 'style'> {
+  if (!ZONE_BACKGROUNDS[kind]) return { style: {} };
   const landing: ZoneStyle =
     kind === 'section' ? { '--slide-anchor-offset': '0px', '--slide-space-before': 'var(--header-block)' } : {};
-  return { '--slide-surface': surfaceOf(zone), ...zoneText(zone), ...landing };
+  return { surface: zoneSurface(zone), style: landing };
 }
 
 function surfaceOf(zone: Zone): string {
   return zone === 'surface' ? skyTop() : zoneToken(zone);
 }
 
-export function zoneTitlePresentation(): { readonly style: ZoneStyle } {
-  return { style: zoneSurface('surface', 'title') };
+// decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md
+function bubbleTint(zone: Zone): Pick<NonNullable<ZonePresentation['enter']>, 'style'> {
+  return surfaceOf(zone) === zoneToken(zone) ? {} : { style: { '--slide-transition-bubble': zoneToken(zone) } };
+}
+
+export function zoneTitlePresentation(): Pick<ZonePresentation, 'surface' | 'style'> {
+  return zoneLook('surface', 'title');
 }
 
 export function zonePresentation({ sections, section, kind, scene }: ZonePresentationInput): ZonePresentation {
   const zone = zoneOf(sections, section);
   const rail = <DepthRail sections={sections} lit={section} phoneOnly={kind === 'section'} />;
-  if (kind === 'page') return { style: zoneSurface(zone, kind), rear: rail, rearMobile: true };
+  if (kind === 'page') return { ...zoneLook(zone, kind), rear: rail, rearMobile: true };
   return {
-    style: zoneSurface(zone, kind),
-    enter: { effect: 'bubbles', style: { '--slide-transition-bubble': zoneToken(zone) } },
+    ...zoneLook(zone, kind),
+    enter: { effect: 'bubbles', ...bubbleTint(zone) },
     rear: (
       <>
         {scene}

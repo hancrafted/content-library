@@ -57,7 +57,7 @@ The owning Archgate records are authoritative. Feature contracts do not waive th
 - [FE-002](../../.archgate/adrs/FE-002-episode-page.md): one container, free JSX, typed kit, existing header modes, translation ownership and published anchors. Optional mechanics are not a Slide-type renderer.
 - [FE-001](../../.archgate/adrs/FE-001-state-management.md): one history writer and active-Slide reader; presentation measurements are transient memory, with no new persistence key. An additive correlated lifecycle belongs to the existing URL authority.
 - [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md), [FE-005](../../.archgate/adrs/FE-005-static-export-contract.md) and [FE-007](../../.archgate/adrs/FE-007-module-layering.md): leaf clients, serializable crossings, complete static output, downward imports and sealed Slide folders. Provider placement, hydration coordination and safe reattachment are implementation choices under those disciplines.
-- [FE-011](../../.archgate/adrs/FE-011-design-tokens.md): live theme-aware colour tokens, governed type roles and Slide-local overrides. Surface overrides preserve authored contrast semantics or carry a matching tone declaration.
+- [FE-011](../../.archgate/adrs/FE-011-design-tokens.md): live theme-aware colour tokens, governed type roles and Slide-local overrides. Surface overrides follow Decision record _Slide Surface and the inverse flag_: a Surface sets its own text colour, and the inverse flag is the declared tone.
 - [Decision record 0012](0012-slide-header-and-play-once-motion.md): header/Scene entrance policy remains distinct from reversible surface transitions. Decorative slots do not introduce a second Scene entrance or change shared-header ownership.
 
 These disciplines remain binding. Any implementation that needs a broader exception must stop for its own governance decision.
@@ -72,6 +72,8 @@ These disciplines remain binding. Any implementation that needs a broader except
 - UX taste remains a manual-review gap: restrained ToC motion and approximate header/ink alignment need human judgment on rendered pages in both themes. Browser smoothness requires measurement; a pure clock test cannot establish it.
 
 ## References
+
+- [Slide Surface and the inverse flag](0030-slide-surface-and-the-inverse-flag.md) — replaces `tone` with the Surface and the inverse flag; semantic tone is the declared flag.
 
 - [Shared Anchor geometry and composed Title selection](0023-shared-anchor-geometry-and-composed-title-selection.md) — accepted follow-up design; shared measurements and composition-owned compatibility, not an implementation claim.
 - [Slide presentation contracts](../features/slide-transitions.md) — accepted feature contract and downstream verification.
