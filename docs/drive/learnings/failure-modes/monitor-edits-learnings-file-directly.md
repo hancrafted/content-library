@@ -1,8 +1,10 @@
 ---
 title: 'A monitor session edits the learnings file directly because no monitor channel is documented'
-enforcer: 'check: `drive learnings check` fails when `docs/drive/learnings.md` exists, plus a documented monitor channel in `.scratch/<topic>/monitor.md`'
-status: ticket
+enforcer: 'check: `drive learnings check` fails when `docs/drive/learnings.md` exists; prose in skills/drive/SKILL.md "Monitor" writes only `.scratch/<topic>/monitor.md`'
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/798
+fixed-by: https://github.com/hancrafted/content-library/commit/cc58d41b0
+fixed-on: '2026-11-19'
 ---
 
 # A monitor session edits the learnings file directly because no monitor channel is documented

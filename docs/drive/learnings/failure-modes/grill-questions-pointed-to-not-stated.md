@@ -1,8 +1,10 @@
 ---
 title: "A grill round's questions are pointed to, not stated where the Operator reads"
-enforcer: "review: a Define rule in the drive skill that each round's questions appear in full in the message that asks for answers, architectural"
-status: ticket
+enforcer: "review: prose in skills/drive/SKILL.md Define, state each round's questions in full in the message that asks for answers"
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/798
+fixed-by: https://github.com/hancrafted/content-library/commit/cc58d41b0
+fixed-on: '2026-11-19'
 ---
 
 # A grill round's questions are pointed to, not stated where the Operator reads
