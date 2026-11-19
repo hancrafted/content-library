@@ -147,7 +147,7 @@ _Done when:_ CI passes on the last push, every finding has a logged verdict with
 
 After the Operator merges the Integration branch's PR (exit 12) and the leftover tickets are closed, ask once: "Fortify now (a top-tier decision page) or skip?" Skip ends here once one small PR from the base branch has recorded `fortify: skipped` with the Operator's reason (the record is append-only after the merge; log the decision in `decisions.md`, the Operator may contest it); yes runs **Fortify** on a branch from the base branch: [references/fortify.md](references/fortify.md). It blocks nothing else.
 
-_Done when:_ the record says `engaged` or `skipped`; when engaged, at most one `fortify` ticket is open and it is the recommended architectural option. Then clean up the merged branches and worktrees.
+_Done when:_ the record says `engaged` or `skipped`; when engaged, at most one `fortify` ticket is open and it is the recommended architectural option. `drive status` then reports Done: clean up the merged branches and worktrees (`/cleanup`).
 
 ## Monitor
 
