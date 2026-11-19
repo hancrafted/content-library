@@ -1,4 +1,4 @@
-import { needsBuild } from '../verify/needs-build.pure.ts';
+import { changeKind } from '../verify/change-kind.pure.ts';
 
 export const BUILD_COMMANDS = ['npm run build', 'npm run test:build'] as const;
 
@@ -9,7 +9,7 @@ export interface BuildIfNeeded {
 }
 
 export function buildIfNeeded({ changedPaths, run, log }: BuildIfNeeded): boolean {
-  if (!needsBuild(changedPaths)) {
+  if (!changeKind(changedPaths).build) {
     log('✔ no build needed: the branch changes nothing the export reads');
     return true;
   }

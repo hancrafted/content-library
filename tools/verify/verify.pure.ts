@@ -1,4 +1,4 @@
-import { needsBuild } from './needs-build.pure.ts';
+import { changeKind } from './change-kind.pure.ts';
 
 export interface Step {
   name: string;
@@ -65,7 +65,7 @@ function buildReason({ refs, mergeBase, changedPaths }: PushFacts): string | nul
   const remoteRefs = refs.split('\n').map((line) => line.trim().split(/\s+/)[2]);
   if (remoteRefs.includes('refs/heads/main')) return 'push to main: building';
   if (mergeBase === null) return 'no merge-base with origin/main: building';
-  if (needsBuild(changedPaths)) return `an export input changed since ${mergeBase}: building`;
+  if (changeKind(changedPaths).build) return `an export input changed since ${mergeBase}: building`;
   return null;
 }
 

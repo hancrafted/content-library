@@ -38,6 +38,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
+      - name: Detect the change kind
+        id: kind
+        if: github.ref != 'refs/heads/main'
+        run: |
+          base=$(git merge-base origin/main HEAD)
+          git diff --name-only "$base" HEAD | npm run -s verify:change-kind >> "$GITHUB_OUTPUT"
       # The `archgate` npm package is a launcher: its first call downloads a ~67 MB binary into ~/.archgate/bin.
       # Keyed on the launcher's version, so a bump fetches the matching binary once.
       - uses: actions/cache@v6
@@ -46,10 +54,13 @@ jobs:
           key: archgate-${{ runner.os }}-${{ hashFiles('node_modules/archgate/package.json') }}
       - run: npm run preflight
       - run: npm run archgate:full
-      - run: npm run lint
+      - if: steps.kind.outputs.docs-only != 'true'
+        run: npm run lint
       - run: npm run format:check
-      - run: npm run typecheck
-      - run: npm run knip
+      - if: steps.kind.outputs.docs-only != 'true'
+        run: npm run typecheck
+      - if: steps.kind.outputs.docs-only != 'true'
+        run: npm run knip
       # The new-episode sample sits under a dot-folder, which the default corpus never walks.
       - run: npm run check:docs
 
@@ -66,10 +77,24 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
+      - name: Detect the change kind
+        id: kind
+        if: github.ref != 'refs/heads/main'
+        run: |
+          base=$(git merge-base origin/main HEAD)
+          git diff --name-only "$base" HEAD | npm run -s verify:change-kind >> "$GITHUB_OUTPUT"
       # The JSON report feeds the budget below; naming reporters drops the config's local slow-test log.
-      - run: npm test -- --reporter=default --reporter=json --outputFile.json=fast-suite.json
+      - if: steps.kind.outputs.docs-only != 'true'
+        run: npm test -- --reporter=default --reporter=json --outputFile.json=fast-suite.json
+      # A Markdown-only branch runs the tests its paths reach (ARCH-003-testing §4.6 names the rerun triggers); the
+      # local pre-push keeps the full suite as the backstop.
+      - if: steps.kind.outputs.docs-only == 'true'
+        run: npx vitest run --changed origin/main --passWithNoTests
       # ARCH-003-testing §4.4: a fast-suite test over 3 s fails the job. The nightly 2 s budget warns first.
       - name: Fail on fast-suite tests over 3 s
+        if: steps.kind.outputs.docs-only != 'true'
         run: |
           over=$(node tools/test-budget/over-budget.ts fast-suite.json 3000)
           [ -z "$over" ] && exit 0
@@ -77,13 +102,15 @@ jobs:
           exit 1
 
   # The one build per commit, in the shape its ref ships: production on main (no Upcoming Episodes), preview everywhere
-  # else. `changed` says whether the branch touched an export input against main (EXPORT_PATHS in
-  # tools/verify/needs-build.pure.ts), which is what gates `preview`.
+  # else. `build` says whether the branch touched an export input against main (EXPORT_PATHS in
+  # tools/verify/change-kind.pure.ts), which gates `preview`; `docs-only` says the branch is Markdown only, so there is
+  # nothing to build or post-build test.
   export:
     name: build
     runs-on: ubuntu-latest
     outputs:
-      changed: ${{ steps.changed.outputs.changed }}
+      build: ${{ steps.kind.outputs.build }}
+      docs-only: ${{ steps.kind.outputs.docs-only }}
     env:
       # Build as the Cloudflare Pages deploy does, from the domain root, so a base-path bug fails here, not at deploy.
       NEXT_PUBLIC_BASE_PATH: ''
@@ -92,25 +119,26 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          # Full history: the merge-base with main decides `changed`.
+          # Full history: the merge-base with main decides the change kind.
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Detect export inputs
-        id: changed
+      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
+      - name: Detect the change kind
+        id: kind
+        if: github.ref != 'refs/heads/main'
         run: |
           base=$(git merge-base origin/main HEAD)
-          if git diff --name-only "$base" HEAD | npm run -s verify:needs-build; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
-      - run: npm run build
+          git diff --name-only "$base" HEAD | npm run -s verify:change-kind >> "$GITHUB_OUTPUT"
+      - if: steps.kind.outputs.docs-only != 'true'
+        run: npm run build
       # Main's export is what production publishes and what a rollback redeploys, so it is kept for 30 days.
       - name: Upload export
+        if: steps.kind.outputs.docs-only != 'true'
         uses: actions/upload-artifact@v7.0.2
         with:
           name: out
@@ -124,6 +152,7 @@ jobs:
   build-test:
     name: post-build tests
     needs: export
+    if: needs.export.outputs.docs-only != 'true'
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_PATH: ''
@@ -143,7 +172,8 @@ jobs:
       - run: npm run test:build
 
   # The check main's ruleset requires, `build, post-build tests`. `always()` runs it after a failed or skipped need, and
-  # it fails unless both succeeded, so a skipped job can never stand in for a pass.
+  # it fails unless `export` succeeded and `build-test` succeeded, or was skipped on a docs-only branch, so a skipped job
+  # never stands in for a pass otherwise.
   gate:
     name: build, post-build tests
     needs: [export, build-test]
@@ -154,9 +184,12 @@ jobs:
         env:
           BUILD: ${{ needs.export.result }}
           POST_BUILD: ${{ needs.build-test.result }}
+          DOCS_ONLY: ${{ needs.export.outputs.docs-only }}
         run: |
-          echo "build: $BUILD, post-build tests: $POST_BUILD"
-          [ "$BUILD" = success ] && [ "$POST_BUILD" = success ]
+          echo "build: $BUILD, post-build tests: $POST_BUILD, docs-only: $DOCS_ONLY"
+          [ "$BUILD" = success ] || exit 1
+          [ "$POST_BUILD" = success ] && exit 0
+          [ "$POST_BUILD" = skipped ] && [ "$DOCS_ONLY" = true ]
 
   # A job of its own, so the run graph shows the deploy and the environment links to the deployed URL. Main is never
   # previewed (deploy-cloudflare.yml publishes it). A fork's or Dependabot's push has no access to the Cloudflare
@@ -164,7 +197,7 @@ jobs:
   preview:
     name: deploy to Cloudflare Pages (preview)
     needs: export
-    if: needs.export.outputs.changed == 'true' && github.ref != 'refs/heads/main' && github.repository == 'hancrafted/content-library' && github.actor != 'dependabot[bot]'
+    if: needs.export.outputs.build == 'true' && github.ref != 'refs/heads/main' && github.repository == 'hancrafted/content-library' && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     environment:
       name: preview
