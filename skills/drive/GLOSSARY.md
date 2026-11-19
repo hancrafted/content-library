@@ -16,10 +16,10 @@ _Avoid_: pipeline, process, flow
 **DRIVE**: the five phases of a Workflow, each named by its verb: **D**efine (_clarify_: requirements, grilling), **R**eason (_specify_: design, architecture, Decision docs, spec, tickets), **I**mplement (_codify_: the code), **V**erify (_verify_: review, integration, CI), **E**volve (_fortify_: Fortify). A skill may serve several phases and a phase several skills.
 _Avoid_: stage, step, SDLC
 
-**Fortify**: the Evolve phase. After the Operator merges the Integration branch, on a branch from the base branch, it gathers what went wrong into 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer. Every option is logged with a recurrence count, and the recommended architectural option becomes the single open `fortify` ticket, where the Operator picks a quick win when triaging it. Fortify blocks nothing.
+**Fortify**: the Evolve phase. The Workflow's record is written automatically at the end of Verify; after the Operator merges the Integration branch, the Orchestrator asks once whether to Fortify now or skip. A skip is recorded with its reason. On a yes, on a branch from the base branch, it gathers what went wrong into 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer, and the recommended architectural option becomes the single open `fortify` ticket, where the Operator picks a quick win when triaging it. Fortify blocks nothing.
 _Avoid_: retro, retrospective (`/retro` is one evidence source), lessons learned
 
-**Failure mode**: one narrow way the Workflow or the repo went wrong, named so an Enforcer could catch it next time. Fortify proposes options per failure mode, and the learnings file keeps one entry per failure mode with a recurrence count; a count of three or more is a **smell** to raise with the Operator.
+**Failure mode**: one narrow way the Workflow or the repo went wrong, named so an Enforcer could catch it next time. Each has one file holding its Enforcer and status; each Workflow's record cites the failure modes it hit, and the recurrence count is the number of records citing it, computed, never typed. A count of three or more is a **smell** to raise with the Operator.
 _Avoid_: issue, problem, lesson
 
 **Quick win**: a Fortify option the Operator can let a Subagent do and merge in 15–30 minutes, before cleanup.
