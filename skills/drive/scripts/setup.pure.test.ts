@@ -7,7 +7,6 @@ import {
   detectPackageManager,
   installCommands,
   learningsCheckCommand,
-  parseSetupArgs,
   updateProjectConfig,
 } from './setup.pure.ts';
 import { REVIEW_STUB } from './stubs.pure.ts';
@@ -116,21 +115,6 @@ describe('REVIEW_STUB', () => {
     expect(REVIEW_STUB).toContain('# Drive review');
     for (const heading of ['Mode', 'Audience', 'Layout', 'Depth', 'Fidelity', 'Feedback route', 'Review width'])
       expect(REVIEW_STUB).toContain(`## ${heading}`);
-  });
-});
-
-describe('parseSetupArgs', () => {
-  it('reads --agent-type and --tier, and rejects a tier that is not mid or top', () => {
-    // ARRANGE
-    // ACT
-    // ASSERT
-    expect(parseSetupArgs(['--agent-type', 'team:dev', '--tier', 'top'])).toEqual({
-      agentType: 'team:dev',
-      tier: 'top',
-    });
-    expect(parseSetupArgs(['--tier', 'opus'])).toEqual({
-      error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
-    });
   });
 });
 

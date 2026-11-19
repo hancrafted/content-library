@@ -1,16 +1,29 @@
 import { describe, expect, it } from 'vitest';
-import { killable, lineage, parseLsof, planSync } from './worktree-process.pure.ts';
+import { blockingProcs, killable, lineage, parseLsof, planSync } from './worktree-process.pure.ts';
 
 describe('parseLsof', () => {
   it('keeps only processes whose cwd is inside the worktree', () => {
     // ARRANGE
-    const out = ['p10', 'cnode', 'n/r/wt/sub', 'p11', 'cvim', 'n/r/wt-other', 'p12', 'cchrome', 'n/r/wt'].join('\n');
+    const out = [
+      'p10',
+      'u501',
+      'cnode',
+      'n/r/wt/sub',
+      'p11',
+      'u501',
+      'cvim',
+      'n/r/wt-other',
+      'p12',
+      'u0',
+      'cchrome',
+      'n/r/wt',
+    ].join('\n');
     // ACT
     const found = parseLsof(out, '/r/wt');
     // ASSERT
     expect(found).toEqual([
-      { pid: 10, command: 'node' },
-      { pid: 12, command: 'chrome' },
+      { pid: 10, command: 'node', uid: 501 },
+      { pid: 12, command: 'chrome', uid: 0 },
     ]);
   });
 });
@@ -22,7 +35,7 @@ describe('killable', () => {
       [30, 20],
       [20, 1],
     ]);
-    const procs = [20, 30, 40, 40, 50].map((pid) => ({ pid, command: 'x' }));
+    const procs = [20, 30, 40, 40, 50].map((pid) => ({ pid, command: 'x', uid: null }));
     // ACT
     const pids = killable(procs, lineage(30, parentOf)).map((p) => p.pid);
     // ASSERT
@@ -86,5 +99,32 @@ describe('planSync', () => {
     const plans = inputs.map(planSync);
     // ASSERT
     expect(plans.every((plan) => 'error' in plan)).toBe(true);
+  });
+});
+
+describe('blockingProcs', () => {
+  const procs = [
+    { pid: 10, command: 'node', uid: 501 },
+    { pid: 11, command: 'gone', uid: 501 },
+    { pid: 12, command: 'other-user', uid: 0 },
+    { pid: 13, command: 'no-owner', uid: null },
+  ];
+
+  it('drops pids that exited and pids another user owns', () => {
+    // ARRANGE
+    const facts = { uid: 501, isAlive: (pid: number) => pid !== 11 };
+    // ACT
+    const blocking = blockingProcs(procs, facts).map((proc) => proc.pid);
+    // ASSERT
+    expect(blocking).toEqual([10, 13]);
+  });
+
+  it('keeps every live process of the caller', () => {
+    // ARRANGE
+    const facts = { uid: 501, isAlive: () => true };
+    // ACT
+    const blocking = blockingProcs(procs.slice(0, 2), facts);
+    // ASSERT
+    expect(blocking).toHaveLength(2);
   });
 });

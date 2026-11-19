@@ -1,5 +1,5 @@
 import { parse } from 'yaml';
-import { CONFIG_PATH } from './config.pure.ts';
+import { DRIVE_FOLDER } from './config.pure.ts';
 import { isRecord, isText } from './yaml.pure.ts';
 
 export const FAILURE_MODE_STATUSES = ['proposed', 'ticket', 'fixed', 'wontfix'] as const;
@@ -46,7 +46,6 @@ export interface Store {
 
 export const FAILURE_MODES_FOLDER = 'failure-modes';
 export const RECORDS_FOLDER = 'records';
-const DRIVE_FOLDER = CONFIG_PATH.slice(0, CONFIG_PATH.lastIndexOf('/'));
 export const LEARNINGS_STORE = `${DRIVE_FOLDER}/learnings`;
 export const LEGACY_LEARNINGS_FILE = `${DRIVE_FOLDER}/learnings.md`;
 const BULLET_LABELS = ['**Evidence:**', '**Correction:**', '**Regressed:**'] as const;

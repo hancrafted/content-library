@@ -1,13 +1,15 @@
 export interface Proc {
   pid: number;
   command: string;
+  uid: number | null;
 }
 
 export function parseLsof(stdout: string, target: string): Proc[] {
   const found: Proc[] = [];
-  let current: Proc = { pid: 0, command: '' };
+  let current: Proc = { pid: 0, command: '', uid: null };
   for (const line of stdout.split('\n')) {
-    if (line.startsWith('p')) current = { pid: Number(line.slice(1)), command: '' };
+    if (line.startsWith('p')) current = { pid: Number(line.slice(1)), command: '', uid: null };
+    else if (line.startsWith('u')) current.uid = Number(line.slice(1));
     else if (line.startsWith('c')) current.command = line.slice(1);
     else if (line.startsWith('n') && (line.slice(1) + '/').startsWith(target + '/')) found.push({ ...current });
   }
@@ -25,6 +27,13 @@ export function killable(procs: readonly Proc[], protectedPids: ReadonlySet<numb
   const unique = new Map<number, Proc>();
   for (const proc of procs) if (!protectedPids.has(proc.pid) && !unique.has(proc.pid)) unique.set(proc.pid, proc);
   return [...unique.values()];
+}
+
+export function blockingProcs(
+  procs: readonly Proc[],
+  { uid, isAlive }: { uid: number; isAlive: (pid: number) => boolean },
+): Proc[] {
+  return procs.filter((proc) => isAlive(proc.pid) && (proc.uid === null || proc.uid === uid));
 }
 
 export const describeProc = (proc: Proc): string => `pid ${proc.pid} (${proc.command})`;

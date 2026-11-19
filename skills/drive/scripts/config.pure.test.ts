@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { defaultsFor, harnessCapFrom, PARALLEL_DEFAULTS, parseConfig } from './config.pure.ts';
+import {
+  CONFIG_PATH,
+  DRIVE_FOLDER,
+  defaultsFor,
+  harnessCapFrom,
+  PARALLEL_DEFAULTS,
+  parseConfig,
+} from './config.pure.ts';
 
 const ENTRY = 'skills/drive/scripts/drive.ts';
 
@@ -22,6 +29,7 @@ describe('parseConfig', () => {
         '  afterRemove: [tidy]',
         'parallel: { default: 2, harnessCap: 8 }',
         'decisionDocs: [docs/words.md]',
+        'grill: { format: docs/agents/grilling-format.md }',
       ].join('\n');
       // ACT
       const config = parseConfig(text, ENTRY);
@@ -43,6 +51,7 @@ describe('parseConfig', () => {
         parallel: { default: 2, harnessCap: 8 },
         models: {},
         decisionDocs: ['docs/words.md'],
+        grill: { format: 'docs/agents/grilling-format.md' },
       });
     });
 
@@ -90,6 +99,7 @@ describe('parseConfig', () => {
           parallel: PARALLEL_DEFAULTS,
           models: {},
           decisionDocs: [],
+          grill: { format: null },
         })),
       );
     });
@@ -110,6 +120,9 @@ describe('parseConfig', () => {
         'models: x',
         'models:\n  claude: { mid: sonnet }',
         'models:\n  claude: { mid: sonnet, top: opus, low: haiku }',
+        'grill: { format: 3 }',
+        'grill: { style: x }',
+        'grill: x',
       ];
       // ACT
       const errors = texts.map((text) => parseConfig(text, ENTRY));
@@ -127,6 +140,9 @@ describe('parseConfig', () => {
         'models in docs/drive/project.yml must be a mapping of provider to tiers',
         'models.claude.top must be a non-empty string',
         "unknown tier 'low' in models.claude; expected mid, top",
+        'grill.format must be a non-empty path',
+        "unknown grill key 'style'; expected format",
+        'grill in docs/drive/project.yml must be a mapping',
       ]);
     });
   });
@@ -141,5 +157,17 @@ describe('harnessCapFrom', () => {
     const caps = [set, bad, {}].map(harnessCapFrom);
     // ASSERT
     expect(caps).toEqual([6, PARALLEL_DEFAULTS.harnessCap, PARALLEL_DEFAULTS.harnessCap]);
+  });
+});
+
+describe('DRIVE_FOLDER', () => {
+  it('is the folder that holds the project config', () => {
+    // ARRANGE
+    const expected = 'docs/drive';
+    // ACT
+    const folder = DRIVE_FOLDER;
+    // ASSERT
+    expect(folder).toBe(expected);
+    expect(CONFIG_PATH.startsWith(`${folder}/`)).toBe(true);
   });
 });

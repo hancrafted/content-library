@@ -4,7 +4,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CATALOG, PHASE_TIERS, readBinding } from './binding.pure.ts';
 import { harnessCapFrom, parseConfig } from './config.pure.ts';
-import { detectSkills, setup } from './setup.ts';
+import { checkBinding, detectSkills, setup } from './setup.ts';
 
 function repo(files: Record<string, string>): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-setup-')));
@@ -301,5 +301,26 @@ describe('drive setup', () => {
       expect(written.filter((file) => file.startsWith('.husky') || file.startsWith('.github'))).toEqual([]);
       expect(notes.join('\n')).toMatch(/drive\.ts guard --against origin\/main/);
     });
+  });
+});
+
+describe('drive setup --check', () => {
+  it('names a bound skill that no longer exists, and passes once it is renamed in the Binding', () => {
+    // ARRANGE
+    const root = repo({
+      'skills-lock.json': LOCK({ tdd: VENDOR, 'code-review': VENDOR }),
+      '.agents/skills/tdd/SKILL.md': SKILL,
+      '.agents/skills/code-review/SKILL.md': SKILL,
+    });
+    setup(root);
+    const file = path.join(root, 'docs/drive/binding.yml');
+    writeFileSync(file, text(root, 'docs/drive/binding.yml').replace(/- code-review/g, '- review-code'));
+    // ACT
+    const stale = checkBinding(root);
+    writeFileSync(file, text(root, 'docs/drive/binding.yml').replace(/- review-code/g, '- code-review'));
+    const fixed = checkBinding(root);
+    // ASSERT
+    expect(stale).toEqual([expect.stringContaining("binds 'review-code'")]);
+    expect(fixed).toEqual([]);
   });
 });

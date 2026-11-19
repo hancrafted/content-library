@@ -2,6 +2,7 @@ export interface CheckoutFacts {
   nodeModules: 'directory' | 'symlink' | 'missing';
   hooksInstalled: boolean;
   archgateTotal: number;
+  coreBare: boolean;
 }
 
 export interface Violation {
@@ -36,6 +37,12 @@ const CHECKS: Check[] = [
     fails: (facts) => facts.archgateTotal === 0,
     problem: 'archgate ran zero checks, so a pass proves nothing.',
     fix: 'Run `npm run archgate:full -- --verbose` and see why no rule ran; in CI, check out with fetch-depth 0.',
+  },
+  {
+    id: 'core-bare',
+    fails: (facts) => facts.coreBare,
+    problem: 'core.bare=true is set on a checkout that has a working tree; git status, commit and worktrees misbehave.',
+    fix: 'Run `git config core.bare false` in the main checkout.',
   },
 ];
 

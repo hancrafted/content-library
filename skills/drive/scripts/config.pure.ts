@@ -3,6 +3,7 @@ import { readModels, type ModelsConfig } from './models.pure.ts';
 import { isRecord, isText } from './yaml.pure.ts';
 
 export const CONFIG_PATH = 'docs/drive/project.yml';
+export const DRIVE_FOLDER = CONFIG_PATH.slice(0, CONFIG_PATH.lastIndexOf('/'));
 
 export interface WorktreeConfig {
   dir: string;
@@ -23,11 +24,16 @@ export interface ParallelConfig {
   harnessCap: number;
 }
 
+export interface GrillConfig {
+  format: string | null;
+}
+
 export interface DriveConfig {
   worktree: WorktreeConfig;
   parallel: ParallelConfig;
   decisionDocs: string[];
   models: ModelsConfig;
+  grill: GrillConfig;
 }
 
 export const PARALLEL_DEFAULTS: ParallelConfig = { default: 3, harnessCap: 20 };
@@ -107,8 +113,21 @@ function readRest(root: Record<string, unknown>): Omit<DriveConfig, 'worktree'> 
   if (!isTextList(docs)) return { error: 'decisionDocs must be a list of paths' };
   const models = readModels(root.models, CONFIG_PATH);
   if ('error' in models) return models;
-  return { parallel, models: models.models, decisionDocs: docs };
+  const grill = readGrill(root.grill);
+  if ('error' in grill) return grill;
+  return { parallel, models: models.models, decisionDocs: docs, grill };
 }
+
+function readGrill(section: unknown): GrillConfig | { error: string } {
+  const body = section ?? {};
+  if (!isRecord(body)) return { error: `grill in ${CONFIG_PATH} must be a mapping` };
+  const unknown = Object.keys(body).find((key) => key !== 'format');
+  if (unknown !== undefined) return { error: `unknown grill key '${unknown}'; expected format` };
+  return readGrillFormat(body.format ?? null);
+}
+
+const readGrillFormat = (format: unknown): GrillConfig | { error: string } =>
+  format === null || isText(format) ? { format } : { error: 'grill.format must be a non-empty path' };
 
 const isCount = (value: unknown): value is number => Number.isInteger(value) && (value as number) >= 1;
 

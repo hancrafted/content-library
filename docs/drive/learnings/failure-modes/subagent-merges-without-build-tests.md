@@ -1,7 +1,9 @@
 ---
 title: 'A Subagent merges a render-changing task without running the build and its tests'
 enforcer: 'test-runner: test:build, quick win (Implementer profile line) or architectural (`drive worktree done` runs the build lane)'
-status: proposed
+status: fixed
+fixed-by: https://github.com/hancrafted/content-library/issues/742
+fixed-on: '2026-11-19'
 ---
 
 # A Subagent merges a render-changing task without running the build and its tests

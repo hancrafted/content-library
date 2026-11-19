@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { findViolations, type CheckoutFacts } from './preflight.pure';
 
-const HEALTHY: CheckoutFacts = { nodeModules: 'directory', hooksInstalled: true, archgateTotal: 26 };
+const HEALTHY: CheckoutFacts = { nodeModules: 'directory', hooksInstalled: true, archgateTotal: 26, coreBare: false };
 
 describe('findViolations', () => {
   describe('success cases', () => {
@@ -53,6 +53,20 @@ describe('findViolations', () => {
     });
   });
 
+  describe('core.bare', () => {
+    it('flags core.bare=true on the checkout and says how to reset it', () => {
+      // ARRANGE
+      const facts: CheckoutFacts = { ...HEALTHY, coreBare: true };
+      const expectedId = 'core-bare';
+      const expectedFix = 'git config core.bare false';
+      // ACT
+      const [violation] = findViolations(facts);
+      // ASSERT
+      expect(violation.id).toBe(expectedId);
+      expect(violation.fix).toContain(expectedFix);
+    });
+  });
+
   describe('edge cases', () => {
     it('flags a checkout with no node_modules at all', () => {
       // ARRANGE
@@ -68,8 +82,8 @@ describe('findViolations', () => {
 
     it('reports every violation at once, not just the first', () => {
       // ARRANGE
-      const facts: CheckoutFacts = { nodeModules: 'symlink', hooksInstalled: false, archgateTotal: 0 };
-      const expectedIds = ['node-modules-symlink', 'hooks-missing', 'archgate-empty'];
+      const facts: CheckoutFacts = { nodeModules: 'symlink', hooksInstalled: false, archgateTotal: 0, coreBare: true };
+      const expectedIds = ['node-modules-symlink', 'hooks-missing', 'archgate-empty', 'core-bare'];
       // ACT
       const ids = findViolations(facts).map((violation) => violation.id);
       // ASSERT
