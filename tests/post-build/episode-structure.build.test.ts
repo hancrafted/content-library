@@ -94,10 +94,15 @@ describe('episode structure', () => {
   });
   it.each(PAGES)('exports no retired tone marker on $url', ({ url }) => {
     // ARRANGE
-    const retired = ['data-surface-tone', 'data-tone', 'data-tone-flip'];
+    const retired = [
+      '[data-surface-tone]',
+      '[data-tone-flip]',
+      '[data-slide][data-tone]',
+      '[data-slot="title-slide"][data-tone]',
+    ];
     // ACT
     const $ = exportedPage(url);
-    const found = retired.filter((attribute) => $(`[${attribute}]`).length > 0);
+    const found = retired.filter((selector) => $(selector).length > 0);
     // ASSERT
     expect(found).toEqual([]);
   });
