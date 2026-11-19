@@ -1,145 +1,383 @@
 # CI
 
-How a change travels from a local commit to https://hancrafted.net, as of PR #781 (the docs lane). The workflows are the source of truth: `.github/workflows/ci.yml`, `deploy-cloudflare.yml`, `nightly.yml`, `security.yml`, `deploy.yml`; the local hooks are `.husky/pre-commit` and `.husky/pre-push` (plans in `tools/verify/verify.pure.ts`). The prose reference is `docs/features/hosting.md`.
+How a change travels from a local commit to https://hancrafted.net. The source of truth is the code: `.github/workflows/*.yml`, `.husky/*` and the plans in `tools/verify/verify.pure.ts`; the prose reference is `docs/features/hosting.md`. Every command in a box is explained in the [Glossary](#glossary).
 
-## From commit to production
+**Colour key** (same in every chart):
+
+```mermaid
+flowchart LR
+  S[npm ci]:::setup
+  Q{decision}:::decide
+  C[static check]:::check
+  T[test]:::test
+  B[build / artifact]:::build
+  D[deploy]:::deploy
+  G{{required gate}}:::gate
+  O([outcome]):::outcome
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+## 1. The process at a glance
+
+```mermaid
+flowchart LR
+  A([git commit]):::outcome --> B[pre-commit]:::check
+  B --> C([git push]):::outcome
+  C --> D[pre-push]:::test
+  D --> E[ci.yml on the branch]:::check
+  E --> F{{PR checks green?}}:::gate
+  F -- yes --> G([merge to main]):::outcome
+  G --> H[ci.yml on main]:::build
+  H --> I[deploy-cloudflare.yml]:::deploy
+  I --> J([hancrafted.net]):::outcome
+  E -. branch .-> P[preview deploy]:::deploy
+
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+- **Local hooks** catch most failures before anything leaves the machine (section 2).
+- **CI on a branch** runs one of two lanes: the full run, or the docs lane when every changed path is Markdown (section 3).
+- **`main`** always gets the full run; its tested `out/` is what production publishes (section 4).
+- **Scheduled workflows** run beside this, never blocking a merge (section 5).
+
+## 2. Local hooks
+
+### 2.1 pre-commit
+
+`.husky/pre-commit`. Steps on one line run in parallel.
+
+```mermaid
+flowchart LR
+  A([git commit]):::outcome --> G[drive guard]:::check
+  G --> P1[preflight]:::check & P2[check:events]:::check
+  P1 & P2 --> L[lint-staged]:::check
+  L --> A1[archgate check --staged]:::check & A2[lint:boundaries]:::check & A3[typecheck]:::check & A4[vitest run --changed]:::test
+  A1 & A2 & A3 & A4 --> M[commit-msg]:::check
+  M --> O([commit created]):::outcome
+
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+### 2.2 pre-push
+
+`.husky/pre-push` runs `verify:push`: the full `verify` plan, the slow tests the branch reaches, and a build only when the push could change the export.
 
 ```mermaid
 flowchart TD
-  %% ── Local ──────────────────────────────────────────────
-  subgraph LOCAL["Local machine (husky hooks)"]
-    direction TB
-    C([git commit]) --> PC["pre-commit<br/>drive guard<br/>(Decision docs only on decisions/*)"]
-    PC --> VC["verify:commit<br/>1. preflight ‖ check:events<br/>2. lint-staged<br/>3. archgate check --staged ‖ lint:boundaries ‖ typecheck ‖ vitest --changed"]
-    VC --> CM["commit-msg<br/>/commit gate: header, ### body, Source: trailer"]
-    CM --> P([git push])
-    P --> PP["pre-push: verify:push<br/>1. preflight ‖ archgate:full<br/>2. lint ‖ boundaries ‖ format ‖ typecheck ‖ full fast suite ‖ knip ‖ check:docs<br/>3. test:slow --changed merge-base"]
-    PP --> BQ{"push to main, no merge-base,<br/>or changeKind().build?"}
-    BQ -- yes --> LB["4. build<br/>5. test:build"]
-    BQ -- "no (e.g. Markdown only)" --> SENT
-    LB --> SENT([refs sent to GitHub])
-  end
+  A([git push]):::outcome --> P1[preflight]:::check & P2[archgate:full]:::check
+  P1 & P2 --> V1[oxlint]:::check & V2[lint:boundaries]:::check & V3[format:check]:::check & V4[typecheck]:::check & V5[npm test]:::test & V6[knip]:::check & V7[check:docs]:::check
+  V1 & V2 & V3 & V4 & V5 & V6 & V7 --> S[test:slow --changed]:::test
+  S --> Q{"push to main,<br/>no merge-base, or<br/>build = true?"}:::decide
+  Q -- yes --> B[build]:::build --> TB[test:build]:::test --> O([refs sent]):::outcome
+  Q -- no --> O
 
-  SENT --> TRIG
-
-  %% ── CI on push ─────────────────────────────────────────
-  subgraph CIW["ci.yml — on push, every branch (a newer push to the same ref cancels the older run)"]
-    direction TB
-    TRIG([push event]) --> FAN{{"3 jobs start in parallel<br/>each: checkout, setup-node 24, npm ci"}}
-
-    FAN --> S0
-    FAN --> U0
-    FAN --> E0
-
-    %% static
-    subgraph STATIC["static — 'preflight, archgate, lint, typecheck' (required)"]
-      S0{"ref = main?"} -- no --> SK["Detect the change kind<br/>git diff merge-base..HEAD<br/>| verify:change-kind<br/>→ build=, docs-only="]
-      S0 -- "yes: step skipped,<br/>outputs empty = full run" --> S1
-      SK --> S1["preflight<br/>archgate:full<br/>format:check<br/>check:docs"]
-      S1 --> SD{"docs-only?"}
-      SD -- no --> S2["lint<br/>typecheck<br/>knip"]
-      SD -- yes --> SX[skip lint, typecheck, knip]
-    end
-
-    %% unit
-    subgraph UNIT["unit — 'unit tests' (required)"]
-      U0{"ref = main?"} -- no --> UK[Detect the change kind]
-      U0 -- yes --> UF
-      UK --> UD{"docs-only?"}
-      UD -- no --> UF["npm test<br/>(full fast suite, JSON report)"]
-      UD -- yes --> UC["vitest run --changed origin/main<br/>--passWithNoTests (JSON report)"]
-      UF --> UB["Fail on fast-suite tests over 3 s<br/>(ARCH-003 §4.4)"]
-      UC --> UB
-    end
-
-    %% export
-    subgraph EXPORT["export — 'build'"]
-      E0{"ref = main?"} -- no --> EK["Detect the change kind<br/>outputs: build, docs-only"]
-      E0 -- yes --> EB
-      EK --> ED{"docs-only?"}
-      ED -- no --> EB["npm run build<br/>LIST_UPCOMING_EPISODES = true off main, unset on main"]
-      EB --> EU["upload artifact 'out'<br/>kept 30 days on main, 1 day elsewhere"]
-      ED -- yes --> EX[skip build and upload]
-    end
-
-    EU --> BT
-    EX --> BTS
-    subgraph BTEST["build-test — 'post-build tests'"]
-      BT["download out/<br/>npm run test:build"]
-      BTS[skipped: docs-only]
-    end
-
-    EU --> PVQ{"build = true<br/>and ref ≠ main<br/>and this repo<br/>and not Dependabot?"}
-    EX --> PVQ
-    PVQ -- yes --> PV["preview<br/>download out/ → wrangler pages deploy<br/>→ &lt;branch&gt;.hancrafted.pages.dev"]
-    PVQ -- no --> PVX[preview skipped]
-
-    BT --> G
-    BTS --> G
-    EU --> G
-    EX --> G
-    G{"gate — 'build, post-build tests' (required, if: always())<br/>export = success AND<br/>(build-test = success OR<br/>build-test = skipped AND docs-only)"}
-    G -- pass --> GR([run green])
-    G -- fail --> RR([run red])
-  end
-
-  S2 --> GR
-  SX --> GR
-  UB --> GR
-
-  %% ── PR and merge ──────────────────────────────────────
-  GR --> PR{"PR to main<br/>(push run on its head commit<br/>is the PR's checks)"}
-  PR -- "3 required checks green" --> M([Operator merges to main])
-  M --> TRIG2([push to main → ci.yml full run,<br/>no docs lane, no preview])
-  TRIG2 -. same jobs as above .-> CIW
-
-  %% ── Production ────────────────────────────────────────
-  subgraph DEPLOY["deploy-cloudflare.yml — workflow_run: CI completed on main (never cancelled mid-flight)"]
-    direction TB
-    WR{"CI run on main<br/>succeeded?"} -- no --> DN([nothing deployed])
-    WR -- yes --> PICK["Pick CI run<br/>must be CI, on main, success"]
-    WD([workflow_dispatch<br/>optional run-id = rollback]) --> PICK
-    PICK --> DL["download that run's out/<br/>(no checkout, no build)"]
-    DL --> DP["wrangler pages deploy --branch=main"]
-    DP --> LIVE([https://hancrafted.net])
-  end
-
-  TRIG2 --> WR
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
 
-## The change kind
+## 3. CI on push (`ci.yml`)
 
-Every push off `main` is classified once per job by `npm run -s verify:change-kind` (`tools/verify/change-kind.pure.ts`) over the paths changed since the merge-base with `origin/main`.
+Runs on every push to every branch; a newer push to the same branch cancels the older run. A PR shows the push run on its head commit as its checks.
+
+### 3.1 Job graph
 
 ```mermaid
 flowchart LR
-  P[changed paths since merge-base] --> E{"empty list?"}
-  E -- yes --> FULL["docs-only = false<br/>full run"]
-  E -- no --> A{"every path matches **/*.md?<br/>(markdown-harness.config.yaml does not)"}
-  A -- yes --> DOCS["docs-only = true<br/>docs lane"]
-  A -- no --> FULL
-  P --> B{"any path in EXPORT_PATHS<br/>and not src/**/*.md?"}
-  B -- yes --> BT["build = true<br/>preview runs, pre-push builds"]
-  B -- no --> BF["build = false<br/>no preview; CI still builds<br/>unless docs-only"]
+  T([push]):::outcome --> S[static]:::check & U[unit]:::test & E[export]:::build
+  E --> BT[build-test]:::test
+  E --> PV[preview]:::deploy
+  E & BT --> G{{gate}}:::gate
+  S & U & G --> R([run result]):::outcome
+
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
 
-| Lane                       | static                                       | unit                    | export        | post-build tests | preview |
-| -------------------------- | -------------------------------------------- | ----------------------- | ------------- | ---------------- | ------- |
-| `main`                     | all                                          | full suite              | build, 30-day | runs             | never   |
-| branch, export input       | all                                          | full suite              | build, 1-day  | runs             | yes     |
-| branch, other non-Markdown | all                                          | full suite              | build, 1-day  | runs             | no      |
-| branch, Markdown only      | preflight, archgate:full, format, check:docs | `--changed origin/main` | skipped       | skipped          | no      |
+Required checks on `main`: `static` ("preflight, archgate, lint, typecheck"), `unit` ("unit tests") and `gate` ("build, post-build tests").
 
-## Scheduled and side workflows
+### 3.2 The change kind
+
+`static`, `unit` and `export` each run `verify:change-kind` after `npm ci`, over the paths changed since the merge-base with `origin/main`. On `main` the step is skipped, so every job takes the full run.
+
+```mermaid
+flowchart TD
+  P[git diff merge-base..HEAD]:::setup --> K[verify:change-kind]:::check
+  K --> E{empty diff?}:::decide
+  E -- yes --> F([docs-only = false]):::outcome
+  E -- no --> M{"every path *.md?"}:::decide
+  M -- yes --> D([docs-only = true]):::outcome
+  M -- no --> F
+  K --> X{"a path in EXPORT_PATHS,<br/>not src/**/*.md?"}:::decide
+  X -- yes --> BT([build = true]):::outcome
+  X -- no --> BF([build = false]):::outcome
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+- **`docs-only`** picks the lane. `markdown-harness.config.yaml` is not Markdown, so it takes the full run.
+- **`build`** gates the preview and the local pre-push build.
+
+| Lane                       | static                                             | unit                    | export         | build-test | preview |
+| -------------------------- | -------------------------------------------------- | ----------------------- | -------------- | ---------- | ------- |
+| `main`                     | all                                                | `npm test`              | build, 30 days | runs       | never   |
+| branch, export input       | all                                                | `npm test`              | build, 1 day   | runs       | yes     |
+| branch, other non-Markdown | all                                                | `npm test`              | build, 1 day   | runs       | no      |
+| branch, Markdown only      | preflight, archgate:full, format:check, check:docs | `--changed origin/main` | skipped        | skipped    | no      |
+
+### 3.3 static
+
+```mermaid
+flowchart TD
+  A[npm ci]:::setup --> K[verify:change-kind]:::check
+  K --> P[preflight]:::check --> AR[archgate:full]:::check
+  AR --> Q{docs-only?}:::decide
+  Q -- no --> L[lint]:::check --> F[format:check]:::check --> TC[typecheck]:::check --> KN[knip]:::check --> CD[check:docs]:::check
+  Q -- yes --> F2[format:check]:::check --> CD2[check:docs]:::check
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+```
+
+### 3.4 unit
+
+```mermaid
+flowchart TD
+  A[npm ci]:::setup --> K[verify:change-kind]:::check --> Q{docs-only?}:::decide
+  Q -- no --> T[npm test]:::test
+  Q -- yes --> TC["vitest run --changed origin/main"]:::test
+  T & TC --> B[over-budget.ts 3000]:::gate
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+```
+
+### 3.5 export, build-test and preview
+
+```mermaid
+flowchart TD
+  A[npm ci]:::setup --> K[verify:change-kind]:::check --> Q{docs-only?}:::decide
+  Q -- no --> B[npm run build]:::build --> U[upload-artifact out]:::build
+  Q -- yes --> SK([no build, no artifact]):::outcome
+  U --> BT[test:build]:::test
+  U --> PQ{"build = true and<br/>not main?"}:::decide
+  PQ -- yes --> PV[wrangler pages deploy]:::deploy --> PU([branch.hancrafted.pages.dev]):::outcome
+  PQ -- no --> NP([no preview]):::outcome
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+`build` is set before the build step, so `npm run build` also runs `art` first (`prebuild`). The preview also needs this repository (not a fork) and a non-Dependabot actor.
+
+### 3.6 The gate
+
+The required check "build, post-build tests" runs `if: always()`, so a skipped or failed job cannot pass by absence.
+
+```mermaid
+flowchart TD
+  E{export succeeded?}:::decide -- no --> R([red]):::gate
+  E -- yes --> T{build-test?}:::decide
+  T -- success --> G([green]):::outcome
+  T -- skipped --> D{docs-only?}:::decide
+  D -- yes --> G
+  D -- no --> R
+  T -- failed --> R
+
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+## 4. Production deploy and rollback (`deploy-cloudflare.yml`)
+
+Starts when CI completes on `main`. It never builds: it publishes the `out/` that CI built and tested. A production deploy is never cancelled mid-flight.
+
+```mermaid
+flowchart TD
+  W([CI completed on main]):::outcome --> Q{succeeded?}:::decide
+  Q -- no --> N([nothing deployed]):::outcome
+  Q -- yes --> P[gh run view]:::check
+  M([workflow_dispatch run-id]):::outcome --> P
+  P --> V{"CI, on main,<br/>success?"}:::decide
+  V -- no --> F([fail]):::gate
+  V -- yes --> D[download-artifact out]:::build --> W2[wrangler pages deploy --branch=main]:::deploy --> L([hancrafted.net]):::outcome
+
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+**Rollback:** run the workflow by hand with the `run-id` of an older successful CI run on `main` (its artifact is kept 30 days).
+
+## 5. Scheduled and side workflows
+
+None of these blocks a merge.
 
 ```mermaid
 flowchart LR
-  N(["nightly.yml<br/>cron 03:00 UTC daily + manual"]) --> N1["test:slow (whole slow lane)"]
-  N --> N2["fast-suite timings vs 2 s budget"]
-  N1 -- failure --> NI["file a needs-triage issue"]
-  N2 -- over budget --> NI
+  N([nightly.yml · daily 03:00 UTC]):::outcome --> N1[test:slow]:::test & N2[vitest run json]:::test
+  N2 --> N3[over-budget 2 s]:::gate
+  N1 & N3 -- failure --> I[file-issue.sh]:::check
 
-  SEC(["security.yml<br/>pull_request + Mondays 03:00 UTC"]) --> T1["Trivy: deps, config/IaC, secrets<br/>report all, block only on real risk"]
+  S([security.yml · PRs, Mondays]):::outcome --> T[trivy]:::check
 
-  GP(["deploy.yml (temporary)<br/>push to main + manual"]) --> G1["build for the page list<br/>→ redirect stubs to hancrafted.net<br/>→ GitHub Pages"]
+  G([deploy.yml · push to main]):::outcome --> B[build]:::build --> R[redirect-stubs.ts]:::build --> GP[deploy-pages]:::deploy
+
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
+
+- **nightly:** the whole slow lane and fast-suite timings against a 2 s budget; a failure files a `needs-triage` issue.
+- **security:** Trivy over dependencies, config and secrets; reports everything, fails only on real risk.
+- **deploy.yml (temporary):** publishes redirect stubs from the old GitHub Pages URLs to hancrafted.net.
+
+## 6. Complete landscape
+
+```mermaid
+flowchart TD
+  subgraph LOCAL["Local"]
+    direction TB
+    C([git commit]):::outcome --> DG[drive guard]:::check --> PF1[preflight]:::check --> CE[check:events]:::check --> LS[lint-staged]:::check
+    LS --> ACS[archgate check --staged]:::check --> LB1[lint:boundaries]:::check --> TC1[typecheck]:::check --> VC[vitest run --changed]:::test
+    VC --> CM[commit-msg]:::check --> PU([git push]):::outcome
+    PU --> PF2[preflight]:::check --> AF1[archgate:full]:::check --> V[verify plan]:::check --> NT1[npm test]:::test --> TS[test:slow --changed]:::test
+    TS --> LQ{build needed?}:::decide
+    LQ -- yes --> LB[build]:::build --> LTB[test:build]:::test --> SENT([sent]):::outcome
+    LQ -- no --> SENT
+  end
+
+  SENT --> CI0
+
+  subgraph CI["ci.yml (every push)"]
+    direction TB
+    CI0([push]):::outcome --> NC[npm ci]:::setup --> CK[verify:change-kind]:::check
+
+    subgraph STATIC["static"]
+      SP[preflight]:::check --> SA[archgate:full]:::check --> SQ{docs-only?}:::decide
+      SQ -- no --> SL[lint]:::check --> ST[typecheck]:::check --> SK[knip]:::check --> SF[format:check]:::check
+      SQ -- yes --> SF
+      SF --> SD[check:docs]:::check
+    end
+
+    subgraph UNIT["unit"]
+      UQ{docs-only?}:::decide -- no --> UT[npm test]:::test
+      UQ -- yes --> UC[vitest run --changed origin/main]:::test
+      UT & UC --> UB[over-budget 3 s]:::gate
+    end
+
+    subgraph EXPORT["export"]
+      EQ{docs-only?}:::decide -- no --> EB[npm run build]:::build --> EU[upload-artifact out]:::build
+      EQ -- yes --> EX([skip]):::outcome
+    end
+
+    CK --> SP & UQ & EQ
+    EU --> BT[test:build]:::test
+    EU --> PQ{build and not main?}:::decide
+    PQ -- yes --> PV[wrangler pages deploy branch]:::deploy
+    BT & EU & EX --> GATE{{gate}}:::gate
+    SD & UB & GATE --> GREEN([green]):::outcome
+  end
+
+  GREEN --> PR{{PR required checks}}:::gate --> MERGE([merge to main]):::outcome
+  MERGE --> MAINCI[ci.yml on main · full run]:::build
+
+  subgraph PROD["deploy-cloudflare.yml"]
+    direction TB
+    MAINCI --> DQ{CI succeeded?}:::decide
+    DQ -- yes --> DR[gh run view]:::check --> DD[download-artifact out]:::build --> DW[wrangler pages deploy main]:::deploy --> LIVE([hancrafted.net]):::outcome
+    RB([workflow_dispatch run-id]):::outcome --> DR
+  end
+
+  subgraph SCHED["Scheduled"]
+    direction LR
+    NI([nightly]):::outcome --> NS[test:slow]:::test
+    SE([security]):::outcome --> TR[trivy]:::check
+    MAINCI --> GH[deploy.yml redirect stubs]:::deploy
+  end
+
+  classDef setup fill:#e5e7eb,stroke:#6b7280,color:#111
+  classDef decide fill:#fef3c7,stroke:#d97706,color:#111
+  classDef check fill:#dbeafe,stroke:#2563eb,color:#111
+  classDef test fill:#dcfce7,stroke:#16a34a,color:#111
+  classDef build fill:#ffedd5,stroke:#ea580c,color:#111
+  classDef deploy fill:#ede9fe,stroke:#7c3aed,color:#111
+  classDef gate fill:#fee2e2,stroke:#dc2626,color:#111
+  classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
+```
+
+In the landscape, parallel steps of the local plans are drawn in sequence to keep it readable; sections 2.1 and 2.2 show the parallel groups.
+
+## Glossary
+
+| Command                                 | What it does                                                                                                                  | Where it runs                                              |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `drive guard`                           | Fails a commit that changes a Decision doc (decision records, feature docs, glossaries) on a branch other than `decisions/*`. | pre-commit                                                 |
+| `preflight`                             | Checks the checkout itself: `node_modules` is a real folder, the git hooks are installed, archgate can load its rules.        | pre-commit, pre-push, CI static                            |
+| `check:events`                          | Fails if an Episode run's `events` log was edited instead of appended to.                                                     | pre-commit                                                 |
+| `lint-staged`                           | Runs `oxlint --fix` and `oxfmt` on the staged files only, so the commit is formatted.                                         | pre-commit                                                 |
+| `archgate check --staged`               | Runs the ADR rules (`.archgate/adrs/*.rules.ts`) on the staged files.                                                         | pre-commit                                                 |
+| `archgate:full`                         | Runs the ADR rules over every file changed since the repo's first commit.                                                     | pre-push, CI static                                        |
+| `lint`                                  | `oxlint` (code lint) plus `lint:boundaries`.                                                                                  | pre-push, CI static                                        |
+| `lint:boundaries`                       | `depcruise`: fails an import that crosses a forbidden module boundary in `src`, `skills` or `tools`.                          | pre-commit, pre-push, CI static                            |
+| `format:check`                          | `oxfmt --check`: fails on any unformatted file, Markdown included.                                                            | pre-push, CI static                                        |
+| `typecheck`                             | `next typegen` then `tsc --noEmit`.                                                                                           | pre-commit, pre-push, CI static                            |
+| `knip`                                  | Fails on unused files, exports and dependencies.                                                                              | pre-push, CI static                                        |
+| `check:docs`                            | `mh check` (markdown-harness: front matter, headings, freshness of governed docs) plus `check:skills` for every skill folder. | pre-push, CI static                                        |
+| `commit-msg`                            | The `/commit` gate: Conventional Commits header, `### Added/Changed/…` body, a `Source:` trailer.                             | commit-msg hook                                            |
+| `npm test`                              | `vitest run`: the whole fast suite (`*.test.ts`), each test under 3 s in CI.                                                  | pre-push, CI unit                                          |
+| `vitest run --changed`                  | Only the fast tests whose imports reach a changed file (plus the rerun triggers in the vitest config).                        | pre-commit (vs HEAD), CI unit docs lane (vs `origin/main`) |
+| `over-budget.ts`                        | Reads the vitest JSON report and fails (CI, 3 s) or warns (nightly, 2 s) on tests over the budget.                            | CI unit, nightly                                           |
+| `test:slow`                             | `*.slow.test.ts`: tests that take seconds. Pre-push runs those the branch reaches; nightly runs all.                          | pre-push, nightly                                          |
+| `npm run build` (`build`)               | `next build` to the static export `out/`; `prebuild` runs `art` (content-hashed Scene art) first.                             | pre-push (when needed), CI export, deploy.yml              |
+| `test:build`                            | `*.build.test.ts` against `out/`: every page URL the app derives exists in the export.                                        | pre-push (when needed), CI build-test                      |
+| `verify:change-kind`                    | Reads changed paths on stdin and prints `build=` (an export input changed) and `docs-only=` (every path is Markdown).         | CI static, unit, export                                    |
+| `verify:commit` / `verify:push`         | The plans behind the pre-commit and pre-push hooks (`tools/verify/verify.pure.ts`).                                           | hooks                                                      |
+| `verify` / `verify:quick`               | The full local check (what CI will say) and a fast one for uncommitted changes. Run by hand.                                  | developer                                                  |
+| `upload-artifact` / `download-artifact` | Moves `out/` between jobs and workflows; `main`'s is kept 30 days for rollback, a branch's 1 day.                             | CI export, build-test, preview, deploy                     |
+| `wrangler pages deploy`                 | Publishes `out/` to Cloudflare Pages: `--branch=<branch>` for a preview, `--branch=main` for production.                      | CI preview, deploy-cloudflare.yml                          |
+| `gh run view`                           | Confirms the run to publish is a successful CI run on `main` before deploying it.                                             | deploy-cloudflare.yml                                      |
+| `trivy`                                 | Scans dependencies, config and secrets for known vulnerabilities.                                                             | security.yml                                               |
+| `file-issue.sh`                         | Opens a `needs-triage` issue when a nightly check fails.                                                                      | nightly.yml                                                |
+| `redirect-stubs.ts`                     | Writes one meta-refresh page per exported URL pointing at hancrafted.net, for the old GitHub Pages site.                      | deploy.yml                                                 |
