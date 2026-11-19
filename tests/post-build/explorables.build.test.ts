@@ -48,14 +48,14 @@ describe.each(PAGES)('the Explorable page $url', ({ path, url }) => {
 });
 
 describe.each(PAGES)('the Explorable page $url title slide', ({ url }) => {
-  it('declares the inverse tone, so the page chrome can follow it', () => {
+  it('declares the inverse flag, so the page chrome can follow it', () => {
     // ARRANGE
     const $ = exportedPage(url);
     // ACT
     const title = $('[data-slot="title-slide"]');
-    const tone = title.attr('data-surface-tone') ?? title.attr('data-tone');
+    const flag = title.attr('data-inverse');
     // ASSERT
-    expect(tone).toBe('inverse');
+    expect(flag).toBeDefined();
   });
 });
 

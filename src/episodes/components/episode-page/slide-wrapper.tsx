@@ -31,7 +31,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       id={id}
       data-slide={id}
       data-size={size}
-      data-surface-tone={surfaceTone(presentation)}
+      data-inverse={presentation?.inverse || undefined}
       data-surface-edge={transition ? true : undefined}
       className={cn(frameClass, className)}
       style={{ ...presentation?.style, ...style }}
@@ -91,10 +91,6 @@ function wrapperClass(mode: HeaderMode, size: keyof typeof MIN_HEIGHT, presentat
     band,
     presentation && styles.configured,
   );
-}
-
-function surfaceTone(presentation: SlidePresentation | undefined) {
-  return presentation ? (presentation.tone ?? 'normal') : undefined;
 }
 
 function SurfaceLayers({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {

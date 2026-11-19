@@ -61,13 +61,13 @@ export const INSET_CLASSES =
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
 
 export interface TitleBand {
-  readonly tone: 'normal' | 'inverse';
+  readonly inverse: boolean;
   readonly presentation?: { readonly style?: { readonly '--slide-surface'?: string } };
 }
 
 // decision: FE-004 §5.4
-export function fillsHeaderBand({ tone, presentation }: TitleBand): boolean {
-  return tone === 'inverse' || presentation?.style?.['--slide-surface'] !== undefined;
+export function fillsHeaderBand({ inverse, presentation }: TitleBand): boolean {
+  return inverse || presentation?.style?.['--slide-surface'] !== undefined;
 }
 
 export function pageClassOf(title: TitleBand): string {

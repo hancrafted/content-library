@@ -40,7 +40,7 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
     <div className="flex flex-wrap gap-3">
       <Link
         href={localizePath(go.path, locale, go.anchor)}
-        className={`${ACTION} border-transparent bg-foreground text-(--tone-paper) hover:bg-foreground/90`}
+        className={`${ACTION} border-transparent bg-foreground text-background hover:bg-foreground/90`}
       >
         {tryIt.label}
       </Link>

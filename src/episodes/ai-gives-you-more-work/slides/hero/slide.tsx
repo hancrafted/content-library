@@ -11,7 +11,7 @@ export const hero = slide({
     <>
       <SlideBackdrop mobile />
       <SlideFrame className="mt-10">
-        <div data-tone-flip className="flex flex-col gap-3 rounded-xl bg-muted p-6 md:max-w-3xl">
+        <div className="flex flex-col gap-3 rounded-xl bg-muted p-6 md:max-w-3xl">
           <Staircase
             label={t('label')}
             axis={t('axis')}

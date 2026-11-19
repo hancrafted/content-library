@@ -51,9 +51,9 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [true, true, false];
     const titles = [
-      { tone: 'inverse' as const },
-      { tone: 'normal' as const, presentation: { style: { '--slide-surface': 'var(--zone-surface)' } } },
-      { tone: 'normal' as const },
+      { inverse: true },
+      { inverse: false, presentation: { style: { '--slide-surface': 'var(--zone-surface)' } } },
+      { inverse: false },
     ];
     // ACT
     const seen = titles.map(fillsHeaderBand);

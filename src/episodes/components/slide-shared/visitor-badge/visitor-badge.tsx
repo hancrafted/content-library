@@ -99,7 +99,6 @@ function Facts({ facts }: { facts: readonly BadgeFact[] }) {
 function Card({ look, ...badge }: Omit<VisitorBadgeProps, 'focus' | 'compact' | 'className'> & { look: Look }) {
   return (
     <div
-      data-tone-flip
       className={cn(
         'w-full overflow-hidden border border-border bg-card',
         CARD[look],
