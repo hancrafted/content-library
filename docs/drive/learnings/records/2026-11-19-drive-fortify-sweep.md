@@ -1,7 +1,7 @@
 ---
 workflow: drive-fortify-sweep
 date: '2026-11-19'
-fortify: engaged
+fortify: pending
 ---
 
 # drive-fortify-sweep

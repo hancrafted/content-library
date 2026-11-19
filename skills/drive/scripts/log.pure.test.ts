@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { commandEntry, isSubagentEntry, logPath, parseLog, serializeEntry, topicOfBranch } from './log.pure.ts';
+import {
+  baseOfBranch,
+  commandEntry,
+  isSubagentEntry,
+  logPath,
+  parseLog,
+  serializeEntry,
+  topicOfBranch,
+  topicOfCommand,
+} from './log.pure.ts';
 
 describe('topicOfBranch', () => {
   it.each([
@@ -9,11 +18,56 @@ describe('topicOfBranch', () => {
     [null, null],
     ['feat/', null],
   ])('reads %s as %s', (branch, topic) => {
-    expect(topicOfBranch(branch)).toBe(topic);
+    // ACT
+    const read = topicOfBranch(branch);
+    // ASSERT
+    expect(read).toBe(topic);
   });
 
   it('puts the log under the topic', () => {
-    expect(logPath('t')).toBe('.scratch/t/drive.log.jsonl');
+    // ARRANGE
+    const topic = 't';
+    const expected = '.scratch/t/drive.log.jsonl';
+    // ACT
+    const path = logPath(topic);
+    // ASSERT
+    expect(path).toBe(expected);
+  });
+});
+
+describe('topicOfCommand', () => {
+  const task = 'chore/sweep--1-a';
+
+  it.each([
+    { name: 'worktree done <branch> from main', argv: ['worktree', 'done', task], cwd: 'main', topic: 'sweep' },
+    {
+      name: 'worktree new <branch> from main',
+      argv: ['worktree', 'new', task, '--base', 'chore/sweep'],
+      cwd: 'main',
+      topic: 'sweep',
+    },
+    { name: '--base alone', argv: ['worktree', 'sync', '--base', 'chore/other'], cwd: 'main', topic: 'other' },
+    { name: 'the cwd branch otherwise', argv: ['learnings', 'check'], cwd: 'chore/third--2-b', topic: 'third' },
+    { name: 'nothing on main without either', argv: ['learnings', 'check'], cwd: 'main', topic: null },
+    { name: 'a flag is no branch', argv: ['worktree', 'done', '--base', 'chore/sweep'], cwd: 'main', topic: 'sweep' },
+  ])('reads $name', ({ argv, cwd, topic }) => {
+    // ACT
+    const read = topicOfCommand(argv, cwd);
+    // ASSERT
+    expect(read).toBe(topic);
+  });
+});
+
+describe('baseOfBranch', () => {
+  it.each([
+    ['chore/sweep--795-log', 'chore/sweep'],
+    ['chore/sweep', null],
+    [null, null],
+  ])('reads the base of %s as %s', (branch, base) => {
+    // ACT
+    const read = baseOfBranch(branch);
+    // ASSERT
+    expect(read).toBe(base);
   });
 });
 
@@ -22,20 +76,58 @@ describe('commandEntry', () => {
 
   it('records ok on exit 0 and the last error otherwise, preferring the --base flag', () => {
     // ARRANGE
-    const facts = { argv: ['worktree', 'done', '--base', 'x'], branch: 'a/b', base: 'main', lastError: 'boom' };
+    const facts = {
+      argv: ['worktree', 'done', '--base', 'x'],
+      branch: 'a/b',
+      base: 'main',
+      lastError: 'boom',
+    };
     // ACT
     const ok = commandEntry({ ...facts, exit: 0 }, now);
     const bad = commandEntry({ ...facts, exit: 1 }, now);
     // ASSERT
     expect(ok).toEqual({
       t: '2026-11-19T10:00:00.000Z',
-      cmd: 'worktree done --base x',
-      branch: 'a/b',
+      cmd: facts.argv.join(' '),
+      branch: facts.branch,
       base: 'x',
       exit: 0,
       result: 'ok',
     });
-    expect(bad.result).toBe('boom');
+    expect(bad.result).toBe(facts.lastError);
+  });
+
+  it('derives the base of a task branch from its name and falls back to the configured base on an Integration branch', () => {
+    // ARRANGE
+    const facts = {
+      argv: ['learnings', 'check'],
+      base: 'main',
+      exit: 0,
+      lastError: '',
+    };
+    // ACT
+    const onTask = commandEntry({ ...facts, branch: 'chore/sweep--795-log' }, now);
+    const onIntegration = commandEntry({ ...facts, branch: 'chore/sweep' }, now);
+    // ASSERT
+    expect(onTask.base).toBe('chore/sweep');
+    expect(onIntegration.base).toBe(facts.base);
+  });
+
+  it('names the branch a worktree command works on, not the checkout it runs from', () => {
+    // ARRANGE
+    const task = 'chore/sweep--795-log';
+    const facts = {
+      argv: ['worktree', 'done', task],
+      branch: 'main',
+      base: 'main',
+      exit: 0,
+      lastError: '',
+    };
+    // ACT
+    const entry = commandEntry(facts, now);
+    // ASSERT
+    expect(entry.branch).toBe(task);
+    expect(entry.base).toBe('chore/sweep');
   });
 });
 

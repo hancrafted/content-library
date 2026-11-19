@@ -15,6 +15,7 @@ export interface SubagentEntry {
   event: 'subagent-start' | 'subagent-stop';
   session: string;
   transcript: string;
+  parent?: string;
   agent: string | null;
   branch: string | null;
 }
@@ -28,25 +29,53 @@ export function topicOfBranch(branch: string | null): string | null {
   return slug === '' ? null : slug;
 }
 
+const TASK_SEPARATOR = '--';
+
+export const baseOfBranch = (branch: string | null): string | null => {
+  const at = branch?.indexOf(TASK_SEPARATOR) ?? -1;
+  return branch === null || at <= 0 ? null : branch.slice(0, at);
+};
+
+const BRANCH_COMMANDS = new Set(['new', 'done']);
+
+export const branchOfArgs = (argv: readonly string[]): string | null => {
+  const branch = argv[2];
+  return argv[0] === 'worktree' &&
+    BRANCH_COMMANDS.has(argv[1] ?? '') &&
+    branch !== undefined &&
+    !branch.startsWith('--')
+    ? branch
+    : null;
+};
+
+export const topicOfCommand = (argv: readonly string[], cwdBranch: string | null): string | null =>
+  topicOfBranch(branchOfArgs(argv)) ?? topicOfBranch(baseOfArgs(argv)) ?? topicOfBranch(cwdBranch);
+
 export const logPath = (topic: string): string => `${SCRATCH}/${topic}/${LOG_FILE}`;
 
 export const serializeEntry = (entry: LogEntry): string => `${JSON.stringify(entry)}\n`;
 
-export const baseOfArgs = (args: readonly string[]): string | null => {
+export function baseOfArgs(args: readonly string[]): string | null {
   const at = args.indexOf('--base');
   return at === -1 ? null : (args[at + 1] ?? null);
-};
+}
 
 const RESULT_LIMIT = 300;
 
 export const commandEntry = (
-  facts: { argv: readonly string[]; branch: string | null; base: string | null; exit: number; lastError: string },
+  facts: {
+    argv: readonly string[];
+    branch: string | null;
+    base: string | null;
+    exit: number;
+    lastError: string;
+  },
   now: Date,
 ): CommandEntry => ({
   t: now.toISOString(),
   cmd: facts.argv.join(' '),
-  branch: facts.branch,
-  base: baseOfArgs(facts.argv) ?? facts.base,
+  branch: branchOfArgs(facts.argv) ?? facts.branch,
+  base: baseOfArgs(facts.argv) ?? baseOfBranch(branchOfArgs(facts.argv) ?? facts.branch) ?? facts.base,
   exit: facts.exit,
   result: facts.exit === 0 ? 'ok' : facts.lastError.slice(0, RESULT_LIMIT),
 });

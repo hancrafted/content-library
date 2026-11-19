@@ -7,31 +7,41 @@ const FIXTURE = readFileSync(path.join(import.meta.dirname, 'fixtures', 'session
 const line = (o: object) => `${JSON.stringify(o)}\n`;
 
 describe('extractEvents on the trimmed session 93f19e8f', () => {
-  const { events } = extractEvents(FIXTURE);
-  const texts = (kind: string) => events.filter((e) => e.kind === kind).map((e) => e.text);
+  const texts = (events: readonly { kind: string; text: string }[], kind: string) =>
+    events.filter((e) => e.kind === kind).map((e) => e.text);
 
   it('surfaces the Operator message "what twekas?" and the relayed merge-conflict link', () => {
+    // ARRANGE
+    const asked = 'what twekas?';
+    const relayed = 'pull/760?panel=mergeStatus has merge conflicts';
+    // ACT
+    const { events } = extractEvents(FIXTURE);
     // ASSERT
-    expect(texts('operator')).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining('what twekas?'),
-        expect.stringContaining('pull/760?panel=mergeStatus has merge conflicts'),
-      ]),
+    expect(texts(events, 'operator')).toEqual(
+      expect.arrayContaining([expect.stringContaining(asked), expect.stringContaining(relayed)]),
     );
   });
 
   it('surfaces the null-exit push as an error', () => {
+    // ARRANGE
+    const nullExit = 'failed (null)';
+    // ACT
+    const { events } = extractEvents(FIXTURE);
     // ASSERT
-    expect(texts('error').some((text) => text.includes('failed (null)'))).toBe(true);
+    expect(texts(events, 'error').some((text) => text.includes(nullExit))).toBe(true);
   });
 
   it('leaves tool and Skill calls out unless asked', () => {
     // ARRANGE
+    const skill = 'codebase-design';
+    const tool = 'Bash';
+    // ACT
+    const without = extractEvents(FIXTURE).events;
     const withTools = extractEvents(FIXTURE, { tools: true }).events;
     // ASSERT
-    expect(events.filter((e) => e.kind === 'tool' || e.kind === 'skill')).toEqual([]);
-    expect(withTools.some((e) => e.kind === 'skill' && e.text === 'codebase-design')).toBe(true);
-    expect(withTools.some((e) => e.kind === 'tool' && e.text.startsWith('Bash'))).toBe(true);
+    expect(without.filter((e) => e.kind === 'tool' || e.kind === 'skill')).toEqual([]);
+    expect(withTools.some((e) => e.kind === 'skill' && e.text === skill)).toBe(true);
+    expect(withTools.some((e) => e.kind === 'tool' && e.text.startsWith(tool))).toBe(true);
   });
 });
 
@@ -42,26 +52,40 @@ describe('extractEvents', () => {
       line({
         type: 'assistant',
         timestamp: 'a',
-        message: { content: [{ type: 'text', text: 'Ready.\nShall I merge?' }] },
+        message: {
+          content: [{ type: 'text', text: 'Ready.\nShall I merge?' }],
+        },
       }) +
       line({
         type: 'assistant',
         timestamp: 'b',
         message: {
-          content: [{ type: 'tool_use', name: 'AskUserQuestion', input: { questions: [{ question: 'Which base?' }] } }],
+          content: [
+            {
+              type: 'tool_use',
+              name: 'AskUserQuestion',
+              input: { questions: [{ question: 'Which base?' }] },
+            },
+          ],
         },
       }) +
       line({
         type: 'user',
         timestamp: 'c',
-        message: { content: [{ type: 'text', text: '[Request interrupted by user]' }] },
+        message: {
+          content: [{ type: 'text', text: '[Request interrupted by user]' }],
+        },
       }) +
       line({
         type: 'user',
         timestamp: 'd',
         message: {
           content: [
-            { type: 'tool_result', is_error: true, content: "The user doesn't want to proceed: permission denied" },
+            {
+              type: 'tool_result',
+              is_error: true,
+              content: "The user doesn't want to proceed: permission denied",
+            },
           ],
         },
       });
@@ -80,17 +104,64 @@ describe('extractEvents', () => {
   it('ignores system-injected user text and the brief a Subagent was given', () => {
     // ARRANGE
     const text =
-      line({ type: 'user', timestamp: 'a', isMeta: true, message: { content: 'skill body' } }) +
+      line({
+        type: 'user',
+        timestamp: 'a',
+        isMeta: true,
+        message: { content: 'skill body' },
+      }) +
       line({
         type: 'user',
         timestamp: 'b',
         origin: { kind: 'task-notification' },
         message: { content: '<task-notification/>' },
       }) +
-      line({ type: 'user', timestamp: 'c', isSidechain: true, message: { content: 'You are a Subagent' } }) +
+      line({
+        type: 'user',
+        timestamp: 'c',
+        isSidechain: true,
+        message: { content: 'You are a Subagent' },
+      }) +
       'not json\n';
+    // ACT
+    const { events } = extractEvents(text);
     // ASSERT
-    expect(extractEvents(text).events).toEqual([]);
+    expect(events).toEqual([]);
+  });
+
+  it('keeps an Operator message sent with an image or as several blocks', () => {
+    // ARRANGE
+    const note = 'slide 3 looks off';
+    const text = line({
+      type: 'user',
+      timestamp: 'a',
+      message: {
+        content: [
+          { type: 'text', text: note },
+          { type: 'image', source: {} },
+        ],
+      },
+    });
+    // ACT
+    const { events } = extractEvents(text);
+    // ASSERT
+    expect(events).toEqual([{ t: 'a', kind: 'operator', text: `${note} [image]` }]);
+  });
+
+  it('prints a slash command as itself and drops local command output unless --tools', () => {
+    // ARRANGE
+    const command =
+      '<command-message>drive</command-message>\n<command-name>/drive</command-name>\n<command-args>sweep it</command-args>';
+    const output = '<local-command-stdout>Set model</local-command-stdout>';
+    const text =
+      line({ type: 'user', timestamp: 'a', message: { content: command } }) +
+      line({ type: 'user', timestamp: 'b', message: { content: output } });
+    // ACT
+    const plain = extractEvents(text).events;
+    const withTools = extractEvents(text, { tools: true }).events;
+    // ASSERT
+    expect(plain).toEqual([{ t: 'a', kind: 'operator', text: '/drive sweep it' }]);
+    expect(withTools.map((e) => e.text)).toEqual(['/drive sweep it', output]);
   });
 
   it('skips lines already read and counts the lines it saw', () => {
@@ -111,10 +182,16 @@ describe('local time', () => {
     // ARRANGE
     const d = new Date('2026-11-17T22:29:50.484Z');
     const expected = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:50`;
+    const event = {
+      t: '2026-11-17T22:29:50.484Z',
+      kind: 'operator' as const,
+      text: 'hi',
+    };
+    // ACT
+    const local = localTime(event.t);
+    const [rendered] = renderEvents('orch', [event]);
     // ASSERT
-    expect(localTime('2026-11-17T22:29:50.484Z')).toContain(expected);
-    expect(renderEvents('orch', [{ t: '2026-11-17T22:29:50.484Z', kind: 'operator', text: 'hi' }])[0]).toContain(
-      'orch  operator',
-    );
+    expect(local).toContain(expected);
+    expect(rendered).toContain('orch  operator');
   });
 });
