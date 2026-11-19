@@ -2,11 +2,22 @@
 
 How the Orchestrator hands tickets to Subagents, and the Handoff they return. One contract for every provider: a Subagent in this session reads the same brief and writes the same report as an agent another provider runs from a copied brief.
 
+## Before each wave
+
+Run `drive dispatch check [--base <Integration branch>] <issue number…>` on the tickets about to go out together. Without `--base` it takes the Integration branch from the tickets' `## Parent` epic: the single Decision PR whose `## Spec` names that epic; with none or several it refuses and asks you to pass `--base`. Merged means merged into the Integration branch, not the one you sit on. It fails a ticket missing its `Files:`, `ADRs:` or `Evidence from:` line, two queued tickets whose `Files:` globs overlap, and a `Describes:` target not yet merged. Fix the order or the ownership it names, then dispatch. A ticket carries those four lines under its **Skills** and **Review after** lines:
+
+```markdown
+Files: <paths or globs the ticket owns>
+Describes: <tickets whose result it documents, or none>
+ADRs: <ADRs that bind it>
+Evidence from: <the log lines, failure modes or decisions behind it>
+```
+
 ## Before each dispatch
 
 1. **Overlap.** List the open PRs and every other worktree (`git worktree list`), with the paths each touches. A path this ticket will change that another session also changes: settle it before the gate and name it in the Decision PR. After the gate, run this ticket after the other work and log the order in `decisions.md`; only a conflict with the spec is an interrupt.
 2. **Ownership.** Give each concurrent ticket the paths it owns, and name the paths it must leave alone. Two tickets that need one file run one after the other.
-3. **Model.** Pass the model explicitly on every dispatch; an inherited model is a bug. The Operator's override for this session wins. The Binding names a **Model tier** (`mid` or `top`); resolve it to a model through this harness's provider entry under `models` in `project.yml` (Claude Code: `models.claude`).
+3. **Model.** Pass the model explicitly on every dispatch; an inherited model is a bug. The Operator's override for this session wins. Name the resolved model in the dispatch line you write in the conversation ("dispatching #797 on opus (top)"), so the Operator sees the tier before the Subagent starts. The Binding names a **Model tier** (`mid` or `top`); resolve it to a model through this harness's provider entry under `models` in `project.yml` (Claude Code: `models.claude`).
 
    | Work                       | Tier                       |
    | -------------------------- | -------------------------- |
@@ -51,8 +62,9 @@ Profile: the implementer's, in <path to this skill>/references/profiles.md, exte
 2. Build the ticket with the skills its **Skills** line names.
 3. Every acceptance criterion is done, or reported `not done` with the blocker that stopped you; judging one unnecessary is not a blocker.
 4. Verify with <the project's quick and full verification commands>; commit the project's way.
-5. Finish as <path to this skill>/references/worktrees.md "How a Subagent finishes" says.
-6. Never push, open a PR or run the pre-push verification; never edit installed skills; never edit Decision docs: propose terms under **Terms** instead.
+5. Run `git status` before staging; report any change you did not make and leave it unstaged.
+6. Finish as <path to this skill>/references/worktrees.md "How a Subagent finishes" says.
+7. Never push (and never pipe `drive push`), open a PR or run the pre-push verification; never edit installed skills; never edit Decision docs: propose terms under **Terms** instead.
 
 ## Report
 
@@ -79,15 +91,21 @@ For a Subagent in this session, the task brief is its whole first message.
 
 ## The report
 
-`.scratch/<topic>/<task>.report.md`, under 150 words:
+`.scratch/<topic>/<task>.report.md`, under 150 words besides the criteria. A criterion left undone names the ticket that takes it, as `deferred: <issue url>`:
 
 ```markdown
-- <acceptance criterion>: done | not done (<why>) (one line each)
+## Acceptance criteria
+
+- [x] <acceptance criterion> — <evidence>
+- [ ] <acceptance criterion> — not done: <why>; deferred: <ticket url>
+
 - **Merge:** <merge commit hash>, <files changed, insertions, deletions>
 - **Not verified:** <what could not be checked, and why>
 - **Trade-offs:** <each one, with its cost>
 - **Interfaces changed:** <commands, flags, exports, file formats>
 - **Terms:** <words needed that the glossary lacks, with a proposed meaning>
 ```
+
+`drive worktree done` reads this report for a Task branch `<type>/<topic>--<issue>-<task>` and refuses to merge when it is missing, has no `## Acceptance criteria` section, or holds a `- [ ]` line without `deferred: <ticket url>`. Write the report before `worktree done`.
 
 An empty **Not verified** or **Trade-offs** line says `none`; a missing line counts as a failed check.

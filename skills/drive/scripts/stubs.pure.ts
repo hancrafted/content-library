@@ -8,15 +8,6 @@ and the implementer's, which every Subagent brief points at. Write only what is 
 ## Implementer
 `;
 
-export const LEARNINGS_STUB = `# Drive learnings
-
-Format: the drive skill's references/fortify.md, "The learnings file".
-
-## Failure modes
-
-## Corrections
-`;
-
 export const REVIEW_STUB = `# Drive review
 
 The calibration answers for every decision page of this project. Fill each section once; /drive passes this file to the

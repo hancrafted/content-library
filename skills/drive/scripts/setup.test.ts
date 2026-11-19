@@ -1,10 +1,10 @@
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CATALOG, PHASE_TIERS, readBinding } from './binding.pure.ts';
 import { harnessCapFrom, parseConfig } from './config.pure.ts';
-import { detectSkills, setup } from './setup.ts';
+import { checkBinding, detectSkills, setup } from './setup.ts';
 
 function repo(files: Record<string, string>): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-setup-')));
@@ -105,7 +105,7 @@ describe('drive setup', () => {
       expect(written.sort()).toEqual([
         'docs/drive/binding.yml',
         'docs/drive/enforcers.yml',
-        'docs/drive/learnings.md',
+        'docs/drive/learnings/README.md',
         'docs/drive/profiles.md',
         'docs/drive/project.yml',
         'docs/drive/review.md',
@@ -158,7 +158,6 @@ describe('drive setup', () => {
         writeFileSync(path.join(root, file), text(root, file).replace(from, to));
       edit('docs/drive/binding.yml', 'agentType: general-purpose', 'agentType: mine');
       edit('docs/drive/project.yml', 'default: 3', 'default: 2');
-      writeFileSync(path.join(root, 'docs/drive/learnings.md'), '# Drive learnings\n\n- a correction\n');
       writeFileSync(path.join(root, 'skills-lock.json'), LOCK({ tdd: VENDOR, 'code-review': VENDOR }));
       // ACT
       setup(root);
@@ -166,7 +165,28 @@ describe('drive setup', () => {
       expect(binding(root).agentType).toBe('mine');
       expect(binding(root).phases.verify.skills).toEqual(['code-review']);
       expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({ parallel: { default: 2 } });
-      expect(text(root, 'docs/drive/learnings.md')).toContain('- a correction');
+    });
+
+    it('creates the learnings store with its records and failure-modes folders', () => {
+      // ARRANGE
+      const root = repo({});
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(existsSync(path.join(root, 'docs/drive/learnings/records'))).toBe(true);
+      expect(existsSync(path.join(root, 'docs/drive/learnings/failure-modes'))).toBe(true);
+    });
+
+    it('does not recreate learnings.md in a store that has failure modes', () => {
+      // ARRANGE
+      const root = repo({
+        'docs/drive/learnings/failure-modes/stale-branch.md': '---\nstatus: open\n---\n# Stale branch\n',
+      });
+      // ACT
+      const { written } = setup(root);
+      // ASSERT
+      expect(written).not.toContain('docs/drive/learnings.md');
+      expect(existsSync(path.join(root, 'docs/drive/learnings.md'))).toBe(false);
     });
 
     it('seeds notify once and keeps a notify the Operator changed', () => {
@@ -218,6 +238,33 @@ describe('drive setup', () => {
     });
   });
 
+  describe('the learnings check', () => {
+    it('wires the learnings check into check:docs once and seeds the store README', () => {
+      // ARRANGE
+      const root = repo({ 'package.json': JSON.stringify({ scripts: { 'check:docs': 'mh check' } }) });
+      const expected = `mh check && mh check --root docs/drive/learnings --config skills/drive/markdown-harness.config.yaml && node ${ENTRY} learnings check`;
+      // ACT
+      setup(root, {}, INSIDE(root));
+      const { written } = setup(root, {}, INSIDE(root));
+      // ASSERT
+      const scripts = (JSON.parse(text(root, 'package.json')) as { scripts: Record<string, string> }).scripts;
+      expect(scripts['check:docs']).toBe(expected);
+      expect(written).toEqual([]);
+      expect(text(root, 'docs/drive/learnings/README.md')).toContain('# Drive learnings');
+    });
+
+    it('prints the command instead of writing a path that leaves the repo', () => {
+      // ARRANGE
+      const manifest = JSON.stringify({ scripts: { 'check:docs': 'mh check' } });
+      const root = repo({ 'package.json': manifest });
+      // ACT
+      const { notes } = setup(root);
+      // ASSERT
+      expect(text(root, 'package.json')).toBe(manifest);
+      expect(notes.join('\n')).toContain('learnings check');
+    });
+  });
+
   describe('the Decision-doc guard', () => {
     it('adds the guard to an existing husky pre-commit hook once', () => {
       // ARRANGE
@@ -239,7 +286,7 @@ describe('drive setup', () => {
       // ASSERT
       expect(text(root, '.husky/pre-commit')).toBe('npm run verify:commit\n');
       expect(written).not.toContain('.husky/pre-commit');
-      expect(notes.join('\n')).toMatch(/sits outside this repo[^\n]*\n\s+node \/[^\n]*drive\.ts guard$/);
+      expect(notes.join('\n')).toMatch(/sits outside this repo[^\n]*\n\s+node \/[^\n]*drive\.ts guard$/m);
     });
 
     it('writes no workflow without husky and hands back the one CI line instead', () => {
@@ -254,5 +301,26 @@ describe('drive setup', () => {
       expect(written.filter((file) => file.startsWith('.husky') || file.startsWith('.github'))).toEqual([]);
       expect(notes.join('\n')).toMatch(/drive\.ts guard --against origin\/main/);
     });
+  });
+});
+
+describe('drive setup --check', () => {
+  it('names a bound skill that no longer exists, and passes once it is renamed in the Binding', () => {
+    // ARRANGE
+    const root = repo({
+      'skills-lock.json': LOCK({ tdd: VENDOR, 'code-review': VENDOR }),
+      '.agents/skills/tdd/SKILL.md': SKILL,
+      '.agents/skills/code-review/SKILL.md': SKILL,
+    });
+    setup(root);
+    const file = path.join(root, 'docs/drive/binding.yml');
+    writeFileSync(file, text(root, 'docs/drive/binding.yml').replace(/- code-review/g, '- review-code'));
+    // ACT
+    const stale = checkBinding(root);
+    writeFileSync(file, text(root, 'docs/drive/binding.yml').replace(/- review-code/g, '- code-review'));
+    const fixed = checkBinding(root);
+    // ASSERT
+    expect(stale).toEqual([expect.stringContaining("binds 'review-code'")]);
+    expect(fixed).toEqual([]);
   });
 });

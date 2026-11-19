@@ -1,8 +1,9 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync } from 'node:fs';
 import path from 'node:path';
 import { fullStdoutOf } from './full-stdout.ts';
-import { findViolations, type CheckoutFacts } from './preflight.pure.ts';
+import { coreBareIsTrue } from './preflight-bare.ts';
+import { findViolations, HEALTHY_CHECKOUT, type CheckoutFacts } from './preflight.pure.ts';
 
 function git(...args: string[]): string {
   return execFileSync('git', args, { encoding: 'utf8' }).trim();
@@ -40,15 +41,42 @@ function archgateFullScopeTotal(root: string): number {
   }
 }
 
-const root = git('rev-parse', '--show-toplevel');
-const violations = findViolations({
-  nodeModules: nodeModulesKind(root),
-  hooksInstalled: hooksInstalled(root),
-  archgateTotal: archgateFullScopeTotal(root),
-});
+function rootOfCoreBareCheckout(): string {
+  return path.dirname(git('rev-parse', '--absolute-git-dir'));
+}
+
+function rootOfCheckout(): string {
+  try {
+    return git('rev-parse', '--show-toplevel');
+  } catch {
+    return rootOfCoreBareCheckout();
+  }
+}
+
+function driveBindingProblem(root: string): string | null {
+  const checked = spawnSync('node', ['skills/drive/scripts/drive.ts', 'setup', '--check'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  return checked.status === 0 ? null : checked.stderr.trim() || 'drive setup --check failed';
+}
+
+const root = rootOfCheckout();
+const coreBare = coreBareIsTrue(root);
+const violations = findViolations(
+  coreBare
+    ? { ...HEALTHY_CHECKOUT, coreBare }
+    : {
+        nodeModules: nodeModulesKind(root),
+        hooksInstalled: hooksInstalled(root),
+        archgateTotal: archgateFullScopeTotal(root),
+        coreBare,
+        driveBindingProblem: driveBindingProblem(root),
+      },
+);
 
 for (const violation of violations) {
   console.error(`✖ preflight [${violation.id}] ${violation.problem}\n  fix: ${violation.fix}`);
 }
 if (violations.length > 0) process.exit(1);
-console.log('✔ preflight: node_modules, hooks and archgate scope are healthy');
+console.log('✔ preflight: node_modules, hooks, archgate scope and the drive Binding are healthy');

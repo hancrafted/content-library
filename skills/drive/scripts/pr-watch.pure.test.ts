@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { DRIVE_MARKER, idsOf, judge, parseReviewComments, parseView, type PullRequestView } from './pr-watch.pure.ts';
+import {
+  closesIn,
+  DRIVE_MARKER,
+  idsOf,
+  judge,
+  judgeIntegration,
+  parseReviewComments,
+  parseView,
+  ticketsLine,
+  type PullRequestView,
+} from './pr-watch.pure.ts';
 import { watchPullRequest } from './pr-watch.ts';
 
 const open = (over: Partial<PullRequestView> = {}): PullRequestView => ({
@@ -42,9 +52,7 @@ describe('judge', () => {
 
   it('keeps waiting when nothing is new or the only new comment carries the drive marker', () => {
     // ARRANGE
-    const own = open({
-      comments: [{ id: 'c1', body: `${DRIVE_MARKER}\nrevised` }],
-    });
+    const own = open({ comments: [{ id: 'c1', body: `${DRIVE_MARKER}\nrevised` }] });
     // ACT
     const verdicts = [judge(open(), new Set()), judge(own, new Set())];
     // ASSERT
@@ -91,6 +99,37 @@ describe('parseView', () => {
   });
 });
 
+describe('parseView status check rollup', () => {
+  const withRollup = (rollup: unknown) => parseView(JSON.stringify({ state: 'OPEN', statusCheckRollup: rollup }));
+
+  it('maps a CheckRun by name and conclusion and a StatusContext by context and state', () => {
+    // ARRANGE
+    const rollup = [
+      { __typename: 'CheckRun', name: 'lint', status: 'COMPLETED', conclusion: 'FAILURE' },
+      { __typename: 'StatusContext', context: 'ci/legacy', state: 'ERROR' },
+    ];
+    const expected = [
+      { name: 'lint', status: 'COMPLETED', conclusion: 'FAILURE', state: undefined },
+      { name: 'ci/legacy', status: undefined, conclusion: undefined, state: 'ERROR' },
+    ];
+    // ACT
+    const view = withRollup(rollup);
+    // ASSERT
+    expect(view).toHaveProperty('checks', expected);
+    expect(judgeIntegration(view as PullRequestView)).toEqual({ exit: 10, line: 'failing checks: lint, ci/legacy' });
+  });
+
+  it('reads a rollup that is not an array as no checks, and an absent one as unknown', () => {
+    // ARRANGE
+    const notAnArray = withRollup({ oops: true });
+    // ACT
+    const absent = parseView('{"state":"OPEN"}');
+    // ASSERT
+    expect(notAnArray).toHaveProperty('checks', []);
+    expect(absent).toHaveProperty('checks', undefined);
+  });
+});
+
 describe('watchPullRequest', () => {
   const watch = (views: PullRequestView[]) => {
     const queue = [...views];
@@ -129,5 +168,69 @@ describe('watchPullRequest', () => {
     });
     // ASSERT
     expect(outcome).toEqual({ exit: 0, line: 'merged f00' });
+  });
+});
+
+describe('judgeIntegration', () => {
+  const view = (over: Partial<PullRequestView> = {}) => open({ mergeable: 'MERGEABLE', checks: [], ...over });
+
+  it('ends 12 on merge listing nothing itself, 13 on close', () => {
+    // ARRANGE
+    // ACT
+    const verdicts = [
+      judgeIntegration(view({ state: 'MERGED', mergeCommit: { oid: 'abc' } })),
+      judgeIntegration(view({ state: 'CLOSED' })),
+    ];
+    // ASSERT
+    expect(verdicts).toEqual([
+      { exit: 12, line: 'merged abc' },
+      { exit: 13, line: 'closed' },
+    ]);
+  });
+
+  it('ends 11 on a merge conflict and 10 naming the failing checks', () => {
+    // ARRANGE
+    const conflict = view({ mergeable: 'CONFLICTING' });
+    const red = view({
+      checks: [
+        { name: 'lint', conclusion: 'FAILURE' },
+        { name: 'test', conclusion: 'SUCCESS' },
+        { name: 'build', state: 'ERROR' },
+      ],
+    });
+    // ACT
+    const verdicts = [judgeIntegration(conflict), judgeIntegration(red)];
+    // ASSERT
+    expect(verdicts[0]).toEqual({ exit: 11, line: 'merge conflict with the base branch' });
+    expect(verdicts[1]).toEqual({ exit: 10, line: 'failing checks: lint, build' });
+  });
+
+  it('keeps waiting on pending checks, unknown mergeability and green', () => {
+    // ARRANGE
+    const pending = view({ checks: [{ name: 'lint', status: 'IN_PROGRESS', conclusion: '' }] });
+    const unknown = view({ mergeable: 'UNKNOWN' });
+    // ACT
+    const verdicts = [judgeIntegration(pending), judgeIntegration(unknown), judgeIntegration(view())];
+    // ASSERT
+    expect(verdicts).toEqual([null, null, null]);
+  });
+});
+
+describe('tickets', () => {
+  it('reads Closes numbers from a PR body, once each', () => {
+    // ARRANGE
+    const body = 'Closes #3\nCloses #4\nclosed #3\nRefs #9';
+    // ACT
+    const numbers = closesIn(body);
+    // ASSERT
+    expect(numbers).toEqual([3, 4]);
+  });
+
+  it('lists the still open tickets, or says all are closed', () => {
+    // ARRANGE
+    // ACT
+    const lines = [ticketsLine([4, 7]), ticketsLine([])];
+    // ASSERT
+    expect(lines).toEqual(['tickets still open: #4, #7', 'all tickets closed']);
   });
 });

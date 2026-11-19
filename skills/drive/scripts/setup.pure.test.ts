@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { parseConfig } from './config.pure.ts';
 import {
+  addLearningsCheck,
   decisionDocGlobs,
   detectEnforcers,
   detectPackageManager,
   installCommands,
-  parseSetupArgs,
+  learningsCheckCommand,
   updateProjectConfig,
 } from './setup.pure.ts';
-import { LEARNINGS_STUB, REVIEW_STUB } from './stubs.pure.ts';
+import { REVIEW_STUB } from './stubs.pure.ts';
 
 const FACTS = {
   baseBranch: 'trunk',
@@ -117,33 +118,6 @@ describe('REVIEW_STUB', () => {
   });
 });
 
-describe('parseSetupArgs', () => {
-  it('reads --agent-type and --tier, and rejects a tier that is not mid or top', () => {
-    // ARRANGE
-    // ACT
-    // ASSERT
-    expect(parseSetupArgs(['--agent-type', 'team:dev', '--tier', 'top'])).toEqual({
-      agentType: 'team:dev',
-      tier: 'top',
-    });
-    expect(parseSetupArgs(['--tier', 'opus'])).toEqual({
-      error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
-    });
-  });
-});
-
-describe('LEARNINGS_STUB', () => {
-  it('carries the header and the two sections of the format in references/fortify.md', () => {
-    // ARRANGE
-    // ACT
-    // ASSERT
-    expect(LEARNINGS_STUB).toContain('# Drive learnings');
-    expect(LEARNINGS_STUB).toContain('"The learnings file"');
-    expect(LEARNINGS_STUB.indexOf('## Failure modes')).toBeGreaterThan(0);
-    expect(LEARNINGS_STUB.indexOf('## Corrections')).toBeGreaterThan(LEARNINGS_STUB.indexOf('## Failure modes'));
-  });
-});
-
 describe('updateProjectConfig', () => {
   it('seeds a missing file with the worktree, the parallel default beside the harness cap, and the decision docs', () => {
     // ARRANGE
@@ -210,5 +184,54 @@ describe('updateProjectConfig', () => {
       decisionDocs: ['docs/decision-records/**'],
     });
     expect(updateProjectConfig(text, FACTS)).toBe(text);
+  });
+});
+
+describe('learningsCheckCommand', () => {
+  it('runs mh over the learnings store with the config the skill ships, then the drive learnings check', () => {
+    // ARRANGE
+    const expected =
+      'mh check --root docs/drive/learnings --config skills/drive/markdown-harness.config.yaml && node skills/drive/scripts/drive.ts learnings check';
+    // ACT
+    const command = learningsCheckCommand('skills/drive/scripts/drive.ts');
+    // ASSERT
+    expect(command).toBe(expected);
+  });
+});
+
+describe('addLearningsCheck', () => {
+  const COMMAND = 'mh check --root docs/drive/learnings --config x.yaml && node d.ts learnings check';
+
+  it('appends the learnings check to the check:docs script and keeps every other byte', () => {
+    // ARRANGE
+    const manifest = '{\n  "scripts": {\n    "check:docs": "mh check",\n    "test": "vitest"\n  }\n}\n';
+    const expected = `{\n  "scripts": {\n    "check:docs": "mh check && ${COMMAND}",\n    "test": "vitest"\n  }\n}\n`;
+    // ACT
+    const result = addLearningsCheck(manifest, COMMAND);
+    // ASSERT
+    expect(result).toEqual({ text: expected });
+  });
+
+  it('leaves a check:docs that already runs it alone', () => {
+    // ARRANGE
+    const manifest = `{ "scripts": { "check:docs": "mh check && ${COMMAND}" } }`;
+    // ACT
+    const result = addLearningsCheck(manifest, COMMAND);
+    // ASSERT
+    expect(result).toEqual({ text: manifest });
+  });
+
+  it('prints the command to add when the repo has no check:docs script or no package.json', () => {
+    // ARRANGE
+    const expected = {
+      note: `! no check:docs script in package.json: add this to the docs check, so the learnings store stays Fortify-ready:\n    ${COMMAND}`,
+    };
+    // ACT
+    const results = [
+      addLearningsCheck('{ "scripts": { "test": "vitest" } }', COMMAND),
+      addLearningsCheck(null, COMMAND),
+    ];
+    // ASSERT
+    expect(results).toEqual([expected, expected]);
   });
 });

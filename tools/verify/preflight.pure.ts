@@ -2,7 +2,17 @@ export interface CheckoutFacts {
   nodeModules: 'directory' | 'symlink' | 'missing';
   hooksInstalled: boolean;
   archgateTotal: number;
+  coreBare: boolean;
+  driveBindingProblem: string | null;
 }
+
+export const HEALTHY_CHECKOUT: CheckoutFacts = {
+  nodeModules: 'directory',
+  hooksInstalled: true,
+  archgateTotal: 1,
+  coreBare: false,
+  driveBindingProblem: null,
+};
 
 export interface Violation {
   id: string;
@@ -36,6 +46,18 @@ const CHECKS: Check[] = [
     fails: (facts) => facts.archgateTotal === 0,
     problem: 'archgate ran zero checks, so a pass proves nothing.',
     fix: 'Run `npm run archgate:full -- --verbose` and see why no rule ran; in CI, check out with fetch-depth 0.',
+  },
+  {
+    id: 'core-bare',
+    fails: (facts) => facts.coreBare,
+    problem: 'core.bare=true is set on a checkout that has a working tree; git status, commit and worktrees misbehave.',
+    fix: 'Run `git config core.bare false` in the main checkout.',
+  },
+  {
+    id: 'drive-binding',
+    fails: (facts) => facts.driveBindingProblem !== null,
+    problem: 'the drive Binding names a skill that is not installed (`drive setup --check` fails).',
+    fix: 'Rename or remove the binding in docs/drive/binding.yml, then rerun `npm run preflight`.',
   },
 ];
 

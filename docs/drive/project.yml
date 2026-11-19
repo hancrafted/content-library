@@ -44,3 +44,6 @@ decisionDocs:
   - docs/decision-records/**
   - docs/features/**
   - '**/GLOSSARY*.md'
+# Grill format: the file a /drive grill round reads before it writes (opening, buckets, headlines, numbering).
+grill:
+  format: docs/agents/grilling-format.md
