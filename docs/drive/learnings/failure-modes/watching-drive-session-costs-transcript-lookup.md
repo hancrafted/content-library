@@ -1,8 +1,10 @@
 ---
 title: 'Watching a drive session by hand costs time on the transcript path and its UTC timestamps'
-enforcer: 'review: a short section in the drive skill, `references/watch.md`, naming the transcript path `~/.claude/projects/<project>/<session-id>.jsonl`, that its timestamps are UTC, and that Subagent transcripts sit under `<session-id>/subagents/`'
-status: ticket
+enforcer: 'test-runner: `drive transcript` finds the session and its Subagent transcripts and prints local time, pinned by skills/drive/scripts/log.slow.test.ts'
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/795
+fixed-by: https://github.com/hancrafted/content-library/issues/795
+fixed-on: '2026-11-19'
 ---
 
 # Watching a drive session by hand costs time on the transcript path and its UTC timestamps
