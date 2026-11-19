@@ -6,7 +6,7 @@ import { toPickerHex } from './colour-convert.pure';
 const css = readFileSync(join(__dirname, '../../app/globals.css'), 'utf8');
 
 function block(selector: string): string {
-  const start = css.indexOf(`\n${selector} {`);
+  const start = css.indexOf(`\n${selector},\n`);
   return css.slice(start, css.indexOf('\n}', start));
 }
 

@@ -33,7 +33,7 @@ Reasons, values and the token reference: [`docs/design/design-system.md`](../../
 
 ### 2. Colour
 
-1. A raw colour (hex, `rgb()`, `hsl()`, `oklch()`, named) MAY appear only in `globals.css` `:root` / `.dark`, a Slide token file, `token-panel.module.css`. (📜 Rule: `no-raw-colour-in-css`)
+1. A raw colour (hex, `rgb()`, `hsl()`, `oklch()`, named) MAY appear only in `globals.css` under a selector list whose every selector is `:root`, `.dark` or an inverse form of them (`.dark [data-inverse]`, `:root:not(.dark) [data-inverse]`, nested to three levels), a Slide token file, `token-panel.module.css`. (📜 Rule: `no-raw-colour-in-css`)
 2. A Slide token file (a CSS module in the Slide's folder) MUST NOT declare a global token name (`--primary`). (📜 Rule: `slide-token-no-global-name`)
 3. Every raw colour in a Slide token file MUST have a dark counterpart under `:global(.dark)`. (📜 Rule: `slide-token-dark-counterpart`)
 4. Slide-local token names are free.

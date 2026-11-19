@@ -14,7 +14,7 @@ const ROOT = path.join(__dirname, '../..');
 describe('success cases', () => {
   it('declares the shared colour tokens on the root', () => {
     // ARRANGE
-    const shared = ':root {\n  --radius: 0.625rem;\n  --background:';
+    const shared = ':root,\n.dark [data-inverse],';
     // ACT
     const stylesheet = GLOBALS;
     // ASSERT

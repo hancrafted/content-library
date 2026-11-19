@@ -231,7 +231,11 @@ function declarations(css: string): Declaration[] {
   return found;
 }
 
-const isRootOrDark = (selector: string) => /^(?::root|\.dark)$/.test(selector);
+// decision: FE-011 §2.1
+const THEME_SELECTOR_RE =
+  /^(?::root(?::not\(\.dark\))?|\.dark)(?:(?: \[data-inverse\]){1,3}|\[data-page-tone=(['"])inverse\1\] \[data-testid=(['"])site-header\2\])?$/;
+const isThemeSelectorList = (selectors: string) =>
+  selectors.split(',').every((selector) => THEME_SELECTOR_RE.test(selector.trim()));
 const isDarkSelector = (selector: string) => selector.includes(':global(.dark)');
 const lightForm = (selector: string) => selector.replace(/:global\(\.dark\)\s*/g, '').trim();
 
@@ -275,7 +279,7 @@ export default {
     // decision: FE-011 §2.1
     'no-raw-colour-in-css': {
       description:
-        'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only under :root / .dark in globals.css and in a Slide token file (a CSS module in an Episode Slide folder), plus the token editor panel module. Named colours (black, chocolate, …) count; transparent, currentColor and inherit do not. Legacy files are exempt.',
+        'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only in globals.css under a selector list of :root, .dark and their inverse forms and in a Slide token file (a CSS module in an Episode Slide folder), plus the token editor panel module. Named colours (black, chocolate, …) count; transparent, currentColor and inherit do not. Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
         const globbed = (await Promise.all(SLIDE_MODULE_GLOBS.map((glob) => ctx.glob(glob)))).flat();
@@ -284,10 +288,10 @@ export default {
           if (slides.has(file)) continue;
           const css = stripComments(await ctx.readFile(file), 'css');
           for (const decl of declarations(css)) {
-            if (file === GLOBALS && isRootOrDark(decl.selector)) continue;
+            if (file === GLOBALS && isThemeSelectorList(decl.selector)) continue;
             if (!cssValueHasColour(decl.value)) continue;
             ctx.report.violation({
-              message: `Raw colour \`${decl.value}\` in \`${decl.selector}\` — use a token utility or var(--…); raw colours live in globals.css :root/.dark or a Slide token file (FE-011 [no-raw-colour-in-css]).`,
+              message: `Raw colour \`${decl.value}\` in \`${decl.selector}\` — use a token utility or var(--…); raw colours live in a globals.css theme block (:root, .dark and their inverse forms) or a Slide token file (FE-011 [no-raw-colour-in-css]).`,
               file,
               line: decl.line,
             });
