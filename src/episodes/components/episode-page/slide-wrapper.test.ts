@@ -65,6 +65,16 @@ describe('success cases', () => {
     expect(unflagged).not.toContain('data-inverse');
   });
 
+  it('paints a Surface and its text colour on the Slide and touches no theme token, so a card on it keeps its own colours', () => {
+    // ARRANGE
+    const presentation = { surface: { background: 'navy', foreground: 'white' } };
+    // ACT
+    const html = renderToStaticMarkup(createElement(SlideWrapper, { id: 'a', presentation }, 'content'));
+    const style = /<div id="a"[^>]*style="([^"]*)"/.exec(html)?.[1] ?? '';
+    // ASSERT
+    expect(style).toBe('--slide-surface:navy;--surface-foreground:white');
+  });
+
   it('gives both retained decorations and the Scene their own Slide identity', () => {
     // ARRANGE
     const id = 'a--b';

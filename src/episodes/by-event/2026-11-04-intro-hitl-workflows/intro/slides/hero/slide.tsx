@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { SOFT_MIRROR } from '@/episodes/components/slide-master/standard-looks';
+import { SOFT_MIRROR } from '@/episodes/components/slide-master/surface';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -9,8 +9,8 @@ export const hero = slide({
   messages: { en, de },
   presentation: {
     inverse: true,
+    surface: SOFT_MIRROR,
     style: {
-      '--slide-surface': SOFT_MIRROR,
       '--slide-space-after': '160px',
     },
     leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },

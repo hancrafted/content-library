@@ -21,7 +21,7 @@ declare module './episode-instance' {
 interface FakeSlide {
   readonly slug: string;
   readonly messages: { readonly en: object; readonly de: object };
-  readonly presentation?: { readonly tone?: 'inverse' };
+  readonly presentation?: { readonly inverse?: boolean };
 }
 
 interface FakeEpisode {
