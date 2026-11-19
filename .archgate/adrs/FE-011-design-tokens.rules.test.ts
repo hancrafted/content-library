@@ -115,6 +115,8 @@ describe('no-raw-colour-in-css (A1)', () => {
   it.each([
     ['a selector list with one foreign selector', ':root,\n.panel'],
     ['a bare inverse flag', '[data-inverse]'],
+    ['an inverse flag under a bare :root', ':root [data-inverse]'],
+    ['a bare :root:not(.dark)', ':root:not(.dark)'],
     ['a fourth nested inverse level', '.dark [data-inverse] [data-inverse] [data-inverse] [data-inverse]'],
   ])('fails a raw colour under %s in globals.css', async (_name, list) => {
     // ARRANGE
