@@ -76,6 +76,12 @@ _Avoid_: Tooling page, Layout reference, reference Episode, Asset
 **Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.
 _Avoid_: Resource list, Resource catalogue
 
+**Surface**: the colour a Slide sits on, declared as `presentation.surface`: a background with its matching text colour. It colours the Slide and its own text, never the cards on it. See Decision record _Slide Surface and the inverse flag_.
+_Avoid_: tone, slide colour, background theme
+
+**Inverse flag**: `presentation.inverse: true`, a CSS-only switch that makes everything inside a Slide read in the other theme, cards included; dark in the light theme, light in the dark theme. Independent of the Surface.
+_Avoid_: tone, inverse tone, tone flip, mirror mode
+
 **Template**: an authoring Resource to copy from: an Episode template, a Master slide or a Theme. It presents reusable structure or visual vocabulary rather than a published Episode.
 _Avoid_: Resource (that is the umbrella), Tooling page
 
