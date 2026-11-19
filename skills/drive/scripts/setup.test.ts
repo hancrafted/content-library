@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -105,7 +105,6 @@ describe('drive setup', () => {
       expect(written.sort()).toEqual([
         'docs/drive/binding.yml',
         'docs/drive/enforcers.yml',
-        'docs/drive/learnings.md',
         'docs/drive/learnings/README.md',
         'docs/drive/profiles.md',
         'docs/drive/project.yml',
@@ -159,7 +158,6 @@ describe('drive setup', () => {
         writeFileSync(path.join(root, file), text(root, file).replace(from, to));
       edit('docs/drive/binding.yml', 'agentType: general-purpose', 'agentType: mine');
       edit('docs/drive/project.yml', 'default: 3', 'default: 2');
-      writeFileSync(path.join(root, 'docs/drive/learnings.md'), '# Drive learnings\n\n- a correction\n');
       writeFileSync(path.join(root, 'skills-lock.json'), LOCK({ tdd: VENDOR, 'code-review': VENDOR }));
       // ACT
       setup(root);
@@ -167,7 +165,28 @@ describe('drive setup', () => {
       expect(binding(root).agentType).toBe('mine');
       expect(binding(root).phases.verify.skills).toEqual(['code-review']);
       expect(parseConfig(text(root, 'docs/drive/project.yml'), ENTRY)).toMatchObject({ parallel: { default: 2 } });
-      expect(text(root, 'docs/drive/learnings.md')).toContain('- a correction');
+    });
+
+    it('creates the learnings store with its records and failure-modes folders', () => {
+      // ARRANGE
+      const root = repo({});
+      // ACT
+      setup(root);
+      // ASSERT
+      expect(existsSync(path.join(root, 'docs/drive/learnings/records'))).toBe(true);
+      expect(existsSync(path.join(root, 'docs/drive/learnings/failure-modes'))).toBe(true);
+    });
+
+    it('does not recreate learnings.md in a store that has failure modes', () => {
+      // ARRANGE
+      const root = repo({
+        'docs/drive/learnings/failure-modes/stale-branch.md': '---\nstatus: open\n---\n# Stale branch\n',
+      });
+      // ACT
+      const { written } = setup(root);
+      // ASSERT
+      expect(written).not.toContain('docs/drive/learnings.md');
+      expect(existsSync(path.join(root, 'docs/drive/learnings.md'))).toBe(false);
     });
 
     it('seeds notify once and keeps a notify the Operator changed', () => {

@@ -67,6 +67,15 @@
             "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" start"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/drive/scripts/claude-adapter.ts\" start",
+            "async": true
+          }
+        ]
       }
     ],
     "SubagentStop": [
@@ -75,6 +84,15 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR}/skills/new-episode/scripts/claude-adapter.ts\" stop"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/skills/drive/scripts/claude-adapter.ts\" stop",
+            "async": true
           }
         ]
       }

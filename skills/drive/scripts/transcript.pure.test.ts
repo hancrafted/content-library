@@ -1,0 +1,120 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
+import { extractEvents, localTime, renderEvents } from './transcript.pure.ts';
+
+const FIXTURE = readFileSync(path.join(import.meta.dirname, 'fixtures', 'session-93f19e8f.trimmed.jsonl'), 'utf8');
+const line = (o: object) => `${JSON.stringify(o)}\n`;
+
+describe('extractEvents on the trimmed session 93f19e8f', () => {
+  const { events } = extractEvents(FIXTURE);
+  const texts = (kind: string) => events.filter((e) => e.kind === kind).map((e) => e.text);
+
+  it('surfaces the Operator message "what twekas?" and the relayed merge-conflict link', () => {
+    // ASSERT
+    expect(texts('operator')).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('what twekas?'),
+        expect.stringContaining('pull/760?panel=mergeStatus has merge conflicts'),
+      ]),
+    );
+  });
+
+  it('surfaces the null-exit push as an error', () => {
+    // ASSERT
+    expect(texts('error').some((text) => text.includes('failed (null)'))).toBe(true);
+  });
+
+  it('leaves tool and Skill calls out unless asked', () => {
+    // ARRANGE
+    const withTools = extractEvents(FIXTURE, { tools: true }).events;
+    // ASSERT
+    expect(events.filter((e) => e.kind === 'tool' || e.kind === 'skill')).toEqual([]);
+    expect(withTools.some((e) => e.kind === 'skill' && e.text === 'codebase-design')).toBe(true);
+    expect(withTools.some((e) => e.kind === 'tool' && e.text.startsWith('Bash'))).toBe(true);
+  });
+});
+
+describe('extractEvents', () => {
+  it('reads Orchestrator questions, interrupts and refusals', () => {
+    // ARRANGE
+    const text =
+      line({
+        type: 'assistant',
+        timestamp: 'a',
+        message: { content: [{ type: 'text', text: 'Ready.\nShall I merge?' }] },
+      }) +
+      line({
+        type: 'assistant',
+        timestamp: 'b',
+        message: {
+          content: [{ type: 'tool_use', name: 'AskUserQuestion', input: { questions: [{ question: 'Which base?' }] } }],
+        },
+      }) +
+      line({
+        type: 'user',
+        timestamp: 'c',
+        message: { content: [{ type: 'text', text: '[Request interrupted by user]' }] },
+      }) +
+      line({
+        type: 'user',
+        timestamp: 'd',
+        message: {
+          content: [
+            { type: 'tool_result', is_error: true, content: "The user doesn't want to proceed: permission denied" },
+          ],
+        },
+      });
+    // ACT
+    const { events } = extractEvents(text);
+    // ASSERT
+    expect(events.map((e) => [e.kind, e.text.slice(0, 20)])).toEqual([
+      ['question', 'Shall I merge?'],
+      ['question', 'Which base?'],
+      ['interrupt', '[Request interrupted'],
+      ['error', "The user doesn't wan"],
+    ]);
+    expect(events[3]?.text).toContain('[refusal]');
+  });
+
+  it('ignores system-injected user text and the brief a Subagent was given', () => {
+    // ARRANGE
+    const text =
+      line({ type: 'user', timestamp: 'a', isMeta: true, message: { content: 'skill body' } }) +
+      line({
+        type: 'user',
+        timestamp: 'b',
+        origin: { kind: 'task-notification' },
+        message: { content: '<task-notification/>' },
+      }) +
+      line({ type: 'user', timestamp: 'c', isSidechain: true, message: { content: 'You are a Subagent' } }) +
+      'not json\n';
+    // ASSERT
+    expect(extractEvents(text).events).toEqual([]);
+  });
+
+  it('skips lines already read and counts the lines it saw', () => {
+    // ARRANGE
+    const text =
+      line({ type: 'user', timestamp: 'a', message: { content: 'one' } }) +
+      line({ type: 'user', timestamp: 'b', message: { content: 'two' } });
+    // ACT
+    const { events, lines } = extractEvents(text, { skip: 1 });
+    // ASSERT
+    expect(events.map((e) => e.text)).toEqual(['two']);
+    expect(lines).toBe(2);
+  });
+});
+
+describe('local time', () => {
+  it('prints UTC timestamps in the reader local time', () => {
+    // ARRANGE
+    const d = new Date('2026-11-17T22:29:50.484Z');
+    const expected = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:50`;
+    // ASSERT
+    expect(localTime('2026-11-17T22:29:50.484Z')).toContain(expected);
+    expect(renderEvents('orch', [{ t: '2026-11-17T22:29:50.484Z', kind: 'operator', text: 'hi' }])[0]).toContain(
+      'orch  operator',
+    );
+  });
+});

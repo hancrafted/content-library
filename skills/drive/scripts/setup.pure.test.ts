@@ -10,7 +10,7 @@ import {
   parseSetupArgs,
   updateProjectConfig,
 } from './setup.pure.ts';
-import { LEARNINGS_STUB, REVIEW_STUB } from './stubs.pure.ts';
+import { REVIEW_STUB } from './stubs.pure.ts';
 
 const FACTS = {
   baseBranch: 'trunk',
@@ -131,18 +131,6 @@ describe('parseSetupArgs', () => {
     expect(parseSetupArgs(['--tier', 'opus'])).toEqual({
       error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
     });
-  });
-});
-
-describe('LEARNINGS_STUB', () => {
-  it('carries the header and the two sections of the format in references/fortify.md', () => {
-    // ARRANGE
-    // ACT
-    // ASSERT
-    expect(LEARNINGS_STUB).toContain('# Drive learnings');
-    expect(LEARNINGS_STUB).toContain('"The learnings file"');
-    expect(LEARNINGS_STUB.indexOf('## Failure modes')).toBeGreaterThan(0);
-    expect(LEARNINGS_STUB.indexOf('## Corrections')).toBeGreaterThan(LEARNINGS_STUB.indexOf('## Failure modes'));
   });
 });
 

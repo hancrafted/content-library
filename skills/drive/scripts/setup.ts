@@ -3,8 +3,9 @@ import path from 'node:path';
 import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
 import { CONFIG_PATH, harnessCapFrom } from './config.pure.ts';
 import { run } from './git.ts';
-import { LEARNINGS_STORE } from './learnings.pure.ts';
+import { FAILURE_MODES_FOLDER, LEARNINGS_STORE, RECORDS_FOLDER } from './learnings.pure.ts';
 import { driveEntry, fail } from './project.ts';
+import { addAdapterHooks, adapterHookNote, SETTINGS_FILE } from './setup-hooks.pure.ts';
 import {
   addGuardToHook,
   addLearningsCheck,
@@ -24,7 +25,7 @@ import {
   renderEnforcers,
   updateProjectConfig,
 } from './setup.pure.ts';
-import { LEARNINGS_STUB, PROFILES_STUB, REVIEW_STUB } from './stubs.pure.ts';
+import { PROFILES_STUB, REVIEW_STUB } from './stubs.pure.ts';
 
 export const LOCKFILE = 'skills-lock.json';
 const AUTHORED_DIR = 'skills';
@@ -165,8 +166,9 @@ export function setup(root: string, options: SeedOptions = {}, scriptsDir: strin
   write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
   notes.push(...wire(root, { entry, baseBranch: facts.baseBranch }, write));
   createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
-  createdOnly(`${DRIVE_DIR}/learnings.md`, LEARNINGS_STUB);
   createdOnly(`${LEARNINGS_STORE}/README.md`, LEARNINGS_README);
+  for (const folder of [RECORDS_FOLDER, FAILURE_MODES_FOLDER])
+    mkdirSync(path.join(root, LEARNINGS_STORE, folder), { recursive: true });
   createdOnly(`${DRIVE_DIR}/review.md`, REVIEW_STUB);
   return { written, notes };
 }
@@ -192,8 +194,20 @@ function wire(
   guard: { entry: string; baseBranch: string },
   write: (relative: string, text: string) => void,
 ): string[] {
-  const notes = [wireGuard(root, guard, write), wireLearningsCheck(root, guard.entry, write)];
+  const notes = [
+    wireGuard(root, guard, write),
+    wireLearningsCheck(root, guard.entry, write),
+    wireAdapterHooks(root, guard.entry, write),
+  ];
   return notes.filter((note): note is string => note !== null);
+}
+
+function wireAdapterHooks(root: string, entry: string, write: (relative: string, text: string) => void): string | null {
+  if (path.isAbsolute(entry)) return adapterHookNote(entry);
+  const result = addAdapterHooks(read(path.join(root, SETTINGS_FILE)), entry);
+  if ('note' in result) return result.note;
+  write(SETTINGS_FILE, result.text);
+  return null;
 }
 
 function wireLearningsCheck(
