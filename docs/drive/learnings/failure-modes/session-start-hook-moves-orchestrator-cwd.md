@@ -1,7 +1,8 @@
 ---
 title: "A session-start hook moves the Orchestrator's working directory"
 enforcer: "review: Orchestrator commands use absolute paths or `git -C`, quick win; the repo's SessionStart hook (`.claude/settings.json`, matcher `compact`) runs no `cd`, so the move came from a user-level hook outside this repo (not checked further)"
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/62
 ---
 
 # A session-start hook moves the Orchestrator's working directory

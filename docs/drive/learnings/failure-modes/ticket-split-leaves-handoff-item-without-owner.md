@@ -1,7 +1,8 @@
 ---
 title: 'A ticket split leaves a handoff item with no owning ticket'
 enforcer: 'check: new dispatch check that fails when a Describes or hand-off line in a ticket names a file no queued ticket owns, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/69
 ---
 
 # A ticket split leaves a handoff item with no owning ticket

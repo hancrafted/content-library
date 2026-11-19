@@ -1,7 +1,8 @@
 ---
 title: "`drive` is not on a Subagent's PATH and its brief names no command that works"
 enforcer: 'test-runner: test that the task brief template in `dispatch.md` carries the command line `npm run -s drive -- worktree ...`, quick win'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/54
 ---
 
 # `drive` is not on a Subagent's PATH and its brief names no command that works

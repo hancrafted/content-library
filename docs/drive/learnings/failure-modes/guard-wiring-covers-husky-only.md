@@ -1,7 +1,8 @@
 ---
 title: 'Guard wiring covers husky only'
 enforcer: 'hook: new hook-manager wiring for `.githooks` and lefthook, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/59
 ---
 
 # Guard wiring covers husky only

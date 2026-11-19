@@ -1,7 +1,8 @@
 ---
 title: "A review Subagent cannot start the code-review skill's parallel sub-agents"
 enforcer: 'review: the Orchestrator reads the review report for a missing Standards or Spec axis, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/61
 ---
 
 # A review Subagent cannot start the code-review skill's parallel sub-agents

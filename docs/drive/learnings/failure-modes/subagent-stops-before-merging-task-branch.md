@@ -1,7 +1,8 @@
 ---
 title: 'A Subagent stops before committing and merging its Task branch'
 enforcer: 'hook: new SubagentStop hook that blocks while the Task branch is unmerged, with an escape for a reported blocker, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/65
 ---
 
 # A Subagent stops before committing and merging its Task branch

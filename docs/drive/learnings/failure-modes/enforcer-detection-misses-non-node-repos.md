@@ -1,7 +1,8 @@
 ---
 title: 'Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)'
 enforcer: 'test-runner: test, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/55
 ---
 
 # Enforcer detection misses non-Node repos (pyproject, uv, Cargo, go.mod)
