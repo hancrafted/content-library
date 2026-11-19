@@ -1,7 +1,8 @@
 ---
 workflow: drive-fortify-sweep
 date: '2026-11-19'
-fortify: pending
+fortify: skipped
+skip-reason: skip
 ---
 
 # drive-fortify-sweep
