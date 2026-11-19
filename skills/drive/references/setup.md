@@ -10,10 +10,14 @@ Run once per project, and again whenever a skill was installed or removed: `node
 | `project.yml`   | seeds the base branch, the install command a lockfile implies, the parallel defaults, the `models` tier mapping and the `decisionDocs` globs it finds; later adds only missing sections | every value; preflight, lock and hooks are the Operator's to add |
 | `enforcers.yml` | rewrites it each run from the project's manifests, hook folders and checkers                                                                                                            | none: change the repo, then rerun setup                          |
 | `profiles.md`   | the empty headings                                                                                                                                                                      | the project's rules per Profile                                  |
-| `learnings.md`  | the empty file                                                                                                                                                                          | none: the Workflow appends                                       |
+| `learnings/`    | `records/` and `failure-modes/` with a README, never a `learnings.md`                                                                                                                   | none: Fortify writes the files                                   |
 | `review.md`     | an empty template when missing, never rewritten                                                                                                                                         | the calibration answers every decision page uses                 |
 
 Skills are found in the skills lockfile and in the project's skill folders, authored ones first.
+
+## The learnings store
+
+Setup creates `docs/drive/learnings/{records,failure-modes}` and wires two checks. `mh check --root docs/drive/learnings --config <skill>/markdown-harness.config.yaml` and `drive learnings check` go into the project's docs check, so a record or failure-mode file that breaks the format fails the docs lane. Two async hooks, `SubagentStart` and `SubagentStop`, in `.claude/settings.json` run the skill's Claude adapter, which writes each Subagent's session and transcript path into `.scratch/<topic>/drive.log.jsonl` for `drive transcript`. `drive setup --check` writes nothing and reports Binding entries whose skill is not installed. When the skill sits outside the repo, setup prints the line to add by hand instead of editing the file.
 
 ## The decision-doc guard
 
@@ -21,7 +25,7 @@ Skills are found in the skills lockfile and in the project's skill folders, auth
 
 ## Model tiers
 
-Setup seeds each phase's `model` from `PHASE_TIERS` in `scripts/binding.pure.ts`: reason and verify `top`, the rest `mid`. `project.yml` maps each tier to a provider's model (`models: { claude: { mid: sonnet, top: opus } }`); add an entry for another provider and its harness resolves the tiers the same way. Change a phase's tier in `binding.yml` when experience shows its Subagents need more or less, and log why in `docs/drive/learnings.md`. The Orchestrator's own session override, when the Operator gives one, beats the Binding for that session.
+Setup seeds each phase's `model` from `PHASE_TIERS` in `scripts/binding.pure.ts`: reason and verify `top`, the rest `mid`. `project.yml` maps each tier to a provider's model (`models: { claude: { mid: sonnet, top: opus } }`); add an entry for another provider and its harness resolves the tiers the same way. Change a phase's tier in `binding.yml` when experience shows its Subagents need more or less, and log why in a record under `docs/drive/learnings/records/`. The Orchestrator's own session override, when the Operator gives one, beats the Binding for that session.
 
 ## The review file
 

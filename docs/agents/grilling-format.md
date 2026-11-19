@@ -60,6 +60,8 @@ Every example gets the same shape, the same depth, and inline comments giving th
 
 Write the question in plain words and keep the technical terms exact. A term is exact when `GLOSSARY.md` or the surrounding docs already establish it — reach for that one rather than a synonym.
 
+Explain every term the question uses that no `GLOSSARY.md` or surrounding doc defines, in a short clause the first time it appears in a round ("a _failure mode_, one narrow way things went wrong"), so the user never has to ask what a word means. An established term needs no gloss; an unexplained one is a defect in the question.
+
 Coin nothing silently. Where a concept genuinely has no name yet, say so in the question ("no name for this yet, calling it a _lesson bundle_ here"), so a fresh word is never mistaken for established vocabulary.
 
 ## Refer by name
