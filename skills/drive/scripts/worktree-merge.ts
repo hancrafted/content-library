@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { capture, git } from './git.ts';
+import { reportPathFor, unmetCriteria } from './report.pure.ts';
 
 const gitDirOf = (tree: string) => git(tree, ['rev-parse', '--absolute-git-dir']).stdout.trim();
 
@@ -141,6 +142,7 @@ export function mergeIntoBase(
     ...BUSY_WAIT,
     ...options,
   };
+  if (git(cwd, ['merge-base', '--is-ancestor', branch, base]).status !== 0) refuseUnmetCriteria(branch, cwd);
   return withMergeLock(base, { cwd, log, withLock }, async () => {
     const deadline = Date.now() + timeoutMilliseconds;
     const mergeBuiltOnBaseTip = { on: '', commit: '' };
@@ -165,4 +167,17 @@ export function forkDateBeforeMerge(branch: string, base: string, cwd: string): 
   const fork = git(cwd, ['merge-base', branch, base]).stdout.trim();
   if (fork === '') return null;
   return new Date(git(cwd, ['log', '-1', '--format=%cI', fork]).stdout.trim());
+}
+
+export function refuseUnmetCriteria(branch: string, root: string): void {
+  const relative = reportPathFor(branch);
+  if (relative === null) return;
+  const file = path.join(root, relative);
+  const problems = existsSync(file)
+    ? unmetCriteria(readFileSync(file, 'utf8'))
+    : [`no report at ${relative}; write it, with an "## Acceptance criteria" section`];
+  if (problems.length > 0)
+    throw new Error(
+      `${branch} has an unmet report (${relative}):\n  ${problems.join('\n  ')}\n${branch} was not merged`,
+    );
 }

@@ -1,5 +1,5 @@
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -65,7 +65,17 @@ function fixture(lock = LOCK) {
   return { root, main, trees: path.join(main, '.trees') };
 }
 
+const PASSING_REPORT = '## Acceptance criteria\n- [x] built — evidence\n';
+
+function writeReport(main: string, branch: string, text: string): void {
+  const [parent, task] = branch.split('--');
+  const file = path.join(main, '.scratch', parent?.split('/').pop() ?? '', `${task}.report.md`);
+  mkdirSync(path.dirname(file), { recursive: true });
+  writeFileSync(file, text);
+}
+
 function task(main: string, branch: string, base: string | null): string {
+  if (branch.includes('--')) writeReport(main, branch, PASSING_REPORT);
   const file = `${branch.replaceAll('/', '-')}.txt`;
   const result = drive(main, 'new', branch, ...(base === null ? [] : ['--base', base]));
   expect(result.status).toBe(0);
@@ -313,6 +323,36 @@ describe('drive worktree', () => {
       expect(existsSync(tree)).toBe(true);
       expect(git(main, 'rev-parse', 'feat/x')).toBe(baseTip);
       expect(git(main, 'branch', '--list', 'feat/x--1-task')).toContain('feat/x--1-task');
+    });
+
+    it('refuses to merge a Task whose report has an unchecked acceptance criterion, leaving branch and worktree', () => {
+      // ARRANGE
+      const { main } = fixture();
+      drive(main, 'new', 'feat/x');
+      const tree = task(main, 'feat/x--1-task', 'feat/x');
+      writeReport(main, 'feat/x--1-task', '## Acceptance criteria\n- [x] a — e\n- [ ] b\n');
+      const baseTip = git(main, 'rev-parse', 'feat/x');
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain('- [ ] b');
+      expect(existsSync(tree)).toBe(true);
+      expect(git(main, 'rev-parse', 'feat/x')).toBe(baseTip);
+      expect(git(main, 'branch', '--list', 'feat/x--1-task')).toContain('feat/x--1-task');
+    });
+
+    it('refuses a Task with no report, naming where it belongs', () => {
+      // ARRANGE
+      const { main } = fixture();
+      drive(main, 'new', 'feat/x');
+      task(main, 'feat/x--1-task', 'feat/x');
+      rmSync(path.join(main, '.scratch', 'x', '1-task.report.md'));
+      // ACT
+      const result = drive(main, 'done', 'feat/x--1-task', '--base', 'feat/x');
+      // ASSERT
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain('.scratch/x/1-task.report.md');
     });
 
     it('rejects a config that names a lock module without withLock', () => {
