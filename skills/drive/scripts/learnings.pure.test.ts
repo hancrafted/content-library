@@ -158,6 +158,16 @@ describe('success cases', () => {
     expect(rows).toContainEqual(expected);
   });
 
+  it('marks a fixed failure mode regressed when a same-day record carries a Regressed bullet', () => {
+    // ARRANGE
+    const records = [record('2026-11-18', 'same-day', [evidence(PUSH, '**Regressed:** the fix did not hold')])];
+    const expected = { slug: PUSH, count: 1, status: 'fixed', regressed: true };
+    // ACT
+    const rows = countCitations(MODES, records);
+    // ASSERT
+    expect(rows).toContainEqual(expected);
+  });
+
   it('renders one line per failure mode with its count, status and the regressed flag', () => {
     // ARRANGE
     const rows = [
@@ -186,7 +196,11 @@ describe('success cases', () => {
       },
     ];
     // ACT
-    const problems = storeProblems({ modes: MODES, records, legacyFileExists: false });
+    const problems = storeProblems({
+      modes: MODES,
+      records,
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(problems).toEqual([]);
   });
@@ -200,7 +214,11 @@ describe('failure cases', () => {
       'records/2026-11-19-sweep.md: ## no-such-mode names no failure-modes/no-such-mode.md; cite an existing one (drive learnings similar "<failure>") or create it',
     ];
     // ACT
-    const problems = storeProblems({ modes: MODES, records, legacyFileExists: false });
+    const problems = storeProblems({
+      modes: MODES,
+      records,
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -211,7 +229,11 @@ describe('failure cases', () => {
       'docs/drive/learnings.md exists beside the learnings store: move its entries into records/ and failure-modes/, then delete it',
     ];
     // ACT
-    const problems = storeProblems({ modes: MODES, records: [], legacyFileExists: true });
+    const problems = storeProblems({
+      modes: MODES,
+      records: [],
+      legacyFileExists: true,
+    });
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -223,16 +245,59 @@ describe('failure cases', () => {
       `records/2026-11-19-sweep.md: ## ${PUSH} cites a failure mode fixed on 2026-11-18 by https://github.com/hancrafted/content-library/pull/768; add a **Regressed:** bullet saying why the fix did not hold`,
     ];
     // ACT
-    const problems = storeProblems({ modes: MODES, records, legacyFileExists: false });
+    const problems = storeProblems({
+      modes: MODES,
+      records,
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(problems).toEqual(expected);
+  });
+
+  it('accepts fortify pending without a skip-reason and refuses a skip-reason on it', () => {
+    // ARRANGE
+    const pending = {
+      ...record('2026-11-19', 'sweep', [evidence(GUARD)]),
+      fortify: 'pending' as const,
+    };
+    const withReason = { ...pending, skipReason: 'deadline' };
+    const expected = ['records/2026-11-19-sweep.md: skip-reason belongs only to fortify skipped'];
+    // ACT
+    const accepted = storeProblems({
+      modes: MODES,
+      records: [pending],
+      legacyFileExists: false,
+    });
+    const refused = storeProblems({
+      modes: MODES,
+      records: [withReason],
+      legacyFileExists: false,
+    });
+    // ASSERT
+    expect(accepted).toEqual([]);
+    expect(refused).toEqual(expected);
+  });
+
+  it('parses fortify pending from the front matter', () => {
+    // ARRANGE
+    const text = ['---', 'workflow: demo', "date: '2026-11-19'", 'fortify: pending', '---', '', '# demo', ''].join(
+      '\n',
+    );
+    const expected = 'pending';
+    // ACT
+    const parsed = parseRecord('2026-11-19-demo.md', text);
+    // ASSERT
+    expect(parsed).toMatchObject({ fortify: expected });
   });
 
   it('fails status fields that disagree with the status, and a title that differs from the H1', () => {
     // ARRANGE
     const modes = [
       mode('a-ticket', 'A ticket', { status: 'ticket' }),
-      mode('a-fix', 'A fix', { status: 'fixed', fixedBy: 'https://example.test/pull/1' }),
+      mode('a-fix', 'A fix', {
+        status: 'fixed',
+        fixedBy: 'https://example.test/pull/1',
+      }),
       mode('a-wontfix', 'A wontfix', { status: 'wontfix' }),
       mode('a-title', 'A title', { heading: 'Another title' }),
     ];
@@ -243,7 +308,11 @@ describe('failure cases', () => {
       'failure-modes/a-title.md: the H1 "Another title" differs from title "A title"',
     ];
     // ACT
-    const problems = storeProblems({ modes, records: [], legacyFileExists: false });
+    const problems = storeProblems({
+      modes,
+      records: [],
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -266,7 +335,11 @@ describe('failure cases', () => {
       'records/2026-11-20-later.md: skip-reason belongs only to fortify skipped',
     ];
     // ACT
-    const problems = storeProblems({ modes: MODES, records, legacyFileExists: false });
+    const problems = storeProblems({
+      modes: MODES,
+      records,
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -277,7 +350,9 @@ describe('failure cases', () => {
     const badStatus = failureModeText(['status: waiting']);
     const expected = [
       { error: 'failure-modes/x.md: no front matter' },
-      { error: 'failure-modes/x.md: status must be proposed, ticket, fixed or wontfix' },
+      {
+        error: 'failure-modes/x.md: status must be proposed, ticket, fixed or wontfix',
+      },
       { error: 'records/x.md: no front matter' },
     ];
     // ACT
@@ -295,7 +370,11 @@ describe('edge cases', () => {
   it('keeps the legacy-file rule dormant until the store holds a failure mode', () => {
     // ARRANGE
     // ACT
-    const problems = storeProblems({ modes: [], records: [], legacyFileExists: true });
+    const problems = storeProblems({
+      modes: [],
+      records: [],
+      legacyFileExists: true,
+    });
     // ASSERT
     expect(problems).toEqual([]);
   });
@@ -303,10 +382,19 @@ describe('edge cases', () => {
   it('does not call a citation on or before fixed-on a regression', () => {
     // ARRANGE
     const records = [record('2026-11-18', 'same-day', [evidence(PUSH)])];
-    const expected = { slug: PUSH, count: 1, status: 'fixed', regressed: false };
+    const expected = {
+      slug: PUSH,
+      count: 1,
+      status: 'fixed',
+      regressed: false,
+    };
     // ACT
     const rows = countCitations(MODES, records);
-    const problems = storeProblems({ modes: MODES, records, legacyFileExists: false });
+    const problems = storeProblems({
+      modes: MODES,
+      records,
+      legacyFileExists: false,
+    });
     // ASSERT
     expect(rows).toContainEqual(expected);
     expect(problems).toEqual([]);
@@ -315,7 +403,12 @@ describe('edge cases', () => {
   it('counts a record once even when it cites a failure mode twice', () => {
     // ARRANGE
     const records = [record('2026-11-17', 'drive', [evidence(GUARD), evidence(GUARD)])];
-    const expected = { slug: GUARD, count: 1, status: 'proposed', regressed: false };
+    const expected = {
+      slug: GUARD,
+      count: 1,
+      status: 'proposed',
+      regressed: false,
+    };
     // ACT
     const rows = countCitations(MODES, records);
     // ASSERT
