@@ -6,6 +6,16 @@ export function parseLsRemote(stdout: string): string | null {
   return sha === undefined || sha === '' ? null : sha;
 }
 
+export function exitProblem(
+  pushArgs: readonly string[],
+  { status, signal }: { status: number | null; signal: string | null },
+): string | null {
+  if (status === 0) return null;
+  const command = `git ${pushArgs.join(' ')}`;
+  if (status !== null) return `${command} failed (${status})`;
+  return `${command} failed (${signal === null ? 'no exit status' : `killed by ${signal}`})`;
+}
+
 export function remoteDiffersFrom(
   { branch, remote }: { branch: string; remote: string },
   head: string,
