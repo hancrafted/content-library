@@ -20,6 +20,15 @@ export function missingCloses(body: string, tickets: readonly number[]): number[
   return tickets.filter((ticket) => !closed.has(ticket));
 }
 
+export function closesProblem(where: string, body: string, tickets: readonly number[]): string | null {
+  const missing = missingCloses(body, tickets);
+  return missing.length === 0 ? null : `${where} lacks Closes for ${missing.map((ticket) => `#${ticket}`).join(', ')}`;
+}
+
+export function refuseSpecOffGithub(skipNote: string | null): string | null {
+  return skipNote === null ? null : `--spec needs a GitHub remote to open or check the Integration PR; ${skipNote}`;
+}
+
 export function isGithubRemote(url: string): boolean {
   return /^(?:https?:\/\/(?:[^/@]+@)?|ssh:\/\/(?:[^/@]+@)?|[^/@]+@)github\.com[/:]/i.test(url.trim());
 }

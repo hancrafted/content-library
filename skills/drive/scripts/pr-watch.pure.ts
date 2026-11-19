@@ -28,10 +28,7 @@ export interface Check {
   state?: string;
 }
 
-export type Verdict = {
-  exit: 0 | 2 | 3 | 10 | 11 | 12 | 13;
-  line: string;
-} | null;
+export type Verdict = { exit: 0 | 2 | 3 | 10 | 11 | 12 | 13; line: string } | null;
 
 const isOperatorRemark = (remark: Remark): boolean => !remark.body.trimStart().startsWith(DRIVE_MARKER);
 
@@ -62,9 +59,7 @@ export function judge(view: PullRequestView, seen: ReadonlySet<string>): Verdict
 
 export function parseView(stdout: string): PullRequestView | { error: string } {
   try {
-    const parsed = JSON.parse(stdout) as Partial<PullRequestView> & {
-      statusCheckRollup?: unknown;
-    };
+    const parsed = JSON.parse(stdout) as Partial<PullRequestView> & { statusCheckRollup?: unknown };
     const rollup = parsed.statusCheckRollup;
     if (typeof parsed.state !== 'string') return { error: 'gh pr view returned no state' };
     return {
@@ -103,19 +98,27 @@ export function parseReviewComments(stdout: string): InlineRemark[] | { error: s
       line: item.line ?? item.original_line ?? null,
     }));
   } catch (error) {
-    return {
-      error: `gh api returned invalid JSON: ${(error as Error).message}`,
-    };
+    return { error: `gh api returned invalid JSON: ${(error as Error).message}` };
   }
 }
 
-const FAILED = new Set(['FAILURE', 'TIMED_OUT', 'CANCELLED', 'STARTUP_FAILURE', 'ACTION_REQUIRED', 'ERROR']);
+const FAILING_CHECK_CONCLUSIONS = new Set([
+  'FAILURE',
+  'TIMED_OUT',
+  'CANCELLED',
+  'STARTUP_FAILURE',
+  'ACTION_REQUIRED',
+  'ERROR',
+]);
 
-const isFailing = (check: Check): boolean => FAILED.has(check.conclusion ?? '') || FAILED.has(check.state ?? '');
+const isFailing = (check: Check): boolean =>
+  FAILING_CHECK_CONCLUSIONS.has(check.conclusion ?? '') || FAILING_CHECK_CONCLUSIONS.has(check.state ?? '');
 
 const failingChecks = (view: PullRequestView): Verdict => {
   const failing = (view.checks ?? []).filter(isFailing);
-  return failing.length === 0 ? null : { exit: 10, line: `failing checks: ${failing.map((c) => c.name).join(', ')}` };
+  return failing.length === 0
+    ? null
+    : { exit: 10, line: `failing checks: ${failing.map((check) => check.name).join(', ')}` };
 };
 
 export function judgeIntegration(view: PullRequestView): Verdict {
@@ -133,7 +136,7 @@ export function closesIn(body: string): number[] {
 export function ticketsLine(stillOpen: readonly number[]): string {
   return stillOpen.length === 0
     ? 'all tickets closed'
-    : `tickets still open: ${stillOpen.map((n) => `#${n}`).join(', ')}`;
+    : `tickets still open: ${stillOpen.map((ticket) => `#${ticket}`).join(', ')}`;
 }
 
 interface RollupItem {
