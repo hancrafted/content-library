@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { branchPrState, missingCloses, openingBody, refuseMerged, skipPrLookup } from './push-pr.pure.ts';
+import {
+  branchPrState,
+  closesProblem,
+  missingCloses,
+  openingBody,
+  refuseMerged,
+  refuseSpecOffGithub,
+  skipPrLookup,
+} from './push-pr.pure.ts';
 
 describe('branchPrState', () => {
   it('is none without PRs, open when any is open, merged when only merged ones exist', () => {
@@ -22,24 +30,23 @@ describe('branchPrState', () => {
 describe('refuseMerged', () => {
   it('tells the agent to branch anew when the branch merged', () => {
     // ARRANGE
+    const expected =
+      'the PR of feat/x has merged; branch anew from the base branch (drive worktree new) instead of pushing more commits here';
     // ACT
     const messages = [refuseMerged('feat/x', 'merged'), refuseMerged('feat/x', 'open')];
     // ASSERT
-    expect(messages[0]).toContain('feat/x');
-    expect(messages[0]).toContain('branch anew');
-    expect(messages[1]).toBeNull();
+    expect(messages).toEqual([expected, null]);
   });
 });
 
 describe('openingBody', () => {
-  it('has a Closes line for every ticket and names the spec', () => {
+  it('names the spec and has a Closes line for every ticket', () => {
     // ARRANGE
+    const expected = 'Spec: #789\n\nCloses #790\nCloses #791';
     // ACT
     const body = openingBody(789, [790, 791]);
     // ASSERT
-    expect(body).toContain('Closes #790');
-    expect(body).toContain('Closes #791');
-    expect(body).toContain('#789');
+    expect(body).toBe(expected);
   });
 });
 
@@ -56,6 +63,36 @@ describe('missingCloses', () => {
   });
 });
 
+describe('closesProblem', () => {
+  it('names the PR and the tickets it does not close, and passes when all are there', () => {
+    // ARRANGE
+    const stale = 'Spec: #1\n\nCloses #5';
+    const expected = ['https://github.com/o/r/pull/9 lacks Closes for #6, #7', null];
+    // ACT
+    const problems = [
+      closesProblem('https://github.com/o/r/pull/9', stale, [5, 6, 7]),
+      closesProblem('https://github.com/o/r/pull/9', stale, [5]),
+    ];
+    // ASSERT
+    expect(problems).toEqual(expected);
+  });
+});
+
+describe('refuseSpecOffGithub', () => {
+  it('refuses --spec with the skip note, and passes on GitHub', () => {
+    // ARRANGE
+    const note = '! origin is not on GitHub (/tmp/o.git); skipped the merged-PR check';
+    const expected = [
+      '--spec needs a GitHub remote to open or check the Integration PR; ! origin is not on GitHub (/tmp/o.git); skipped the merged-PR check',
+      null,
+    ];
+    // ACT
+    const problems = [refuseSpecOffGithub(note), refuseSpecOffGithub(null)];
+    // ASSERT
+    expect(problems).toEqual(expected);
+  });
+});
+
 describe('skipPrLookup', () => {
   it('skips the merged-PR check with a note for a remote not on GitHub, and asks GitHub otherwise', () => {
     // ARRANGE
@@ -66,12 +103,12 @@ describe('skipPrLookup', () => {
       'ssh://git@github.com/o/r.git',
     ];
     const elsewhere = ['/tmp/origin.git', 'https://gitlab.com/o/r.git', 'git@notgithub.com:o/r.git'];
+    const expectedSkips = elsewhere.map((url) => `! origin is not on GitHub (${url}); skipped the merged-PR check`);
     // ACT
     const asked = github.map((url) => skipPrLookup(url, 'origin'));
     const skipped = elsewhere.map((url) => skipPrLookup(url, 'origin'));
     // ASSERT
     expect(asked).toEqual([null, null, null, null]);
-    for (const note of skipped) expect(note).toContain('skipped the merged-PR check');
-    expect(skipped[0]).toContain('/tmp/origin.git');
+    expect(skipped).toEqual(expectedSkips);
   });
 });

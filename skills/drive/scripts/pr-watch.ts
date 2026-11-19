@@ -70,10 +70,7 @@ function ghView(number: string): PullRequestView | { error: string } {
   const view = parseView(result.stdout);
   if ('error' in view) return view;
   const inline = run('gh', ['api', '--paginate', '--slurp', `repos/{owner}/{repo}/pulls/${number}/comments`]);
-  if (inline.status !== 0)
-    return {
-      error: `gh api pulls/${number}/comments failed:\n${inline.stderr}`,
-    };
+  if (inline.status !== 0) return { error: `gh api pulls/${number}/comments failed:\n${inline.stderr}` };
   const reviewComments = parseReviewComments(inline.stdout);
   return 'error' in reviewComments ? reviewComments : { ...view, reviewComments };
 }

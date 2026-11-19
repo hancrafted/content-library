@@ -58,7 +58,7 @@ frontmatter:
               }
         ticket:
           format: uri
-          intent: 'The tracker URL of the ticket that fixes it. Required from status ticket on.'
+          intent: 'The tracker URL of the ticket that fixes it. Required with status ticket; keep it when the status moves on.'
         fixed-by:
           format: uri
           intent: 'The merged PR URL or merge commit that made the Enforcer catch it. Required with status fixed.'

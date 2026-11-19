@@ -4,6 +4,11 @@ import { parsePrArgs, USAGE } from './pr-args.pure.ts';
 describe('parsePrArgs', () => {
   it('reads watch with poll interval and the integration flag, and ready', () => {
     // ARRANGE
+    const expected = [
+      { verb: 'watch', number: '5', integration: false, timing: { pollMilliseconds: 30_000 } },
+      { verb: 'watch', number: '5', integration: true, timing: { pollMilliseconds: 10 } },
+      { verb: 'ready', number: '7' },
+    ];
     // ACT
     const parsed = [
       parsePrArgs(['watch', '5']),
@@ -11,35 +16,30 @@ describe('parsePrArgs', () => {
       parsePrArgs(['ready', '7']),
     ];
     // ASSERT
-    expect(parsed).toEqual([
-      {
-        verb: 'watch',
-        number: '5',
-        integration: false,
-        timing: { pollMilliseconds: 30_000 },
-      },
-      {
-        verb: 'watch',
-        number: '5',
-        integration: true,
-        timing: { pollMilliseconds: 10 },
-      },
-      { verb: 'ready', number: '7' },
-    ]);
+    expect(parsed).toEqual(expected);
   });
 
-  it('rejects malformed input with the usage text, which documents the integration exit codes', () => {
+  it('rejects malformed input with the usage text', () => {
     // ARRANGE
+    const expected = [{ error: USAGE }, { error: USAGE }, { error: USAGE }, { error: USAGE }];
     // ACT
-    const bad = [
+    const parsed = [
       parsePrArgs([]),
       parsePrArgs(['watch']),
       parsePrArgs(['ready', '7', '--integration']),
       parsePrArgs(['watch', '5', '--poll-milliseconds']),
     ];
     // ASSERT
-    for (const result of bad) expect(result).toEqual({ error: USAGE });
-    expect(USAGE).toMatch(/--integration/);
-    expect(USAGE).toMatch(/10.*11.*12/s);
+    expect(parsed).toEqual(expected);
+  });
+
+  it('documents the integration flag and its exit codes in the usage text', () => {
+    // ARRANGE
+    const exitCodes =
+      'watch --integration exits 10 failing check, 11 merge conflict, 12 merged (lists the tickets still open), 13 closed unmerged.';
+    // ACT
+    const lines = USAGE.split('\n');
+    // ASSERT
+    expect(lines).toContain(exitCodes);
   });
 });

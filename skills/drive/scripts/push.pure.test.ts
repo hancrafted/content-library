@@ -66,7 +66,7 @@ describe('exitProblem', () => {
   });
 });
 
-describe('remoteHasCommit', () => {
+describe('remoteDiffersFrom', () => {
   it('fails when the ls-remote answer lacks the local commit, even when git exited 0', () => {
     // ARRANGE
     const ref = { branch: 'feat/x', remote: 'origin' };

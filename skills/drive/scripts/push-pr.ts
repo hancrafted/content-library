@@ -1,6 +1,6 @@
 import { capture, run } from './git.ts';
 import { fail } from './project.ts';
-import { branchPrState, type BranchPrState, missingCloses, openingBody } from './push-pr.pure.ts';
+import { branchPrState, type BranchPrState, closesProblem, openingBody } from './push-pr.pure.ts';
 
 interface Heads {
   branch: string;
@@ -36,11 +36,21 @@ function createDraft(spec: number, tickets: readonly number[], heads: Heads & { 
   return created.stdout.trim();
 }
 
-export function openIntegrationPr(spec: number, heads: Heads, cwd: string): void {
-  const tickets = ticketsOf(spec, cwd);
-  const url = createDraft(spec, tickets, { ...heads, cwd });
+function checkCloses(url: string, tickets: readonly number[], cwd: string): void {
   const body = capture('gh', ['pr', 'view', url, '--json', 'body', '--jq', '.body'], cwd);
-  const missing = missingCloses(body, tickets);
-  if (missing.length > 0) fail(`${url} lacks Closes for ${missing.map((n) => `#${n}`).join(', ')}`);
-  console.log(`✔ opened draft ${url} closing ${tickets.map((n) => `#${n}`).join(', ')}`);
+  const problem = closesProblem(url, body, tickets);
+  if (problem !== null) fail(problem);
+}
+
+export function syncIntegrationPr(spec: number, heads: Heads & { state: BranchPrState }, cwd: string): void {
+  const tickets = ticketsOf(spec, cwd);
+  const list = tickets.map((ticket) => `#${ticket}`).join(', ');
+  if (heads.state === 'open') {
+    checkCloses(heads.branch, tickets, cwd);
+    console.log(`✔ the open PR closes ${list}`);
+    return;
+  }
+  const url = createDraft(spec, tickets, { ...heads, cwd });
+  checkCloses(url, tickets, cwd);
+  console.log(`✔ opened draft ${url} closing ${list}`);
 }

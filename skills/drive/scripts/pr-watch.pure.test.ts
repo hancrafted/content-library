@@ -52,9 +52,7 @@ describe('judge', () => {
 
   it('keeps waiting when nothing is new or the only new comment carries the drive marker', () => {
     // ARRANGE
-    const own = open({
-      comments: [{ id: 'c1', body: `${DRIVE_MARKER}\nrevised` }],
-    });
+    const own = open({ comments: [{ id: 'c1', body: `${DRIVE_MARKER}\nrevised` }] });
     // ACT
     const verdicts = [judge(open(), new Set()), judge(own, new Set())];
     // ASSERT
@@ -65,9 +63,7 @@ describe('judge', () => {
 describe('inline review comments', () => {
   it('reports a new inline comment with its file and line', () => {
     // ARRANGE
-    const view = open({
-      reviewComments: [{ id: 'rc9', body: 'rename this', path: 'a/b.ts', line: 12 }],
-    });
+    const view = open({ reviewComments: [{ id: 'rc9', body: 'rename this', path: 'a/b.ts', line: 12 }] });
     // ACT
     const verdict = judge(view, new Set());
     // ASSERT
@@ -78,15 +74,7 @@ describe('inline review comments', () => {
     // ARRANGE
     const pages = JSON.stringify([
       [{ id: 1, body: 'one', path: 'x.ts', line: 3 }],
-      [
-        {
-          id: 2,
-          body: '<!-- drive -->\nreply',
-          path: 'x.ts',
-          line: null,
-          original_line: 4,
-        },
-      ],
+      [{ id: 2, body: '<!-- drive -->\nreply', path: 'x.ts', line: null, original_line: 4 }],
     ]);
     // ACT
     const parsed = parseReviewComments(pages);
@@ -108,6 +96,37 @@ describe('parseView', () => {
     // ASSERT
     expect(view).toEqual(open());
     expect(broken).toHaveProperty('error');
+  });
+});
+
+describe('parseView status check rollup', () => {
+  const withRollup = (rollup: unknown) => parseView(JSON.stringify({ state: 'OPEN', statusCheckRollup: rollup }));
+
+  it('maps a CheckRun by name and conclusion and a StatusContext by context and state', () => {
+    // ARRANGE
+    const rollup = [
+      { __typename: 'CheckRun', name: 'lint', status: 'COMPLETED', conclusion: 'FAILURE' },
+      { __typename: 'StatusContext', context: 'ci/legacy', state: 'ERROR' },
+    ];
+    const expected = [
+      { name: 'lint', status: 'COMPLETED', conclusion: 'FAILURE', state: undefined },
+      { name: 'ci/legacy', status: undefined, conclusion: undefined, state: 'ERROR' },
+    ];
+    // ACT
+    const view = withRollup(rollup);
+    // ASSERT
+    expect(view).toHaveProperty('checks', expected);
+    expect(judgeIntegration(view as PullRequestView)).toEqual({ exit: 10, line: 'failing checks: lint, ci/legacy' });
+  });
+
+  it('reads a rollup that is not an array as no checks, and an absent one as unknown', () => {
+    // ARRANGE
+    const notAnArray = withRollup({ oops: true });
+    // ACT
+    const absent = parseView('{"state":"OPEN"}');
+    // ASSERT
+    expect(notAnArray).toHaveProperty('checks', []);
+    expect(absent).toHaveProperty('checks', undefined);
   });
 });
 
@@ -182,21 +201,13 @@ describe('judgeIntegration', () => {
     // ACT
     const verdicts = [judgeIntegration(conflict), judgeIntegration(red)];
     // ASSERT
-    expect(verdicts[0]).toEqual({
-      exit: 11,
-      line: 'merge conflict with the base branch',
-    });
-    expect(verdicts[1]).toEqual({
-      exit: 10,
-      line: 'failing checks: lint, build',
-    });
+    expect(verdicts[0]).toEqual({ exit: 11, line: 'merge conflict with the base branch' });
+    expect(verdicts[1]).toEqual({ exit: 10, line: 'failing checks: lint, build' });
   });
 
   it('keeps waiting on pending checks, unknown mergeability and green', () => {
     // ARRANGE
-    const pending = view({
-      checks: [{ name: 'lint', status: 'IN_PROGRESS', conclusion: '' }],
-    });
+    const pending = view({ checks: [{ name: 'lint', status: 'IN_PROGRESS', conclusion: '' }] });
     const unknown = view({ mergeable: 'UNKNOWN' });
     // ACT
     const verdicts = [judgeIntegration(pending), judgeIntegration(unknown), judgeIntegration(view())];
