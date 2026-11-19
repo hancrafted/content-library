@@ -111,7 +111,7 @@ function resolveTransitions(
   surfaces: readonly {
     id: string;
     presentation?: SlidePresentation;
-    surface?: string;
+    fallbackSurface?: string;
   }[],
   precedence = 'enter',
 ): ReadonlyMap<string, ResolvedSlideTransition> {
@@ -146,7 +146,8 @@ function transitionsOf(
   const surfaces = slides.map((slide) => ({
     id: slide.id,
     presentation: slide.presentation,
-    surface: header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
+    fallbackSurface:
+      header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
   }));
   return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...surfaces], precedence);
 }
@@ -167,11 +168,11 @@ function inkOf(
 }
 
 function transitionTarget(
-  { presentation, surface }: { presentation?: SlidePresentation; surface?: string },
+  { presentation, fallbackSurface }: { presentation?: SlidePresentation; fallbackSurface?: string },
   outgoing: SlidePresentation | undefined,
   { style: override }: SlideTransition,
 ) {
-  const targetSurface = inkOf(presentation, surface, override?.['--slide-transition-ink']);
+  const targetSurface = inkOf(presentation, fallbackSurface, override?.['--slide-transition-ink']);
   const { style, inverse } = presentation ?? {};
   const differsFromOutgoingWrapper = (inverse === true) !== (outgoing?.inverse === true);
   return {

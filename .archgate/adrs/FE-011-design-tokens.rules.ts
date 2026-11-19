@@ -233,7 +233,7 @@ function declarations(css: string): Declaration[] {
 
 // decision: FE-011 §2.1
 const THEME_SELECTOR_RE =
-  /^(?::root(?::not\(\.dark\))?|\.dark)(?:(?: \[data-inverse\]){1,3}|\[data-page-tone=(['"])inverse\1\] \[data-testid=(['"])site-header\2\])?$/;
+  /^(?::root|\.dark|(?::root:not\(\.dark\)|\.dark)(?: \[data-inverse\]){1,3}|(?::root:not\(\.dark\)|\.dark)\[data-page-tone=(['"])inverse\1\] \[data-testid=(['"])site-header\2\])$/;
 const isThemeSelectorList = (selectors: string) =>
   selectors.split(',').every((selector) => THEME_SELECTOR_RE.test(selector.trim()));
 const isDarkSelector = (selector: string) => selector.includes(':global(.dark)');
