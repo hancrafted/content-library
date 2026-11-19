@@ -1,3 +1,4 @@
+import { runDispatch } from './dispatch.ts';
 import { runGuard } from './guard.ts';
 import { runLearnings } from './learnings.ts';
 import { logCommandAtExit } from './log.ts';
@@ -16,9 +17,10 @@ else if (group === 'push') runPush(rest);
 else if (group === 'pr') await runPr(rest);
 else if (group === 'learnings') runLearnings(rest);
 else if (group === 'transcript') runTranscript(rest);
+else if (group === 'dispatch') runDispatch(rest);
 else {
   console.error(
-    `✖ unknown group '${group ?? ''}'; usage: drive <worktree <new|done|sync> ...|push|pr watch <number>|learnings [list|similar "<failure>"|check]|transcript <session-id>|--topic <topic> [--tools] [--since-last]|setup|guard [--against <ref>]>`,
+    `✖ unknown group '${group ?? ''}'; usage: drive <worktree <new|done|sync> ...|push|pr watch <number>|learnings [list|similar "<failure>"|check]|dispatch check [--base <branch>] <issue…>|transcript <session-id>|--topic <topic> [--tools] [--since-last]|setup|guard [--against <ref>]>`,
   );
   process.exit(1);
 }
