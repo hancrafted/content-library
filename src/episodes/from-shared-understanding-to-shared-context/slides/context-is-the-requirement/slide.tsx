@@ -10,7 +10,7 @@ export const contextIsTheRequirement = slide({
   segments: [{ slug: 'the-claim' }, { slug: 'the-route' }],
   content: ({ t }) => (
     <SlideFrame>
-      <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
+      <div className="max-w-xl rounded-xl bg-card p-6">
         <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
           <rect x={6} y={10} width={288} height={134} rx={12} className="fill-card stroke-machine" strokeWidth={2} />
           <path d="M6 34 H294" className="stroke-machine" strokeWidth={1.5} />

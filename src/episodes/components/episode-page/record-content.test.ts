@@ -14,7 +14,7 @@ import { load } from 'cheerio';
 import { createElement, Fragment, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { PageSurfaceClock, tocEntranceOf, usesSurfaceClock } from './page-surface-clock';
+import { PageSurfaceClock, tocEntranceOf } from './page-surface-clock';
 import { recordContent, type TranslatorOf } from './record-content';
 import { SlideWrapper } from './slide-wrapper';
 import { TitleSlide } from './title-slide';
@@ -119,7 +119,6 @@ describe('success cases', () => {
       // ARRANGE
       const expectedEdge = `top→${firstSection}`;
       const expectedEffect = 'liquid';
-      const expectedTone = 'normal';
       const expectedSpace = '--slide-space-after:160px';
       const titleOnly = episode({
         ...record,
@@ -141,7 +140,7 @@ describe('success cases', () => {
       // ASSERT
       expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
-      expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
+      expect($('#top').attr('data-inverse')).toBeUndefined();
       expect($('#top').attr('style')).toContain(expectedSpace);
       expect($('#top').attr('style')).not.toContain('--slide-surface');
     },
@@ -150,21 +149,21 @@ describe('success cases', () => {
     [
       introHitlWorkflowsAiAttentionSpan,
       [
-        ['top→thought-experiment', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['top→thought-experiment', 'color-mix(in oklab, var(--background) 88%, var(--foreground))'],
         ['thought-experiment→thought-experiment--the-long-phone-call-story', 'var(--background)'],
         [
           'thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span',
-          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+          'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         ],
         ['the-ais-attention-span→the-ais-attention-span--the-context-window', 'var(--background)'],
         [
           'the-ais-attention-span--what-we-learned-so-far→what-fills-the-window',
-          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+          'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         ],
         ['what-fills-the-window→what-fills-the-window--whats-really-in-the-window', 'var(--background)'],
         [
           'what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span',
-          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+          'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         ],
         ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
       ],
@@ -172,18 +171,18 @@ describe('success cases', () => {
     [
       introHitlWorkflowsAiGivesYouMoreWork,
       [
-        ['top→from-execution-to-management', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['top→from-execution-to-management', 'color-mix(in oklab, var(--background) 88%, var(--foreground))'],
         ['from-execution-to-management→from-execution-to-management--every-revolution-one-card', 'var(--background)'],
       ],
     ],
     [
       introHitlWorkflowsOnboardAiEveryTime,
       [
-        ['top→the-thought-experiment', 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))'],
+        ['top→the-thought-experiment', 'color-mix(in oklab, var(--background) 88%, var(--foreground))'],
         ['the-thought-experiment→the-thought-experiment--you-are-the-new-hire', 'var(--background)'],
         [
           'the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer',
-          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+          'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         ],
         ['five-moves-to-brief-a-freelancer→five-moves-to-brief-a-freelancer--manage-the-price', 'var(--background)'],
       ],
@@ -193,7 +192,6 @@ describe('success cases', () => {
     async (record, expected) => {
       // ARRANGE
       const expectedEffect = 'liquid';
-      const expectedTone = 'inverse';
       const expectedSpace = '--slide-space-after:200px';
       const expectedSectionCount = record.sections.length;
       // ACT
@@ -230,24 +228,23 @@ describe('success cases', () => {
       effects.forEach((effect) => expect(effect).toBe(expectedEffect));
       expect(sections).toHaveLength(expectedSectionCount);
       sections.forEach((section) => {
-        expect($(section).attr('data-surface-tone')).toBe(expectedTone);
+        expect($(section).attr('data-inverse')).toBeDefined();
         expect($(section).attr('style')).toContain(expectedSpace);
       });
     },
   );
-  it('composes inherited authored Title tone for both rendered surface and narrow clock descriptors', async () => {
+  it('composes an authored inverse Title for both rendered surface and narrow clock descriptors', async () => {
     // ARRANGE
     const record = episode({
       ...RECORD,
-      tone: 'inverse',
       title: slide({
         slug: 'hero',
         messages: EPISODE,
         content: () => null,
-        presentation: { style: { '--slide-space-after': '160px' } },
+        presentation: { inverse: true, style: { '--slide-space-after': '160px' } },
       }),
     });
-    const expected = { tone: 'inverse', presentation: { tone: 'inverse', style: { '--slide-space-after': '160px' } } };
+    const expected = { inverse: true, presentation: { inverse: true, style: { '--slide-space-after': '160px' } } };
     const expectedSurfaces = [
       { id: 'top', tone: 'inverse' },
       { id: 'foundations', tone: 'normal' },
@@ -255,7 +252,6 @@ describe('success cases', () => {
       { id: 'foundations--visual', tone: 'normal' },
       { id: 'next-steps', tone: 'normal' },
     ];
-    const expectedTone = 'inverse';
     const policy = 'title-departure';
     // ACT
     const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
@@ -271,52 +267,16 @@ describe('success cases', () => {
     const clock = PageSurfaceClock({ content });
     // ASSERT
     expect(content.titleAppearance).toEqual(expected);
-    expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
-    expect($('#top').attr('data-tone')).toBeUndefined();
+    expect($('#top').attr('data-inverse')).toBeDefined();
     expect(clock?.props.surfaces).toEqual(expectedSurfaces);
     expect(tocEntranceOf(content)).toBe(policy);
-  });
-  it('composes a legacy inverse Title with its first Slide as the ink target and no geometry opt-in', async () => {
-    // ARRANGE
-    const record = episode({ ...RECORD, tone: 'inverse' });
-    const expected = { tone: 'inverse', legacyTone: 'inverse', inkTarget: 'foundations' };
-    const clockEntrance = 'legacy';
-    const inverse = 'inverse';
-    // ACT
-    const content = await recordContent(record, 'en', {
-      translatorOf: translatorOf('en'),
-      id: 'ai-token-economy',
-    });
-    const html = renderToStaticMarkup(
-      createElement(TitleSlide, {
-        title: content.title,
-        mode: content.header,
-        entrance: content.entrance,
-        appearance: content.titleAppearance,
-      }),
-    );
-    const $ = load(html);
-    // ASSERT
-    expect(content.titleAppearance).toEqual(expected);
-    expect($('#top').attr('data-tone')).toBe(inverse);
-    expect($('#top').attr('data-surface-tone')).toBeUndefined();
-    expect(content.titleAppearance.presentation).toBeUndefined();
-    expect(content.transitions.has('top')).toBe(false);
-    expect(tocEntranceOf(content)).toBe(clockEntrance);
   });
   it.each(['en', 'de'] as const)(
     'keeps Intro pages normal behind the inverse grounding section without removing reading space in %s',
     async (locale) => {
       // ARRANGE
       const expectedEdges = [['grounding→agenda', 'liquid']];
-      const expectedSurfaces = [
-        ['grounding', 'inverse'],
-        ['agenda', 'normal'],
-        ['poll', 'normal'],
-        ['check-in-1', 'normal'],
-        ['check-in-2', 'normal'],
-        ['check-in-3', 'normal'],
-      ];
+      const expectedSurfaces = [['grounding']];
       const expectedTrailingSpace = '--slide-space-after:265px';
       const trailingSlides = ['agenda', 'poll', 'check-in-1', 'check-in-2'];
       const expectedLeadingSpace = '--slide-space-before:160px';
@@ -348,9 +308,9 @@ describe('success cases', () => {
       const edges = $('[data-transition-edge]')
         .toArray()
         .map((host) => [$(host).attr('data-transition-edge'), $(host).attr('data-transition-effect')]);
-      const surfaces = $('[data-surface-tone]')
+      const surfaces = $('[data-inverse]')
         .toArray()
-        .map((host) => [$(host).attr('id'), $(host).attr('data-surface-tone')]);
+        .map((host) => [$(host).attr('id')]);
       const trailingStyles = trailingSlides.map((id) => $(`#${id}`).attr('style'));
       // ASSERT
       expect(edges).toEqual(expectedEdges);
@@ -363,10 +323,9 @@ describe('success cases', () => {
     'renders the workshop Intro Title inverse with liquid departure into the inverse grounding section in %s',
     async (locale) => {
       // ARRANGE
-      const expectedTone = 'inverse';
       const expectedEdge = 'top→grounding';
       const expectedEffect = 'liquid';
-      const expectedDestination = 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))';
+      const expectedDestination = 'color-mix(in oklab, var(--background) 88%, var(--foreground))';
       const expectedTrailingSpace = '--slide-space-after:160px';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
@@ -383,7 +342,7 @@ describe('success cases', () => {
       );
       const $ = load(html);
       // ASSERT
-      expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
+      expect($('#top').attr('data-inverse')).toBeDefined();
       expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
       expect(content.transitions.get('top')?.targetSurface).toBe(expectedDestination);
@@ -442,9 +401,13 @@ describe('success cases', () => {
       expect(renderToStaticMarkup(tree)).toBe(html);
     },
   );
-  it('carries explicit navigation entrance independently of a legacy inverse Title', async () => {
+  it('carries explicit navigation entrance independently of an inverse Title', async () => {
     // ARRANGE
-    const record = episode({ ...RECORD, tone: 'inverse', tocEntrance: 'visible-from-start' });
+    const record = episode({
+      ...RECORD,
+      title: slide({ slug: 'hero', messages: EPISODE, content: () => null, presentation: { inverse: true } }),
+      tocEntrance: 'visible-from-start',
+    });
     const expected = 'visible-from-start';
     // ACT
     const content = await recordContent(record, 'en', {
@@ -453,11 +416,11 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(content.tocEntrance).toBe(expected);
-    expect(content.titleAppearance.presentation).toBeUndefined();
+    expect(content.titleAppearance.inverse).toBe(true);
   });
   it('composes the Context Title with independent inverse surface, rear drift and outgoing ink', async () => {
     // ARRANGE
-    const expected = { tone: 'inverse', effect: 'liquid', incoming: 'play' };
+    const expected = { inverse: true, effect: 'liquid', incoming: 'play' };
     const backdrop = 'data-slot="slide-backdrop"';
     const mount = 'data-slot="slide-mount"';
     const motionButton = 'data-hero-motion-button';
@@ -468,7 +431,7 @@ describe('success cases', () => {
       route: '/explorables/context-window',
     });
     // ASSERT
-    expect(content.titleAppearance.presentation?.tone).toBe(expected.tone);
+    expect(content.titleAppearance.presentation?.inverse).toBe(expected.inverse);
     expect(content.titleAppearance.presentation?.rear).toBeDefined();
     expect(content.transitions.get('top')?.declaration.effect).toBe(expected.effect);
     expect(content.transitions.get('top')?.incoming).toBe(expected.incoming);
@@ -515,7 +478,7 @@ describe('success cases', () => {
       sections: [
         [
           { ...foundations, presentation: { leave } },
-          { ...whyATemplate, presentation: { enter, tone: 'inverse' } },
+          { ...whyATemplate, presentation: { enter, inverse: true } },
         ],
       ],
     });
@@ -524,7 +487,8 @@ describe('success cases', () => {
       outgoing: 'foundations',
       incoming: 'foundations--why-a-template',
       declaration: enter,
-      targetSurface: 'var(--tone-paper)',
+      targetSurface: 'var(--background)',
+      targetInverse: true,
     };
     // ACT
     const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
@@ -640,14 +604,14 @@ describe('success cases', () => {
 
 describe('failure cases', () => {
   it.each([
-    { inherited: 'inverse', authored: 'normal', expected: 'normal' },
-    { inherited: undefined, authored: 'inverse', expected: 'inverse' },
+    { authored: false, expected: undefined },
+    { authored: true, expected: 'true' },
   ] as const)(
-    'uses authored $authored Title tone over legacy $inherited in both header modes',
-    async ({ inherited, authored, expected }) => {
+    'renders an authored inverse flag of $authored on the Title in both header modes',
+    async ({ authored, expected }) => {
       // ARRANGE
       const modes = ['shared', 'authored'] as const;
-      const expectedAppearance = { tone: expected, presentation: { tone: expected } };
+      const expectedClock = authored ? 'inverse' : 'normal';
       // ACT
       const observations = await Promise.all(
         modes.map(async (header) => {
@@ -655,8 +619,12 @@ describe('failure cases', () => {
             episode({
               ...RECORD,
               header: header === 'authored' ? header : undefined,
-              tone: inherited,
-              title: slide({ slug: 'hero', messages: EPISODE, content: () => null, presentation: { tone: authored } }),
+              title: slide({
+                slug: 'hero',
+                messages: EPISODE,
+                content: () => null,
+                presentation: { inverse: authored },
+              }),
             }),
             'en',
             { translatorOf: translatorOf('en'), id: 'ai-token-economy' },
@@ -671,57 +639,18 @@ describe('failure cases', () => {
           );
           const $ = load(html);
           return {
-            appearance: content.titleAppearance,
-            surface: $('#top').attr('data-surface-tone'),
-            legacy: $('#top').attr('data-tone'),
+            surface: $('#top').attr('data-inverse'),
             clock: PageSurfaceClock({ content })?.props.surfaces[0].tone,
           };
         }),
       );
       // ASSERT
       for (const observed of observations) {
-        expect(observed.appearance).toEqual(expectedAppearance);
         expect(observed.surface).toBe(expected);
-        expect(observed.legacy).toBeUndefined();
-        expect(observed.clock).toBe(expected);
+        expect(observed.clock).toBe(expectedClock);
       }
     },
   );
-  it('suppresses legacy ink for an incoming-declared outgoing Title edge without adding a Title surface', async () => {
-    // ARRANGE
-    const record = episode({
-      ...RECORD,
-      tone: 'inverse',
-      sections: [[{ ...foundations, presentation: { enter: { effect: 'wave' } } }, whyATemplate]],
-    });
-    const expected = { tone: 'inverse', legacyTone: 'inverse' };
-    const expectedSurfaces = [
-      { id: 'top', tone: 'inverse', effect: 'wave' },
-      { id: 'foundations', tone: 'normal' },
-      { id: 'foundations--why-a-template', tone: 'normal' },
-    ];
-    const expectedEdge = 'top→foundations';
-    const inverse = 'inverse';
-    // ACT
-    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
-    const html = renderToStaticMarkup(
-      createElement(TitleSlide, {
-        title: content.title,
-        mode: content.header,
-        entrance: content.entrance,
-        appearance: content.titleAppearance,
-        transition: content.transitions.get('top'),
-        geometricTone: usesSurfaceClock(content),
-      }),
-    );
-    const $ = load(html);
-    // ASSERT
-    expect(content.titleAppearance).toEqual(expected);
-    expect($('#top').attr('data-tone')).toBe(inverse);
-    expect($('#top').attr('data-surface-tone')).toBeUndefined();
-    expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
-    expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
-  });
   it('rejects a Slide slug used twice in one Episode, as when a copied Slide collides', async () => {
     // ARRANGE
     const record = episode({
@@ -770,16 +699,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps non-Title-only presentation opt-in independent of legacy Title ink', async () => {
+  it('keeps non-Title-only presentation opt-in independent of the Title look', async () => {
     // ARRANGE
     const record = episode({
       ...RECORD,
-      tone: 'inverse',
-      sections: [[foundations, { ...whyATemplate, presentation: { tone: 'inverse' } }]],
+      sections: [[foundations, { ...whyATemplate, presentation: { inverse: true } }]],
     });
-    const expectedAppearance = { tone: 'inverse', legacyTone: 'inverse', inkTarget: 'foundations' };
+    const expectedAppearance = { inverse: false, presentation: STANDARD_TITLE_LOOK };
     const expectedSurfaces = [
-      { id: 'top', tone: 'inverse' },
+      { id: 'top', tone: 'normal' },
       { id: 'foundations', tone: 'normal' },
       { id: 'foundations--why-a-template', tone: 'inverse' },
     ];
@@ -795,7 +723,7 @@ describe('edge cases', () => {
     'keeps explicit %s geometry independent of the standard Title look',
     async (policy) => {
       // ARRANGE
-      const expectedAppearance = { tone: 'normal', presentation: STANDARD_TITLE_LOOK };
+      const expectedAppearance = { inverse: false, presentation: STANDARD_TITLE_LOOK };
       const expectedSurfaces = [
         { id: 'top', tone: 'normal', effect: undefined },
         { id: 'foundations', tone: 'normal', effect: undefined },
@@ -819,8 +747,7 @@ describe('edge cases', () => {
       const $ = load(html);
       // ASSERT
       expect(content.titleAppearance).toEqual(expectedAppearance);
-      expect($('#top').attr('data-tone')).toBeUndefined();
-      expect($('#top').attr('data-surface-tone')).toBe('normal');
+      expect($('#top').attr('data-inverse')).toBeUndefined();
       expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
       expect(tocEntranceOf(content)).toBe(policy);
     },
@@ -836,7 +763,7 @@ describe('edge cases', () => {
         presentation: { style: { '--slide-surface': 'var(--zone-surface)' } },
       }),
     });
-    const expected = { band: '', tone: 'normal' };
+    const expected = { band: '', tone: undefined };
     // ACT
     const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     const $ = load(
@@ -849,7 +776,7 @@ describe('edge cases', () => {
         }),
       ),
     );
-    const seen = { band: $('#top').attr('data-header-band'), tone: $('#top').attr('data-surface-tone') };
+    const seen = { band: $('#top').attr('data-header-band'), tone: $('#top').attr('data-inverse') };
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -879,11 +806,11 @@ describe('edge cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
-  it('keeps a Title and section slides that declare an empty presentation untoned, without ink or the surface clock', async () => {
+  it('keeps a Title and section slides that declare an empty presentation unflipped, without ink or the surface clock', async () => {
     // ARRANGE
     const optedOut = slide({ slug: 'hero', messages: EPISODE, presentation: {}, content: () => null });
     const record = episode({ ...RECORD, title: optedOut });
-    const expectedAppearance = { tone: 'normal', presentation: {} };
+    const expectedAppearance = { inverse: false, presentation: {} };
     const legacy = 'legacy';
     // ACT
     const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
@@ -899,13 +826,12 @@ describe('edge cases', () => {
     );
     // ASSERT
     expect(content.titleAppearance).toEqual(expectedAppearance);
-    expect($('#top').attr('data-tone')).toBeUndefined();
-    expect($('#top').attr('data-surface-tone')).toBe('normal');
+    expect($('#top').attr('data-inverse')).toBeUndefined();
     expect(content.transitions.has('top')).toBe(false);
     expect(PageSurfaceClock({ content })).toBeNull();
     expect(tocEntranceOf(content)).toBe(legacy);
   });
-  it('keeps enter-only and leave-only choices independent from tone and decoration and omits undeclared edges', async () => {
+  it('keeps enter-only and leave-only choices independent from the inverse flag and decoration and omits undeclared edges', async () => {
     // ARRANGE
     const enter = { effect: 'dither' as const };
     const leave = { effect: 'liquid' as const };
@@ -927,7 +853,7 @@ describe('edge cases', () => {
     // ASSERT
     expect([...content.transitions.keys()]).toEqual(hosts);
     expect([...content.transitions.values()].map((edge) => edge.declaration)).toEqual(choices);
-    expect(content.slides[1].presentation?.tone).toBeUndefined();
+    expect(content.slides[1].presentation?.inverse).toBeUndefined();
     expect(content.slides[1].presentation?.front).toBeUndefined();
     expect(plain.transitions.size).toBe(0);
   });

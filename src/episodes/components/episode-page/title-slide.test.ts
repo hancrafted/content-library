@@ -11,7 +11,7 @@ function render(hero?: string) {
     ...TEXT,
     mode: 'shared' as const,
     entrance: 'none' as const,
-    appearance: { tone: 'normal' as const },
+    appearance: { inverse: false },
   };
   return renderToStaticMarkup(
     createElement(TitleSlide, hero === undefined ? props : { ...props, hero: createElement('figure', null, hero) }),
@@ -28,7 +28,7 @@ describe('success cases', () => {
         ...TEXT,
         mode,
         entrance: 'none' as const,
-        appearance: { tone: 'normal' as const },
+        appearance: { inverse: false },
         notice: createElement('p', { 'data-past-notice': true }, notice),
       };
       // ACT
@@ -55,39 +55,36 @@ describe('success cases', () => {
     expect(html).toMatch(/<\/h1>.*<figure>board<\/figure>/);
   });
 
-  it('marks its wrapper with the declared tone', () => {
+  it('marks its wrapper with the declared inverse flag', () => {
     // ARRANGE
     const props = {
       ...TEXT,
       mode: 'shared' as const,
       entrance: 'none' as const,
-      appearance: { tone: 'inverse' as const, legacyTone: 'inverse' as const },
+      appearance: { inverse: true, presentation: { inverse: true } },
     };
     // ACT
     const html = renderToStaticMarkup(createElement(TitleSlide, props));
     // ASSERT
     expect(html).toMatch(
-      /data-slot="title-slide"[^>]*data-tone="inverse"|data-tone="inverse"[^>]*data-slot="title-slide"/,
+      /data-slot="title-slide"[^>]*data-inverse="true"|data-inverse="true"[^>]*data-slot="title-slide"/,
     );
   });
 });
 
 describe('failure cases', () => {
-  it('does not apply legacy inverse text tokens over an explicitly normal Title surface', () => {
+  it('does not flip a Title whose presentation declares no inverse flag', () => {
     // ARRANGE
     const props = {
       ...TEXT,
       mode: 'shared' as const,
       entrance: 'none' as const,
-      appearance: { tone: 'normal' as const, presentation: { tone: 'normal' as const } },
+      appearance: { inverse: false, presentation: {} },
     };
-    const legacy = 'data-tone="inverse"';
-    const normal = 'data-surface-tone="normal"';
     // ACT
     const html = renderToStaticMarkup(createElement(TitleSlide, props));
     // ASSERT
-    expect(html).toContain(normal);
-    expect(html).not.toContain(legacy);
+    expect(html).not.toContain('data-inverse');
   });
   it('never lets an authored hero fill the slide, which would push it to the bottom', () => {
     // ARRANGE
@@ -110,12 +107,12 @@ describe('edge cases', () => {
     expect(html).toMatch(/data-slot="slide-header"[^>]*class="[^"]*\bmy-auto\b/);
   });
 
-  it('carries no tone mark when the record declares none', () => {
+  it('carries no retired tone mark', () => {
     // ARRANGE
-    const attribute = 'data-tone';
+    const retired = /data-tone|data-surface-tone/;
     // ACT
     const html = render('board');
     // ASSERT
-    expect(html).not.toContain(attribute);
+    expect(html).not.toMatch(retired);
   });
 });

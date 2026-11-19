@@ -22,7 +22,7 @@ import { talkOf, tocLabelsOf } from './episode-labels';
 import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
 import { PagePicksProvider } from './page-picks-provider.client';
-import { PageSurfaceClock, tocEntranceOf, usesSurfaceClock } from './page-surface-clock';
+import { PageSurfaceClock, tocEntranceOf } from './page-surface-clock';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -118,7 +118,6 @@ function titleSlideOf(
     hero: content.hero,
     appearance: content.titleAppearance,
     transition: content.transitions.get(TITLE_ANCHOR),
-    geometricTone: usesSurfaceClock(content),
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };

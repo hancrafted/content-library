@@ -15,6 +15,7 @@ export interface ResolvedSlideTransition {
   readonly incoming: string;
   readonly declaration: SlideTransition;
   readonly targetSurface: string;
+  readonly targetInverse?: boolean;
   readonly targetStyle?: PresentationStyle;
 }
 
@@ -22,7 +23,7 @@ export interface SlidePresentation {
   readonly Provider?: ComponentType<{ children: ReactNode }>;
   readonly enter?: SlideTransition;
   readonly leave?: SlideTransition;
-  readonly tone?: 'normal' | 'inverse';
+  readonly inverse?: boolean;
   readonly rear?: ReactNode;
   readonly rearMobile?: boolean;
   readonly front?: ReactNode;

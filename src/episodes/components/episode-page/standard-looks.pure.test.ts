@@ -24,12 +24,12 @@ describe('success cases', () => {
     // ARRANGE
     const expected = STANDARD_TITLE_LOOK;
     // ACT
-    const look = standardTitleLook(undefined, undefined);
+    const look = standardTitleLook(undefined);
     // ASSERT
     expect(look).toBe(expected);
   });
 
-  it('gives the Title normal tone and surface, no effect and 160px after', () => {
+  it('gives the Title no inverse flag and no Surface, no effect and 160px after', () => {
     // ARRANGE
     const expected = { style: { '--slide-space-after': '160px' } };
     // ACT
@@ -38,12 +38,12 @@ describe('success cases', () => {
     expect(look).toEqual(expected);
   });
 
-  it('gives the section inverse tone, softened surface, liquid enter and leave and 200px around', () => {
+  it('gives the section the inverse flag, the soft mirror surface, liquid enter and leave and 200px around', () => {
     // ARRANGE
     const expected = {
-      tone: 'inverse',
+      inverse: true,
       style: {
-        '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        '--slide-surface': 'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         '--slide-space-before': '200px',
         '--slide-space-after': '200px',
       },
@@ -96,12 +96,12 @@ describe('edge cases', () => {
     expect([first.presentation, second.presentation]).toEqual([undefined, STANDARD_SECTION_LOOK]);
   });
 
-  it('leaves a legacy toned Title to its own tone', () => {
+  it('keeps a declared Title presentation whole', () => {
     // ARRANGE
-    const legacyTone = 'inverse' as const;
+    const declared = { inverse: true };
     // ACT
-    const look = standardTitleLook(undefined, legacyTone);
+    const look = standardTitleLook(declared);
     // ASSERT
-    expect(look).toBeUndefined();
+    expect(look).toBe(declared);
   });
 });

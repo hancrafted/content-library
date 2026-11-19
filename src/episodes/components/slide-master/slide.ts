@@ -115,8 +115,6 @@ export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
 
 export const withoutSectionSlide = markWithoutSectionSlide as (section: readonly [TitledSlide, ...Slide[]]) => Section;
 
-export type PageTone = 'inverse';
-
 export interface EpisodeMessages {
   readonly title: string;
   readonly caption: string;
@@ -139,8 +137,6 @@ export interface EpisodeComposition<Ep extends string = string> {
   readonly notes?: readonly NoteSpec[];
   readonly segments?: readonly SegmentSpec[];
   readonly title?: Slide;
-  // decision: FE-004 §5.4
-  readonly tone?: PageTone;
   readonly header?: 'authored';
   readonly entrance?: SlideEntrance;
   readonly sections: readonly Section[];

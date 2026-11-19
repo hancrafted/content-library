@@ -20,7 +20,7 @@ export const hero = slide({
       <SlideBackdrop mobile />
       <SlideFrame className={`mt-10 ${styles.beside}`}>
         <div data-hero-beside>
-          <div data-tone-flip className="rounded-xl bg-card p-6 md:max-w-xl xl:max-w-none">
+          <div className="rounded-xl bg-card p-6 md:max-w-xl xl:max-w-none">
             <AimBoard
               label={t('label')}
               handover={t('handover')}

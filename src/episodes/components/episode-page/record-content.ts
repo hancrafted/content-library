@@ -12,7 +12,6 @@ import {
   headerModeOf,
   type EpisodeComposition,
   type HeaderMode,
-  type PageTone,
   type Slide,
   type SlideEntrance,
 } from '@/episodes/components/slide-master/slide';
@@ -36,10 +35,8 @@ export interface PageContext {
 }
 
 export interface TitleAppearance {
-  readonly tone: 'normal' | 'inverse';
-  readonly legacyTone?: PageTone;
+  readonly inverse: boolean;
   readonly presentation?: SlidePresentation;
-  readonly inkTarget?: string;
 }
 
 export interface EpisodeContent {
@@ -85,35 +82,10 @@ export async function recordContent(
 }
 
 function composedLooks(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
-  const title = standardTitleLook(record.title?.presentation, record.tone);
+  const title = standardTitleLook(record.title?.presentation);
   const transitions = transitionsOf({ title, precedence: record.transitionPrecedence }, slides, header);
-  const titleAppearance = titleAppearanceOf(record, slides, {
-    presentation: title,
-    outgoingEdge: transitions.has(TITLE_ANCHOR),
-  });
+  const titleAppearance: TitleAppearance = { inverse: title?.inverse === true, presentation: title };
   return { transitions, titleAppearance };
-}
-
-function titlePresentationOf(
-  presentation: SlidePresentation,
-  tone: TitleAppearance['tone'],
-  legacyTone: PageTone | undefined,
-): SlidePresentation {
-  return presentation.tone === undefined && legacyTone === undefined ? presentation : { ...presentation, tone };
-}
-
-function titleAppearanceOf(
-  record: EpisodeComposition,
-  slides: readonly LocalizedSlide[],
-  { presentation, outgoingEdge }: { presentation: SlidePresentation | undefined; outgoingEdge: boolean },
-): TitleAppearance {
-  const tone = presentation?.tone ?? record.tone ?? 'normal';
-  if (presentation) return { tone, presentation: titlePresentationOf(presentation, tone, record.tone) };
-  return { tone, legacyTone: record.tone, inkTarget: legacyInkTarget(record.tone, slides[0]?.id, outgoingEdge) };
-}
-
-function legacyInkTarget(tone: PageTone | undefined, firstSlide: string | undefined, outgoingEdge: boolean) {
-  return tone && firstSlide && !outgoingEdge ? firstSlide : undefined;
 }
 
 function contextOf(
@@ -172,9 +144,10 @@ function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePrese
 
 function transitionTarget(presentation: SlidePresentation | undefined, fallback = 'var(--background)') {
   if (!presentation) return { targetSurface: fallback };
-  const { style, tone } = presentation;
+  const { style, inverse } = presentation;
   return {
-    targetSurface: style?.['--slide-surface'] ?? (tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
+    targetSurface: style?.['--slide-surface'] ?? 'var(--background)',
+    ...(inverse && { targetInverse: true }),
     ...(style && { targetStyle: style }),
   };
 }
