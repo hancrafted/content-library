@@ -32,7 +32,7 @@
     "verify:quick": "node tools/verify/verify.ts quick",
     "verify:commit": "node tools/verify/verify.ts commit",
     "verify:push": "node tools/verify/verify.ts push",
-    "verify:needs-build": "node tools/verify/needs-build.ts",
+    "verify:change-kind": "node tools/verify/change-kind.ts",
     "lint-staged": "lint-staged",
     "check:docs": "mh check && npm run check:skills",
     "test:build": "vitest run --config vitest.build.config.mts",
