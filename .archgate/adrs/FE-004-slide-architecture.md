@@ -149,7 +149,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
-4. A Slide MAY declare surface tone, apart from effects and slots; one container adapter publishes `data-page-tone` on `<html>` from geometry at the sampling line. Chrome follows; Scenes never style chrome or infer tone from colours.
+4. A Slide MAY declare a Surface and an inverse flag, independently (Decision record 0030). One container adapter publishes the flag as `data-page-tone` on `<html>` at the sampling line; chrome follows it, never a Surface.
 
 ### 6. What an agent may change
 
@@ -190,7 +190,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 4. **DON'T** put an Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
 6. **DON'T** add a tier, module or Slide schema beyond the approved presentation boundary without a new ADR. (Decision 6)
-7. **DON'T** restyle chrome from a Scene or infer semantic tone from computed colours. (Decision 5)
+7. **DON'T** restyle chrome from a Scene, infer tone from colours, or declare `tone`. (Decision 5)
 8. **DON'T** let shared measurement import Episode records or Title policy. (Decision 3)
 9. **DON'T** list a page via `compositionOf(ref)`; read `summaryOf(ref)`. (Decision 4)
 
