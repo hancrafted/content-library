@@ -15,7 +15,7 @@ description: 'Read-first architecture map: tiers, Episode modules, static compos
 
 ## Context
 
-Map of shape and ownership. Rules stay with their owner, which wins on conflict.
+Map of shape and ownership. Rules stay with their owner (Episode page, imports, server/client, Slide wrapper, Context drawer), which wins on conflict.
 
 **Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
@@ -45,7 +45,7 @@ flowchart TD
   tools["skills/, tools/"] -. "node-safe entries" .-> pipeline
 ```
 
-Areas meet in page assembly via props.
+Areas meet in page assembly via props: the Event template passes Episode cards to the Playlist list.
 
 **Episodes:** content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) stays apart from code (`components/`, `lib/`, `hooks/`); these names are reserved.
 
@@ -149,7 +149,7 @@ Rejected: visual schema (constrains Scenes), per-Episode containers (navigation 
 1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
-4. A Slide MAY declare a Surface and an inverse flag, independently (Decision record 0030). One container adapter publishes the flag as `data-page-tone` on `<html>` at the sampling line; chrome follows it, never a Surface. (📜 Rule: `no-retired-tone`)
+4. A Slide's Surface and inverse flag follow Decision record 0030; the one page-tone adapter sets `data-page-tone`. (📜 Rule: `no-retired-tone`)
 
 ### 6. What an agent may change
 

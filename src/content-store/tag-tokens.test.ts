@@ -11,7 +11,7 @@ const THEMES = [':root', '.dark'] as const;
 const READABLE = 4.5;
 
 function block(selector: string): string {
-  const start = css.indexOf(`\n${selector} {`);
+  const start = css.indexOf(`\n${selector},\n`);
   return css.slice(start, css.indexOf('\n}', start));
 }
 
