@@ -38,7 +38,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # The docs lane (docs/features/ci.md): a branch whose changed paths are all Markdown runs only the checks that
       # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
       - name: Detect the change kind
         id: kind
@@ -77,7 +77,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # The docs lane (docs/features/ci.md): a branch whose changed paths are all Markdown runs only the checks that
       # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
       - name: Detect the change kind
         id: kind
@@ -125,7 +125,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # The docs lane (docs/features/hosting.md): a branch whose changed paths are all Markdown runs only the checks that
+      # The docs lane (docs/features/ci.md): a branch whose changed paths are all Markdown runs only the checks that
       # read Markdown. Skipped on main, which always takes the full run, so the output stays empty there.
       - name: Detect the change kind
         id: kind

@@ -1,6 +1,12 @@
+---
+type: feature-guide
+title: CI
+stale_after: 2027-05-19T00:00:00Z
+---
+
 # CI
 
-How a change travels from a local commit to https://hancrafted.net. The source of truth is the code: `.github/workflows/*.yml`, `.husky/*` and the plans in `tools/verify/verify.pure.ts`; the prose reference is `docs/features/hosting.md`. Every command in a box is explained in the [Glossary](#glossary).
+Read before touching a husky hook, a workflow in `.github/workflows/`, or the plans in `tools/verify/`. How a change travels from a local commit to a tested `out/` that Cloudflare Pages serves; what Cloudflare does with it, the domain and the headers: `docs/features/hosting.md`. Every command in a box is explained in the [Glossary](#glossary).
 
 **Colour key** (same in every chart):
 
@@ -76,7 +82,7 @@ flowchart LR
 
 ### 2.2 pre-push
 
-`.husky/pre-push` runs `verify:push`: the full `verify` plan, the slow tests the branch reaches, and a build only when the push could change the export.
+`.husky/pre-push` runs `verify:push`: the full `verify` plan, the slow tests the branch reaches, and a build only when the push could change the export. A Markdown-only push still runs the full `verify` and skips only the build, so it is the backstop for a test the CI docs lane's `--changed` misses.
 
 ```mermaid
 flowchart TD
@@ -140,8 +146,9 @@ flowchart TD
   classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
 
-- **`docs-only`** picks the lane. `markdown-harness.config.yaml` is not Markdown, so it takes the full run.
-- **`build`** gates the preview and the local pre-push build.
+- **`docs-only`** picks the lane: true when every changed path matches `**/*.md`. `markdown-harness.config.yaml` is not Markdown and an empty diff is not a docs change, so both take the full run. The site build reads no Markdown, so the docs lane skips it. `main` always takes the full run, so every successful `main` run holds an `out/` for deploy and rollback.
+- **`build`** gates the preview and the local pre-push build: true when a changed path is an export input. The diff is taken against the merge-base, so a branch pushed without a PR works too.
+- **Export inputs** live in one place: `EXPORT_PATHS` in `tools/verify/change-kind.pure.ts`, shared by pre-push and the `preview` condition, minus Markdown under `src/` (no build step reads it). Add a path there when the build starts reading it. Its tests fail if `next.config.ts` starts importing `*.md`, if `preview` stops being gated on `export`'s `build` output or on `main`'s exclusion, or if `test:build` moves back into `export`.
 
 | Lane                       | static                                             | unit                    | export         | build-test | preview |
 | -------------------------- | -------------------------------------------------- | ----------------------- | -------------- | ---------- | ------- |
@@ -202,11 +209,13 @@ flowchart TD
   classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
 
-`build` is set before the build step, so `npm run build` also runs `art` first (`prebuild`). The preview also needs this repository (not a fork) and a non-Dependabot actor.
+- **export** builds `out/` with an empty `NEXT_PUBLIC_BASE_PATH`, `SITE_URL=https://hancrafted.net` and, on every ref but `main`, `LIST_UPCOMING_EPISODES=true` (what each target shows: `docs/features/hosting.md`). `npm run build` runs `art` first (`prebuild`). It uploads `out/`, hidden files included, kept 30 days on `main` for rollback and 1 day elsewhere, and does not run the post-build suite.
+- **build-test** needs only `export`: it downloads `out/`, runs `npm ci` and `npm run test:build` under the same env the build used.
+- **preview** needs `export` and runs when `build` is true, the ref is not `main`, the repository is this one (not a fork) and the actor is not Dependabot: forks and Dependabot have no Cloudflare secrets. A branch that changes no export input (docs, skills, tooling) gets no preview. The preview may exist while `build-test` is red; where it lands and when it may go to a client: `docs/features/hosting.md`.
 
 ### 3.6 The gate
 
-The required check "build, post-build tests" runs `if: always()`, so a skipped or failed job cannot pass by absence.
+The `gate` job, named "build, post-build tests" (the context the `main` ruleset requires), needs `export` and `build-test` and runs `if: always()`. It fails unless `export` succeeded and `build-test` succeeded, or was skipped on a `docs-only` push, so a skipped job never stands in for a pass otherwise.
 
 ```mermaid
 flowchart TD
@@ -225,7 +234,7 @@ flowchart TD
 
 ## 4. Production deploy and rollback (`deploy-cloudflare.yml`)
 
-Starts when CI completes on `main`. It never builds: it publishes the `out/` that CI built and tested. A production deploy is never cancelled mid-flight.
+Starts when CI completes on `main`, and only when that run succeeded, so it waits for CI's run on the merged commit. A failed or cancelled CI run deploys nothing, and a newer merge cancels the older one's CI. It never builds: it downloads that run's `out/` (the build CI tested) and publishes it in the `production` environment. A production deploy is never cancelled mid-flight.
 
 ```mermaid
 flowchart TD
@@ -245,7 +254,7 @@ flowchart TD
   classDef outcome fill:#f1f5f9,stroke:#334155,color:#111
 ```
 
-**Rollback:** run the workflow by hand with the `run-id` of an older successful CI run on `main` (its artifact is kept 30 days).
+**Rollback:** run the workflow by hand (`workflow_dispatch`). Without a `run-id` it publishes the newest successful CI run on `main`; with one, that run's `out/`, which must be a successful CI run on `main` whose artifact is still inside its 30 days. Redeploying an older run is the rollback.
 
 ## 5. Scheduled and side workflows
 

@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Pages
 # Production: each CI run that succeeds on main publishes the `out/` that run built and tested to
 # https://hancrafted.net, so nothing CI has not passed reaches production and nothing is built twice. This workflow
 # only publishes: no checkout, no `npm ci`, no build. Previews are deployed by ci.yml. CI keeps main's `out/` for 30
-# days, so redeploying an older run is the rollback. One-time setup (project, domain, www redirect):
+# days, so redeploying an older run is the rollback (docs/features/ci.md). One-time setup (project, domain, www redirect):
 # docs/features/hosting.md.
 on:
   # GitHub runs this trigger from the workflow file on main, whatever branch CI ran on; the branch filter and the job
