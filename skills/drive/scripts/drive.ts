@@ -7,6 +7,7 @@ import { runPush } from './push.ts';
 import { runSetup } from './setup.ts';
 import { runStatus } from './status.ts';
 import { runTranscript } from './transcript.ts';
+import { DRIVE_USAGE } from './usage.pure.ts';
 import { runWorktree } from './worktree.ts';
 
 const [group, ...rest] = process.argv.slice(2);
@@ -21,8 +22,6 @@ else if (group === 'transcript') runTranscript(rest);
 else if (group === 'dispatch') runDispatch(rest);
 else if (group === 'status') runStatus(rest);
 else {
-  console.error(
-    `✖ unknown group '${group ?? ''}'; usage: drive <worktree <new|done|sync> ...|push|pr watch <number>|learnings [list|similar "<failure>"|check]|dispatch check [--base <branch>] <issue…>|transcript <session-id>|--topic <topic> [--tools] [--since-last]|status <topic>|setup|guard [--against <ref>]>`,
-  );
+  console.error(`✖ unknown group '${group ?? ''}'; usage: ${DRIVE_USAGE}`);
   process.exit(1);
 }

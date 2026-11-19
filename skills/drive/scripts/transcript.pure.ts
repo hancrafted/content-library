@@ -19,7 +19,6 @@ const firstLines = (text: string, count: number): string => text.split('\n').sli
 const clip = (text: string, limit = 240): string => (text.length > limit ? `${text.slice(0, limit)}…` : text);
 
 const INTERRUPT = /\[Request interrupted by user/;
-const NULL_EXIT = /failed \(null\)/;
 const REFUSAL = /refus|denied|not allowed|permission to use|must first/i;
 
 const isOperatorMessage = (line: Json): boolean => {
@@ -84,10 +83,13 @@ function assistantBlock(t: string, block: Json, scope: Scope): TranscriptEvent[]
   return scope.tools ? toolCall(t, block) : [];
 }
 
+const exitedNonZero = (block: Json): boolean =>
+  [block.exit_code, block.exitCode].some((code) => typeof code === 'number' && code !== 0);
+
 function toolResult(t: string, block: Json): TranscriptEvent[] {
+  if (block.is_error !== true && !exitedNonZero(block)) return [];
   const text = resultText(block);
-  if (block.is_error !== true && !NULL_EXIT.test(text)) return [];
-  const mark = REFUSAL.test(text) ? '  [refusal]' : '';
+  const mark = block.is_error === true && REFUSAL.test(text) ? '  [refusal]' : '';
   return [{ t, kind: 'error', text: clip(firstLines(text, 4) + mark, 600) }];
 }
 

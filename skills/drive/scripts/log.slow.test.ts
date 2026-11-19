@@ -179,4 +179,18 @@ describe('drive transcript', () => {
     expect(first.stdout).toBe(all.stdout);
     expect(second.stdout).toBe('');
   });
+
+  it('says so and exits non-zero when --topic finds a log that links no session', () => {
+    // ARRANGE
+    const root = repo('chore/sweep--3-c');
+    const logFile = '.scratch/sweep/drive.log.jsonl';
+    mkdirSync(path.join(root, '.scratch', 'sweep'), { recursive: true });
+    writeFileSync(path.join(root, logFile), `${JSON.stringify({ t: 'a', cmd: 'status sweep', exit: 0 })}\n`);
+    // ACT
+    const result = node('drive.ts', ['transcript', '--topic', 'sweep'], { cwd: root });
+    // ASSERT
+    expect(result.status).toBe(1);
+    expect(result.stdout).toBe('');
+    expect(result.stderr).toContain(`no sessions linked in ${logFile}`);
+  });
 });

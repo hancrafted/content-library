@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -34,5 +34,18 @@ describe('coreBareIsTrue', () => {
     const bare = coreBareIsTrue(root);
     // ASSERT
     expect(bare).toBe(false);
+  });
+
+  it('reports [core-bare] from the script itself on a main checkout whose --show-toplevel is fatal', () => {
+    // ARRANGE
+    const root = repo();
+    execFileSync('git', ['config', 'core.bare', 'true'], { cwd: root });
+    const script = path.resolve(import.meta.dirname, 'preflight.ts');
+    const expected = 'preflight [core-bare]';
+    // ACT
+    const ran = spawnSync('node', [script], { cwd: root, encoding: 'utf8' });
+    // ASSERT
+    expect(ran.status).toBe(1);
+    expect(ran.stderr).toContain(expected);
   });
 });

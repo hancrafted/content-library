@@ -1,12 +1,12 @@
-import { topicOfBranch } from './branch-topic.pure.ts';
+import { isIntegrationBranch, topicSlugOf } from './branch-topic.pure.ts';
+import { SCRATCH } from './log.pure.ts';
 
 export function topicOf(branch: string): string | null {
-  const parsed = topicOfBranch(branch);
-  return parsed === null || parsed.task !== null || !branch.includes('/') ? null : parsed.topic;
+  return isIntegrationBranch(branch) ? topicSlugOf(branch) : null;
 }
 
 export function reviewPath(topic: string): string {
-  return `.scratch/${topic}/review.md`;
+  return `${SCRATCH}/${topic}/review.md`;
 }
 
 export function notIntegrationBranch(branch: string): string {

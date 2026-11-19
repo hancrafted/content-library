@@ -8,9 +8,22 @@ import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-me
 import { planSync } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
 
-function rollBack(project: Project, target: string, branch: string): void {
-  git(project.root, ['worktree', 'remove', '--force', target]);
-  git(project.root, ['branch', '-D', branch]);
+function rollBack(project: Project, target: string, branch: string): string {
+  const leftBehind = [
+    {
+      what: `the worktree ${target}`,
+      cleanup: `git worktree remove --force ${target}`,
+      removed: git(project.root, ['worktree', 'remove', '--force', target]).status === 0,
+    },
+    {
+      what: `the branch ${branch}`,
+      cleanup: `git branch -D ${branch}`,
+      removed: git(project.root, ['branch', '-D', branch]).status === 0,
+    },
+  ].filter((item) => !item.removed);
+  return leftBehind.length === 0
+    ? 'the worktree and branch were removed; rerun to retry'
+    : `${leftBehind.map((item) => `${item.what} could not be removed (run \`${item.cleanup}\`)`).join('; ')}; then rerun`;
 }
 
 function create(project: Project, branch: string, base: string | null): void {
@@ -21,8 +34,8 @@ function create(project: Project, branch: string, base: string | null): void {
   stream('git', ['worktree', 'add', target, '-b', branch, base ?? project.remoteBase]);
   for (const command of config.install)
     if (spawnSync(command, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0) {
-      rollBack(project, target, branch);
-      fail(`install step failed in ${target}: ${command}\n  the worktree and branch were removed; rerun to retry`);
+      const outcome = rollBack(project, target, branch);
+      fail(`install step failed in ${target}: ${command}\n  ${outcome}`);
     }
   const { preflight } = config;
   if (preflight !== null && spawnSync(preflight, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)

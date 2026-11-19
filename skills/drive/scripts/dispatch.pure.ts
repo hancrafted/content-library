@@ -46,10 +46,6 @@ export function globsOverlap(a: string, b: string): boolean {
   return a === b || globToRegExp(a).test(literalPrefix(b)) || globToRegExp(b).test(literalPrefix(a));
 }
 
-export function taskBranchGlob(integrationBranch: string, issue: number): string {
-  return `${integrationBranch}--${issue}-*`;
-}
-
 export type IsMerged = (issue: number) => boolean;
 
 function overlapProblems(tickets: readonly Ticket[]): string[] {
@@ -76,4 +72,15 @@ export function checkTickets(tickets: readonly Ticket[], isMerged: IsMerged): st
       if (!isMerged(target)) problems.push(`${id} describes #${target}, which is unmerged`);
   }
   return [...problems, ...overlapProblems(tickets)];
+}
+
+export function epicOfTickets(bodies: readonly string[]): number | null {
+  const epics = bodies.map((body) => {
+    const section = /^## Parent\s*$([\s\S]*?)(?=^## |(?![\s\S]))/m.exec(body);
+    const found = /#(\d+)/.exec(section?.[1] ?? '');
+    return found === null ? null : Number(found[1]);
+  });
+  const unique = new Set(epics);
+  const [only] = [...unique];
+  return unique.size === 1 && only !== null && only !== undefined ? only : null;
 }

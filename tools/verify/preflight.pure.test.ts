@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { findViolations, type CheckoutFacts } from './preflight.pure';
+import { findViolations, HEALTHY_CHECKOUT, type CheckoutFacts } from './preflight.pure';
 
-const HEALTHY: CheckoutFacts = { nodeModules: 'directory', hooksInstalled: true, archgateTotal: 26, coreBare: false };
+const HEALTHY: CheckoutFacts = { ...HEALTHY_CHECKOUT, archgateTotal: 26 };
 
 describe('findViolations', () => {
   describe('success cases', () => {
@@ -67,6 +67,23 @@ describe('findViolations', () => {
     });
   });
 
+  describe('drive Binding', () => {
+    it('flags a Binding that names a skill that is not installed and says how to repair it', () => {
+      // ARRANGE
+      const facts: CheckoutFacts = {
+        ...HEALTHY,
+        driveBindingProblem: "binds 'old-skill' but no such skill is installed",
+      };
+      const expectedId = 'drive-binding';
+      const expectedFix = 'docs/drive/binding.yml';
+      // ACT
+      const [violation] = findViolations(facts);
+      // ASSERT
+      expect(violation.id).toBe(expectedId);
+      expect(violation.fix).toContain(expectedFix);
+    });
+  });
+
   describe('edge cases', () => {
     it('flags a checkout with no node_modules at all', () => {
       // ARRANGE
@@ -82,8 +99,14 @@ describe('findViolations', () => {
 
     it('reports every violation at once, not just the first', () => {
       // ARRANGE
-      const facts: CheckoutFacts = { nodeModules: 'symlink', hooksInstalled: false, archgateTotal: 0, coreBare: true };
-      const expectedIds = ['node-modules-symlink', 'hooks-missing', 'archgate-empty', 'core-bare'];
+      const facts: CheckoutFacts = {
+        nodeModules: 'symlink',
+        hooksInstalled: false,
+        archgateTotal: 0,
+        coreBare: true,
+        driveBindingProblem: 'binds a skill that is gone',
+      };
+      const expectedIds = ['node-modules-symlink', 'hooks-missing', 'archgate-empty', 'core-bare', 'drive-binding'];
       // ACT
       const ids = findViolations(facts).map((violation) => violation.id);
       // ASSERT

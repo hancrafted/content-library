@@ -1,29 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import {
-  baseOfBranch,
-  commandEntry,
-  isSubagentEntry,
-  logPath,
-  parseLog,
-  serializeEntry,
-  topicOfBranch,
-  topicOfCommand,
-} from './log.pure.ts';
+import { commandEntry, isSubagentEntry, logPath, parseLog, serializeEntry, topicOfCommand } from './log.pure.ts';
 
-describe('topicOfBranch', () => {
-  it.each([
-    ['chore/drive-fortify-sweep', 'drive-fortify-sweep'],
-    ['chore/drive-fortify-sweep--795-log-transcript', 'drive-fortify-sweep'],
-    ['main', null],
-    [null, null],
-    ['feat/', null],
-  ])('reads %s as %s', (branch, topic) => {
-    // ACT
-    const read = topicOfBranch(branch);
-    // ASSERT
-    expect(read).toBe(topic);
-  });
-
+describe('logPath', () => {
   it('puts the log under the topic', () => {
     // ARRANGE
     const topic = 't';
@@ -55,19 +33,6 @@ describe('topicOfCommand', () => {
     const read = topicOfCommand(argv, cwd);
     // ASSERT
     expect(read).toBe(topic);
-  });
-});
-
-describe('baseOfBranch', () => {
-  it.each([
-    ['chore/sweep--795-log', 'chore/sweep'],
-    ['chore/sweep', null],
-    [null, null],
-  ])('reads the base of %s as %s', (branch, base) => {
-    // ACT
-    const read = baseOfBranch(branch);
-    // ASSERT
-    expect(read).toBe(base);
   });
 });
 

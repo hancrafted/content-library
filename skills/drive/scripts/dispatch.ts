@@ -1,9 +1,12 @@
-import { checkTickets, parseTicket, taskBranchGlob } from './dispatch.pure.ts';
+import { taskBranchGlob, taskMergeSubjectPrefix } from './branch-topic.pure.ts';
+import { checkTickets, epicOfTickets, parseTicket } from './dispatch.pure.ts';
 import { capture, git } from './git.ts';
-import { fail } from './project.ts';
+import { DECISIONS_PREFIX } from './guard.pure.ts';
+import { fail, loadConfig } from './project.ts';
+import { pickIntegrationBranch, specOfDecisionBody } from './status.pure.ts';
 
 const USAGE =
-  'usage: drive dispatch check [--base <integration branch>] <issue number…> (the base defaults to the current branch)';
+  "usage: drive dispatch check [--base <Integration branch>] <issue number…> (without --base, the Integration branch of the tickets' epic)";
 
 interface Issue {
   state: string;
@@ -28,9 +31,9 @@ function readIssue(number: number): Issue {
   return JSON.parse(capture('gh', ['issue', 'view', String(number), '--json', 'state,body'])) as Issue;
 }
 
-function hasMergeCommit(base: string, glob: string, cwd: string): boolean {
-  const prefix = glob.slice(0, -1);
-  return capture('git', ['log', base, '--format=%s', '--fixed-strings', `--grep=Merge branch '${prefix}`], cwd) !== '';
+function hasMergeCommit(base: string, number: number, cwd: string): boolean {
+  const prefix = taskMergeSubjectPrefix(base, number);
+  return capture('git', ['log', base, '--format=%s', '--fixed-strings', `--grep=${prefix}`], cwd) !== '';
 }
 
 function hasMergedWorkBranch(base: string, glob: string, cwd: string): boolean {
@@ -48,16 +51,33 @@ function isClosedOrTaskBranchMerged(base: string, cwd: string): (number: number)
   return (number) => {
     if (readIssue(number).state === 'CLOSED') return true;
     const glob = taskBranchGlob(base, number);
-    return hasMergeCommit(base, glob, cwd) || hasMergedWorkBranch(base, glob, cwd);
+    return hasMergeCommit(base, number, cwd) || hasMergedWorkBranch(base, glob, cwd);
   };
+}
+
+const PASS_BASE = 'pass --base <Integration branch>';
+
+function integrationOfEpic(epic: number | null, cwd: string): string | null {
+  if (epic === null) return null;
+  const root = capture('git', ['rev-parse', '--show-toplevel'], cwd);
+  const { remote } = loadConfig(root).worktree;
+  const listed = capture('gh', ['pr', 'list', '--state', 'all', '--limit', '200', '--json', 'headRefName,body'], cwd);
+  const decisions = (JSON.parse(listed) as { headRefName: string; body: string }[]).filter(
+    (pr) => pr.headRefName.startsWith(DECISIONS_PREFIX) && specOfDecisionBody(pr.body) === epic,
+  );
+  const [only] = decisions;
+  if (decisions.length !== 1 || only === undefined) return null;
+  const branches = capture('git', ['branch', '-a', '--format=%(refname:short)'], cwd).split('\n');
+  return pickIntegrationBranch(branches, only.headRefName.slice(DECISIONS_PREFIX.length), remote);
 }
 
 export function runDispatch(argv: readonly string[]): void {
   const { base: given, issues } = readArgs(argv);
   const cwd = process.cwd();
-  const base = given ?? capture('git', ['branch', '--show-current'], cwd);
-  if (base === '') fail('detached HEAD: pass --base <integration branch>');
-  const tickets = issues.map((number) => parseTicket(number, readIssue(number).body));
+  const bodies = issues.map((number) => readIssue(number).body);
+  const base = given ?? integrationOfEpic(epicOfTickets(bodies), cwd);
+  if (base === null) fail(`no single Integration branch found for the tickets' epic: ${PASS_BASE}`);
+  const tickets = issues.map((number, index) => parseTicket(number, bodies[index] ?? ''));
   const problems = checkTickets(tickets, isClosedOrTaskBranchMerged(base, cwd));
   if (problems.length > 0) fail(`dispatch check failed:\n${problems.map((problem) => `  - ${problem}`).join('\n')}`);
   console.log(`✔ ${issues.map((n) => `#${n}`).join(', ')} may be dispatched together`);
