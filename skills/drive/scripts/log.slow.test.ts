@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
+import { copyFileSync, mkdirSync, writeFileSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -17,13 +17,13 @@ const node = (script: string, args: string[], run: { cwd: string; env?: Record<s
     env: { ...process.env, ...run.env },
   });
 
-function repo(branch: string): string {
+function repo(branch: string | null): string {
   const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'drive-log-')));
   const git = (...args: string[]) =>
     execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd: root });
   git('init', '-q', '-b', 'main');
   git('commit', '-q', '--allow-empty', '-m', 'init');
-  git('checkout', '-q', '-b', branch);
+  if (branch !== null) git('checkout', '-q', '-b', branch);
   return root;
 }
 
@@ -39,9 +39,29 @@ describe('drive event log', () => {
     node('drive.ts', ['learnings', 'check'], { cwd: root });
     // ASSERT
     const [first, second] = logOf(root, 'sweep');
-    expect(first).toMatchObject({ cmd: 'nonsense', branch: 'chore/sweep--1-a', exit: 1 });
+    expect(first).toMatchObject({
+      cmd: 'nonsense',
+      branch: 'chore/sweep--1-a',
+      exit: 1,
+    });
     expect((first as { result: string }).result).toContain("unknown group 'nonsense'");
     expect(second).toMatchObject({ cmd: 'learnings check' });
+  });
+
+  it('logs a worktree command run from the main checkout under the topic of its branch argument', () => {
+    // ARRANGE
+    const root = repo(null);
+    const task = 'chore/sweep--9-z';
+    // ACT
+    node('drive.ts', ['worktree', 'done', task, '--base', 'chore/sweep'], {
+      cwd: root,
+    });
+    // ASSERT
+    expect(logOf(root, 'sweep')[0]).toMatchObject({
+      branch: task,
+      base: 'chore/sweep',
+      cmd: expect.stringContaining('worktree done'),
+    });
   });
 
   it('does not log on a branch without a topic, and never fails the command', () => {
@@ -59,16 +79,74 @@ describe('claude adapter hook', () => {
   it('logs the session, transcript path and branch of a Subagent start', () => {
     // ARRANGE
     const root = repo('chore/sweep--2-b');
-    const payload = JSON.stringify({ session_id: 's1', transcript_path: '/t/s1.jsonl', cwd: root, agent_id: 'a1' });
+    const payload = JSON.stringify({
+      session_id: 's1',
+      transcript_path: '/t/s1.jsonl',
+      cwd: root,
+      agent_id: 'a1',
+    });
     // ACT
-    const result = node('claude-adapter.ts', ['start'], { cwd: root, input: payload });
+    const result = node('claude-adapter.ts', ['start'], {
+      cwd: root,
+      input: payload,
+    });
     // ASSERT
     expect(result.status).toBe(0);
     expect(logOf(root, 'sweep')[0]).toMatchObject({
       event: 'subagent-start',
       session: 's1',
-      transcript: '/t/s1.jsonl',
+      transcript: '/t/s1/subagents/agent-a1.jsonl',
+      parent: '/t/s1.jsonl',
       branch: 'chore/sweep--2-b',
+    });
+  });
+});
+
+describe('claude adapter hook from the main checkout', () => {
+  const hookFrom = (root: string, transcript: string | null) => {
+    const payload = {
+      session_id: 's1',
+      transcript_path: '/t/s1.jsonl',
+      cwd: root,
+      agent_id: 'a1',
+      ...(transcript === null ? {} : { agent_transcript_path: transcript }),
+    };
+    return node('claude-adapter.ts', ['stop'], {
+      cwd: root,
+      input: JSON.stringify(payload),
+    });
+  };
+
+  it('takes the topic from the brief path in the Subagent transcript when the cwd is on main', () => {
+    // ARRANGE
+    const root = repo(null);
+    const transcript = path.join(root, 'agent.jsonl');
+    const brief = 'Save this brief to .scratch/sweep/x.brief.md';
+    writeFileSync(transcript, `${JSON.stringify({ type: 'user', message: { content: brief } })}\n`);
+    // ACT
+    const result = hookFrom(root, transcript);
+    // ASSERT
+    expect(result.status).toBe(0);
+    expect(logOf(root, 'sweep')[0]).toMatchObject({
+      event: 'subagent-stop',
+      transcript,
+      parent: '/t/s1.jsonl',
+      branch: 'main',
+    });
+  });
+
+  it('falls back to the single Integration worktree', () => {
+    // ARRANGE
+    const root = repo(null);
+    execFileSync('git', ['worktree', 'add', '-q', '-b', 'chore/lone', path.join(root, '.worktrees', 'chore-lone')], {
+      cwd: root,
+    });
+    // ACT
+    hookFrom(root, null);
+    // ASSERT
+    expect(logOf(root, 'lone')[0]).toMatchObject({
+      event: 'subagent-stop',
+      session: 's1',
     });
   });
 });
@@ -82,9 +160,18 @@ describe('drive transcript', () => {
     mkdirSync(dir, { recursive: true });
     copyFileSync(path.join(SCRIPTS, 'fixtures', 'session-93f19e8f.trimmed.jsonl'), path.join(dir, 'abc.jsonl'));
     // ACT
-    const all = node('drive.ts', ['transcript', 'abc'], { cwd: root, env: { HOME: home } });
-    const first = node('drive.ts', ['transcript', 'abc', '--since-last'], { cwd: root, env: { HOME: home } });
-    const second = node('drive.ts', ['transcript', 'abc', '--since-last'], { cwd: root, env: { HOME: home } });
+    const all = node('drive.ts', ['transcript', 'abc'], {
+      cwd: root,
+      env: { HOME: home },
+    });
+    const first = node('drive.ts', ['transcript', 'abc', '--since-last'], {
+      cwd: root,
+      env: { HOME: home },
+    });
+    const second = node('drive.ts', ['transcript', 'abc', '--since-last'], {
+      cwd: root,
+      env: { HOME: home },
+    });
     // ASSERT
     expect(all.stdout).toContain('what twekas?');
     expect(all.stdout).toContain('failed (null)');

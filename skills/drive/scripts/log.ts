@@ -2,7 +2,7 @@ import { appendFileSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { CONFIG_PATH, parseConfig } from './config.pure.ts';
 import { run } from './git.ts';
-import { commandEntry, type LogEntry, logPath, serializeEntry, topicOfBranch } from './log.pure.ts';
+import { commandEntry, type LogEntry, logPath, serializeEntry, topicOfCommand } from './log.pure.ts';
 
 export function branchOf(cwd: string): string | null {
   const result = run('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd });
@@ -15,19 +15,22 @@ export function mainRootOf(cwd: string): string | null {
   return result.status === 0 ? path.dirname(result.stdout.trim()) : null;
 }
 
-function configuredBase(cwd: string): string | null {
+export function configuredWorktree(cwd: string): { baseBranch: string; dir: string } | null {
   try {
-    const root = run('git', ['rev-parse', '--show-toplevel'], { cwd }).stdout.trim();
+    const root = run('git', ['rev-parse', '--show-toplevel'], {
+      cwd,
+    }).stdout.trim();
     const parsed = parseConfig(readFileSync(path.join(root, CONFIG_PATH), 'utf8'), '');
-    return 'error' in parsed ? null : parsed.worktree.baseBranch;
+    return 'error' in parsed ? null : parsed.worktree;
   } catch {
     return null;
   }
 }
 
-export function appendLog(cwd: string, branch: string | null, entry: LogEntry): void {
+const configuredBase = (cwd: string): string | null => configuredWorktree(cwd)?.baseBranch ?? null;
+
+export function appendLog(cwd: string, topic: string | null, entry: LogEntry): void {
   try {
-    const topic = topicOfBranch(branch);
     const root = mainRootOf(cwd);
     if (topic === null || root === null) return;
     const file = path.join(root, logPath(topic));
@@ -50,7 +53,7 @@ export function logCommandAtExit(argv: readonly string[]): void {
     const branch = branchOf(cwd);
     appendLog(
       cwd,
-      branch,
+      topicOfCommand(argv, branch),
       commandEntry({ argv, branch, base: configuredBase(cwd), exit: code, lastError }, new Date()),
     );
   });

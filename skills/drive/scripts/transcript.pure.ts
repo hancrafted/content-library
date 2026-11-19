@@ -40,7 +40,11 @@ function questionsOf(block: Json): string[] {
   return questions.filter(isJson).map((q) => asString(q.question));
 }
 
-const asQuestion = (t: string, text: string): TranscriptEvent => ({ t, kind: 'question', text: clip(text) });
+const asQuestion = (t: string, text: string): TranscriptEvent => ({
+  t,
+  kind: 'question',
+  text: clip(text),
+});
 
 function textQuestion(t: string, block: Json): TranscriptEvent[] {
   const last = asString(block.text).trim().split('\n').at(-1) ?? '';
@@ -50,9 +54,21 @@ function textQuestion(t: string, block: Json): TranscriptEvent[] {
 function toolCall(t: string, block: Json): TranscriptEvent[] {
   const input = isJson(block.input) ? block.input : {};
   if (block.name === 'Skill')
-    return [{ t, kind: 'skill', text: `${asString(input.skill)} ${asString(input.args)}`.trim() }];
+    return [
+      {
+        t,
+        kind: 'skill',
+        text: `${asString(input.skill)} ${asString(input.args)}`.trim(),
+      },
+    ];
   const detail = asString(input.command) || asString(input.file_path) || asString(input.description);
-  return [{ t, kind: 'tool', text: clip(`${asString(block.name)} ${firstLines(detail, 1)}`.trim()) }];
+  return [
+    {
+      t,
+      kind: 'tool',
+      text: clip(`${asString(block.name)} ${firstLines(detail, 1)}`.trim()),
+    },
+  ];
 }
 
 interface Scope {
@@ -81,10 +97,44 @@ function userBlock(t: string, block: Json): TranscriptEvent[] {
   return block.type === 'text' && INTERRUPT.test(text) ? [{ t, kind: 'interrupt', text: clip(text) }] : [];
 }
 
-function userEvents(line: Json, t: string, content: unknown): TranscriptEvent[] {
-  if (typeof content !== 'string') return blocksOf(content).flatMap((block) => userBlock(t, block));
+const LOCAL_OUTPUT = /^\s*<local-command-(stdout|caveat)>/;
+const COMMAND_NAME = /<command-name>\s*\/?([^<]*?)\s*<\/command-name>/;
+const COMMAND_ARGS = /<command-args>([\s\S]*?)<\/command-args>/;
+
+const commandText = (raw: string, name: string): string =>
+  `/${name} ${COMMAND_ARGS.exec(raw)?.[1]?.trim() ?? ''}`.trim();
+
+export function operatorText(raw: string, tools: boolean): string | null {
+  if (LOCAL_OUTPUT.test(raw)) return tools ? raw : null;
+  const name = COMMAND_NAME.exec(raw)?.[1];
+  return name === undefined ? raw : commandText(raw, name);
+}
+
+const operatorEvent = (t: string, raw: string, tools: boolean): TranscriptEvent[] => {
+  const text = operatorText(raw, tools);
+  return text === null || text.trim() === '' ? [] : [{ t, kind: 'operator', text: clip(text, 600) }];
+};
+
+function blockMessage(blocks: readonly Json[]): string {
+  return blocks
+    .flatMap((block) => {
+      if (block.type === 'image') return ['[image]'];
+      const text = asString(block.text);
+      return block.type === 'text' && !INTERRUPT.test(text) ? [text] : [];
+    })
+    .join(' ');
+}
+
+function userEvents(line: Json, t: string, tools: boolean): TranscriptEvent[] {
+  const content = isJson(line.message) ? line.message.content : undefined;
+  if (typeof content !== 'string') {
+    const blocks = blocksOf(content);
+    const found = blocks.flatMap((block) => userBlock(t, block));
+    if (blocks.some((block) => block.type === 'tool_result') || !isOperatorMessage(line)) return found;
+    return [...found, ...operatorEvent(t, blockMessage(blocks), tools)];
+  }
   if (INTERRUPT.test(content)) return [{ t, kind: 'interrupt', text: clip(content) }];
-  return isOperatorMessage(line) ? [{ t, kind: 'operator', text: clip(content, 600) }] : [];
+  return isOperatorMessage(line) ? operatorEvent(t, content, tools) : [];
 }
 
 function lineEvents(raw: string, tools: boolean): TranscriptEvent[] {
@@ -96,7 +146,7 @@ function lineEvents(raw: string, tools: boolean): TranscriptEvent[] {
   }
   if (!isJson(line) || !isJson(line.message) || typeof line.timestamp !== 'string') return [];
   const { timestamp: t, message } = line;
-  if (line.type === 'user') return userEvents(line, t, message.content);
+  if (line.type === 'user') return userEvents(line, t, tools);
   if (line.type !== 'assistant') return [];
   const scope = { tools, orchestrator: line.isSidechain !== true };
   return blocksOf(message.content).flatMap((block) => assistantBlock(t, block, scope));

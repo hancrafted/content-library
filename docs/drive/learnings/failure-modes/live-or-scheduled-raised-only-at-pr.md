@@ -2,7 +2,7 @@
 title: 'What is live or scheduled that a change touches is raised only at the PR'
 enforcer: "review: the Decision PR body's required section (Decision record 0028), architectural"
 status: fixed
-fixed-by: https://github.com/hancrafted/content-library/issues/740
+fixed-by: https://github.com/hancrafted/content-library/pull/768
 fixed-on: '2026-11-18'
 ---
 

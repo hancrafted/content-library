@@ -30,7 +30,12 @@ const FLAGS: Record<string, (options: Options, rest: string[]) => void> = {
 const isPositional = (arg: string, options: Options): boolean => !arg.startsWith('--') && options.session === null;
 
 function parseArgs(args: readonly string[]): Options | null {
-  const options: Options = { session: null, topic: null, tools: false, sinceLast: false };
+  const options: Options = {
+    session: null,
+    topic: null,
+    tools: false,
+    sinceLast: false,
+  };
   const rest = [...args];
   for (let arg = rest.shift(); arg !== undefined; arg = rest.shift()) {
     const flag = FLAGS[arg];
@@ -88,7 +93,7 @@ function sessionsOfTopic(root: string, topic: string): string[] {
   if (!existsSync(log)) fail(`no drive log for topic '${topic}' at ${logPath(topic)}`);
   const transcripts = parseLog(readFileSync(log, 'utf8'))
     .filter(isSubagentEntry)
-    .map((entry) => entry.transcript);
+    .map((entry) => entry.parent ?? entry.transcript);
   return [...new Set(transcripts)];
 }
 
@@ -112,7 +117,10 @@ function readAll(sessionFiles: readonly string[], options: Options, cursors: Cur
   for (const sessionFile of sessionFiles) {
     for (const file of [sessionFile, ...subagentFiles(sessionFile)].filter((candidate) => existsSync(candidate))) {
       const skip = cursors[file] ?? 0;
-      const { events, lines } = extractEvents(readFileSync(file, 'utf8'), { skip, tools: options.tools });
+      const { events, lines } = extractEvents(readFileSync(file, 'utf8'), {
+        skip,
+        tools: options.tools,
+      });
       next[file] = lines;
       output.push(...renderEvents(labelOf(file, sessionFile), events));
     }

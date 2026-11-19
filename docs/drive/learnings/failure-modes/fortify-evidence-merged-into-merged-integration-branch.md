@@ -2,7 +2,7 @@
 title: 'Fortify evidence is merged into an Integration branch whose PR had already merged'
 enforcer: 'review: Fortify takes its evidence from the base branch after the merge (Decision record 0028), architectural'
 status: fixed
-fixed-by: https://github.com/hancrafted/content-library/issues/740
+fixed-by: https://github.com/hancrafted/content-library/pull/768
 fixed-on: '2026-11-18'
 ---
 

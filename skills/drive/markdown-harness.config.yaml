@@ -21,6 +21,10 @@ frontmatter:
           presence: required
           allowed:
             - {
+                value: pending,
+                intent: 'Written at the end of Verify, before the Operator answers "Fortify now or skip?". Replace it with engaged or skipped the moment he answers.',
+              }
+            - {
                 value: engaged,
                 intent: 'The Operator answered yes to "Fortify now or skip?"; the Fortify branch adds corrections made after the merge.',
               }
@@ -29,7 +33,7 @@ frontmatter:
                 intent: 'The Operator answered skip. Write skip-reason in his words; the learnings are still recorded, nothing is asked again.',
               }
         skip-reason:
-          intent: 'Required when fortify is skipped, absent when engaged: the Operator''s reason, verbatim ("deadline 17:30", "skipp fortify").'
+          intent: 'Required when fortify is skipped, absent when pending or engaged: the Operator''s reason, verbatim ("deadline 17:30", "skipp fortify").'
     - ruleId: drive-learnings-failure-mode
       folders: [failure-modes/]
       intent: 'A failure mode is one narrow way a Workflow went wrong that a single Enforcer could catch; its file is the stable thing every record cites by file name, and it never holds a count. Search with `drive learnings similar "<failure>"` first and reuse a file whose Enforcer would also catch this case; create one only when none would.'
