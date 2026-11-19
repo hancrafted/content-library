@@ -308,7 +308,7 @@ describe('success cases', () => {
       const edges = $('[data-transition-edge]')
         .toArray()
         .map((host) => [$(host).attr('data-transition-edge'), $(host).attr('data-transition-effect')]);
-      const surfaces = $('[data-inverse]')
+      const surfaces = $('[id][data-inverse]')
         .toArray()
         .map((host) => [$(host).attr('id')]);
       const trailingStyles = trailingSlides.map((id) => $(`#${id}`).attr('style'));
@@ -495,6 +495,32 @@ describe('success cases', () => {
     // ASSERT
     expect(content.transitions.get(expected.outgoing)).toEqual(expected);
   });
+  it.each([
+    { name: 'inverse into normal', from: true, to: false, flagged: true },
+    { name: 'inverse into inverse', from: true, to: true, flagged: false },
+    { name: 'normal into inverse', from: false, to: true, flagged: true },
+    { name: 'normal into normal', from: false, to: false, flagged: false },
+  ])(
+    'flags the ink target only when the Slides differ in inverse, since the edge sits in the outgoing wrapper: $name',
+    async ({ from, to, flagged }) => {
+      // ARRANGE
+      const enter = { effect: 'liquid' as const };
+      const record = episode({
+        slug: 'ai-token-economy',
+        messages: EPISODE,
+        sections: [
+          [
+            { ...foundations, presentation: { inverse: from } },
+            { ...whyATemplate, presentation: { enter, inverse: to } },
+          ],
+        ],
+      });
+      // ACT
+      const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+      // ASSERT
+      expect(content.transitions.get('foundations')?.targetInverse ?? false).toBe(flagged);
+    },
+  );
   it.each([
     {
       name: 'the incoming Surface background',
