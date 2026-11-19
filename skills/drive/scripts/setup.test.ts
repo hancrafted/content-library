@@ -106,6 +106,7 @@ describe('drive setup', () => {
         'docs/drive/binding.yml',
         'docs/drive/enforcers.yml',
         'docs/drive/learnings.md',
+        'docs/drive/learnings/README.md',
         'docs/drive/profiles.md',
         'docs/drive/project.yml',
         'docs/drive/review.md',
@@ -218,6 +219,33 @@ describe('drive setup', () => {
     });
   });
 
+  describe('the learnings check', () => {
+    it('wires the learnings check into check:docs once and seeds the store README', () => {
+      // ARRANGE
+      const root = repo({ 'package.json': JSON.stringify({ scripts: { 'check:docs': 'mh check' } }) });
+      const expected = `mh check && mh check --root docs/drive/learnings --config skills/drive/markdown-harness.config.yaml && node ${ENTRY} learnings check`;
+      // ACT
+      setup(root, {}, INSIDE(root));
+      const { written } = setup(root, {}, INSIDE(root));
+      // ASSERT
+      const scripts = (JSON.parse(text(root, 'package.json')) as { scripts: Record<string, string> }).scripts;
+      expect(scripts['check:docs']).toBe(expected);
+      expect(written).toEqual([]);
+      expect(text(root, 'docs/drive/learnings/README.md')).toContain('# Drive learnings');
+    });
+
+    it('prints the command instead of writing a path that leaves the repo', () => {
+      // ARRANGE
+      const manifest = JSON.stringify({ scripts: { 'check:docs': 'mh check' } });
+      const root = repo({ 'package.json': manifest });
+      // ACT
+      const { notes } = setup(root);
+      // ASSERT
+      expect(text(root, 'package.json')).toBe(manifest);
+      expect(notes.join('\n')).toContain('learnings check');
+    });
+  });
+
   describe('the Decision-doc guard', () => {
     it('adds the guard to an existing husky pre-commit hook once', () => {
       // ARRANGE
@@ -239,7 +267,7 @@ describe('drive setup', () => {
       // ASSERT
       expect(text(root, '.husky/pre-commit')).toBe('npm run verify:commit\n');
       expect(written).not.toContain('.husky/pre-commit');
-      expect(notes.join('\n')).toMatch(/sits outside this repo[^\n]*\n\s+node \/[^\n]*drive\.ts guard$/);
+      expect(notes.join('\n')).toMatch(/sits outside this repo[^\n]*\n\s+node \/[^\n]*drive\.ts guard$/m);
     });
 
     it('writes no workflow without husky and hands back the one CI line instead', () => {

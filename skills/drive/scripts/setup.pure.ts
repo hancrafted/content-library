@@ -1,6 +1,7 @@
 import { Document, type YAMLMap } from 'yaml';
 import { isTier, type SeedOptions } from './binding.pure.ts';
 import { defaultsFor, PARALLEL_DEFAULTS } from './config.pure.ts';
+import { FAILURE_MODES_FOLDER, LEARNINGS_STORE, RECORDS_FOLDER } from './learnings.pure.ts';
 import { openMapping } from './yaml.pure.ts';
 
 export type EnforcerKind = 'adr-checker' | 'linter' | 'type-checker' | 'test-runner' | 'formatter' | 'check' | 'hook';
@@ -183,3 +184,50 @@ export const guardCiLine = (command: string): string =>
 
 export const guardHookLine = (hook: string, command: string): string =>
   guardLineNote(`the drive skill sits outside this repo, so ${hook} was left alone: add this line to it`, command);
+
+const DOCS_CHECK_SCRIPT = 'check:docs';
+export const HARNESS_CONFIG_FILE = 'markdown-harness.config.yaml';
+
+export function learningsCheckCommand(driveEntry: string): string {
+  const skillFolder = driveEntry.split('/').slice(0, -2).join('/');
+  return `mh check --root ${LEARNINGS_STORE} --config ${skillFolder}/${HARNESS_CONFIG_FILE} && node ${driveEntry} learnings check`;
+}
+
+export const learningsCheckNote = (command: string): string =>
+  guardLineNote(
+    `no ${DOCS_CHECK_SCRIPT} script in package.json: add this to the docs check, so the learnings store stays Fortify-ready`,
+    command,
+  );
+
+function docsCheckScript(manifest: string): string | null {
+  try {
+    const script = (JSON.parse(manifest) as { scripts?: Record<string, unknown> }).scripts?.[DOCS_CHECK_SCRIPT];
+    return typeof script === 'string' ? script : null;
+  } catch {
+    return null;
+  }
+}
+
+export function addLearningsCheck(manifest: string | null, command: string): { text: string } | { note: string } {
+  const script = manifest === null ? null : docsCheckScript(manifest);
+  if (manifest === null || script === null) return { note: learningsCheckNote(command) };
+  if (script.includes(command)) return { text: manifest };
+  const quotedScript = JSON.stringify(script);
+  const keyAt = manifest.indexOf(JSON.stringify(DOCS_CHECK_SCRIPT));
+  const at = manifest.indexOf(quotedScript, keyAt);
+  if (at === -1) return { note: learningsCheckNote(command) };
+  const wired = JSON.stringify(`${script} && ${command}`);
+  return { text: manifest.slice(0, at) + wired + manifest.slice(at + quotedScript.length) };
+}
+
+export const LEARNINGS_README = `# Drive learnings
+
+What each drive Workflow hit, kept so Fortify counts recurrences from records instead of trusting a typed number.
+
+- \`${RECORDS_FOLDER}/<date>-<workflow>.md\`: one per Workflow, written at the end of Verify and never edited after its Fortify question. Each H2 names a failure mode.
+- \`${FAILURE_MODES_FOLDER}/<slug>.md\`: one per failure mode, holding its title, Enforcer and status, never a count.
+
+The drive skill's \`${HARNESS_CONFIG_FILE}\` is the template for both. Before writing a file, read what it asks with \`mh query --intents ${RECORDS_FOLDER}/<file>.md --config <skill>/${HARNESS_CONFIG_FILE}\` (or \`${FAILURE_MODES_FOLDER}/<file>.md\`); paths are relative to this folder. Before creating a failure mode, run \`drive learnings similar "<failure>"\` and cite the match when its Enforcer would catch this case too.
+
+\`drive learnings\` lists every failure mode with its computed count, its status and \`regressed\` when a record cites it after its fix. \`drive learnings check\` runs in the docs check beside \`mh check\`.
+`;

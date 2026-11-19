@@ -1,4 +1,5 @@
 import { runGuard } from './guard.ts';
+import { runLearnings } from './learnings.ts';
 import { runPr } from './pr-watch.ts';
 import { runPush } from './push.ts';
 import { runSetup } from './setup.ts';
@@ -10,9 +11,10 @@ else if (group === 'setup') runSetup(rest);
 else if (group === 'guard') runGuard(rest);
 else if (group === 'push') runPush(rest);
 else if (group === 'pr') await runPr(rest);
+else if (group === 'learnings') runLearnings(rest);
 else {
   console.error(
-    `✖ unknown group '${group ?? ''}'; usage: drive <worktree <new|done|sync> ...|push|pr watch <number>|setup|guard [--against <ref>]>`,
+    `✖ unknown group '${group ?? ''}'; usage: drive <worktree <new|done|sync> ...|push|pr watch <number>|learnings [list|similar "<failure>"|check]|setup|guard [--against <ref>]>`,
   );
   process.exit(1);
 }
