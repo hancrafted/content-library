@@ -26,7 +26,7 @@ export interface LearningsRecord {
   file: string;
   workflow: string;
   date: string;
-  fortify: 'engaged' | 'skipped';
+  fortify: 'engaged' | 'skipped' | 'pending';
   skipReason: string | null;
   citations: Citation[];
 }
@@ -82,7 +82,9 @@ export function parseFailureMode(slug: string, text: string): FailureMode | { er
   const { data, body } = split;
   if (!isText(data.title) || !isText(data.enforcer)) return { error: `${where}: title and enforcer are required` };
   if (!isStatus(data.status))
-    return { error: `${where}: status must be ${FAILURE_MODE_STATUSES.join(', ').replace(/, (\w+)$/, ' or $1')}` };
+    return {
+      error: `${where}: status must be ${FAILURE_MODE_STATUSES.join(', ').replace(/, (\w+)$/, ' or $1')}`,
+    };
   return {
     slug,
     title: data.title,
@@ -102,8 +104,8 @@ export function parseRecord(file: string, text: string): LearningsRecord | { err
   if (split === null) return { error: `${where}: no front matter` };
   const { data, body } = split;
   if (!isText(data.workflow) || !isText(data.date)) return { error: `${where}: workflow and date are required` };
-  if (data.fortify !== 'engaged' && data.fortify !== 'skipped')
-    return { error: `${where}: fortify must be engaged or skipped` };
+  if (data.fortify !== 'engaged' && data.fortify !== 'skipped' && data.fortify !== 'pending')
+    return { error: `${where}: fortify must be engaged, skipped or pending` };
   const citations = topLevelHeadings(body, 2).map(({ text: slug, lines }) => ({
     slug,
     bullets: lines.filter((line) => line.startsWith('- ')).map((line) => line.slice(2).trim()),
@@ -117,6 +119,11 @@ export function parseRecord(file: string, text: string): LearningsRecord | { err
     citations,
   };
 }
+
+const carriesRegressedBullet = (record: LearningsRecord, slug: string): boolean =>
+  record.citations.some(
+    (citation) => citation.slug === slug && citation.bullets.some((bullet) => bullet.startsWith(REGRESSED_LABEL)),
+  );
 
 const citesAfterFix = (mode: FailureMode, record: LearningsRecord): boolean =>
   mode.status === 'fixed' && mode.fixedOn !== null && record.date > mode.fixedOn;
@@ -132,7 +139,10 @@ export function countCitations(modes: readonly FailureMode[], records: readonly 
         slug: mode.slug,
         count: citing.length,
         status: mode.status,
-        regressed: citing.some((record) => citesAfterFix(mode, record)),
+        regressed: citing.some(
+          (record) =>
+            (mode.status === 'fixed' && carriesRegressedBullet(record, mode.slug)) || citesAfterFix(mode, record),
+        ),
       };
     })
     .sort((left, right) => right.count - left.count || left.slug.localeCompare(right.slug));
@@ -153,7 +163,12 @@ const FIELDS_A_STATUS_NEEDS: Record<FailureModeStatus, readonly ('ticket' | 'fix
   fixed: ['fixedBy', 'fixedOn'],
   wontfix: ['reason'],
 };
-const FRONT_MATTER_KEYS = { ticket: 'ticket', fixedBy: 'fixed-by', fixedOn: 'fixed-on', reason: 'reason' } as const;
+const FRONT_MATTER_KEYS = {
+  ticket: 'ticket',
+  fixedBy: 'fixed-by',
+  fixedOn: 'fixed-on',
+  reason: 'reason',
+} as const;
 
 function failureModeProblems(mode: FailureMode): string[] {
   const where = `${FAILURE_MODES_FOLDER}/${mode.slug}.md`;
@@ -199,7 +214,7 @@ function recordProblems(record: LearningsRecord, bySlug: ReadonlyMap<string, Fai
   if (record.file !== expectedFile) problems.push(`${where}: name it ${expectedFile}, from its date and workflow`);
   if (record.fortify === 'skipped' && record.skipReason === null)
     problems.push(`${where}: fortify skipped needs skip-reason`);
-  if (record.fortify === 'engaged' && record.skipReason !== null)
+  if (record.fortify !== 'skipped' && record.skipReason !== null)
     problems.push(`${where}: skip-reason belongs only to fortify skipped`);
   const context = { record, seen: new Set<string>(), bySlug };
   return [...problems, ...record.citations.flatMap((citation) => citationProblems(context, citation))];
