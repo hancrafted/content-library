@@ -7,6 +7,7 @@ import type { SlideEntrance } from './slide';
 import { eyebrowLength, SlideEyebrow, type EyebrowText } from './slide-eyebrow';
 import type { CaptionNote } from './slide-header-text';
 import { HeroTitle, SlideTitle } from './slide-master';
+import { SURFACE_MUTED_TEXT } from './surface';
 import { typedLength, TypedText } from './typed-text';
 
 function scheduleOf(entrance: SlideEntrance, seed: string, lengths: readonly number[]) {
@@ -79,7 +80,7 @@ function TitleGroup({
         <TypedText text={title} delaysMilliseconds={delays[1]} caretMovesOnAtMilliseconds={ends[1]} />
       </Heading>
       {caption && (
-        <p data-target="caption" className="text-body text-muted-foreground">
+        <p data-target="caption" className={cn('text-body', SURFACE_MUTED_TEXT)}>
           <TypedText
             text={caption}
             delaysMilliseconds={delays[2]}

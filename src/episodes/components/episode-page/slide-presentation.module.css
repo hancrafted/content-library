@@ -71,7 +71,7 @@
 
   scroll-margin-top: var(--slide-anchor-offset, 6rem);
   min-height: calc(100svh + var(--slide-space-total));
-  color: var(--slide-surface-foreground, var(--foreground));
+  color: var(--surface-foreground, var(--foreground));
 }
 
 .configured[data-size='section'] {

@@ -1,3 +1,5 @@
+import { cn } from '@/shared/lib/utils';
+import { SURFACE_MUTED_TEXT } from './surface';
 import { TypedText, typedLength } from './typed-text';
 
 export interface EyebrowText {
@@ -27,7 +29,7 @@ export function SlideEyebrow({
 }) {
   const split = typedLength(eyebrow.section);
   return (
-    <p data-slot="slide-eyebrow" className="text-caption tracking-wide text-muted-foreground uppercase">
+    <p data-slot="slide-eyebrow" className={cn('text-caption tracking-wide uppercase', SURFACE_MUTED_TEXT)}>
       <TypedText
         text={eyebrow.section}
         delaysMilliseconds={delays?.slice(0, split)}

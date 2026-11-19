@@ -22,7 +22,7 @@ import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
-import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
+import type { ResolvedSlideTransition, SlidePresentation, SlideTransition } from '../slide-master/slide-presentation';
 import { slideSizeOf } from './episode-page-container.pure';
 import { standardTitleLook, withStandardSlideLooks } from './standard-looks.pure';
 
@@ -116,7 +116,7 @@ function resolveTransitions(
       outgoing: outgoing.id,
       incoming: incoming.id,
       declaration,
-      ...transitionTarget(incoming.presentation, incoming.surface),
+      ...transitionTarget(incoming.presentation, incoming.surface, declaration),
     });
   }
   return resolved;
@@ -142,12 +142,24 @@ function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePrese
   return precedence === 'leave' ? (leave ?? enter) : (enter ?? leave);
 }
 
-function transitionTarget(presentation: SlidePresentation | undefined, fallback = 'var(--background)') {
-  if (!presentation) return { targetSurface: fallback };
+// decision: docs/decision-records/0030-slide-surface-and-the-inverse-flag.md
+function inkOf(
+  presentation: SlidePresentation | undefined,
+  fallback = 'var(--background)',
+  override: string | number | undefined,
+) {
+  if (override !== undefined) return String(override);
+  if (!presentation) return fallback;
+  return presentation.surface?.background ?? 'var(--background)';
+}
+
+function transitionTarget(
+  presentation: SlidePresentation | undefined,
+  fallback = 'var(--background)',
+  { style: override }: SlideTransition,
+) {
+  const targetSurface = inkOf(presentation, fallback, override?.['--slide-transition-ink']);
+  if (!presentation) return { targetSurface };
   const { style, inverse } = presentation;
-  return {
-    targetSurface: style?.['--slide-surface'] ?? 'var(--background)',
-    ...(inverse && { targetInverse: true }),
-    ...(style && { targetStyle: style }),
-  };
+  return { targetSurface, ...(inverse && { targetInverse: true }), ...(style && { targetStyle: style }) };
 }

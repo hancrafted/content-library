@@ -42,8 +42,11 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       inverse: true,
+      surface: {
+        background: 'color-mix(in oklab, var(--background) 88%, var(--foreground))',
+        foreground: 'var(--foreground)',
+      },
       style: {
-        '--slide-surface': 'color-mix(in oklab, var(--background) 88%, var(--foreground))',
         '--slide-space-before': '200px',
         '--slide-space-after': '200px',
       },

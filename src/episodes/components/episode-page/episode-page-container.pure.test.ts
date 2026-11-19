@@ -52,7 +52,10 @@ describe('success cases', () => {
     const expected = [true, true, false];
     const titles = [
       { inverse: true },
-      { inverse: false, presentation: { style: { '--slide-surface': 'var(--zone-surface)' } } },
+      {
+        inverse: false,
+        presentation: { surface: { background: 'var(--zone-surface)', foreground: 'var(--foreground)' } },
+      },
       { inverse: false },
     ];
     // ACT

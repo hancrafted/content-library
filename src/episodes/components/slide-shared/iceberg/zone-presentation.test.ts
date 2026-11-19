@@ -39,9 +39,13 @@ describe('success cases', () => {
       rail: { rails: 1, phoneOnly: undefined, lit: ['6'] },
     };
     // ACT
-    const presentation = zonePresentation({ sections: SECTIONS, section: 6, kind: 'page' });
+    const presentation = zonePresentation({
+      sections: SECTIONS,
+      section: 6,
+      kind: 'page',
+    });
     const seen = {
-      surface: presentation.style['--slide-surface'],
+      surface: presentation.surface?.background,
       enter: presentation.enter,
       mobile: presentation.rearMobile,
       rail: railOf(presentation.rear),
@@ -50,18 +54,22 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('fills a section slide with its zone and descends into it through bubbles tinted by that zone, its rail kept to phones', () => {
+  it('fills a section slide with its zone and descends into it through bubbles, its rail kept to phones', () => {
     // ARRANGE
     const expected = {
-      enter: { effect: 'bubbles', style: { '--slide-transition-bubble': 'var(--zone-sunlit)' } },
+      enter: { effect: 'bubbles' },
       surface: 'var(--zone-sunlit)',
       rail: { rails: 1, phoneOnly: '', lit: ['2'] },
     };
     // ACT
-    const presentation = zonePresentation({ sections: SECTIONS, section: 2, kind: 'section' });
+    const presentation = zonePresentation({
+      sections: SECTIONS,
+      section: 2,
+      kind: 'section',
+    });
     const seen = {
       enter: presentation.enter,
-      surface: presentation.style['--slide-surface'],
+      surface: presentation.surface?.background,
       rail: railOf(presentation.rear),
     };
     // ASSERT
@@ -70,12 +78,16 @@ describe('success cases', () => {
 
   it('fills a Surface section slide with the top of its sky, so the wave rising into it reads as one with the sky', () => {
     // ARRANGE
-    const expected = { surface: SKY_TOP, bubbles: 'var(--zone-surface)' };
+    const expected = { surface: SKY_TOP, bubbleTint: undefined };
     // ACT
-    const presentation = zonePresentation({ sections: SECTIONS, section: 0, kind: 'section' });
+    const presentation = zonePresentation({
+      sections: SECTIONS,
+      section: 0,
+      kind: 'section',
+    });
     const seen = {
-      surface: presentation.style['--slide-surface'],
-      bubbles: presentation.enter?.style['--slide-transition-bubble'],
+      surface: presentation.surface?.background,
+      bubbleTint: (presentation.enter as { style?: unknown } | undefined)?.style,
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -85,22 +97,55 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { surface: SKY_TOP, foreground: 'var(--zone-abyss)' };
     // ACT
-    const { style } = zoneTitlePresentation();
-    const seen = { surface: style['--slide-surface'], foreground: style['--foreground'] };
+    const { surface } = zoneTitlePresentation();
+    const seen = {
+      surface: surface?.background,
+      foreground: surface?.foreground,
+    };
     // ASSERT
     expect(seen).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
+  it('writes no text colour into a zone style: the Surface carries it, whole-Slide, with the 78% muted text', () => {
+    // ARRANGE
+    const expected = {
+      style: [undefined, undefined],
+      scope: 'slide',
+      muted: 'color-mix(in oklab, var(--zone-abyss) 78%, transparent)',
+    };
+    // ACT
+    const { style, surface } = zonePresentation({
+      sections: SECTIONS,
+      section: 0,
+      kind: 'section',
+    });
+    const seen = {
+      style: [style['--foreground'], style['--muted-foreground']],
+      scope: surface?.textScope,
+      muted: surface?.muted,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
   it('keeps the scene behind a section slide alone: a page Slide draws only its rail, whatever scene it is handed', () => {
     // ARRANGE
     const expected = { scenes: 0, rails: 1 };
     const scene = createElement('svg', { 'data-test-scene': '' });
     // ACT
-    const { rear } = zonePresentation({ sections: SECTIONS, section: 3, kind: 'page', scene });
+    const { rear } = zonePresentation({
+      sections: SECTIONS,
+      section: 3,
+      kind: 'page',
+      scene,
+    });
     const $ = load(renderToStaticMarkup(createElement('div', null, rear)));
-    const seen = { scenes: $('[data-test-scene]').length, rails: $('[data-depth-rail]').length };
+    const seen = {
+      scenes: $('[data-test-scene]').length,
+      rails: $('[data-depth-rail]').length,
+    };
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -120,7 +165,10 @@ describe('edge cases', () => {
     // ARRANGE
     const dark = 'var(--zone-abyss)';
     const light = 'var(--on-brand-accent)';
-    const expected = { order: ['scene', 'rail'], foreground: [dark, dark, light, light, light] };
+    const expected = {
+      order: ['scene', 'rail'],
+      foreground: [dark, dark, light, light, light],
+    };
     const scene = createElement('svg', { 'data-test-scene': '' });
     // ACT
     const at = (section: number) => zonePresentation({ sections: SECTIONS, section, kind: 'section', scene });
@@ -129,7 +177,7 @@ describe('edge cases', () => {
       order: $('[data-test-scene], [data-depth-rail]')
         .toArray()
         .map((element) => ($(element).is('[data-test-scene]') ? 'scene' : 'rail')),
-      foreground: [0, 2, 4, 6, 7].map((section) => at(section).style['--foreground']),
+      foreground: [0, 2, 4, 6, 7].map((section) => at(section).surface?.foreground),
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -143,8 +191,15 @@ describe('edge cases', () => {
     };
     // ACT
     const landing = (kind: 'section' | 'page') => {
-      const { style } = zonePresentation({ sections: SECTIONS, section: 3, kind });
-      return { offset: style['--slide-anchor-offset'], before: style['--slide-space-before'] };
+      const { style } = zonePresentation({
+        sections: SECTIONS,
+        section: 3,
+        kind,
+      });
+      return {
+        offset: style['--slide-anchor-offset'],
+        before: style['--slide-space-before'],
+      };
     };
     const seen = { section: landing('section'), page: landing('page') };
     // ASSERT
@@ -155,7 +210,14 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = [{}, {}, {}, {}];
     // ACT
-    const seen = [6, 7, 4, 0].map((section) => zonePresentation({ sections: SECTIONS, section, kind: 'page' }).style);
+    const seen = [6, 7, 4, 0].map((section) => {
+      const { style, surface } = zonePresentation({
+        sections: SECTIONS,
+        section,
+        kind: 'page',
+      });
+      return { ...style, ...surface };
+    });
     // ASSERT
     expect(seen).toEqual(expected);
   });

@@ -495,6 +495,33 @@ describe('success cases', () => {
     // ASSERT
     expect(content.transitions.get(expected.outgoing)).toEqual(expected);
   });
+  it.each([
+    {
+      name: 'the incoming Surface background',
+      incoming: { surface: { background: 'var(--zone-sunlit)', foreground: 'black' } },
+      ink: 'var(--zone-sunlit)',
+    },
+    { name: 'the swapped background when it has only the flag', incoming: { inverse: true }, ink: 'var(--background)' },
+    { name: 'the page background when it declares neither', incoming: {}, ink: 'var(--background)' },
+    {
+      name: 'the transition override over its Surface',
+      incoming: { surface: { background: 'var(--zone-sunlit)', foreground: 'black' } },
+      style: { '--slide-transition-ink': 'var(--zone-abyss)' },
+      ink: 'var(--zone-abyss)',
+    },
+  ])('runs the ink to $name', async ({ incoming, ink, style }) => {
+    // ARRANGE
+    const enter = { effect: 'liquid' as const, ...(style && { style }) };
+    const record = episode({
+      slug: 'ai-token-economy',
+      messages: EPISODE,
+      sections: [[foundations, { ...whyATemplate, presentation: { ...incoming, enter } }]],
+    });
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    // ASSERT
+    expect(content.transitions.get('foundations')?.targetSurface).toBe(ink);
+  });
   it("reads the Episode's own title and caption in the page's locale", async () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', caption: 'Die kleinste Episode.' };
@@ -760,7 +787,7 @@ describe('edge cases', () => {
         slug: 'hero',
         messages: EPISODE,
         content: () => null,
-        presentation: { style: { '--slide-surface': 'var(--zone-surface)' } },
+        presentation: { surface: { background: 'var(--zone-surface)', foreground: 'var(--foreground)' } },
       }),
     });
     const expected = { band: '', tone: undefined };

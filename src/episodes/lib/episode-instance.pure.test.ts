@@ -65,11 +65,11 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       hero: { en: { goal: 'Manage' }, de: HERO.messages.de },
-      presentation: { tone: 'inverse' },
+      presentation: { inverse: true },
     };
     // ACT
     const instance = resolve(BASE, {
-      slides: { hero: { messages: { en: { goal: 'Manage' } } }, price: { presentation: { tone: 'inverse' } } },
+      slides: { hero: { messages: { en: { goal: 'Manage' } } }, price: { presentation: { inverse: true } } },
     });
     // ASSERT
     expect({ hero: instance.title?.messages, presentation: instance.sections[0][1].presentation }).toEqual(expected);

@@ -9,6 +9,7 @@ import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
 import type { LocalizedSlideOutline } from '../slide-master/slide-outline';
+import type { Surface } from '../slide-master/surface';
 
 export function slideSizeOf(slide: Pick<LocalizedSlide, 'level' | 'withoutSectionSlide'>): 'section' | 'page' {
   return slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page';
@@ -62,12 +63,12 @@ export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5
 
 export interface TitleBand {
   readonly inverse: boolean;
-  readonly presentation?: { readonly style?: { readonly '--slide-surface'?: string } };
+  readonly presentation?: { readonly surface?: Surface };
 }
 
 // decision: FE-004 §5.4
 export function fillsHeaderBand({ inverse, presentation }: TitleBand): boolean {
-  return inverse || presentation?.style?.['--slide-surface'] !== undefined;
+  return inverse || presentation?.surface !== undefined;
 }
 
 export function pageClassOf(title: TitleBand): string {
