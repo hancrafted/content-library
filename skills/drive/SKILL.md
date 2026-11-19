@@ -17,7 +17,7 @@ You are the **Orchestrator** of one Workflow: the architect the Operator talks t
 - **Lean Orchestrator.** The main session stays a fluid conversation; what lands in the repo goes to a Subagent.
 - **Deterministic enforcement.** Narrow every failure mode until a mechanical check can govern it.
 
-Announce each phase and its branch changes before acting.
+Announce each phase and its branch changes before acting, and print `drive status <topic>` at each phase start and on every resume: it reads the topic folder, the branches, the PRs and the tickets, and names the phase and the next stop.
 
 ## Entry check
 
@@ -56,8 +56,8 @@ flowchart TD
 Every project fact lives in `docs/drive/`; this skill knows none. Read it before anything else:
 
 - `binding.yml`: the **Binding**, each DRIVE phase's skills (`phases.<phase>.skills`), the Model tier its Subagents run on (`phases.<phase>.model`, `mid` or `top`), the agent type every agent uses (`agentType`) and the notify port (`notify.adapter`: `push-notification`, the harness's push notification, or `none`; absent means `push-notification`). A phase with no bound skill is done inline by you. Within a phase, pick a skill by its description.
-- `project.yml`: the project settings for worktrees (`worktree.*`), the parallel cap (`parallel.*`), the models behind each provider's tiers (`models`) and the Decision docs' paths (`decisionDocs`).
-- `profiles.md`: the project's rules for each Profile, and the kinds of live or scheduled things a change can touch. `learnings.md`: past corrections and Fortify proposals. `enforcers.yml`: the Enforcers Fortify picks from. `review.md`: the calibration answers for every decision page.
+- `project.yml`: the project settings for worktrees (`worktree.*`), the parallel cap (`parallel.*`), the models behind each provider's tiers (`models`), the Decision docs' paths (`decisionDocs`) and the grill format (`grill.format`).
+- `profiles.md`: the project's rules for each Profile, and the kinds of live or scheduled things a change can touch. `learnings/`: the records and failure modes ([references/fortify.md](references/fortify.md)). `enforcers.yml`: the Enforcers Fortify picks from. `review.md`: the calibration answers for every decision page.
 
 No folder yet, or a skill installed since setup: run setup first, [references/setup.md](references/setup.md).
 
@@ -76,6 +76,7 @@ Each Workflow keeps its memory in `.scratch/<topic>/` (gitignored), so it surviv
 - `brief.md`: the shared brief every Subagent reads first.
 - `decisions.md`: the decisions log. Write each settled term and decision in its exact wording the moment it settles, and each Operator correction under **Corrections** at once.
 - `<task>.brief.md` and `<task>.report.md`: one **Handoff** per task, [references/dispatch.md](references/dispatch.md).
+- `drive.log.jsonl`: written by the CLI and the Subagent hooks; `drive transcript --topic <topic>` reads the sessions it links. `monitor.md`: the monitor's findings, below.
 
 ## Branches
 
@@ -87,7 +88,7 @@ These names override any worktree path or branch a Handoff or another skill name
 
 ## 1. Define (clarify)
 
-Every grill starts /drive. Create and push the Integration branch first, in the background. Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`. A grill that changes nothing in the repo ends here, with its topic folder.
+Every grill starts /drive. Create and push the Integration branch first, in the background. Read the file `grill.format` names in `project.yml` (`docs/agents/grilling-format.md`) and follow it: state each round's questions in full, with options and examples, and explain every term no glossary defines. Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`. A grill that changes nothing in the repo ends here, with its topic folder.
 
 **Pre-flight.** Before the gate, list what the change touches that is live or scheduled; `docs/drive/profiles.md` names the kinds for this project. Settle each with the Operator now, and record it in `decisions.md`: it goes into the Decision PR body, and it is never first raised at the PR.
 
@@ -126,7 +127,7 @@ _Done when:_ the Operator passed the Decision gate (the Decision PR merged, or t
 
 ## 3. Implement (codify)
 
-The gate is passed: nothing here asks the Operator anything except a closed interrupt. Dispatch the tickets as [references/dispatch.md](references/dispatch.md) says: overlap check, file ownership, explicit model, the parallel cap. Each Subagent merges itself into the Integration branch, and `drive worktree done` runs the project's `beforeMerge` hooks first. Check every report as [references/review.md](references/review.md) says the moment it arrives, then dispatch what it unblocked.
+The gate is passed: nothing here asks the Operator anything except a closed interrupt. Dispatch the tickets as [references/dispatch.md](references/dispatch.md) says: `drive dispatch check` before each wave, overlap check, file ownership, the resolved model named in each dispatch line, the parallel cap. Each Subagent merges itself into the Integration branch, and `drive worktree done` runs the project's `beforeMerge` hooks first. Check every report as [references/review.md](references/review.md) says the moment it arrives, then dispatch what it unblocked.
 
 At an interrupt, notify the Operator through the Binding's notify port, say what stopped and what you need, and wait.
 
@@ -134,14 +135,32 @@ _Done when:_ every ticket's task is merged and checked, or reverted with its rea
 
 ## 4. Verify
 
-Push after every merge with `drive push`, in the background, never piped through another command; it fails when the push fails or the remote differs from the local commit. The first push after the first merge opens the draft PR to the base branch. Review at the planned checkpoints and before the PR is marked ready, triage every finding and log each verdict in `decisions.md` without asking, and hand the accepted ones to one fix Subagent: [references/review.md](references/review.md). CI red twice after a fix round is an interrupt.
+Push after every merge with `drive push`, in the background, never piped through another command (a pipe hides its exit code); it fails when the push fails or the remote differs from the local commit. The first push, `drive push --spec <epic number>`, opens the draft PR to the base branch with a `Closes` line for each sub-issue and fails on a missing one; a branch whose PR already merged is refused. Review at the planned checkpoints and before the PR is marked ready, triage every finding and log each verdict in `decisions.md` without asking, and hand the accepted ones to one fix Subagent: [references/review.md](references/review.md). CI red twice after a fix round is an interrupt.
 
-When CI passes on the last push, notify the Operator through the notify port that the PR is ready. The PR body lists the verdicts, so the Operator contests them there.
+Then delegate the Workflow's record ([references/fortify.md](references/fortify.md) "The record"): it is the PR's last commit, with `fortify: pending`. Save the final review as `.scratch/<topic>/review.md`, and run `drive pr ready <number>`: it refuses without that report and marks the PR ready.
 
-_Done when:_ CI passes on the last push, every finding has a logged verdict with a reason, the Operator is notified and has the PR to merge.
+Watch the PR in the background with `drive pr watch <number> --integration`, and notify the Operator through the notify port that the PR is ready. The PR body lists the verdicts, so the Operator contests them there. Its exit code says what to do:
+
+| Exit | Meaning                              | You                                                       |
+| ---- | ------------------------------------ | --------------------------------------------------------- |
+| 10   | a check is failing                   | fix it: the next Implement task                           |
+| 11   | a merge conflict                     | `drive worktree sync` the Integration branch, push        |
+| 12   | merged; lists the tickets still open | close the leftover tickets, then ask the Fortify question |
+| 13   | closed unmerged                      | the Workflow stops; tell the Operator                     |
+
+_Done when:_ CI passes on the last push, every finding has a logged verdict with a reason, the record is committed, the Operator is notified and has the PR to merge.
 
 ## 5. Evolve (fortify)
 
-After the Operator merges the Integration branch's PR, run **Fortify** on a branch from the base branch: [references/fortify.md](references/fortify.md). It blocks nothing and asks nothing.
+After the Operator merges the Integration branch's PR (exit 12) and the leftover tickets are closed, ask once: "Fortify now (a top-tier decision page) or skip?" Skip records `fortify: skipped` with the Operator's reason and ends here; yes runs **Fortify** on a branch from the base branch: [references/fortify.md](references/fortify.md). It blocks nothing else.
 
-_Done when:_ every option and correction is in `docs/drive/learnings.md` with its recurrence count, and at most one `fortify` ticket is open and it is the recommended architectural option. Then clean up the merged branches and worktrees.
+_Done when:_ the record says `engaged` or `skipped`; when engaged, at most one `fortify` ticket is open and it is the recommended architectural option. Then clean up the merged branches and worktrees.
+
+## Monitor
+
+`/drive monitor <session-id>` watches another session, usually a grill the Operator runs elsewhere, and records what it learns for Fortify. It writes only `.scratch/<topic>/monitor.md` and nothing in the repo; the `<topic>` is the watched Workflow's.
+
+1. **Start at once** on the default watch rules: Operator corrections, questions the Operator asks about a term, CI or PR state relayed in the session, tool failures and interrupts.
+2. **Calibrate without blocking.** Ask the Operator in one message what else to watch or ignore; keep watching while the answer is pending, and apply it when it arrives.
+3. **Loop.** On each tick run `drive transcript <session-id> --since-last`, which prints only what is new since the last run, and append each finding to `monitor.md` with the session's name, a time and the Operator's words verbatim.
+4. **End** when the session ends or the Operator says stop. At Verify the record folds each finding in with `(source: monitor)`.

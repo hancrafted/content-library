@@ -1,8 +1,10 @@
 ---
 title: 'A decision page of the wrong model tier fails layout or rendering'
 enforcer: 'review: the tier rule in dispatch.md "Model", read from the page''s calibration; the screenshot check in dispatch.md "A decision page"'
-status: ticket
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/797
+fixed-by: https://github.com/hancrafted/content-library/issues/798
+fixed-on: '2026-11-19'
 ---
 
 # A decision page of the wrong model tier fails layout or rendering
