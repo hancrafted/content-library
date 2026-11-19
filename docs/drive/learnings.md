@@ -94,10 +94,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A Subagent skips an acceptance criterion and the report passes the shape check
 
-- **Count:** 3 (last: 2026-11-18, brief-or-pay-the-price)
+- **Count:** 4 (last: 2026-11-19, docs-lane)
 - **Enforcer:** none deterministic yet: Implementer profile line, quick win; new test for a report parser called by `worktree done`, architectural
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; ai-gives-you-more-work-pool: the fix-review Subagent did not read the `test:build` output its ticket required, and the Orchestrator accepted that because pre-push runs build tests; brief-or-pay-the-price: #718 dropped the morph fade-out and the BRIEF F "new" label, #720 the matrix FLIP from chip letters, #721 the BRACE→Workflow flight and the picker placement, each reported under Trade-offs and merged; the Operator or a review checkpoint found them (718-fix, #723, 721-review-fix); brief-or-pay-the-price: offered as AR-2 on the Fortify page, Operator skipped the picks (2026-11-18)
+- **Evidence:** ai-attention-span-pool: #712 reported visual-check as not done under Not verified and merged; the Orchestrator dispatched it separately; ai-gives-you-more-work-pool: the fix-review Subagent did not read the `test:build` output its ticket required, and the Orchestrator accepted that because pre-push runs build tests; brief-or-pay-the-price: #718 dropped the morph fade-out and the BRIEF F "new" label, #720 the matrix FLIP from chip letters, #721 the BRACE→Workflow flight and the picker placement, each reported under Trade-offs and merged; the Operator or a review checkpoint found them (718-fix, #723, 721-review-fix); brief-or-pay-the-price: offered as AR-2 on the Fortify page, Operator skipped the picks (2026-11-18); docs-lane: the first ticket reported "test:slow not run (nothing in that lane changed)" against a brief that asks for test:slow for changed areas; the Orchestrator judged it acceptable and noted it (the mildest case: no check separates a justified skip from an unjustified one)
 
 ### A pool Slide's test references a by-event Episode, and nothing checks it
 
@@ -108,10 +108,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### The harness attribution reminder conflicts with the commit rule and a Subagent has to arbitrate
 
-- **Count:** 1 (last: 2026-11-18, ai-attention-span-pool)
+- **Count:** 2 (last: 2026-11-19, docs-lane)
 - **Enforcer:** hook: .husky/commit-msg, architectural (brittle by the commit skill's account); or an Implementer profile line
 - **Status:** proposed
-- **Evidence:** ai-attention-span-pool: both implementation Subagents noted `/commit` strips the Co-Authored-By the harness asks for; the project rule won
+- **Evidence:** ai-attention-span-pool: both implementation Subagents noted `/commit` strips the Co-Authored-By the harness asks for; the project rule won; docs-lane: a Subagent followed `/commit` over the harness reminder to add a Co-Authored-By trailer and reported the conflict
 
 ### A Subagent's tracer ticket breaks FE-012 patterns and review fixes them after later tickets copied them
 
@@ -283,10 +283,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 
 ### A commit hook times out two unrelated tests while a Subagent runs in parallel
 
-- **Count:** 1 (last: 2026-11-18, drive-handoff)
-- **Enforcer:** test-runner: test, the load-scaled timeout in `vitest.config.mts`, quick win
-- **Status:** proposed
-- **Evidence:** drive-handoff: the test stage took 221 s under parallel load and failed two unrelated tests; the retry passed; `vitest.config.mts` already scales the timeout to the measured load, so it is a gap in that measure, not a missing one
+- **Count:** 2 (last: 2026-11-19, docs-lane)
+- **Enforcer:** test-runner: test, the load-scaled timeout in `tools/load/workers.pure.ts` also reading the load average, quick win; or a gate that waits for machine room before it starts, architectural
+- **Status:** waiting (recommended architectural option; #772 is the open `fortify` ticket)
+- **Evidence:** drive-handoff: the test stage took 221 s under parallel load and failed two unrelated tests; the retry passed; `vitest.config.mts` already scales the timeout to the measured load, so it is a gap in that measure, not a missing one; docs-lane: pre-push of `decisions/docs-lane` failed with 7 fast tests timed out at 7.1 s (episode-checks, robot-story, context.test, decision-record-term, worktree-merge lock wait) at machine load 55 on 16 cores from other sessions; a 7.1 s timeout is what `timeoutFor` gives at about 47% idle, so the one 200 ms sample in `currentLoad` probably read a quiet moment (inferred, not measured); the retry passed
 
 ### The notify port's push notification reaches only the terminal
 
@@ -323,6 +323,48 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - **Status:** proposed
 - **Evidence:** drive-learnings-consolidate: #774, #776 and #777 each appended failure modes after the last entry and corrections before the last line, so each conflicted with main and the others; merged by hand into one PR, and the "Operator skips Fortify" count was raised from 1 to 3 across them
 
+### A ticket is dispatched before the Operator confirmed its Skills and Review lines
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** check: new `drive` dispatch check that refuses a ticket whose Skills and Review-after lines are not marked confirmed, architectural
+- **Status:** proposed
+- **Evidence:** docs-lane: #780 went out on `/implement-spec 773` with Skills (tdd) and Review after (no) the Operator never answered directly
+
+### A skill outside the Binding prescribes its own merger flow and the Orchestrator arbitrates
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** none deterministic yet: a line in the drive skill that a skill not in the Binding yields to drive's merge and branch names, quick win (AGENTS.md already says a bound skill runs inside /drive)
+- **Status:** proposed
+- **Evidence:** docs-lane: `/implement-spec` names a merger Subagent and its own flow; drive's self-merge and Task branch names were used instead
+
+### The Orchestrator runs a check itself instead of delegating it
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** none deterministic yet: the Architect profile's "Lean context" line already says what lands in the repo is delegated; a check run only reads, so no hook can tell it from a Subagent's
+- **Status:** proposed
+- **Evidence:** docs-lane: the Orchestrator ran a vitest check inline (empty `--changed` run writes its JSON report; budget exits 0) to settle a Subagent's flagged risk
+
+### A session-start hook moves the Orchestrator's working directory
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** none deterministic yet: Orchestrator commands use absolute paths or `git -C`, quick win; the repo's SessionStart hook (`.claude/settings.json`, matcher `compact`) runs no `cd`, so the move came from a user-level hook outside this repo (not checked further)
+- **Status:** proposed
+- **Evidence:** docs-lane: a SessionStart hook's `cd` into an unrelated Episode worktree moved the Orchestrator; the next commands had to re-`cd` to the main checkout
+
+### `drive` is not on a Subagent's PATH and its brief names no command that works
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** test-runner: test that the task brief template in `dispatch.md` carries the command line `npm run -s drive -- worktree ...`, quick win
+- **Status:** proposed
+- **Evidence:** docs-lane: both Subagents found `npm run -s drive -- worktree ...` themselves; the brief named the drive skill's references, not the command (`worktrees.md` has no `npm run` line)
+
+### A Markdown-only commit or push runs the whole fast suite and the code gates
+
+- **Count:** 1 (last: 2026-11-19, docs-lane)
+- **Enforcer:** test-runner: test over the `docs/features/*.md` rerun trigger in `vitest.config.mts`, quick win; or hook: `verify:commit` and `verify:push` taking the docs lane, architectural
+- **Status:** proposed
+- **Evidence:** docs-lane: committing the one-file `docs/features/hosting.md` change ran pre-commit `verify:commit` for 3+ min (test 169.8 s, boundaries 20.1 s); the glob `docs/features/*.md` is a rerun trigger, so `vitest run --changed` ran every fast test; the first push of `decisions/docs-lane` ran the full fast suite too (Q7 keeps local verification full)
+
 ## Corrections
 
 - 2026-11-17 drive: The Operator stopped `wt:new -- decisions/drive` and asked "are we starting to implement? or is this prep work? are we already on a new integration branch?". The Orchestrator had started a step without saying which DRIVE phase it was in or what branch state would follow. → The Orchestrator starts a step without naming its DRIVE phase, the branch state that follows, or the Operator's decision points
@@ -355,3 +397,10 @@ One entry per failure mode with its recurrence count, and every Operator correct
 - 2026-11-18 drive-handoff: the notify port's push notification reached only the terminal; Remote Control was off, so no phone push (gap) → The notify port's push notification reaches only the terminal
 - 2026-11-18 event-copy-derivation: list round 1 questions → A grill round's questions are pointed to, not stated where the Operator reads
 - 2026-11-18 drive-learnings-consolidate: "774,776 and 777 are pr with learndings updates of drive. they have conflices and will cause conflicts of each other." → Parallel Workflows append to learnings.md at the same spot and their PRs conflict with each other
+- 2026-11-19 docs-lane: Ticket #780 was filed and dispatched on the Operator's `/implement-spec 773` without an explicit confirmation of its Skills (tdd) and Review after (no) lines; the lines were in `.scratch/docs-lane/ticket.md`, which the Operator had been asked to confirm but never answered directly (Orchestrator's own) → A ticket is dispatched before the Operator confirmed its Skills and Review lines
+- 2026-11-19 docs-lane: `/implement-spec` names a merger Subagent and its own flow; drive's self-merge and Task branch names were used instead (CLAUDE.md: a skill bound to a DRIVE phase runs inside /drive; implement-spec is not in the Binding) (Orchestrator's own) → A skill outside the Binding prescribes its own merger flow and the Orchestrator arbitrates
+- 2026-11-19 docs-lane: The Orchestrator ran a vitest check inline (empty `--changed` run writes its JSON report; budget exits 0) to settle a Subagent's flagged risk, instead of delegating it (Orchestrator's own) → The Orchestrator runs a check itself instead of delegating it
+- 2026-11-19 docs-lane: A SessionStart hook's `cd` into an unrelated Episode worktree moved the Orchestrator's working directory; the next commands had to re-`cd` to the main checkout (Orchestrator's own) → A session-start hook moves the Orchestrator's working directory
+- 2026-11-19 docs-lane: `drive` is not on PATH in a Subagent's shell; both Subagents found `npm run -s drive -- worktree ...` themselves (the brief named the drive skill's references, not `worktree.invoke`) (Subagents) → `drive` is not on a Subagent's PATH and its brief names no command that works
+- 2026-11-19 docs-lane: the harness attribution reminder asks for a Co-Authored-By trailer; `/commit` forbids it; the Subagent followed /commit and reported the conflict (Subagent) → The harness attribution reminder conflicts with the commit rule and a Subagent has to arbitrate
+- 2026-11-19 docs-lane: the first ticket's Subagent reported "test:slow not run (nothing in that lane changed)"; the brief asked for test:slow for changed areas; acceptable, noted (Subagent, first ticket) → A Subagent skips an acceptance criterion and the report passes the shape check
