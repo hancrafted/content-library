@@ -79,15 +79,21 @@ For a Subagent in this session, the task brief is its whole first message.
 
 ## The report
 
-`.scratch/<topic>/<task>.report.md`, under 150 words:
+`.scratch/<topic>/<task>.report.md`, under 150 words besides the criteria:
 
 ```markdown
-- <acceptance criterion>: done | not done (<why>) (one line each)
+## Acceptance criteria
+
+- [x] <acceptance criterion> — <evidence>
+- [ ] <acceptance criterion> — not done: <why>; deferred: <ticket url>
+
 - **Merge:** <merge commit hash>, <files changed, insertions, deletions>
 - **Not verified:** <what could not be checked, and why>
 - **Trade-offs:** <each one, with its cost>
 - **Interfaces changed:** <commands, flags, exports, file formats>
 - **Terms:** <words needed that the glossary lacks, with a proposed meaning>
 ```
+
+`drive worktree done` reads this report for a Task branch `<type>/<topic>--<issue>-<task>` and refuses to merge when it is missing, has no `## Acceptance criteria` section, or holds a `- [ ]` line without `deferred: <ticket url>`. Write the report before `worktree done`.
 
 An empty **Not verified** or **Trade-offs** line says `none`; a missing line counts as a failed check.
