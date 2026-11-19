@@ -24,13 +24,22 @@ When the OS drops a metadata file (`.DS_Store`) into the folder mid-delete, `don
 
 ## push
 
-`drive push`, inside a worktree, pushes the current branch (setting the upstream when there is none), fails when the push exits non-zero, then fails unless the remote branch equals `HEAD`. It prints `✔ pushed <branch> <old>..<new>`; hook output streams. Run it in the background and read its exit code: never pipe it through `grep` or `tail`, which hides the exit code. `--spec <epic number>` opens the draft Integration PR when the branch has none, with `Closes #n` for every sub-issue of the epic, and fails on a missing one. A branch whose PR already merged is refused. Only the Orchestrator pushes.
+`drive push`, inside a worktree, pushes the current branch (setting the upstream when there is none), fails when the push exits non-zero, then fails unless the remote branch equals `HEAD`. It prints `✔ pushed <branch> <old>..<new>`; hook output streams. Run it in the background and read its exit code: never pipe it through `grep` or `tail`, which hides the exit code. `--spec <epic number>` opens the draft Integration PR when the branch has none (Define pushes the empty Integration branch without it; pass it on the first push after the first merge), with `Closes #n` for every sub-issue of the epic, and fails on a missing one. A branch whose PR already merged is refused. Only the Orchestrator pushes.
 
 ## pr watch
 
 `drive pr watch <number>` polls the PR in the background. Exit 0 and `merged <sha>`: merged. Exit 2 and `closed`: closed unmerged. Exit 3 with the bodies: a review, comment or inline review comment (printed as `path:line body`) arrived after the watch started. It skips comments that start with `<!-- drive -->`, so start each reply you post on a PR with it.
 
-`drive pr watch <number> --integration` watches the Integration PR instead and ignores comments: exit 10 a failing check, 11 a merge conflict, 12 merged (it lists the tickets still open), 13 closed unmerged. `drive pr ready <number>` marks the draft ready and refuses without `.scratch/<topic>/review.md`.
+`drive pr watch <number> --integration` watches the Integration PR instead and ignores comments. Its exit codes:
+
+| Exit | Meaning                              |
+| ---- | ------------------------------------ |
+| 10   | a check is failing                   |
+| 11   | a merge conflict                     |
+| 12   | merged; lists the tickets still open |
+| 13   | closed unmerged                      |
+
+`drive pr ready <number>` marks the draft ready and refuses without `.scratch/<topic>/review.md`.
 
 ## How a Subagent finishes
 

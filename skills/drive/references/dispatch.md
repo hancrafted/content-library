@@ -4,7 +4,7 @@ How the Orchestrator hands tickets to Subagents, and the Handoff they return. On
 
 ## Before each wave
 
-Run `drive dispatch check [--base <Integration branch>] <issue number…>` on the tickets about to go out together. It reads each ticket's `Files:`, `Describes:`, `ADRs:` and `Evidence from:` lines and fails when two queued tickets share files, or a ticket describes work not yet merged into the Integration branch. Fix the order or the ownership it names, then dispatch. A ticket carries those four lines under its **Skills** and **Review after** lines:
+Run `drive dispatch check --base <Integration branch> <issue number…>` on the tickets about to go out together; `--base` is required, because you sit on the base branch and merged means merged into the Integration branch. It reads each ticket's `Files:`, `Describes:`, `ADRs:` and `Evidence from:` lines and fails when a ticket lacks one of them, when two queued tickets share files, or when a ticket describes work not yet merged into the Integration branch. Fix the order or the ownership it names, then dispatch. A ticket carries those four lines under its **Skills** and **Review after** lines:
 
 ```markdown
 Files: <paths or globs the ticket owns>
