@@ -3,7 +3,7 @@ title: "A ticket conflicts with a binding ADR and the conflict surfaces only in 
 enforcer: 'check: new `check:tickets` that fails a ticket body with no ADRs line, quick win (the content check stays review)'
 status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/793
-fixed-by: https://github.com/hancrafted/content-library/issues/793
+fixed-by: https://github.com/hancrafted/content-library/commit/3822510c81164552328a421757060216aefacf34
 fixed-on: '2026-11-19'
 ---
 

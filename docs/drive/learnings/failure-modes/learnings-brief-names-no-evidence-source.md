@@ -3,7 +3,7 @@ title: "A learnings ticket's brief names no evidence source, so its Subagent cre
 enforcer: 'check: `drive dispatch check` fails a ticket with no `Evidence from:` line, quick win'
 status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/793
-fixed-by: https://github.com/hancrafted/content-library/issues/793
+fixed-by: https://github.com/hancrafted/content-library/commit/3822510c81164552328a421757060216aefacf34
 fixed-on: '2026-11-19'
 ---
 

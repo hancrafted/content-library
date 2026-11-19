@@ -20,7 +20,7 @@ A lesson that holds for every project belongs in this skill's source, changed de
 When the review report exists and before `drive pr ready`, delegate the record to one Subagent (the Fortify evidence tier); its commit is the Integration PR's last. It writes `records/<date>-<topic>.md` with `fortify: pending` from:
 
 - every line under **Corrections** in `.scratch/<topic>/decisions.md`, yours included (list there each point where you departed from this skill or the Decision docs, with its cause, marked as yours), copied verbatim;
-- `drive transcript --topic <topic> --tools`, which extracts the Operator's turns, the questions asked, tool failures and interrupts (and with `--tools` every tool call and Skill invocation) of every session the topic's hook log links; run `drive transcript <session-id>` over your own session as well;
+- `drive transcript --topic <topic> --tools`, which extracts the Operator's turns, the questions asked, tool failures and interrupts (and with `--tools` every tool call and Skill invocation) of every session the topic's hook log links. It exits non-zero with a notice when the log links no session; the hook logs your session too once a Subagent has started, otherwise run `drive transcript <session-id>` over your own: the newest `.jsonl` transcript path in `drive.log.jsonl`, or the id the Operator gives;
 - `.scratch/<topic>/monitor.md`, when a monitor ran: each finding folded in as a bullet ending `(source: monitor)`;
 - the review report `.scratch/<topic>/review.md` and the CI runs.
 
@@ -30,9 +30,9 @@ You never edit the store yourself. A correction never waits for Fortify: log it 
 
 ## After the merge: the one question
 
-`drive pr watch <n> --integration` exits 12 when the Integration PR merged. Close the leftover tickets it lists, then ask the Operator once: **"Fortify now (a top-tier decision page) or skip?"** Never ask again.
+`drive pr watch <n> --integration` exits 12 when the Integration PR merged ([worktrees.md](worktrees.md) "pr watch"). Close the leftover tickets it lists, then ask the Operator once: **"Fortify now (a top-tier decision page) or skip?"** Never ask again.
 
-- **Skip.** Set the record's `fortify: skipped` and `skip-reason` to the Operator's words, on a branch from the base branch through a small PR. The learnings are kept; nothing else runs. This is how a deadline is honoured.
+- **Skip.** The record is append-only after the merge, so recording a skip is one small PR from the base branch: delegate it to a Subagent, which sets `fortify: skipped` and `skip-reason` to the Operator's words. Log the decision in `decisions.md`; the Operator may contest it. The learnings are kept; nothing else runs. This is how a deadline is honoured.
 - **Yes.** Set `fortify: engaged` and run the steps. Corrections made after the merge (the Operator's PR comments) are added to the record on the Fortify branch.
 
 ## Steps (engaged)

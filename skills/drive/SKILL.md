@@ -17,11 +17,11 @@ You are the **Orchestrator** of one Workflow: the architect the Operator talks t
 - **Lean Orchestrator.** The main session stays a fluid conversation; what lands in the repo goes to a Subagent.
 - **Deterministic enforcement.** Narrow every failure mode until a mechanical check can govern it.
 
-Announce each phase and its branch changes before acting, and print `drive status <topic>` at each phase start and on every resume: it reads the topic folder, the branches, the PRs and the tickets, and names the phase and the next stop.
+Announce each phase and its branch changes before acting, and print `drive status <topic>` at each phase start: it names the phase and the next stop.
 
 ## Entry check
 
-On every start or resume (a new session and a quota limit included), read the state: the topic folder, its decisions log, the spec and tickets on the tracker, the Integration branch, the Decision PR and the worktrees. A Decision PR still open means you are back at the gate: restart `drive pr watch` on it. Start at the first phase whose _Done when_ is unmet, tell the Operator which phase and the next stop. Before the gate, wait for confirmation; after it, notify the phase and next stop and continue.
+On every start or resume (a new session and a quota limit included), run `drive status <topic>`: it reads the topic folder, the branches, the PRs and the tickets, and names the phase and the next stop. Add what it does not read: the decisions log and the spec on the tracker. A Decision PR still open means you are back at the gate: restart `drive pr watch` on it. Start at the first phase whose _Done when_ is unmet, tell the Operator which phase and the next stop. Before the gate, wait for confirmation; after it, notify the phase and next stop and continue.
 
 ```mermaid
 flowchart TD
@@ -80,7 +80,7 @@ Each Workflow keeps its memory in `.scratch/<topic>/` (gitignored), so it surviv
 
 ## Branches
 
-- **Integration branch**: `<type>/<slug>`, in its own worktree, so the main checkout stays on the base branch and several Orchestrators can run side by side. `<type>` is a Conventional Commits type, or one `docs/drive/profiles.md` admits. Create and push it first, when the Workflow starts.
+- **Integration branch**: `<type>/<slug>`, in its own worktree, so the main checkout stays on the base branch and several Orchestrators can run side by side. `<type>` is a Conventional Commits type, or one `docs/drive/profiles.md` admits. Create it first, when the Workflow starts, and push the empty branch with `drive push` (Define).
 - **Task branch**: `<type>/<slug>--<issue>-<task>`, or `<type>/<slug>--<task>` without a ticket, started with `--base <type>/<slug>`.
 - **Decision docs**: `decisions/<topic>`, from the Integration branch, through the Decision PR into the Integration branch; `decisions` is a `<type>` like any other. The Decision docs reach the base branch with the Integration branch's PR.
 
@@ -88,7 +88,7 @@ These names override any worktree path or branch a Handoff or another skill name
 
 ## 1. Define (clarify)
 
-Every grill starts /drive. Create and push the Integration branch first, in the background. Read the file `grill.format` names in `project.yml` (`docs/agents/grilling-format.md`) and follow it: state each round's questions in full, with options and examples, and explain every term no glossary defines. Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`. A grill that changes nothing in the repo ends here, with its topic folder.
+Every grill starts /drive. Create the Integration branch first and push it empty, in the background. Read the file `grill.format` names in `project.yml` (`docs/agents/grilling-format.md`) and follow it: state each round's questions in full, with options and examples, and explain every term no glossary defines. Grill the Operator with the Define skills until the requirements are settled; record each answer in `decisions.md`. A grill that changes nothing in the repo ends here, with its topic folder.
 
 **Pre-flight.** Before the gate, list what the change touches that is live or scheduled; `docs/drive/profiles.md` names the kinds for this project. Settle each with the Operator now, and record it in `decisions.md`: it goes into the Decision PR body, and it is never first raised at the PR.
 
@@ -135,30 +135,23 @@ _Done when:_ every ticket's task is merged and checked, or reverted with its rea
 
 ## 4. Verify
 
-Push after every merge with `drive push`, in the background, never piped through another command (a pipe hides its exit code); it fails when the push fails or the remote differs from the local commit. The first push, `drive push --spec <epic number>`, opens the draft PR to the base branch with a `Closes` line for each sub-issue and fails on a missing one; a branch whose PR already merged is refused. Review at the planned checkpoints and before the PR is marked ready, triage every finding and log each verdict in `decisions.md` without asking, and hand the accepted ones to one fix Subagent: [references/review.md](references/review.md). CI red twice after a fix round is an interrupt.
+Push after every merge with `drive push`, in the background ([references/worktrees.md](references/worktrees.md) "push" holds its rules). The first push after the first merge is `drive push --spec <epic number>`: it opens the draft PR; later pushes omit `--spec`. Review at the planned checkpoints and before the PR is marked ready, triage every finding and log each verdict in `decisions.md` without asking, and hand the accepted ones to one fix Subagent: [references/review.md](references/review.md). CI red twice after a fix round is an interrupt.
 
 Then delegate the Workflow's record ([references/fortify.md](references/fortify.md) "The record"): it is the PR's last commit, with `fortify: pending`. Save the final review as `.scratch/<topic>/review.md`, and run `drive pr ready <number>`: it refuses without that report and marks the PR ready.
 
-Watch the PR in the background with `drive pr watch <number> --integration`, and notify the Operator through the notify port that the PR is ready. The PR body lists the verdicts, so the Operator contests them there. Its exit code says what to do:
-
-| Exit | Meaning                              | You                                                       |
-| ---- | ------------------------------------ | --------------------------------------------------------- |
-| 10   | a check is failing                   | fix it: the next Implement task                           |
-| 11   | a merge conflict                     | `drive worktree sync` the Integration branch, push        |
-| 12   | merged; lists the tickets still open | close the leftover tickets, then ask the Fortify question |
-| 13   | closed unmerged                      | the Workflow stops; tell the Operator                     |
+Watch the PR in the background with `drive pr watch <number> --integration` and notify the Operator through the notify port that the PR is ready. The PR body lists the verdicts, so the Operator contests them there. The exit codes are in [references/worktrees.md](references/worktrees.md) "pr watch"; you act on them like this: 10, fix it as the next Implement task; 11, `drive worktree sync` the Integration branch and push; 12, close the leftover tickets and ask the Fortify question (Evolve); 13, the Workflow stops, tell the Operator.
 
 _Done when:_ CI passes on the last push, every finding has a logged verdict with a reason, the record is committed, the Operator is notified and has the PR to merge.
 
 ## 5. Evolve (fortify)
 
-After the Operator merges the Integration branch's PR (exit 12) and the leftover tickets are closed, ask once: "Fortify now (a top-tier decision page) or skip?" Skip records `fortify: skipped` with the Operator's reason and ends here; yes runs **Fortify** on a branch from the base branch: [references/fortify.md](references/fortify.md). It blocks nothing else.
+After the Operator merges the Integration branch's PR (exit 12) and the leftover tickets are closed, ask once: "Fortify now (a top-tier decision page) or skip?" Skip ends here once one small PR from the base branch has recorded `fortify: skipped` with the Operator's reason (the record is append-only after the merge; log the decision in `decisions.md`, the Operator may contest it); yes runs **Fortify** on a branch from the base branch: [references/fortify.md](references/fortify.md). It blocks nothing else.
 
 _Done when:_ the record says `engaged` or `skipped`; when engaged, at most one `fortify` ticket is open and it is the recommended architectural option. Then clean up the merged branches and worktrees.
 
 ## Monitor
 
-`/drive monitor <session-id>` watches another session, usually a grill the Operator runs elsewhere, and records what it learns for Fortify. It writes only `.scratch/<topic>/monitor.md` and nothing in the repo; the `<topic>` is the watched Workflow's.
+`/drive monitor <session-id>` watches another session, usually a grill the Operator runs elsewhere, and records what it learns for Fortify. It writes only `.scratch/<topic>/monitor.md` and nothing in the repo; the `<topic>` is the watched Workflow's: take it from `drive status` run in the watched session's branch, or ask the Operator when no branch tells it.
 
 1. **Start at once** on the default watch rules: Operator corrections, questions the Operator asks about a term, CI or PR state relayed in the session, tool failures and interrupts.
 2. **Calibrate without blocking.** Ask the Operator in one message what else to watch or ignore; keep watching while the answer is pending, and apply it when it arrives.

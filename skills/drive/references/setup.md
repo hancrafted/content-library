@@ -17,7 +17,7 @@ Skills are found in the skills lockfile and in the project's skill folders, auth
 
 ## The learnings store
 
-Setup creates `docs/drive/learnings/{records,failure-modes}` and wires two checks. `mh check --root docs/drive/learnings --config <skill>/markdown-harness.config.yaml` and `drive learnings check` go into the project's docs check, so a record or failure-mode file that breaks the format fails the docs lane. Two async hooks, `SubagentStart` and `SubagentStop`, in `.claude/settings.json` run the skill's Claude adapter, which writes each Subagent's session and transcript path into `.scratch/<topic>/drive.log.jsonl` for `drive transcript`. `drive setup --check` writes nothing and reports Binding entries whose skill is not installed. When the skill sits outside the repo, setup prints the line to add by hand instead of editing the file.
+Setup creates `docs/drive/learnings/{records,failure-modes}` and wires two checks. `mh check --root docs/drive/learnings --config <skill>/markdown-harness.config.yaml` and `drive learnings check` go into the project's docs check, so a record or failure-mode file that breaks the format fails the docs lane. Two async hooks, `SubagentStart` and `SubagentStop`, in `.claude/settings.json` run the skill's Claude adapter, which writes each Subagent's session and transcript path into `.scratch/<topic>/drive.log.jsonl` for `drive transcript`. `drive setup --check` writes nothing and reports Binding entries whose skill is not installed; it runs inside `npm run preflight`, so a renamed skill fails there. When the skill sits outside the repo, setup prints the line to add by hand instead of editing the file.
 
 ## The decision-doc guard
 
