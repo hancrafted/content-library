@@ -1,27 +1,23 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { CATALOG, type DetectedSkill, mergeDetected, type SeedOptions, updateBinding } from './binding.pure.ts';
-import { CONFIG_PATH, harnessCapFrom } from './config.pure.ts';
+import { type DetectedSkill, mergeDetected, readBinding, type SeedOptions, updateBinding } from './binding.pure.ts';
+import { CONFIG_PATH, DRIVE_FOLDER } from './config.pure.ts';
 import { run } from './git.ts';
 import { FAILURE_MODES_FOLDER, LEARNINGS_STORE, RECORDS_FOLDER } from './learnings.pure.ts';
 import { driveEntry, fail } from './project.ts';
+import { missingBindingSkills, parseSetupArgs } from './setup-args.pure.ts';
+import { enforcerFacts, projectFacts } from './setup-facts.ts';
 import { addAdapterHooks, adapterHookNote, SETTINGS_FILE } from './setup-hooks.pure.ts';
 import {
   addGuardToHook,
   addLearningsCheck,
-  decisionDocGlobs,
   detectEnforcers,
-  type EnforcerFacts,
   guardCommand,
-  detectPackageManager,
   guardCiLine,
   guardHookLine,
-  installCommands,
   LEARNINGS_README,
   learningsCheckCommand,
   learningsCheckNote,
-  parseSetupArgs,
-  type ProjectFacts,
   renderEnforcers,
   updateProjectConfig,
 } from './setup.pure.ts';
@@ -31,7 +27,6 @@ export const LOCKFILE = 'skills-lock.json';
 const AUTHORED_DIR = 'skills';
 const INSTALLED_DIRS = ['.agents/skills', '.claude/skills'];
 const SELF = 'drive';
-const DRIVE_DIR = path.dirname(CONFIG_PATH);
 
 const read = (file: string): string | null => {
   try {
@@ -81,63 +76,6 @@ export function detectSkills(root: string): DetectedSkill[] {
   return mergeDetected(firstSightingWins, SELF);
 }
 
-function scriptsOfPackageJson(root: string): Record<string, string> {
-  try {
-    const manifest = JSON.parse(read(path.join(root, 'package.json')) ?? '{}') as { scripts?: Record<string, string> };
-    return manifest.scripts ?? {};
-  } catch {
-    return {};
-  }
-}
-
-function enforcerFacts(root: string): EnforcerFacts {
-  const scripts = scriptsOfPackageJson(root);
-  const hooks = ['.husky', '.githooks'].flatMap((dir) => {
-    try {
-      return readdirSync(path.join(root, dir), { withFileTypes: true })
-        .filter((entry) => entry.isFile())
-        .map((entry) => `${dir}/${entry.name}`);
-    } catch {
-      return [];
-    }
-  });
-  return {
-    scripts,
-    packageManager: detectPackageManager(readdirSync(root)),
-    hooks,
-    adrChecker: existsSync(path.join(root, '.archgate', 'adrs')),
-  };
-}
-
-function hasGlossary(dir: string, depth = 0): boolean {
-  if (depth > 4) return false;
-  return readdirSync(dir, { withFileTypes: true }).some((entry) => {
-    if (entry.isDirectory())
-      return (
-        !entry.name.startsWith('.') &&
-        entry.name !== 'node_modules' &&
-        hasGlossary(path.join(dir, entry.name), depth + 1)
-      );
-    return entry.name.startsWith('GLOSSARY') && entry.name.endsWith('.md');
-  });
-}
-
-function baseBranch(root: string): string {
-  const head = run('git', ['symbolic-ref', '--short', 'refs/remotes/origin/HEAD'], { cwd: root });
-  return head.status === 0 ? head.stdout.trim().replace(/^origin\//, '') : 'main';
-}
-
-function projectFacts(root: string, entry: string): ProjectFacts {
-  const folders = CATALOG.decisionFolders.filter((folder) => isFolder(path.join(root, folder)));
-  return {
-    baseBranch: baseBranch(root),
-    harnessCap: harnessCapFrom(process.env),
-    install: installCommands(readdirSync(root)),
-    driveEntry: entry,
-    decisionDocs: decisionDocGlobs(folders, hasGlossary(root)),
-  };
-}
-
 export interface SetupResult {
   written: string[];
   notes: string[];
@@ -159,17 +97,17 @@ export function setup(root: string, options: SeedOptions = {}, scriptsDir: strin
   const entry = driveEntry(root, scriptsDir);
   const facts = projectFacts(root, entry);
   write(
-    `${DRIVE_DIR}/binding.yml`,
-    updateBinding(read(path.join(root, DRIVE_DIR, 'binding.yml')), detectSkills(root), options),
+    `${DRIVE_FOLDER}/binding.yml`,
+    updateBinding(read(path.join(root, DRIVE_FOLDER, 'binding.yml')), detectSkills(root), options),
   );
   write(CONFIG_PATH, updateProjectConfig(read(path.join(root, CONFIG_PATH)), facts));
-  write(`${DRIVE_DIR}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
+  write(`${DRIVE_FOLDER}/enforcers.yml`, renderEnforcers(detectEnforcers(enforcerFacts(root))));
   notes.push(...wire(root, { entry, baseBranch: facts.baseBranch }, write));
-  createdOnly(`${DRIVE_DIR}/profiles.md`, PROFILES_STUB);
+  createdOnly(`${DRIVE_FOLDER}/profiles.md`, PROFILES_STUB);
   createdOnly(`${LEARNINGS_STORE}/README.md`, LEARNINGS_README);
   for (const folder of [RECORDS_FOLDER, FAILURE_MODES_FOLDER])
     mkdirSync(path.join(root, LEARNINGS_STORE, folder), { recursive: true });
-  createdOnly(`${DRIVE_DIR}/review.md`, REVIEW_STUB);
+  createdOnly(`${DRIVE_FOLDER}/review.md`, REVIEW_STUB);
   return { written, notes };
 }
 
@@ -223,18 +161,29 @@ function wireLearningsCheck(
   return null;
 }
 
-const isFolder = (dir: string): boolean => {
-  try {
-    return statSync(dir).isDirectory();
-  } catch {
-    return false;
-  }
-};
+export function checkBinding(root: string): string[] {
+  const text = read(path.join(root, DRIVE_FOLDER, 'binding.yml'));
+  if (text === null) return [`${DRIVE_FOLDER}/binding.yml does not exist; run \`drive setup\``];
+  const binding = readBinding(text);
+  if ('error' in binding) return [binding.error];
+  const installed = detectSkills(root).map((skill) => skill.name);
+  return missingBindingSkills(binding, installed).map(
+    ({ skill, phases }) =>
+      `${DRIVE_FOLDER}/binding.yml binds '${skill}' (${phases.join(', ')}) but no such skill is installed; rename or remove it`,
+  );
+}
+
+function reportBinding(root: string): void {
+  const problems = checkBinding(root);
+  if (problems.length > 0) fail(problems.join('\n✖ '));
+  console.log('✔ every skill the Binding names is installed');
+}
 
 export function runSetup(args: readonly string[]): void {
   const options = parseSetupArgs(args);
   if ('error' in options) fail(options.error);
   const root = path.resolve(run('git', ['rev-parse', '--show-toplevel']).stdout.trim() || process.cwd());
+  if (options.check) return reportBinding(root);
   let result: SetupResult;
   try {
     result = setup(root, options);
@@ -243,7 +192,7 @@ export function runSetup(args: readonly string[]): void {
   }
   const { written, notes } = result;
   console.log(
-    written.length === 0 ? `✔ ${DRIVE_DIR}/ is up to date` : written.map((file) => `✔ wrote ${file}`).join('\n'),
+    written.length === 0 ? `✔ ${DRIVE_FOLDER}/ is up to date` : written.map((file) => `✔ wrote ${file}`).join('\n'),
   );
   for (const note of notes) console.log(note);
 }

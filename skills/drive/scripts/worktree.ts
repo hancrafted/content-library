@@ -1,11 +1,17 @@
 import { spawnSync } from 'node:child_process';
-import { capture, git, stream } from './git.ts';
+import { capture, git, run, stream } from './git.ts';
 import { fail, loadProject, type Project, runAfter, runHooks, worktreePath } from './project.ts';
 import { parseArgs, refuseNewBranch } from './worktree-args.pure.ts';
+import { mergedPrOfTip, parseMergedPrs } from './worktree-branch.pure.ts';
 import { insideWorktree, refuseWhileBusyLastBeforeRemoval } from './worktree-busy.ts';
 import { forkDateBeforeMerge, mergeIntoBase, withMergeLock } from './worktree-merge.ts';
 import { planSync } from './worktree-process.pure.ts';
 import { removeWorktree } from './worktree-remove.ts';
+
+function rollBack(project: Project, target: string, branch: string): void {
+  git(project.root, ['worktree', 'remove', '--force', target]);
+  git(project.root, ['branch', '-D', branch]);
+}
 
 function create(project: Project, branch: string, base: string | null): void {
   const { config } = project;
@@ -14,23 +20,39 @@ function create(project: Project, branch: string, base: string | null): void {
   if (branchesFromRemoteBase) stream('git', ['fetch', config.remote]);
   stream('git', ['worktree', 'add', target, '-b', branch, base ?? project.remoteBase]);
   for (const command of config.install)
-    if (spawnSync(command, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)
-      fail(`install step failed in ${target}: ${command}`);
+    if (spawnSync(command, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0) {
+      rollBack(project, target, branch);
+      fail(`install step failed in ${target}: ${command}\n  the worktree and branch were removed; rerun to retry`);
+    }
   const { preflight } = config;
   if (preflight !== null && spawnSync(preflight, { shell: true, cwd: target, stdio: 'inherit' }).status !== 0)
     fail(`preflight failed in ${target}: ${preflight}\n  the worktree is left in place`);
   console.log(`✔ worktree ready: ${target}\n  next: cd ${target}`);
 }
 
+function mergedPrOfBranchTip(branch: string): number | null {
+  const tip = git(process.cwd(), ['rev-parse', `refs/heads/${branch}`]).stdout.trim();
+  const listed = run('gh', ['pr', 'list', '--state', 'merged', '--head', branch, '--json', 'number,headRefOid']);
+  if (listed.status !== 0 || tip === '') return null;
+  return mergedPrOfTip(parseMergedPrs(listed.stdout), tip)?.number ?? null;
+}
+
+const gitDeletes = (branch: string): boolean => git(process.cwd(), ['branch', '-d', branch]).status === 0;
+
 function deleteBranch(branch: string): void {
-  try {
-    capture('git', ['branch', '-d', branch]);
+  if (gitDeletes(branch)) {
     console.log(`✔ deleted branch ${branch}`);
-  } catch {
-    console.warn(
-      `! kept branch ${branch}: git sees unmerged commits (squash merge?). Delete with \`git branch -D ${branch}\` once its PR merged.`,
-    );
+    return;
   }
+  const pr = mergedPrOfBranchTip(branch);
+  if (pr === null) {
+    console.warn(
+      `! kept branch ${branch}: git sees unmerged commits and no merged PR has its tip as head. Delete with \`git branch -D ${branch}\` once its PR merged.`,
+    );
+    return;
+  }
+  capture('git', ['branch', '-D', branch]);
+  console.log(`✔ deleted branch ${branch}, its tip was merged by PR #${pr}`);
 }
 
 function refuseUnpushedBaseBeforeAnyRemoval(project: Project): void {

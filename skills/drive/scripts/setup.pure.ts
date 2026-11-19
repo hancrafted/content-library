@@ -1,5 +1,4 @@
 import { Document, type YAMLMap } from 'yaml';
-import { isTier, type SeedOptions } from './binding.pure.ts';
 import { defaultsFor, PARALLEL_DEFAULTS } from './config.pure.ts';
 import { FAILURE_MODES_FOLDER, LEARNINGS_STORE, RECORDS_FOLDER } from './learnings.pure.ts';
 import { openMapping } from './yaml.pure.ts';
@@ -143,22 +142,6 @@ export function updateProjectConfig(existing: string | null, facts: ProjectFacts
     comment: DECISION_DOCS_NOTE,
   });
   return doc.toString();
-}
-
-export function parseSetupArgs(args: readonly string[]): SeedOptions | { error: string } {
-  const usage = {
-    error: 'usage: drive setup [--agent-type <type>] [--tier mid|top]',
-  };
-  const options: SeedOptions = {};
-  for (let i = 0; i < args.length; i += 2) {
-    const flag = args[i];
-    const value = args[i + 1];
-    if (value === undefined || value.startsWith('--')) return usage;
-    if (flag === '--agent-type') options.agentType = value;
-    else if (flag === '--tier' && isTier(value)) options.tier = value;
-    else return usage;
-  }
-  return options;
 }
 
 export const guardCommand = (driveEntry: string, against: string | null = null): string =>

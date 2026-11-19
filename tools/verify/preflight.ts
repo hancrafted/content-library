@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, lstatSync } from 'node:fs';
 import path from 'node:path';
 import { fullStdoutOf } from './full-stdout.ts';
+import { coreBareIsTrue } from './preflight-bare.ts';
 import { findViolations, type CheckoutFacts } from './preflight.pure.ts';
 
 function git(...args: string[]): string {
@@ -45,6 +46,7 @@ const violations = findViolations({
   nodeModules: nodeModulesKind(root),
   hooksInstalled: hooksInstalled(root),
   archgateTotal: archgateFullScopeTotal(root),
+  coreBare: coreBareIsTrue(root),
 });
 
 for (const violation of violations) {

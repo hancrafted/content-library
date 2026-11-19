@@ -1,11 +1,12 @@
 import { capture, run } from './git.ts';
 import { fail } from './project.ts';
-import { describeProc, killable, lineage, parseLsof, type Proc } from './worktree-process.pure.ts';
+import { blockingProcs, describeProc, killable, lineage, parseLsof, type Proc } from './worktree-process.pure.ts';
 import { signalProcess } from './worktree-signal.ts';
 
 function processesIn(target: string): Proc[] {
-  const { stdout: lsofStdoutWhateverItsExitCode } = run('lsof', ['-d', 'cwd', '-Fpcn']);
-  return parseLsof(lsofStdoutWhateverItsExitCode, target);
+  const { stdout: lsofStdoutWhateverItsExitCode } = run('lsof', ['-d', 'cwd', '-Fpcun']);
+  const found = parseLsof(lsofStdoutWhateverItsExitCode, target);
+  return blockingProcs(found, { uid: process.getuid?.() ?? -1, isAlive });
 }
 
 function protectedPids(): Set<number> {

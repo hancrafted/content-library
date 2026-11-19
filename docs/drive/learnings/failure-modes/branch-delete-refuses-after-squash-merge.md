@@ -1,8 +1,10 @@
 ---
 title: '`git branch -d` refuses to delete a Task branch after a squash merge'
 enforcer: 'test-runner: test, cleanup deletes a branch with `-D` only after confirming its PR merged, quick win'
-status: ticket
+status: fixed
 ticket: https://github.com/hancrafted/content-library/issues/797
+fixed-by: https://github.com/hancrafted/content-library/issues/797
+fixed-on: '2026-11-19'
 ---
 
 # `git branch -d` refuses to delete a Task branch after a squash merge
