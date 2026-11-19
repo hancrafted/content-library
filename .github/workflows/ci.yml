@@ -91,10 +91,9 @@ jobs:
       # A Markdown-only branch runs the tests its paths reach (ARCH-003-testing §4.6 names the rerun triggers); the
       # local pre-push keeps the full suite as the backstop.
       - if: steps.kind.outputs.docs-only == 'true'
-        run: npx vitest run --changed origin/main --passWithNoTests
+        run: npx vitest run --changed origin/main --passWithNoTests --reporter=default --reporter=json --outputFile.json=fast-suite.json
       # ARCH-003-testing §4.4: a fast-suite test over 3 s fails the job. The nightly 2 s budget warns first.
       - name: Fail on fast-suite tests over 3 s
-        if: steps.kind.outputs.docs-only != 'true'
         run: |
           over=$(node tools/test-budget/over-budget.ts fast-suite.json 3000)
           [ -z "$over" ] && exit 0

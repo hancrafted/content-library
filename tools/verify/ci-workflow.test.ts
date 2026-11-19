@@ -179,18 +179,20 @@ describe('the CI docs lane', () => {
       const steps = workflow().jobs[job]?.steps ?? [];
       const detect = steps.find((step) => step.id === 'kind');
       return {
-        afterInstall: steps.findIndex((step) => step === detect) > steps.findIndex((step) => step.run === 'npm ci'),
+        detectIndex: steps.findIndex((step) => step === detect),
+        installIndex: steps.findIndex((step) => step.run === 'npm ci'),
         run: detect?.run,
-        main: detect?.if,
+        condition: detect?.if,
       };
     });
     // ASSERT
-    for (const { afterInstall, run, main } of detects) {
-      expect(afterInstall).toBe(true);
+    for (const { detectIndex, installIndex, run, condition } of detects) {
+      expect(installIndex).toBeGreaterThan(-1);
+      expect(detectIndex).toBeGreaterThan(installIndex);
       expect(run).toContain('git merge-base origin/main HEAD');
       expect(run).toContain('verify:change-kind');
       expect(run).toContain('$GITHUB_OUTPUT');
-      expect(main).toBe("github.ref != 'refs/heads/main'");
+      expect(condition).toBe("github.ref != 'refs/heads/main'");
     }
   });
 
@@ -209,7 +211,7 @@ describe('the CI docs lane', () => {
     }
   });
 
-  it('runs the full fast suite and its budget unless docs-only, and vitest --changed origin/main on docs-only', () => {
+  it('runs the full fast suite unless docs-only, vitest --changed origin/main on docs-only, and the 3 s budget on both', () => {
     // ARRANGE
     const steps = workflow().jobs.unit?.steps ?? [];
     // ACT
@@ -218,9 +220,14 @@ describe('the CI docs lane', () => {
     const changed = steps.find((step) => step.run?.includes('--changed origin/main'));
     // ASSERT
     expect(full?.if).toBe(NOT_DOCS_ONLY);
-    expect(budget?.if).toBe(NOT_DOCS_ONLY);
+    expect(budget).toMatchObject({ run: expect.stringContaining('over-budget.ts fast-suite.json 3000') });
+    expect(budget?.if).toBeUndefined();
     expect(changed?.if).toBe("steps.kind.outputs.docs-only == 'true'");
-    expect(changed?.run).toMatch(/^npx vitest run --changed origin\/main/);
+    expect(changed).toMatchObject({
+      run: expect.stringMatching(
+        /^npx vitest run --changed origin\/main .*--reporter=json --outputFile.json=fast-suite.json/,
+      ),
+    });
   });
 
   it('skips the build and the upload only on docs-only, and publishes both outputs', () => {
@@ -271,17 +278,17 @@ describe('the CI docs lane', () => {
     // ARRANGE
     const { gate } = workflow().jobs;
     const run = gate?.steps.map((step) => step.run ?? '').join('\n') ?? '';
-    const run_ = (build: string, postBuild: string, docsOnly: string) =>
+    const gateExitCode = (build: string, postBuild: string, docsOnly: string) =>
       spawnSync('sh', ['-c', run], {
         env: { ...process.env, BUILD: build, POST_BUILD: postBuild, DOCS_ONLY: docsOnly },
       }).status;
     // ACT
     const verdicts = {
-      passes: run_('success', 'success', ''),
-      docsOnlySkip: run_('success', 'skipped', 'true'),
-      otherSkip: run_('success', 'skipped', ''),
-      skipAfterFailedBuild: run_('failure', 'skipped', 'true'),
-      failedTests: run_('success', 'failure', 'true'),
+      passes: gateExitCode('success', 'success', ''),
+      docsOnlySkip: gateExitCode('success', 'skipped', 'true'),
+      otherSkip: gateExitCode('success', 'skipped', ''),
+      skipAfterFailedBuild: gateExitCode('failure', 'skipped', 'true'),
+      failedTests: gateExitCode('success', 'failure', 'true'),
     };
     // ASSERT
     expect(gate?.if).toBe('always()');

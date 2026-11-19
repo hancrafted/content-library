@@ -241,6 +241,18 @@ describe('pushPlan', () => {
       expect(tail(plan)).toEqual(expectedTail);
       expect(notes).toEqual(expectedNotes);
     });
+    it.each([
+      ['a Markdown-only push', ['docs/a.md', 'README.md']],
+      ['a recording description under src', ['src/episodes/x/recording/youtube.de.md']],
+    ])('plans the full verify and no build for %s', (_name, changedPaths) => {
+      // ARRANGE
+      const facts = { refs: pushed('docs/x', 'docs/x'), mergeBase: MERGE_BASE, changedPaths };
+      // ACT
+      const { plan } = pushPlan(facts);
+      // ASSERT
+      expect(plan.phases.slice(0, VERIFY_PLAN.phases.length)).toEqual(VERIFY_PLAN.phases);
+      expect(tail(plan)).toEqual([['slow: npm run -s test:slow -- --changed abc1234 --passWithNoTests [test lock]']]);
+    });
   });
 
   describe('edge cases', () => {
