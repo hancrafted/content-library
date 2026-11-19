@@ -16,9 +16,22 @@ export interface PullRequestView {
   reviews: (Remark & { state?: string })[];
   comments: Remark[];
   reviewComments: InlineRemark[];
+  mergeable?: string;
+  checks?: Check[];
+  body?: string;
 }
 
-export type Verdict = { exit: 0; line: string } | { exit: 2; line: string } | { exit: 3; line: string } | null;
+export interface Check {
+  name: string;
+  status?: string;
+  conclusion?: string;
+  state?: string;
+}
+
+export type Verdict = {
+  exit: 0 | 2 | 3 | 10 | 11 | 12 | 13;
+  line: string;
+} | null;
 
 const isOperatorRemark = (remark: Remark): boolean => !remark.body.trimStart().startsWith(DRIVE_MARKER);
 
@@ -49,7 +62,10 @@ export function judge(view: PullRequestView, seen: ReadonlySet<string>): Verdict
 
 export function parseView(stdout: string): PullRequestView | { error: string } {
   try {
-    const parsed = JSON.parse(stdout) as Partial<PullRequestView>;
+    const parsed = JSON.parse(stdout) as Partial<PullRequestView> & {
+      statusCheckRollup?: unknown;
+    };
+    const rollup = parsed.statusCheckRollup;
     if (typeof parsed.state !== 'string') return { error: 'gh pr view returned no state' };
     return {
       state: parsed.state,
@@ -57,6 +73,9 @@ export function parseView(stdout: string): PullRequestView | { error: string } {
       reviews: parsed.reviews ?? [],
       comments: parsed.comments ?? [],
       reviewComments: [],
+      mergeable: parsed.mergeable,
+      checks: rollup === undefined ? undefined : parseChecks(rollup),
+      body: parsed.body,
     };
   } catch (error) {
     return {
@@ -84,6 +103,53 @@ export function parseReviewComments(stdout: string): InlineRemark[] | { error: s
       line: item.line ?? item.original_line ?? null,
     }));
   } catch (error) {
-    return { error: `gh api returned invalid JSON: ${(error as Error).message}` };
+    return {
+      error: `gh api returned invalid JSON: ${(error as Error).message}`,
+    };
   }
+}
+
+const FAILED = new Set(['FAILURE', 'TIMED_OUT', 'CANCELLED', 'STARTUP_FAILURE', 'ACTION_REQUIRED', 'ERROR']);
+
+const isFailing = (check: Check): boolean => FAILED.has(check.conclusion ?? '') || FAILED.has(check.state ?? '');
+
+const failingChecks = (view: PullRequestView): Verdict => {
+  const failing = (view.checks ?? []).filter(isFailing);
+  return failing.length === 0 ? null : { exit: 10, line: `failing checks: ${failing.map((c) => c.name).join(', ')}` };
+};
+
+export function judgeIntegration(view: PullRequestView): Verdict {
+  if (view.state === 'MERGED') return { exit: 12, line: `merged ${view.mergeCommit?.oid ?? ''}`.trimEnd() };
+  if (view.state === 'CLOSED') return { exit: 13, line: 'closed' };
+  if (view.mergeable === 'CONFLICTING') return { exit: 11, line: 'merge conflict with the base branch' };
+  return failingChecks(view);
+}
+
+export function closesIn(body: string): number[] {
+  const numbers = [...body.matchAll(/\bcloses #(\d+)/gi)].map((found) => Number(found[1]));
+  return [...new Set(numbers)];
+}
+
+export function ticketsLine(stillOpen: readonly number[]): string {
+  return stillOpen.length === 0
+    ? 'all tickets closed'
+    : `tickets still open: ${stillOpen.map((n) => `#${n}`).join(', ')}`;
+}
+
+interface RollupItem {
+  name?: string;
+  context?: string;
+  status?: string;
+  conclusion?: string;
+  state?: string;
+}
+
+export function parseChecks(rollup: unknown): Check[] {
+  if (!Array.isArray(rollup)) return [];
+  return (rollup as RollupItem[]).map((item) => ({
+    name: item.name ?? item.context ?? 'check',
+    status: item.status,
+    conclusion: item.conclusion,
+    state: item.state,
+  }));
 }

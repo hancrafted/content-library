@@ -17,6 +17,8 @@ and the implementer's, which every Subagent brief points at. Write only what is 
   report.
 - `drive worktree done --base` prints the fast-suite tests that ran past 750 ms on your branch, with the load factor:
   tests creeping towards CI's 3 s limit. Name any of yours under **Trade-offs**.
+- An unmet acceptance criterion is a blocker, never a Trade-off: report it `- [ ]` with a `deferred: <ticket url>`
+  only when the Orchestrator agreed; `drive worktree done` refuses the merge otherwise.
 
 ## Define pre-flight
 
