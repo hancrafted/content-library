@@ -84,7 +84,10 @@ export async function recordContent(
 function composedLooks(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
   const title = standardTitleLook(record.title?.presentation);
   const transitions = transitionsOf({ title, precedence: record.transitionPrecedence }, slides, header);
-  const titleAppearance: TitleAppearance = { inverse: title?.inverse === true, presentation: title };
+  const titleAppearance: TitleAppearance = {
+    inverse: title?.inverse === true,
+    presentation: title,
+  };
   return { transitions, titleAppearance };
 }
 
@@ -97,12 +100,19 @@ function contextOf(
     ...page,
     placed: placeSections<Slide>(record.sections).flat(),
     header: headerModeOf(record),
-    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
+    referenceLabels: {
+      ref: drawer('refNote'),
+      marker: (title) => drawer('markerNote', { title }),
+    },
   };
 }
 
 function resolveTransitions(
-  surfaces: readonly { id: string; presentation?: SlidePresentation; surface?: string }[],
+  surfaces: readonly {
+    id: string;
+    presentation?: SlidePresentation;
+    surface?: string;
+  }[],
   precedence = 'enter',
 ): ReadonlyMap<string, ResolvedSlideTransition> {
   const resolved = new Map<string, ResolvedSlideTransition>();
@@ -116,7 +126,7 @@ function resolveTransitions(
       outgoing: outgoing.id,
       incoming: incoming.id,
       declaration,
-      ...transitionTarget(incoming.presentation, incoming.surface, declaration),
+      ...transitionTarget(incoming, outgoing.presentation, declaration),
     });
   }
   return resolved;
@@ -126,7 +136,10 @@ function transitionsOf(
   {
     title,
     precedence,
-  }: { title: SlidePresentation | undefined; precedence: EpisodeComposition['transitionPrecedence'] },
+  }: {
+    title: SlidePresentation | undefined;
+    precedence: EpisodeComposition['transitionPrecedence'];
+  },
   slides: readonly LocalizedSlide[],
   header: HeaderMode,
 ) {
@@ -154,12 +167,16 @@ function inkOf(
 }
 
 function transitionTarget(
-  presentation: SlidePresentation | undefined,
-  fallback = 'var(--background)',
+  { presentation, surface }: { presentation?: SlidePresentation; surface?: string },
+  outgoing: SlidePresentation | undefined,
   { style: override }: SlideTransition,
 ) {
-  const targetSurface = inkOf(presentation, fallback, override?.['--slide-transition-ink']);
-  if (!presentation) return { targetSurface };
-  const { style, inverse } = presentation;
-  return { targetSurface, ...(inverse && { targetInverse: true }), ...(style && { targetStyle: style }) };
+  const targetSurface = inkOf(presentation, surface, override?.['--slide-transition-ink']);
+  const { style, inverse } = presentation ?? {};
+  const differsFromOutgoingWrapper = (inverse === true) !== (outgoing?.inverse === true);
+  return {
+    targetSurface,
+    ...(differsFromOutgoingWrapper && { targetInverse: true }),
+    ...(style && { targetStyle: style }),
+  };
 }
