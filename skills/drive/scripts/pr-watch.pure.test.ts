@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { DRIVE_MARKER, idsOf, judge, parseReviewComments, parseView, type PullRequestView } from './pr-watch.pure.ts';
+import {
+  closesIn,
+  DRIVE_MARKER,
+  idsOf,
+  judge,
+  judgeIntegration,
+  parseReviewComments,
+  parseView,
+  ticketsLine,
+  type PullRequestView,
+} from './pr-watch.pure.ts';
 import { watchPullRequest } from './pr-watch.ts';
 
 const open = (over: Partial<PullRequestView> = {}): PullRequestView => ({
@@ -55,7 +65,9 @@ describe('judge', () => {
 describe('inline review comments', () => {
   it('reports a new inline comment with its file and line', () => {
     // ARRANGE
-    const view = open({ reviewComments: [{ id: 'rc9', body: 'rename this', path: 'a/b.ts', line: 12 }] });
+    const view = open({
+      reviewComments: [{ id: 'rc9', body: 'rename this', path: 'a/b.ts', line: 12 }],
+    });
     // ACT
     const verdict = judge(view, new Set());
     // ASSERT
@@ -66,7 +78,15 @@ describe('inline review comments', () => {
     // ARRANGE
     const pages = JSON.stringify([
       [{ id: 1, body: 'one', path: 'x.ts', line: 3 }],
-      [{ id: 2, body: '<!-- drive -->\nreply', path: 'x.ts', line: null, original_line: 4 }],
+      [
+        {
+          id: 2,
+          body: '<!-- drive -->\nreply',
+          path: 'x.ts',
+          line: null,
+          original_line: 4,
+        },
+      ],
     ]);
     // ACT
     const parsed = parseReviewComments(pages);
@@ -129,5 +149,77 @@ describe('watchPullRequest', () => {
     });
     // ASSERT
     expect(outcome).toEqual({ exit: 0, line: 'merged f00' });
+  });
+});
+
+describe('judgeIntegration', () => {
+  const view = (over: Partial<PullRequestView> = {}) => open({ mergeable: 'MERGEABLE', checks: [], ...over });
+
+  it('ends 12 on merge listing nothing itself, 13 on close', () => {
+    // ARRANGE
+    // ACT
+    const verdicts = [
+      judgeIntegration(view({ state: 'MERGED', mergeCommit: { oid: 'abc' } })),
+      judgeIntegration(view({ state: 'CLOSED' })),
+    ];
+    // ASSERT
+    expect(verdicts).toEqual([
+      { exit: 12, line: 'merged abc' },
+      { exit: 13, line: 'closed' },
+    ]);
+  });
+
+  it('ends 11 on a merge conflict and 10 naming the failing checks', () => {
+    // ARRANGE
+    const conflict = view({ mergeable: 'CONFLICTING' });
+    const red = view({
+      checks: [
+        { name: 'lint', conclusion: 'FAILURE' },
+        { name: 'test', conclusion: 'SUCCESS' },
+        { name: 'build', state: 'ERROR' },
+      ],
+    });
+    // ACT
+    const verdicts = [judgeIntegration(conflict), judgeIntegration(red)];
+    // ASSERT
+    expect(verdicts[0]).toEqual({
+      exit: 11,
+      line: 'merge conflict with the base branch',
+    });
+    expect(verdicts[1]).toEqual({
+      exit: 10,
+      line: 'failing checks: lint, build',
+    });
+  });
+
+  it('keeps waiting on pending checks, unknown mergeability and green', () => {
+    // ARRANGE
+    const pending = view({
+      checks: [{ name: 'lint', status: 'IN_PROGRESS', conclusion: '' }],
+    });
+    const unknown = view({ mergeable: 'UNKNOWN' });
+    // ACT
+    const verdicts = [judgeIntegration(pending), judgeIntegration(unknown), judgeIntegration(view())];
+    // ASSERT
+    expect(verdicts).toEqual([null, null, null]);
+  });
+});
+
+describe('tickets', () => {
+  it('reads Closes numbers from a PR body, once each', () => {
+    // ARRANGE
+    const body = 'Closes #3\nCloses #4\nclosed #3\nRefs #9';
+    // ACT
+    const numbers = closesIn(body);
+    // ASSERT
+    expect(numbers).toEqual([3, 4]);
+  });
+
+  it('lists the still open tickets, or says all are closed', () => {
+    // ARRANGE
+    // ACT
+    const lines = [ticketsLine([4, 7]), ticketsLine([])];
+    // ASSERT
+    expect(lines).toEqual(['tickets still open: #4, #7', 'all tickets closed']);
   });
 });

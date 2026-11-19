@@ -1,7 +1,19 @@
 import { spawnSync } from 'node:child_process';
 import { capture, git } from './git.ts';
 import { fail, loadConfig } from './project.ts';
-import { parseLsRemote, pushedLine, remoteDiffersFrom } from './push.pure.ts';
+import { refuseMerged } from './push-pr.pure.ts';
+import { branchPr, openIntegrationPr } from './push-pr.ts';
+import { exitProblem, parseLsRemote, pushedLine, remoteDiffersFrom } from './push.pure.ts';
+
+const USAGE =
+  'usage: drive push [--spec <epic number>] (run it inside the worktree; --spec opens the draft Integration PR with Closes for each sub-issue when the branch has no PR)';
+
+function readSpec(argv: readonly string[]): number | null {
+  if (argv.length === 0) return null;
+  const spec = Number(argv[1]);
+  if (argv.length !== 2 || argv[0] !== '--spec' || !Number.isInteger(spec) || spec < 1) fail(USAGE);
+  return spec;
+}
 
 function remoteTip(remote: string, branch: string, cwd: string): string | null {
   const result = git(cwd, ['ls-remote', remote, `refs/heads/${branch}`]);
@@ -9,19 +21,27 @@ function remoteTip(remote: string, branch: string, cwd: string): string | null {
   return parseLsRemote(result.stdout);
 }
 
-export function runPush(argv: readonly string[]): void {
-  if (argv.length > 0) fail('usage: drive push (no arguments; run it inside the worktree to push)');
-  const cwd = process.cwd();
-  const branch = capture('git', ['branch', '--show-current'], cwd);
-  if (branch === '') fail('detached HEAD: check out a branch first');
-  const { remote } = loadConfig(capture('git', ['rev-parse', '--show-toplevel'], cwd)).worktree;
+function pushBranch(branch: string, remote: string, cwd: string): string {
   const hasUpstream = git(cwd, ['rev-parse', '--abbrev-ref', `${branch}@{upstream}`]).status === 0;
   const before = remoteTip(remote, branch, cwd);
   const pushArgs = hasUpstream ? ['push', remote, branch] : ['push', '--set-upstream', remote, branch];
-  const { status } = spawnSync('git', pushArgs, { cwd, stdio: 'inherit' });
-  if (status !== 0) fail(`git ${pushArgs.join(' ')} failed (${status})`);
+  const exit = exitProblem(pushArgs, spawnSync('git', pushArgs, { cwd, stdio: 'inherit' }));
+  if (exit !== null) fail(exit);
   const head = capture('git', ['rev-parse', 'HEAD'], cwd);
   const problem = remoteDiffersFrom({ branch, remote }, head, remoteTip(remote, branch, cwd));
   if (problem !== null) fail(problem);
-  console.log(pushedLine(branch, before, head));
+  return pushedLine(branch, before, head);
+}
+
+export function runPush(argv: readonly string[]): void {
+  const spec = readSpec(argv);
+  const cwd = process.cwd();
+  const branch = capture('git', ['branch', '--show-current'], cwd);
+  if (branch === '') fail('detached HEAD: check out a branch first');
+  const { remote, baseBranch } = loadConfig(capture('git', ['rev-parse', '--show-toplevel'], cwd)).worktree;
+  const prState = branchPr(branch, cwd);
+  const merged = refuseMerged(branch, prState);
+  if (merged !== null) fail(merged);
+  console.log(pushBranch(branch, remote, cwd));
+  if (spec !== null && prState === 'none') openIntegrationPr(spec, { branch, base: baseBranch }, cwd);
 }
