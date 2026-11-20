@@ -4,7 +4,7 @@
 
 - [Content library](./GLOSSARY.md): the site, its Episodes, Explorables, Events and the evidence behind them.
 - [Factory](./tools/factory/GLOSSARY.md): the machinery that makes them, and later other one-person businesses' digital work.
-- [Drive](./skills/drive/GLOSSARY.md): how an Orchestrator runs a Workflow with the Operator and Subagents. It ships with the `/drive` skill, so it holds no word of this repo.
+- [Drive](./.agents/skills/drive/GLOSSARY.md): how an Orchestrator runs a Workflow with the Operator and Subagents. It ships with the `/drive` skill, so it holds no word of this repo.
 
 ## Relationships
 
