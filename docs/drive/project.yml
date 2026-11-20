@@ -1,4 +1,4 @@
-# The `drive` CLI's project config (Decision record 0027): every value the CLI would otherwise hard-code.
+# The `drive` CLI's project config (hancrafted/skills docs/decision-records/drive/0001-workflow-phases-are-ports-bound-per-project.md): every value the CLI would otherwise hard-code.
 # Hooks are shell commands run from the main checkout (beforeMerge: from the Task worktree) with DRIVE_ROOT,
 # DRIVE_BRANCH, DRIVE_BASE (empty without --base), DRIVE_WORKTREE and, for afterMerge, DRIVE_FORKED_AT (when the
 # branch forked, ISO) in the environment.
