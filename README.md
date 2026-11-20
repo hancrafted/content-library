@@ -101,7 +101,7 @@ Every interactive element carries a stable `data-testid`. Select by it, never by
 
 ## Deploy
 
-The site deploys to Cloudflare Pages: CI builds once per pushed commit, previews a branch that changes an export input, and `deploy-cloudflare.yml` publishes `main` after CI passes. How, and the one-time setup: `docs/features/hosting.md`.
+The site deploys to Cloudflare Pages: CI builds once per pushed commit, previews a branch that changes an export input, and `deploy-cloudflare.yml` publishes `main` after CI passes. The pipeline: `docs/features/ci.md`; Cloudflare and the one-time setup: `docs/features/hosting.md`.
 
 ### `NEXT_PUBLIC_BASE_PATH`
 
