@@ -1,7 +1,8 @@
 ---
 title: 'A CLI change is dogfooded from a checkout older than the change'
 enforcer: 'review: a line in SKILL.md to run the CLI from the Integration worktree, quick win'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/53
 ---
 
 # A CLI change is dogfooded from a checkout older than the change

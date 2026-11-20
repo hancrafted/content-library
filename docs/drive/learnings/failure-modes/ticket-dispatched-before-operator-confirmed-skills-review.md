@@ -1,7 +1,8 @@
 ---
 title: 'A ticket is dispatched before the Operator confirmed its Skills and Review lines'
 enforcer: 'check: new `drive` dispatch check that refuses a ticket whose Skills and Review-after lines are not marked confirmed, architectural'
-status: proposed
+status: ticket
+ticket: https://github.com/hancrafted/skills/issues/68
 ---
 
 # A ticket is dispatched before the Operator confirmed its Skills and Review lines
