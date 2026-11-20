@@ -110,7 +110,7 @@ describe('landing page post-build structure', () => {
   it.each(LANDING_PAGES)('links the three social profiles from the header for $locale', ({ url, locale }) => {
     // ARRANGE
     const expectedLinks = [
-      { id: 'youtube', href: 'https://www.youtube.com/@codeadjacent', name: 'YouTube' },
+      { id: 'youtube', href: 'https://www.youtube.com/@hancraftedhq', name: 'YouTube' },
       { id: 'github', href: 'https://github.com/hancrafted', name: 'GitHub' },
       { id: 'linkedin', href: 'https://www.linkedin.com/in/han-che/', name: 'LinkedIn' },
     ];
