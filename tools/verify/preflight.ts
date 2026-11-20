@@ -54,7 +54,7 @@ function rootOfCheckout(): string {
 }
 
 function driveBindingProblem(root: string): string | null {
-  const checked = spawnSync('node', ['skills/drive/scripts/drive.ts', 'setup', '--check'], {
+  const checked = spawnSync('node', ['.agents/skills/drive/scripts/drive.ts', 'setup', '--check'], {
     cwd: root,
     encoding: 'utf8',
   });

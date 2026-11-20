@@ -50,7 +50,7 @@ If `GLOSSARY.md` or `docs/decision-records/` doesn't exist, **proceed silently**
 ├── GLOSSARY-MAP.md                ← lists the contexts
 ├── GLOSSARY.md                    ← content library
 ├── tools/factory/GLOSSARY.md      ← Factory
-├── skills/drive/GLOSSARY.md       ← Drive (ships with the /drive skill)
+├── .agents/skills/drive/GLOSSARY.md ← Drive (ships with the /drive skill)
 ├── docs/decision-records/                      ← Decision records (engineering skills)
 │   ├── 0001-some-decision.md
 │   └── 0002-another-decision.md
