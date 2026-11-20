@@ -27,7 +27,6 @@
     "*.mts",
     "skills/new-episode/scripts",
     "skills/episode-promote/scripts",
-    "skills/drive",
     "skills/visual-check",
     "tools",
     ".next/types/**/*.ts",

@@ -44,6 +44,13 @@
       "skillPath": "skills/engineering/domain-modeling/SKILL.md",
       "computedHash": "b78689833404148c769077355e12dbe5ad996a158a1e21e58ddf169e439d9d8c"
     },
+    "drive": {
+      "source": "hancrafted/skills",
+      "commit": "b5656a5affd70fb8fbd4193821d92566ec916a35",
+      "sourceType": "github",
+      "skillPath": "skills/drive/SKILL.md",
+      "computedHash": "df7edef05b80e27828c9ced1556fd0d42bc4f6fdf9ed55b33f833fb0595ca7b0"
+    },
     "grill-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
