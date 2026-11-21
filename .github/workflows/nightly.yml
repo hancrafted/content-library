@@ -29,6 +29,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The `archgate` npm package is a launcher: its first call downloads the binary into ~/.archgate/bin, with no
+      # lock. The lane's archgate CLI tests run in parallel and race that download, so restore it as ci.yml does and
+      # fetch it once before the lane.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.archgate/bin
+          key: archgate-${{ runner.os }}-${{ hashFiles('node_modules/archgate/package.json') }}
+      - run: npx archgate --version
       - run: npm run test:slow
       - name: File the failure
         if: failure()
