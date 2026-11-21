@@ -9,6 +9,7 @@ import en from './i18n/en.json';
 const QUESTIONS = [
   {
     key: 'model',
+    votes: [0, 3, 2, 3, 2, 2, 0],
     answers: [
       'questions.model.answers.search',
       'questions.model.answers.chat',
@@ -22,6 +23,7 @@ const QUESTIONS = [
   },
   {
     key: 'fluency',
+    votes: [0, 5, 5, 2, 0],
     answers: [
       'questions.fluency.answers.beginner',
       'questions.fluency.answers.basic',
@@ -33,6 +35,7 @@ const QUESTIONS = [
   },
   {
     key: 'scope',
+    votes: [7, 2, 0, 3, 0],
     answers: [
       'questions.scope.answers.self',
       'questions.scope.answers.team',
@@ -44,6 +47,7 @@ const QUESTIONS = [
   },
   {
     key: 'usage',
+    votes: [0, 0, 2, 0, 4, 3, 0, 3],
     answers: [
       'questions.usage.answers.none',
       'questions.usage.answers.ask',
@@ -59,6 +63,7 @@ const QUESTIONS = [
 ] as const satisfies readonly {
   key: 'model' | 'fluency' | 'scope' | 'usage';
   answers: readonly string[];
+  votes?: readonly number[];
   tone: PollTone;
 }[];
 
@@ -88,6 +93,7 @@ export const poll = slide({
                 marker={index + 1}
                 question={t(`questions.${question.key}.question`)}
                 answers={question.answers.map((answer) => t(answer))}
+                votes={question.votes}
                 tone={question.tone}
               />
             ))}
