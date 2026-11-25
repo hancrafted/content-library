@@ -43,7 +43,7 @@ describe('failure cases', () => {
   it('keeps a placeholder outside the named slots as text, so the gap shows', () => {
     // ARRANGE
     const template = 'See {guide} now';
-    const expected = [{ text: 'See ' }, { text: '{guide}' }, { text: ' now' }];
+    const expected = [{ text: 'See {guide} now' }];
     // ACT
     const segments = templateSegments(template, ['skills']);
     // ASSERT

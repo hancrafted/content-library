@@ -1,11 +1,9 @@
-import { offers, type ControlMap } from './toolbar-controls.pure';
-import type { Level } from './workflow-state.pure';
+import type { ToolbarProps } from './part-props.types';
+import { offers } from './toolbar-controls.pure';
 
-interface CliCalloutBar {
-  readonly level: Level;
-  readonly controls: ControlMap;
-  readonly readonly: boolean;
-}
-
-export const showsCliCallout = ({ level, controls, readonly }: CliCalloutBar): boolean =>
+export const showsCliCallout = ({
+  level,
+  controls,
+  readonly,
+}: Pick<ToolbarProps, 'level' | 'controls' | 'readonly'>): boolean =>
   level === 'technical' && offers(controls, 'level', readonly);
