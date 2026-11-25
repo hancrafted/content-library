@@ -9,7 +9,7 @@ import {
   learningsCheckCommand,
   updateProjectConfig,
 } from './setup.pure.ts';
-import { REVIEW_STUB } from './stubs.pure.ts';
+import { PROFILES_STUB, REVIEW_STUB } from './stubs.pure.ts';
 const FACTS = {
   baseBranch: 'trunk',
   harnessCap: 20,
@@ -17,7 +17,7 @@ const FACTS = {
   driveEntry: 'skills/drive/scripts/drive.ts',
   decisionDocs: ['docs/decision-records/**'],
 };
-const COMMAND = 'mh check --root docs/drive/learnings --config x.yaml && node d.ts learnings check';
+const COMMAND = 'mh check --root docs/learnings/drive --config x.yaml && node l.ts check';
 
 describe('success cases', () => {
   describe('detectEnforcers', () => {
@@ -104,6 +104,15 @@ describe('success cases', () => {
         expect(REVIEW_STUB).toContain(`## ${heading}`);
     });
   });
+  describe('PROFILES_STUB', () => {
+    it('names the Profiles and the live or scheduled section', () => {
+      // ARRANGE
+      // ACT
+      // ASSERT
+      for (const heading of ['Architect', 'Implementer', 'Live or scheduled'])
+        expect(PROFILES_STUB).toContain(`## ${heading}`);
+    });
+  });
   describe('updateProjectConfig', () => {
     it('seeds a missing file with the worktree, the parallel default beside the harness cap, and the decision docs', () => {
       // ARRANGE
@@ -160,10 +169,10 @@ describe('success cases', () => {
     });
   });
   describe('learningsCheckCommand', () => {
-    it('runs mh over the learnings store with the config the skill ships, then the drive learnings check', () => {
+    it('runs mh over the learnings store with the config the skill ships, then the learnings check', () => {
       // ARRANGE
       const expected =
-        'mh check --root docs/drive/learnings --config skills/drive/markdown-harness.config.yaml && node skills/drive/scripts/drive.ts learnings check';
+        'mh check --root docs/learnings/drive --config skills/learnings/markdown-harness.config.yaml && node skills/learnings/scripts/learnings.ts check';
       // ACT
       const command = learningsCheckCommand('skills/drive/scripts/drive.ts');
       // ASSERT

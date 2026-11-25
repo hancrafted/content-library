@@ -1,15 +1,19 @@
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { USAGE } from './args.pure.ts';
 import { learningsReport } from './learnings.ts';
+import type { Outcome } from './process.ts';
 const REPO_ROOT = path.resolve(import.meta.dirname, '../../../..');
 const MARKDOWN_HARNESS = path.join(REPO_ROOT, 'node_modules/.bin/mh');
 const CONFIG = path.join(import.meta.dirname, '..', '..', 'markdown-harness.config.yaml');
 const FIXED = 'push-exits-zero';
 const FAILURE_MODE = [
   '---',
+  'type: failure-mode',
+  'stale_after: 2026-12-20',
   'title: drive push exits 0 when the remote rejected the commit',
   "enforcer: 'test-runner: test'",
   'status: fixed',
@@ -31,6 +35,7 @@ const FAILURE_MODE = [
 ].join('\n');
 const VALID_RECORD = [
   '---',
+  'type: record',
   'workflow: sweep',
   'date: 2026-11-19',
   'fortify: skipped',
@@ -45,8 +50,34 @@ const VALID_RECORD = [
   '- **Regressed:** #68 did not hold: the null exit skips ls-remote. (source: monitor)',
   '',
 ].join('\n');
+const INTENT_SECTION = [
+  '## Intent',
+  '',
+  '- **Turns:** 5',
+  '- **Moved:** far',
+  '- **Outcome:** confirmed',
+  '- **Drift:** none',
+  '',
+];
+const withIntent = (sections: readonly (readonly string[])[], afterMode = false): string => {
+  const mode = ['## push-exits-zero', '', '- **Evidence:** e', ''];
+  const body = afterMode ? [mode, ...sections] : [...sections, mode];
+  return [
+    '---',
+    'type: record',
+    'workflow: sweep',
+    'date: 2026-11-19',
+    'fortify: pending',
+    '---',
+    '',
+    '# sweep',
+    '',
+    ...body.flat(),
+  ].join('\n');
+};
 const INVALID_RECORD = [
   '---',
+  'type: record',
   'workflow: sweep',
   'date: 2026-11-19',
   'fortify: maybe',
@@ -87,13 +118,20 @@ const violationsOf = (report: CheckReport): string[] =>
     ),
   );
 
-const STORE = 'docs/drive/learnings';
+const STORE = 'docs/learnings/drive';
+const SKILL = 'drive';
+const TODAY = '2026-11-20';
+const NO_GH = (): Outcome => ({ status: 1, stdout: '', stderr: 'gh must not run' });
+const PORTS = { gh: NO_GH, today: TODAY };
+const runLearnings = (root: string, argv: readonly string[]) => learningsReport(root, argv, PORTS);
 const PROPOSED = 'guard-covers-husky-only';
 const FIXED_TITLE = 'drive push exits 0 when the remote rejected the commit';
 const PROPOSED_TITLE = 'Guard wiring covers husky only';
 const failureMode = (title: string, status: readonly string[]) =>
   [
     '---',
+    'type: failure-mode',
+    'stale_after: 2026-12-20',
     `title: ${title}`,
     "enforcer: 'test-runner: test'",
     ...status,
@@ -109,6 +147,7 @@ const failureMode = (title: string, status: readonly string[]) =>
 const recordFile = (workflow: string, date: string, body: readonly string[]) =>
   [
     '---',
+    'type: record',
     `workflow: ${workflow}`,
     `date: ${date}`,
     'fortify: engaged',
@@ -137,6 +176,35 @@ const MODES = {
 };
 
 describe('success cases', () => {
+  describe('record migration', () => {
+    it('migrates a README written by another version when recording, keeping its Off list', () => {
+      // ARRANGE
+      const old =
+        '---\ntype: readme\ngenerated:\n  by: learnings@0.0.1\n  at: 2026-01-02\n---\n\n# Learnings\n\n## Off\n\n- other\n';
+      const root = repo({ 'docs/learnings/README.md': old });
+      const flags = [
+        'record',
+        '--skill',
+        SKILL,
+        '--topic',
+        'sweep',
+        '--failure',
+        'new-mode',
+        '--title',
+        'New mode',
+        '--enforcer',
+        'review: x',
+        '--evidence',
+        'e',
+      ];
+      // ACT
+      runLearnings(root, flags);
+      const migrated = readFileSync(path.join(root, 'docs/learnings/README.md'), 'utf8');
+      // ASSERT
+      expect(migrated).toBe(old.replace('learnings@0.0.1', 'learnings@0.3.0').replace('2026-01-02', TODAY));
+    });
+  });
+
   describe('drive learnings', () => {
     it('lists each failure mode with the count computed from the records, its status and regressed', () => {
       // ARRANGE
@@ -166,7 +234,7 @@ describe('success cases', () => {
         exit: 0,
       };
       // ACT
-      const report = learningsReport(root, []);
+      const report = runLearnings(root, ['list', '--skill', SKILL]);
       // ASSERT
       expect(report).toEqual(expected);
     });
@@ -179,11 +247,26 @@ describe('success cases', () => {
         { output: `✔ ${STORE}: 2 failure modes, 0 records`, exit: 0 },
       ];
       // ACT
-      const reports = [learningsReport(root, ['similar', 'push', 'hangs']), learningsReport(root, ['check'])];
+      const reports = [
+        runLearnings(root, ['similar', '--skill', SKILL, 'push', 'hangs']),
+        runLearnings(root, ['check', '--skill', SKILL]),
+      ];
       // ASSERT
       expect(reports).toEqual(expected);
     });
   });
+  describe('the skill-shipped markdown-harness config for an Intent section', () => {
+    it('passes a record whose one Intent section comes first', () => {
+      // ARRANGE
+      const expected = { governedFiles: 2, invalidFiles: 0 };
+      // ACT
+      const { exit, report } = checkStore(withIntent([INTENT_SECTION]));
+      // ASSERT
+      expect(exit).toBe(0);
+      expect(report.result.summary).toMatchObject(expected);
+    });
+  });
+
   describe('the skill-shipped markdown-harness config', () => {
     it('passes a well-formed record and failure mode', () => {
       // ARRANGE
@@ -198,6 +281,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  describe('the skill-shipped markdown-harness config for an Intent section', () => {
+    it('fails a record with two Intent sections, and one placed after a failure mode', () => {
+      // ARRANGE
+      const expectedTwice = ['BODY_STRUCTURE__HEADING_REPEATED '];
+      const expectedLate = ['BODY_STRUCTURE__HEADING_OUT_OF_ORDER '];
+      // ACT
+      const twice = checkStore(withIntent([INTENT_SECTION, INTENT_SECTION]));
+      const late = checkStore(withIntent([INTENT_SECTION], true));
+      // ASSERT
+      expect(twice.exit).toBe(1);
+      expect(violationsOf(twice.report)).toEqual(expectedTwice);
+      expect(late.exit).toBe(1);
+      expect(violationsOf(late.report)).toEqual(expectedLate);
+    });
+  });
+
   describe('drive learnings', () => {
     it('check fails a record H2 with no failure-mode file and a learnings.md beside the store', () => {
       // ARRANGE
@@ -213,12 +312,12 @@ describe('failure cases', () => {
       const expected = {
         output: [
           '✖ docs/drive/learnings.md exists beside the learnings store: move its entries into records/ and failure-modes/, then delete it',
-          '✖ records/2026-11-19-sweep.md: ## made-up-mode names no failure-modes/made-up-mode.md; cite an existing one (drive learnings similar "<failure>") or create it',
+          `✖ ${STORE}/records/2026-11-19-sweep.md: ## made-up-mode names no failure-modes/made-up-mode.md; cite an existing one (learnings similar --skill ${SKILL} "<failure>") or create it`,
         ].join('\n'),
         exit: 1,
       };
       // ACT
-      const report = learningsReport(root, ['check']);
+      const report = runLearnings(root, ['check', '--skill', SKILL]);
       // ASSERT
       expect(report).toEqual(expected);
     });
@@ -227,11 +326,11 @@ describe('failure cases', () => {
       // ARRANGE
       const root = repo({ [`${STORE}/records/2026-11-19-sweep.md`]: '# no front matter\n' });
       const expected = [
-        { output: '✖ records/2026-11-19-sweep.md: no front matter', exit: 1 },
-        { output: 'usage: drive learnings [list | similar "<failure>" | check]', exit: 1 },
+        { output: `✖ ${STORE}/records/2026-11-19-sweep.md: no front matter`, exit: 1 },
+        { output: `✖ unknown verb "count"\n✖ ${USAGE}`, exit: 1 },
       ];
       // ACT
-      const reports = [learningsReport(root, ['check']), learningsReport(repo({}), ['count'])];
+      const reports = [runLearnings(root, ['check', '--skill', SKILL]), runLearnings(repo({}), ['count'])];
       // ASSERT
       expect(reports).toEqual(expected);
     });
@@ -255,13 +354,52 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  describe('record', () => {
+    it('writes the README with OKF generated front matter when it is missing, and leaves an existing one alone', () => {
+      // ARRANGE
+      const root = repo({});
+      const flags = [
+        'record',
+        '--skill',
+        SKILL,
+        '--topic',
+        'sweep',
+        '--failure',
+        'new-mode',
+        '--title',
+        'New mode',
+        '--enforcer',
+        'review: x',
+        '--evidence',
+        'e',
+      ];
+      const readme = path.join(root, 'docs/learnings/README.md');
+      // ACT
+      runLearnings(root, flags);
+      const written = readFileSync(readme, 'utf8');
+      const frontMatter = written.split('\n').slice(0, 6);
+      writeFileSync(readme, 'edited\n');
+      runLearnings(root, flags);
+      // ASSERT
+      expect(frontMatter).toEqual([
+        '---',
+        'type: readme',
+        'generated:',
+        '  by: learnings@0.3.0',
+        `  at: ${TODAY}`,
+        '---',
+      ]);
+      expect(readFileSync(readme, 'utf8')).toBe('edited\n');
+    });
+  });
+
   describe('drive learnings', () => {
     it('keeps a learnings.md legal while the store has no failure mode, so a repo mid-migration stays green', () => {
       // ARRANGE
       const root = repo({ 'docs/drive/learnings.md': '# Drive learnings\n' });
       const expected = { output: `✔ ${STORE}: 0 failure modes, 0 records`, exit: 0 };
       // ACT
-      const report = learningsReport(root, ['check']);
+      const report = runLearnings(root, ['check', '--skill', SKILL]);
       // ASSERT
       expect(report).toEqual(expected);
     });
@@ -271,7 +409,7 @@ describe('edge cases', () => {
       const root = repo(MODES);
       const expected = { output: 'no failure mode shares a word with "quota reset": create one', exit: 0 };
       // ACT
-      const report = learningsReport(root, ['similar', 'quota reset']);
+      const report = runLearnings(root, ['similar', '--skill', SKILL, 'quota reset']);
       // ASSERT
       expect(report).toEqual(expected);
     });

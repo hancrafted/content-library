@@ -13,19 +13,22 @@ The words of `/drive`: one Orchestrator works with the Operator and hands execut
 **Workflow**: the orchestrated process `/drive` runs for one topic, through the five DRIVE phases, from the first grilling question to the merged Integration branch and its Fortify.
 _Avoid_: pipeline, process, flow
 
-**DRIVE**: the five phases of a Workflow, each named by its verb: **D**efine (_clarify_: requirements, grilling), **R**eason (_specify_: design, architecture, Decision docs, spec, tickets), **I**mplement (_codify_: the code), **V**erify (_verify_: review, integration, CI), **E**volve (_fortify_: Fortify). A skill may serve several phases and a phase several skills.
+**DRIVE**: the five phases of a Workflow, each named by its verb: **D**efine (_clarify_: intent, requirements, grilling), **R**eason (_specify_: design, architecture, Decision docs, spec, tickets), **I**mplement (_codify_: the code), **V**erify (_verify_: review, integration, CI), **E**volve (_fortify_: Fortify). A skill may serve several phases and a phase several skills.
 _Avoid_: stage, step, SDLC
 
-**Fortify**: the Evolve phase. The Workflow's record is written automatically at the end of Verify; after the Operator merges the Integration branch, the Orchestrator asks once whether to Fortify now or skip. A skip is recorded with its reason. On a yes, on a branch from the base branch, it gathers what went wrong into 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer, and the recommended architectural option becomes the single open `fortify` ticket, where the Operator picks a quick win when triaging it. Fortify blocks nothing.
+**Intent**: the Operator's why for one Workflow, approved in Define before any spec: who really uses the result, what impact it should have, why now. It has two forms. The **pitch** is a couple of plain lines, printed as `INTENT:` on every turn of the Intent step for the Operator to edit; each turn asks one open question, with no options and no recommendation, until the Operator approves the pitch or gives up. The **statement** is the approved pitch plus eight fields (Outcome, User, Why now, Success, Constraint, Out of scope, Appetite, Tradeoff order), written once as the read-back; it heads the spec and the shared brief. Appetite is a feel for size, never a measure. The Operator picks whether the intent or the grill comes first; either way, every later question and agent holds scope changes against it, and a change to it restarts the Workflow.
+_Avoid_: intent engineering, goal, vision, requirements
+
+**Fortify**: the Evolve phase. The Workflow's record is written automatically at the end of Verify; after the Operator merges the Integration branch, the Orchestrator asks once whether to Fortify now or skip. A skip is recorded with its reason. On a yes, on a branch from the base branch, it gathers what went wrong into 2–3 quick wins and 2–3 architectural options, each naming one narrow failure mode and its Enforcer, and the recommended architectural option becomes drive's single open `fortify` ticket (labels `fortify` and `skill:drive`; the cap is one per skill), where the Operator picks a quick win when triaging it. Fortify blocks nothing.
 _Avoid_: retro, retrospective (`/retro` is one evidence source), lessons learned
 
-**Failure mode**: one narrow way the Workflow or the repo went wrong, named so an Enforcer could catch it next time. Each has one file holding its Enforcer and status; each Workflow's record cites the failure modes it hit, and the recurrence count is the number of records citing it, computed, never typed. A count of three or more is a **smell** to raise with the Operator.
+**Failure mode**: one narrow way the Workflow or the repo went wrong, named so an Enforcer could catch it next time. Each has one file holding its Enforcer and status; each Workflow's record cites the failure modes it hit, and the recurrence count is the number of records citing it, computed, never typed. A count of three or more is a **smell** to raise with the Operator. The `learnings` skill keeps them in `docs/learnings/drive/` and computes the counts.
 _Avoid_: issue, problem, lesson
 
 **Quick win**: a Fortify option the Operator can let a Subagent do and merge in 15–30 minutes, before cleanup.
 _Avoid_: low-hanging fruit, hotfix
 
-**Architectural option**: a Fortify option with a lasting effect on the harness, too large for the Workflow at hand; the one picked becomes the single open `fortify` ticket.
+**Architectural option**: a Fortify option with a lasting effect on the harness, too large for the Workflow at hand; the one picked becomes drive's single open `fortify` ticket.
 _Avoid_: tech debt item, long-term fix
 
 **Oversight levels**: where the Operator stands in a piece of the Workflow, named by the established terms _human-in-the-loop_, _human-on-the-loop_ and _human-out-of-the-loop_. The Operator works with the Orchestrator in the loop; Subagents run with the Operator on the loop or out of the loop.

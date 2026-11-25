@@ -1,22 +1,29 @@
-# The drive learnings store (hancrafted/skills docs/decision-records/drive/0003-drive-learnings-are-records-and-failure-modes.md):
-# run with --root docs/drive/learnings, so folders are relative to it. `drive learnings check` holds what a field rule
-# cannot: every record H2 names a failure-mode file, a fixed failure mode cited after its fix carries a Regressed
-# bullet, status and skip fields agree, and no learnings.md sits beside a migrated store.
+# One skill's learnings store: run once per skill with --root docs/learnings/<skill>, so
+# folders are relative to it. `learnings check` holds what a field rule cannot: every record H2 names a failure-mode
+# file, a fixed failure mode cited after its fix carries a Regressed bullet, status and skip fields agree, and no
+# learnings.md sits beside a migrated store.
 frontmatter:
   rules:
-    - ruleId: drive-learnings-record
+    - ruleId: learnings-record
       folders: [records/]
       intent: 'A record is what one Workflow hit, written once at the end of Verify and never edited after its Fortify question, so Fortify counts recurrences from records instead of from a typed number. Fail if the file name is not <date>-<workflow>.md.'
       unknownKeys: forbidden
       fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: record,
+                intent: 'Marks the file as a learnings record. A record is an append-only log, so it carries no stale_after.',
+              }
         workflow:
           presence: required
           pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
-          intent: 'The Workflow topic exactly as its .scratch/<topic>/ folder spells it, so the record traces back to its decisions log and transcripts.'
+          intent: 'The topic of the run, for a drive Workflow exactly as its .scratch/<topic>/ folder spells it, so the record traces back to its decisions log and transcripts.'
         date:
           presence: required
           pattern: '^\d{4}-\d{2}-\d{2}$'
-          intent: "The day the Workflow's Verify ended, YYYY-MM-DD. drive learnings compares it with each cited failure mode's fixed-on to find regressions."
+          intent: "The day the Workflow's Verify ended, YYYY-MM-DD. learnings compares it with each cited failure mode's fixed-on to find regressions."
         fortify:
           presence: required
           allowed:
@@ -34,11 +41,19 @@ frontmatter:
               }
         skip-reason:
           intent: 'Required when fortify is skipped, absent when pending or engaged: the Operator''s reason, verbatim ("deadline 17:30", "skipp fortify").'
-    - ruleId: drive-learnings-failure-mode
+    - ruleId: learnings-failure-mode
       folders: [failure-modes/]
-      intent: 'A failure mode is one narrow way a Workflow went wrong that a single Enforcer could catch; its file is the stable thing every record cites by file name, and it never holds a count. Search with `drive learnings similar "<failure>"` first and reuse a file whose Enforcer would also catch this case; create one only when none would.'
+      intent: 'A failure mode is one narrow way a Workflow went wrong that a single Enforcer could catch; its file is the stable thing every record cites by file name, and it never holds a count. Search with `learnings similar --skill <skill> "<failure>"` first and reuse a file whose Enforcer would also catch this case; create one only when none would.'
       unknownKeys: forbidden
       fields:
+        type:
+          presence: required
+          allowed:
+            - { value: failure-mode, intent: 'Marks the file as a learnings failure mode.' }
+        stale_after:
+          presence: required
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          intent: 'One month after the last write to this file, YYYY-MM-DD. Past it, review the failure mode before trusting its status, and set a new date when you do.'
         title:
           presence: required
           maxLength: 120
@@ -73,7 +88,7 @@ frontmatter:
           intent: 'Why it stays unfixed, in one sentence the Operator agreed to. Required with status wontfix.'
 body-structure:
   rules:
-    - ruleId: drive-learnings-record
+    - ruleId: learnings-record
       folders: [records/]
       intent: "A record has one title and one H2 per failure mode the Workflow hit, each holding only labelled bullets, so Fortify reads every failure mode's evidence and maps it to an Enforcer without reopening the session."
       undefinedHeadings: forbid
@@ -83,13 +98,24 @@ body-structure:
             level: 1,
             intent: 'The Workflow topic, as in front matter workflow. At most one short paragraph under it: the Workflow in a sentence.',
           }
+        - purpose: heading
+          level: 2
+          presence: optional
+          allowed:
+            [
+              {
+                title: Intent,
+                intent: "The drive Workflow's Intent block, at most once, first after the title and before any failure mode. Bullets open with **Turns:** (how many turns the Intent step took), **Moved:** (how far the pitch moved from first to last), **Outcome:** (confirmed or gave up), **Drift:** (drift found later, and whether it was real, or none) and, optionally, **Bets:** (each scope change placed against the intent, and whether it paid off). Fortify judges the Intent method from these after about three records.",
+              },
+            ]
+          mayHold: [unordered-list]
         - purpose: enumeration
           level: 2
           minCount: 0
           pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
           mayHold: [unordered-list]
           intent: "The file name, without .md, of the failure mode in failure-modes/ this evidence belongs to, once per record. Each bullet opens with **Evidence:** (what happened, where: a commit, PR, session or file, one line), **Correction:** (the Operator's words, verbatim, in quotes) or **Regressed:** (required when the failure mode is fixed: which fixed-by did not hold, and why). End a bullet with (source: monitor) when it came from .scratch/<topic>/monitor.md."
-    - ruleId: drive-learnings-failure-mode
+    - ruleId: learnings-failure-mode
       folders: [failure-modes/]
       intent: 'A failure mode states its symptom once and, optionally, the fix its Enforcer needs; evidence lives in the records that cite it, so this file changes only when its status does.'
       undefinedHeadings: forbid

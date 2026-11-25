@@ -1,5 +1,6 @@
 import { isIntegrationBranch, ticketOfMergeSubject, topicSlugOf } from '../core/index.ts';
 import { closesIn } from '../pr/index.ts';
+import type { IntentState, Mode } from './intent.pure.ts';
 
 export type Phase = 'Define' | 'Reason' | 'Implement' | 'Verify' | 'Evolve' | 'Done' | 'Stopped';
 
@@ -9,6 +10,15 @@ export interface PrFact {
   number: number;
   state: 'OPEN' | 'MERGED' | 'CLOSED';
   isDraft: boolean;
+}
+
+export type InputState = 'filled' | 'missing' | 'empty';
+
+export interface ProjectInputs {
+  grillFormat: Exclude<InputState, 'empty'>;
+  grillFormatPath: string | null;
+  review: InputState;
+  profiles: InputState;
 }
 
 export interface Facts {
@@ -23,6 +33,9 @@ export interface Facts {
   tickets: readonly number[];
   mergedTickets: readonly number[];
   lastLog: { t: string; cmd: string } | null;
+  mode: Mode | null;
+  intent: IntentState;
+  inputs: ProjectInputs;
 }
 
 export interface Standing {
@@ -64,6 +77,11 @@ const evolve: Rule = ({ integrationPr, fortify }) => {
 const ghDown: Rule = ({ ghFailed }) =>
   ghFailed ? { phase: 'Stopped', next: 'gh failed (auth or offline): fix it and rerun `drive status`' } : null;
 
+const confirmIntent = (mode: Mode): string =>
+  mode === 'intent-first'
+    ? 'confirm the intent (an Intent statement in decisions.md) before any grill'
+    : 'grill, then confirm the intent (an Intent statement in decisions.md) before Reason';
+
 const define: Rule = ({ integrationBranch, pushed }) =>
   integrationBranch === null || !pushed
     ? { phase: 'Define', next: 'create and push the Integration branch, then grill' }
@@ -77,10 +95,17 @@ const reason: Rule = ({ decisionPr }) =>
       }
     : null;
 
+const intentNext = ({ mode, intent }: Facts): string => {
+  if (mode === null)
+    return 'mode missing: add `Mode: intent-first|grill-first` to decisions.md, then confirm the intent';
+  if (intent === 'confirmed') return 'settle the requirements, then write the Decision docs and tickets';
+  return confirmIntent(mode);
+};
+
 const grilling: Rule = (facts) =>
   facts.decisionPr?.state === 'MERGED' || facts.tickets.length > 0
     ? null
-    : { phase: 'Define', next: 'settle the requirements, then write the Decision docs and tickets' };
+    : { phase: 'Define', next: intentNext(facts) };
 
 const verify: Rule = (facts) =>
   allMerged(facts) ? { phase: 'Verify', next: verifyNext(facts.integrationPr, facts.epic) } : null;
@@ -124,6 +149,14 @@ const prLine = (label: string, pr: PrFact | null, ghFailed: boolean): string => 
   return `${label}: #${pr.number} ${pr.state === 'OPEN' && pr.isDraft ? 'draft' : pr.state.toLowerCase()}`;
 };
 
+const inputLines = ({ grillFormat, grillFormatPath, review, profiles }: ProjectInputs): string[] => [
+  grillFormat === 'missing'
+    ? "Grill format: missing (using drive's template)"
+    : `Grill format: ${grillFormat} (${grillFormatPath ?? 'grill.format unset'})`,
+  `review.md: ${review}`,
+  `profiles.md: ${profiles}`,
+];
+
 export function renderStatus(facts: Facts): string {
   const { phase, next } = derivePhase(facts);
   const branch =
@@ -136,8 +169,11 @@ export function renderStatus(facts: Facts): string {
     `Integration branch: ${branch}`,
     prLine('Decision PR', facts.decisionPr, facts.ghFailed),
     prLine('Integration PR', facts.integrationPr, facts.ghFailed),
+    `Mode: ${facts.mode ?? 'missing'}`,
+    `Intent: ${facts.intent}`,
     `Tickets: ${facts.mergedTickets.filter((ticket) => facts.tickets.includes(ticket)).length}/${facts.tickets.length} merged`,
     `Last command: ${last}`,
+    ...inputLines(facts.inputs),
     `Next stop: ${next}`,
   ].join('\n');
 }
@@ -187,4 +223,25 @@ export function recordFileOf(files: readonly string[], topic: string): string | 
   const dated = (name: string): boolean =>
     /^\d{4}-\d{2}-\d{2}-$/.test(name.slice(0, 11)) && name.slice(11) === `${topic}.md`;
   return files.find((file) => dated(file.split('/').at(-1) ?? '')) ?? null;
+}
+
+export function grillFormatStateOf(configured: string | null, exists: boolean): 'filled' | 'missing' {
+  return configured !== null && exists ? 'filled' : 'missing';
+}
+
+const sectionBodies = (text: string): string[] =>
+  text
+    .split(/^## .*$/m)
+    .slice(1)
+    .map((body) => body.trim());
+
+export function reviewStateOf(text: string | null): InputState {
+  if (text === null) return 'missing';
+  return sectionBodies(text).some((body) => body !== '') ? 'filled' : 'empty';
+}
+
+export function profilesStateOf(text: string | null): InputState {
+  if (text === null) return 'missing';
+  const section = /^## Live or scheduled[ \t]*$([\s\S]*?)(?=^## |(?![\s\S]))/m.exec(text);
+  return (section?.[1] ?? '').trim() === '' ? 'empty' : 'filled';
 }

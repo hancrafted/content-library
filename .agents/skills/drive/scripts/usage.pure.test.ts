@@ -11,7 +11,7 @@ describe('success cases', () => {
         'pr <watch',
         '[--integration]',
         'ready <number>',
-        'learnings',
+        'review quotes <report>',
         'dispatch check',
         'transcript',
         'status <topic>',
