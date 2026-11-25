@@ -6,6 +6,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import { cn } from '@/shared/lib/utils';
 import { Download, FileDown, FileUp, Upload } from 'lucide-react';
 import { useId, type ChangeEvent, type ReactNode } from 'react';
+import { CliCallout } from './cli-callout.client';
+import { showsCliCallout } from './cli-callout.pure';
 import { DebugToggle } from './debug-toggle.client';
 import { DemoToggle, Reset, ResetConfirm, useDemoProps } from './demo-controls.client';
 import { LevelControl } from './level-control.client';
@@ -180,6 +182,7 @@ export function ToolbarPart(bar: ToolbarProps) {
         <Reset {...demoProps} />
       </div>
       <ResetConfirm {...demoProps} />
+      {showsCliCallout(bar) && <CliCallout words={bar.words} locale={bar.locale} />}
       <Notes bar={bar} id={problemsId} />
     </>
   );

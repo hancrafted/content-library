@@ -148,19 +148,19 @@ function toolbarOf(
   demo: DemoProps,
 ): ToolbarProps {
   const { controls, words, readonly } = data;
-  const { level, view, uploadProblems } = state;
   const { onLevel, onView, onWorkflow, onUpload, onDebug } = on;
   const debug = { show: debugAvailable && offers(controls, 'debug', readonly), on: state.debug };
   return {
     ...demo,
     workflow,
     choices: data.workflows.map(({ id, title, description }) => ({ id, title, description })),
-    level,
-    view,
+    level: state.level,
+    view: state.view,
+    locale: data.locale,
     controls,
     readonly,
     words,
-    uploadProblems,
+    uploadProblems: state.uploadProblems,
     note,
     progress,
     canSave: demo.demo.hasWork,

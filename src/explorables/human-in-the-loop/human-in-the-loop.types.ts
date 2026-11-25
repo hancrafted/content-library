@@ -24,6 +24,9 @@ export interface UiWords {
   readonly tryJob: string;
   readonly cli: string;
   readonly cliTip: string;
+  readonly cliCallout: string;
+  readonly cliCalloutSkills: string;
+  readonly cliCalloutDownload: string;
   readonly context: string;
   readonly contextTip: string;
   readonly intro: string;

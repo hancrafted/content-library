@@ -14,6 +14,7 @@ export interface ToolbarProps extends DemoProps {
   readonly choices: readonly { readonly id: string; readonly title: string; readonly description?: string }[];
   readonly level: Level;
   readonly view: View;
+  readonly locale: 'en' | 'de';
   readonly controls: ControlMap;
   readonly canSave: boolean;
   readonly readonly: boolean;

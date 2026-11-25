@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fillTemplate } from './template.pure';
+import { fillTemplate, templateSegments } from './template.pure';
 
 describe('success cases', () => {
   it('fills every named placeholder with its value', () => {
@@ -22,9 +22,34 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toBe(expected);
   });
+  it('splits a template into text and the named slots a component renders', () => {
+    // ARRANGE
+    const template = 'Set up the {skills}, or {download}.';
+    const expected = [
+      { text: 'Set up the ' },
+      { slot: 'skills' },
+      { text: ', or ' },
+      { slot: 'download' },
+      { text: '.' },
+    ];
+    // ACT
+    const segments = templateSegments(template, ['skills', 'download']);
+    // ASSERT
+    expect(segments).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('keeps a placeholder outside the named slots as text, so the gap shows', () => {
+    // ARRANGE
+    const template = 'See {guide} now';
+    const expected = [{ text: 'See ' }, { text: '{guide}' }, { text: ' now' }];
+    // ACT
+    const segments = templateSegments(template, ['skills']);
+    // ASSERT
+    expect(segments).toEqual(expected);
+  });
+
   it('leaves a placeholder it has no value for as written, so the gap shows', () => {
     // ARRANGE
     const template = '{count} of {total}';
