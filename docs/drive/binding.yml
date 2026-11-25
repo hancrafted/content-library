@@ -10,7 +10,7 @@ agentType: archgate:developer
 notify: { adapter: push-notification }
 phases:
   define:
-    model: mid
+    model: top
     skills:
       - grill-me
       - grill-with-docs
@@ -32,8 +32,10 @@ phases:
   implement:
     model: mid
     skills:
+      - commit
       - diagnosing-bugs
       - implement
+      - implement-spec
       - tdd
   verify:
     model: top
@@ -106,3 +108,4 @@ seen:
   - web-design-guidelines
   - wizard
   - writing-for-agents
+  - learnings

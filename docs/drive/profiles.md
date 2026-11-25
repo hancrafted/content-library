@@ -20,7 +20,7 @@ and the implementer's, which every Subagent brief points at. Write only what is 
 - An unmet acceptance criterion is a blocker, never a Trade-off: report it `- [ ]` with a `deferred: <ticket url>`
   only when the Orchestrator agreed; `drive worktree done` refuses the merge otherwise.
 
-## Define pre-flight
+## Live or scheduled
 
 The Define pre-flight names what is live or scheduled that the change touches. The kinds for this project:
 
