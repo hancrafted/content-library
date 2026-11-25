@@ -46,10 +46,10 @@
     },
     "drive": {
       "source": "hancrafted/skills",
-      "commit": "b5656a5affd70fb8fbd4193821d92566ec916a35",
+      "commit": "3fca02acaef57c8a38d2334b03b77cd7c3f5ab6a",
       "sourceType": "github",
       "skillPath": "skills/drive/SKILL.md",
-      "computedHash": "df7edef05b80e27828c9ced1556fd0d42bc4f6fdf9ed55b33f833fb0595ca7b0"
+      "computedHash": "220c5f11dd8d33b709e7ab92fe5b975547ad43d4ad92bca3f262ff631df2062a"
     },
     "grill-me": {
       "source": "mattpocock/skills",
@@ -92,6 +92,13 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
       "computedHash": "5334eba3370c6124922f8819447b42fabd8df8d11008a242083b8527589a8686"
+    },
+    "learnings": {
+      "source": "hancrafted/skills",
+      "commit": "3fca02acaef57c8a38d2334b03b77cd7c3f5ab6a",
+      "sourceType": "github",
+      "skillPath": "skills/learnings/SKILL.md",
+      "computedHash": "46f1741fbf3ee1f5f83cf0ce2ec22bbcf2afe13b2a3b3047c800f661e9ed6d8a"
     },
     "markdown-harness": {
       "source": "hancrafted/markdown-harness",

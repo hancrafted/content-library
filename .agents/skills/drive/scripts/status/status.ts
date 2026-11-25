@@ -1,19 +1,35 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { DECISIONS_PREFIX, fail, loadConfig, logPath, mainRootOf, parseLog, run } from '../core/index.ts';
-import { LEARNINGS_STORE, RECORDS_FOLDER } from '../learnings/index.ts';
+import {
+  DECISIONS_PREFIX,
+  DRIVE_FOLDER,
+  fail,
+  loadConfig,
+  logPath,
+  mainRootOf,
+  parseLog,
+  run,
+  SCRATCH,
+} from '../core/index.ts';
+import { intentStateOf, modeOf, STATUS_USAGE } from './intent.pure.ts';
 import {
   type Facts,
   fortifyOfRecord,
+  grillFormatStateOf,
   lastCommand,
   mergedTicketsOf,
   pickIntegrationBranch,
   type PrFact,
+  profilesStateOf,
+  type ProjectInputs,
   recordFileOf,
   renderStatus,
+  reviewStateOf,
   specOfDecisionBody,
   ticketsOfBodies,
 } from './status.pure.ts';
+
+const DRIVE_RECORDS_FOLDER = 'docs/learnings/drive/records';
 
 interface GhPr extends PrFact {
   headRefName: string;
@@ -53,7 +69,7 @@ function readLog(topic: string, cwd: string): { t?: string; cmd?: string }[] {
 }
 
 function fortifyOf(topic: string, ref: string, cwd: string) {
-  const folder = `${LEARNINGS_STORE}/${RECORDS_FOLDER}`;
+  const folder = DRIVE_RECORDS_FOLDER;
   const listed = run('git', ['ls-tree', '--name-only', ref, `${folder}/`], { cwd });
   const file = listed.status === 0 ? recordFileOf(listed.stdout.split('\n'), topic) : null;
   if (file === null) return null;
@@ -79,9 +95,26 @@ function ticketFacts(integrationBranch: string | null, cwd: string): number[] {
   return integrationBranch === null ? [] : mergedTicketsOf(mergeSubjects(integrationBranch, cwd), integrationBranch);
 }
 
+const readIfExists = (file: string): string | null => (existsSync(file) ? readFileSync(file, 'utf8') : null);
+
+function inputFacts(root: string, grillFormat: string | null): ProjectInputs {
+  return {
+    grillFormat: grillFormatStateOf(grillFormat, grillFormat !== null && existsSync(path.join(root, grillFormat))),
+    grillFormatPath: grillFormat,
+    review: reviewStateOf(readIfExists(path.join(root, DRIVE_FOLDER, 'review.md'))),
+    profiles: profilesStateOf(readIfExists(path.join(root, DRIVE_FOLDER, 'profiles.md'))),
+  };
+}
+
+function decisionsText(topic: string, root: string, cwd: string): string | null {
+  return readIfExists(path.join(mainRootOf(cwd) ?? root, SCRATCH, topic, 'decisions.md'));
+}
+
 function gather(topic: string, cwd: string, scriptsRoot: string): Facts {
-  const { worktree } = loadConfig(run('git', ['rev-parse', '--show-toplevel'], { cwd }).stdout.trim(), scriptsRoot);
+  const root = run('git', ['rev-parse', '--show-toplevel'], { cwd }).stdout.trim();
+  const { worktree, grill } = loadConfig(root, scriptsRoot);
   const branches = branchesOf(cwd);
+  const decisions = decisionsText(topic, root, cwd);
   const integrationBranch = pickIntegrationBranch(branches, topic, worktree.remote);
   return {
     topic,
@@ -91,11 +124,14 @@ function gather(topic: string, cwd: string, scriptsRoot: string): Facts {
     pushed: branches.includes(`${worktree.remote}/${integrationBranch}`),
     mergedTickets: ticketFacts(integrationBranch, cwd),
     lastLog: lastCommand(readLog(topic, cwd)),
+    mode: modeOf(decisions),
+    intent: intentStateOf(decisions),
+    inputs: inputFacts(root, grill.format),
   };
 }
 
 export function runStatus(argv: readonly string[], scriptsRoot: string): void {
   const [topic] = argv;
-  if (topic === undefined || topic.startsWith('-')) fail('usage: drive status <topic>');
+  if (topic === undefined || topic.startsWith('-')) fail(STATUS_USAGE);
   console.log(renderStatus(gather(topic, process.cwd(), scriptsRoot)));
 }
