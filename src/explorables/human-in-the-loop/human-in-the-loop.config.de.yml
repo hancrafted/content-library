@@ -17,6 +17,9 @@ ui:
   tryJob: '{job} in {stage} öffnen'
   cli: CLI
   cliTip: 'CLI: zeigt die Einrichtung und die /Skill-Befehle'
+  cliCallout: 'Der CLI-Modus nutzt Slash-Befehle für Skills. Richte deshalb zuerst die {skills} in deinem KI-Agenten ein. Am einfachsten: {download}, darin sind sie schon enthalten.'
+  cliCalloutSkills: Matt-Pocock-Skills
+  cliCalloutDownload: den Starter-Ordner herunterladen
   context: Hilfe
   intro: 'Gehe die Schritte der Reihe nach durch: Kopiere jeden Prompt in einen neuen KI-Chat und füge das Ergebnis hier wieder ein.'
   stepContext: 'Kontext angeben'

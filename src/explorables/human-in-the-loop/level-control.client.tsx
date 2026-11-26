@@ -18,6 +18,7 @@ export function LevelControl({ words, level, onLevel }: LevelControlProps) {
       label={words.cli}
       tip={words.cliTip}
       pressed={level === 'technical'}
+      text
       variant="ghost"
       data-control="level"
       onClick={() => onLevel(toggledLevel(level))}

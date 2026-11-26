@@ -1,3 +1,4 @@
+import type { Locale } from '@/shared/lib/locale.pure';
 import type { DebugBase } from './debug-footer.pure';
 import type { UiWords } from './human-in-the-loop.types';
 import type { DemoProps, ProgressActions, ProgressNote } from './progress-controls.types';
@@ -14,6 +15,7 @@ export interface ToolbarProps extends DemoProps {
   readonly choices: readonly { readonly id: string; readonly title: string; readonly description?: string }[];
   readonly level: Level;
   readonly view: View;
+  readonly locale: Locale;
   readonly controls: ControlMap;
   readonly canSave: boolean;
   readonly readonly: boolean;

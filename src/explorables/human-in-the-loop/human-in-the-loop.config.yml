@@ -17,6 +17,9 @@ ui:
   tryJob: 'Open {job} in {stage}'
   cli: CLI
   cliTip: 'CLI: show the setup and /skill commands'
+  cliCallout: 'CLI mode runs the /skill commands, so set up the {skills} in your AI agent first. Simplest route: {download}, which already holds them.'
+  cliCalloutSkills: Matt Pocock skills
+  cliCalloutDownload: download the starter folder
   context: Help
   intro: 'Work through the steps in order: copy each prompt into a new AI chat, then paste the result back here.'
   stepContext: 'Provide context'
